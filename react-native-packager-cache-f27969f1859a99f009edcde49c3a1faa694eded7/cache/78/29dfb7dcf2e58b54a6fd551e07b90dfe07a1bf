@@ -1,0 +1,48 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getEntitlementSummaryData = getEntitlementSummaryData;
+function getEntitlementSummaryData(data) {
+
+  entitlementSummaryData = [];
+
+  for (var _iterator = data, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === "function" ? Symbol.iterator : "@@iterator"]();;) {
+    var _ref;
+
+    if (_isArray) {
+      if (_i >= _iterator.length) break;
+      _ref = _iterator[_i++];
+    } else {
+      _i = _iterator.next();
+      if (_i.done) break;
+      _ref = _i.value;
+    }
+
+    var payhead = _ref;
+
+
+    var entitlementData = {
+
+      "component_id": data.Component_Id,
+      "component_name": data.Name,
+      "total_enititlement_amount": data.Entitlement,
+      "total_claimed_amount": data.Claimed_Amount,
+      "total_claimed_count": data.claimed_count,
+      "total_approved_amount": data.Approved_Amount,
+      "total_approved_count": data.approved_count,
+      "total_paid_amount": data.Paid_Amount,
+      "total_paid_count": data.paid_count,
+      "awaiting_approval_amount": data.pending_amount,
+      "awaiting_approval_count": data.pending_count,
+      "awaiting_payment_amount": data.approved_amout,
+      "awaiting_payment_count": data.awaiting_payment_count,
+      "remaining_entitlement_amount": data.Balance_Entitlement,
+      "currency_symbol": data.Currency_Symbol
+
+    };
+
+    entitlementSummaryData.push(entitlementData);
+  }
+
+  return entitlementSummaryData;
+}

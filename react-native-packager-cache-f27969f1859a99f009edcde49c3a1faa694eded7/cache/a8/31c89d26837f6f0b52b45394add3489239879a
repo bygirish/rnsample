@@ -1,0 +1,1283 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetPendingTravelInformationRequest = buildGetPendingTravelInformationRequest;
+exports.buildSuccessGetPendingTravelInformationResponse = buildSuccessGetPendingTravelInformationResponse;
+exports.buildFailedGetPendingTravelInformationResponse = buildFailedGetPendingTravelInformationResponse;
+exports.buildServerErrorGetPendingTravelInformationResponse = buildServerErrorGetPendingTravelInformationResponse;
+exports.buildTravelActionRequest = buildTravelActionRequest;
+exports.buildSuccessTravelActionResponse = buildSuccessTravelActionResponse;
+exports.buildFailedTravelActionResponse = buildFailedTravelActionResponse;
+exports.buildServerErrorTravelActionResponse = buildServerErrorTravelActionResponse;
+exports.buildApplyTravel = buildApplyTravel;
+exports.buildSuccessApplyTravelResponse = buildSuccessApplyTravelResponse;
+exports.buildFailedApplyTravelResponse = buildFailedApplyTravelResponse;
+exports.buildServerErrorApplyTravelResponse = buildServerErrorApplyTravelResponse;
+exports.buildGetCityInformationRequest = buildGetCityInformationRequest;
+exports.buildSuccessGetCityInformationResponse = buildSuccessGetCityInformationResponse;
+exports.buildFailedGetCityInformationResponse = buildFailedGetCityInformationResponse;
+exports.buildServerErrorGetCityInformationResponse = buildServerErrorGetCityInformationResponse;
+exports.buildGetCurrencyInformationRequest = buildGetCurrencyInformationRequest;
+exports.buildSuccessGetCurrencyInformationResponse = buildSuccessGetCurrencyInformationResponse;
+exports.buildFailedGetCurrencyInformationResponse = buildFailedGetCurrencyInformationResponse;
+exports.buildServerErrorGetCurrencyInformationResponse = buildServerErrorGetCurrencyInformationResponse;
+exports.buildGetTravelPurposeRequest = buildGetTravelPurposeRequest;
+exports.buildSuccessGetTravelPurposeResponse = buildSuccessGetTravelPurposeResponse;
+exports.buildFailedGetTravelPurposeResponse = buildFailedGetTravelPurposeResponse;
+exports.buildServerErrorGetTravelPurposeResponse = buildServerErrorGetTravelPurposeResponse;
+exports.buildGetTravelClientAccountsRequest = buildGetTravelClientAccountsRequest;
+exports.buildSuccessGetTravelClientAccountsResponse = buildSuccessGetTravelClientAccountsResponse;
+exports.buildFailedGetTravelClientAccountsResponse = buildFailedGetTravelClientAccountsResponse;
+exports.buildServerErrorGetTravelClientAccountsResponse = buildServerErrorGetTravelClientAccountsResponse;
+exports.buildGetTravelClientAccountProjectsRequest = buildGetTravelClientAccountProjectsRequest;
+exports.buildSuccessGetTravelClientAccountProjectsResponse = buildSuccessGetTravelClientAccountProjectsResponse;
+exports.buildFailedGetTravelClientAccountProjectsResponse = buildFailedGetTravelClientAccountProjectsResponse;
+exports.buildServerErrorGetTravelClientAccountProjectsResponse = buildServerErrorGetTravelClientAccountProjectsResponse;
+exports.buildGetTravelApproverRequest = buildGetTravelApproverRequest;
+exports.buildSuccessGetTravelApproverResponse = buildSuccessGetTravelApproverResponse;
+exports.buildFailedGetTravelApproverResponse = buildFailedGetTravelApproverResponse;
+exports.buildServerErrorGetTravelApproverResponse = buildServerErrorGetTravelApproverResponse;
+exports.buildGetTravelInformationRequest = buildGetTravelInformationRequest;
+exports.buildSuccessGetTravelInformationResponse = buildSuccessGetTravelInformationResponse;
+exports.buildFailedGetTravelInformationResponse = buildFailedGetTravelInformationResponse;
+exports.buildServerErrorGetTravelInformationResponse = buildServerErrorGetTravelInformationResponse;
+exports.buildGetTravelCityCategoryInformationRequest = buildGetTravelCityCategoryInformationRequest;
+exports.buildSuccessGetTravelCityCategoryInformationResponse = buildSuccessGetTravelCityCategoryInformationResponse;
+exports.buildFailedGetTravelCityCategoryInformationResponse = buildFailedGetTravelCityCategoryInformationResponse;
+exports.buildServerErrorGetTravelCityCategoryInformationResponse = buildServerErrorGetTravelCityCategoryInformationResponse;
+exports.buildGetAppliedTravelListRequest = buildGetAppliedTravelListRequest;
+exports.buildSuccesGetAppliedTravelListResponse = buildSuccesGetAppliedTravelListResponse;
+exports.buildFailedGetAppliedTravelListResponse = buildFailedGetAppliedTravelListResponse;
+exports.buildServerErrorGetAppliedTravelListResponse = buildServerErrorGetAppliedTravelListResponse;
+
+var _travelapiendpoints = require('./travelapiendpoints');
+
+var travelApiEndPoints = babelHelpers.interopRequireWildcard(_travelapiendpoints);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _travelutils = require('../../ewscreens/travel/travelutils');
+
+var travelConstants = babelHelpers.interopRequireWildcard(_travelutils);
+
+var FILE_NAME = "travelprocessing.js : ";
+
+function buildGetPendingTravelInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetPendingTravelInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + travelApiEndPoints.GET_PENDING_TRAVEL_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&request_id=" + params.requestId + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var pendingTravelInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", pendingTravelInformationRequest);
+
+  return pendingTravelInformationRequest;
+}
+
+function buildSuccessGetPendingTravelInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetPendingTravelInformationResponse Method - ");
+
+  var serverData = result.data.Travel.Travel_Data;
+
+  console.log("result", result);
+
+  var employeeInfo = {
+
+    'Designation': serverData.Designation,
+    'Email_Id': serverData.Email_Id,
+    'Employee_Name': serverData.Employee_Name,
+    'Employee_Code': serverData.Employee_Code,
+    'Mobile_No': serverData.Mobile_No
+
+  };
+
+  advanceDetails = serverData.Advance_details === undefined ? [] : (0, _utils.getJsonArray)(serverData.Advance_details.Advance_details_line_item);
+
+  travelList = serverData.Travel_Details === undefined ? [] : (0, _utils.getJsonArray)(serverData.Travel_Details.Travel_Details_Line_Item);
+
+  accomodationDetails = serverData.Accommodation_Details === undefined ? [] : (0, _utils.getJsonArray)(serverData.Accommodation_Details.Accommodation_Details_Line_Item);
+
+  conveyanceDetails = serverData.Convey_Details === undefined ? [] : (0, _utils.getJsonArray)(serverData.Convey_Details.Convey_Details_Line_Item);
+
+  var travelCost = {
+    "Total_Tour_Cost_Estimate": serverData.Total_Tour_Cost_Estimate === undefined ? null : serverData.Total_Tour_Cost_Estimate,
+    "Cost_Estimate_Conveyance": serverData.Cost_Estimate_Conveyance === undefined ? null : serverData.Cost_Estimate_Conveyance,
+    "Cost_Estimate_Stay": serverData.Cost_Estimate_Stay === undefined ? null : serverData.Cost_Estimate_Stay,
+    "Cost_Estimate_Travel": serverData.Cost_Estimate_Travel === undefined ? null : serverData.Cost_Estimate_Travel,
+
+    "Total_Tour_Cost_Estimate_Raw": serverData.Total_Tour_Cost_Estimate_Raw === undefined ? null : serverData.Total_Tour_Cost_Estimate_Raw,
+    "Cost_Estimate_Conveyance_Raw": serverData.Cost_Estimate_Conveyance_Raw === undefined ? null : serverData.Cost_Estimate_Conveyance_Raw,
+    "Cost_Estimate_Stay_Raw": serverData.Cost_Estimate_Stay_Raw === undefined ? null : serverData.Cost_Estimate_Stay_Raw,
+    "Cost_Estimate_Travel_Raw": serverData.Cost_Estimate_Travel_Raw === undefined ? null : serverData.Cost_Estimate_Travel_Raw,
+    "currency": serverData.currency === undefined ? "NA" : serverData.currency
+  };
+
+  travelSchedule = {};
+
+  for (var _iterator = travelList, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref;
+
+    if (_isArray) {
+      if (_i >= _iterator.length) break;
+      _ref = _iterator[_i++];
+    } else {
+      _i = _iterator.next();
+      if (_i.done) break;
+      _ref = _i.value;
+    }
+
+    var travel = _ref;
+
+
+    travel['travelAction'] = travelConstants.TRAVEL_ACTION;
+
+    if (travelSchedule[travel.From_Date] === undefined) travelSchedule[travel.From_Date] = (0, _utils.getJsonArray)(travel);else travelSchedule[travel.From_Date].push(travel);
+  }
+
+  for (var _iterator2 = accomodationDetails, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref2;
+
+    if (_isArray2) {
+      if (_i2 >= _iterator2.length) break;
+      _ref2 = _iterator2[_i2++];
+    } else {
+      _i2 = _iterator2.next();
+      if (_i2.done) break;
+      _ref2 = _i2.value;
+    }
+
+    var accomodation = _ref2;
+
+
+    accomodation['travelAction'] = travelConstants.STAY_ACTION;
+
+    if (travelSchedule[accomodation.From_Date] === undefined) travelSchedule[accomodation.From_Date] = (0, _utils.getJsonArray)(accomodation);else travelSchedule[accomodation.From_Date].push(accomodation);
+  }
+
+  for (var _iterator3 = conveyanceDetails, _isArray3 = Array.isArray(_iterator3), _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref3;
+
+    if (_isArray3) {
+      if (_i3 >= _iterator3.length) break;
+      _ref3 = _iterator3[_i3++];
+    } else {
+      _i3 = _iterator3.next();
+      if (_i3.done) break;
+      _ref3 = _i3.value;
+    }
+
+    var localTravel = _ref3;
+
+
+    localTravel['travelAction'] = travelConstants.LOCAL_TRAVEL_ACTION;
+
+    if (travelSchedule[localTravel.From_Date] === undefined) travelSchedule[localTravel.From_Date] = (0, _utils.getJsonArray)(localTravel);else travelSchedule[localTravel.From_Date].push(localTravel);
+  }
+
+  sortedTravelSchedule = {};
+
+  Object.keys(travelSchedule).sort(compareTravelDate).forEach(function (key) {
+    sortedTravelSchedule[key] = travelSchedule[key];
+  });
+
+  console.log("travelSchedule", sortedTravelSchedule);
+
+  var otherDetails = {
+
+    'Request_Date': serverData.Request_Date,
+    'Request_Id': serverData.Request_Id,
+    'create_id': serverData.create_id,
+    'Purpose': serverData.Purpose,
+    'purposeId': serverData.Purpose_Id,
+    'Travel_Type': serverData.Travel_Type,
+    'Work_Type': serverData.Work_Type,
+    'Advance_Required': serverData.Advance_Required,
+    'Billable': serverData.Billable,
+    'clientName': serverData.Client_Name,
+    'clientDetails': serverData.Client_details == "" ? [] : (0, _utils.getJsonArray)(serverData.Client_details.Client_details_line_item),
+    'Status': serverData.Status,
+    'current_approval': serverData.current_approval,
+    'approver_Id': serverData.approver_id,
+    'approver_Id2': serverData.approver_id2,
+    'personalTravel': serverData.Personal_Travel,
+    'firstApproverEmployeeCode': serverData.Approver_Employee_Code,
+    'SecondApproverEmployeeCode': serverData.Additional_Approver_Code,
+    'Description': serverData.Description,
+    'modify_comment': serverData.modify_comment
+  };
+
+  resultData = {
+
+    'employeeInfo': employeeInfo,
+    'travelList': travelList,
+    'otherDetails': otherDetails,
+    'advanceDetails': advanceDetails,
+    'travelCost': travelCost,
+    'accomodationDetails': accomodationDetails,
+    'conveyanceDetails': conveyanceDetails,
+    'travelSchedule': sortedTravelSchedule
+  };
+
+  var response = {
+    data: resultData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetPendingTravelInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetPendingTravelInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetPendingTravelInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetPendingTravelInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildTravelActionRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildTravelActionRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + travelApiEndPoints.TRAVEL_ACTION + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var travelActionRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", travelActionRequest);
+
+  return travelActionRequest;
+}
+
+function buildSuccessTravelActionResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessTravelActionResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedTravelActionResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedTravelActionResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorTravelActionResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorTravelActionResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildApplyTravel(params, getState) {
+
+  console.log(FILE_NAME + "In buildApplyTravel Method - ");
+  console.log("params - ");
+  console.log(params);
+
+  var url = _utils.BASIC_URL + travelApiEndPoints.APPLY_TRAVEL + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME;
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var applyTravel = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", applyTravel);
+
+  return applyTravel;
+};
+
+function buildSuccessApplyTravelResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessApplyTravelResponse Method");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+};
+
+function buildFailedApplyTravelResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedApplyTravelResponse Method");
+
+  var response = {
+    data: null,
+    error: result.data
+  };
+
+  return response;
+}
+
+function buildServerErrorApplyTravelResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorApplyTravelResponse Method");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetCityInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetCityInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + travelApiEndPoints.GET_CITY_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&travel_type=" + params.travel_type + "&QueryString=" + params.QueryString + "&max_city_record=" + params.maxRecords + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var cityInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", cityInformationRequest);
+
+  return cityInformationRequest;
+}
+
+function buildSuccessGetCityInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetCityInformationResponse Method - ");
+
+  var cityDetails = {
+    cityDetails: []
+  };
+
+  if (result.data.root == "") result.data.root = cityDetails;
+
+  console.log("cityarrayepty", result.data);
+
+  var cityInformationData = (0, _utils.getJsonArray)(result.data.root.cityDetails);
+
+  console.log("cityInformationData", cityInformationData);
+
+  var response = {
+    data: cityInformationData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetCityInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetCityInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetCityInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetCityInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetCurrencyInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetCurrencyInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + travelApiEndPoints.GET_CURRENCY_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var currencyInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", currencyInformationRequest);
+
+  return currencyInformationRequest;
+}
+
+function buildSuccessGetCurrencyInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetCurrencyInformationResponse Method - ");
+
+  for (var _iterator4 = result.data, _isArray4 = Array.isArray(_iterator4), _i4 = 0, _iterator4 = _isArray4 ? _iterator4 : _iterator4[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref4;
+
+    if (_isArray4) {
+      if (_i4 >= _iterator4.length) break;
+      _ref4 = _iterator4[_i4++];
+    } else {
+      _i4 = _iterator4.next();
+      if (_i4.done) break;
+      _ref4 = _i4.value;
+    }
+
+    var currencyDetail = _ref4;
+
+
+    currencyDetail["label"] = currencyDetail.currency_Symbol;
+    currencyDetail["value"] = currencyDetail.currency_Id;
+  }
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetCurrencyInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetCurrencyInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetCurrencyInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetCurrencyInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetTravelPurposeRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetTravelPurposeRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + travelApiEndPoints.GET_TRAVEL_PURPOSE_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var travelPurposeRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", travelPurposeRequest);
+
+  return travelPurposeRequest;
+}
+
+function buildSuccessGetTravelPurposeResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetTravelPurposeResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetTravelPurposeResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetTravelPurposeResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetTravelPurposeResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetTravelPurposeResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetTravelClientAccountsRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetTravelClientAccountsRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + travelApiEndPoints.GET_TRAVEL_CLIENT_ACCOUNT_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&QueryString=" + params.QueryString + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var travelClientAccountRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", travelClientAccountRequest);
+
+  return travelClientAccountRequest;
+}
+
+function buildSuccessGetTravelClientAccountsResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetTravelClientAccountsResponse Method - ");
+
+  var accountsData = (0, _utils.getJsonArray)(result.data.root.ACCT);
+
+  var response = {
+    data: accountsData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetTravelClientAccountsResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetTravelClientAccountsResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetTravelClientAccountsResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetTravelClientAccountsResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetTravelClientAccountProjectsRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetTravelClientAccountProjectsRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + travelApiEndPoints.GET_TRAVEL_CLIENT_ACCOUNT_PROJECTS_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&account_id=" + params.accountId + "&currentTimeStamp=" + new Date().getTime();
+
+  if (params.claim_type != null && params.claim_type != undefined) url = url + "&claim_type=" + params.claim_type;
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var travelClientAccountProjectsRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", travelClientAccountProjectsRequest);
+
+  return travelClientAccountProjectsRequest;
+}
+
+function buildSuccessGetTravelClientAccountProjectsResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetTravelClientAccountProjectsResponse Method - ");
+
+  if (result.data != null && result.data.length != 0) {
+
+    defaultProject = {
+
+      "label": "Select Project",
+      "value": -1
+    };
+
+    result.data = [defaultProject].concat(babelHelpers.toConsumableArray(result.data));
+  }
+
+  console.log("datareceivedis ", result.data);
+
+  for (var _iterator5 = result.data, _isArray5 = Array.isArray(_iterator5), _i5 = 0, _iterator5 = _isArray5 ? _iterator5 : _iterator5[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref5;
+
+    if (_isArray5) {
+      if (_i5 >= _iterator5.length) break;
+      _ref5 = _iterator5[_i5++];
+    } else {
+      _i5 = _iterator5.next();
+      if (_i5.done) break;
+      _ref5 = _i5.value;
+    }
+
+    var projects = _ref5;
+
+
+    if (projects["value"] != -1) {
+
+      projects["label"] = projects.project_name;
+      projects["value"] = projects.project_id;
+    }
+  }
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetTravelClientAccountProjectsResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetTravelClientAccountProjectsResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetTravelClientAccountProjectsResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetTravelClientAccountProjectsResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetTravelApproverRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetTravelApproverRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + travelApiEndPoints.GET_TRAVEL_APPROVER_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&travel_type=" + params.travel_type + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var travelApproverRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", travelApproverRequest);
+
+  return travelApproverRequest;
+}
+
+function buildSuccessGetTravelApproverResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetTravelApproverResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetTravelApproverResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetTravelApproverResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetTravelApproverResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetTravelApproverResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetTravelInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetTravelInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + travelApiEndPoints.GET_TRAVEL_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=create_travel_form" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var travelInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", travelInformationRequest);
+
+  return travelInformationRequest;
+}
+
+function buildSuccessGetTravelInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetTravelInformationResponse Method - ");
+
+  console.log("result data - ", result);
+
+  defaultPurpose = {
+
+    "label": "Select Travel Purpose",
+    "value": -1
+
+  };
+
+  result.data.purpose = [defaultPurpose].concat(babelHelpers.toConsumableArray(result.data.purpose));
+
+  for (var _iterator6 = result.data.purpose, _isArray6 = Array.isArray(_iterator6), _i6 = 0, _iterator6 = _isArray6 ? _iterator6 : _iterator6[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref6;
+
+    if (_isArray6) {
+      if (_i6 >= _iterator6.length) break;
+      _ref6 = _iterator6[_i6++];
+    } else {
+      _i6 = _iterator6.next();
+      if (_i6.done) break;
+      _ref6 = _i6.value;
+    }
+
+    var purpose = _ref6;
+
+
+    if (purpose["value"] != -1) {
+
+      purpose["label"] = purpose.purpose;
+      purpose["value"] = purpose.serial_no;
+    }
+  }
+
+  if (result.data.firstDomesticexpenseapprovalinfo.approvalinfo != null) {
+
+    for (var _iterator7 = result.data.firstDomesticexpenseapprovalinfo.approvalinfo, _isArray7 = Array.isArray(_iterator7), _i7 = 0, _iterator7 = _isArray7 ? _iterator7 : _iterator7[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+      var _ref7;
+
+      if (_isArray7) {
+        if (_i7 >= _iterator7.length) break;
+        _ref7 = _iterator7[_i7++];
+      } else {
+        _i7 = _iterator7.next();
+        if (_i7.done) break;
+        _ref7 = _i7.value;
+      }
+
+      var approvalinfo = _ref7;
+
+
+      approvalinfo["label"] = approvalinfo.userName;
+      approvalinfo["value"] = approvalinfo.employeeCode;
+    }
+  }
+
+  if (result.data.firstOverseasxpenseapprovalinfo.approvalinfo != null) {
+
+    for (var _iterator8 = result.data.firstOverseasxpenseapprovalinfo.approvalinfo, _isArray8 = Array.isArray(_iterator8), _i8 = 0, _iterator8 = _isArray8 ? _iterator8 : _iterator8[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+      var _ref8;
+
+      if (_isArray8) {
+        if (_i8 >= _iterator8.length) break;
+        _ref8 = _iterator8[_i8++];
+      } else {
+        _i8 = _iterator8.next();
+        if (_i8.done) break;
+        _ref8 = _i8.value;
+      }
+
+      var approvalinfo = _ref8;
+
+
+      approvalinfo["label"] = approvalinfo.userName;
+      approvalinfo["value"] = approvalinfo.employeeCode;
+    }
+  }
+
+  if (result.data.secondDomesticexpenseapprovalinfo.approvalinfo != null) {
+
+    for (var _iterator9 = result.data.secondDomesticexpenseapprovalinfo.approvalinfo, _isArray9 = Array.isArray(_iterator9), _i9 = 0, _iterator9 = _isArray9 ? _iterator9 : _iterator9[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+      var _ref9;
+
+      if (_isArray9) {
+        if (_i9 >= _iterator9.length) break;
+        _ref9 = _iterator9[_i9++];
+      } else {
+        _i9 = _iterator9.next();
+        if (_i9.done) break;
+        _ref9 = _i9.value;
+      }
+
+      var approvalinfo = _ref9;
+
+
+      approvalinfo["label"] = approvalinfo.userName;
+      approvalinfo["value"] = approvalinfo.employeeCode;
+    }
+  }
+
+  if (result.data.secondOverseasxpenseapprovalinfo.approvalinfo != null) {
+
+    for (var _iterator10 = result.data.secondOverseasxpenseapprovalinfo.approvalinfo, _isArray10 = Array.isArray(_iterator10), _i10 = 0, _iterator10 = _isArray10 ? _iterator10 : _iterator10[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+      var _ref10;
+
+      if (_isArray10) {
+        if (_i10 >= _iterator10.length) break;
+        _ref10 = _iterator10[_i10++];
+      } else {
+        _i10 = _iterator10.next();
+        if (_i10.done) break;
+        _ref10 = _i10.value;
+      }
+
+      var approvalinfo = _ref10;
+
+
+      approvalinfo["label"] = approvalinfo.userName;
+      approvalinfo["value"] = approvalinfo.employeeCode;
+    }
+  }
+
+  travelModes = [];
+
+  defaultMode = {
+
+    "label": "Select Travel Mode",
+    "value": -1,
+    "travelModeId": -1
+  };
+
+  travelModes = [defaultMode].concat(babelHelpers.toConsumableArray(travelModes));
+
+  travelClasses = {};
+
+  localTravelModes = [];
+
+  defaultLocalTravelMode = {
+
+    "label": "Select Transport Type",
+    "value": -1
+  };
+
+  localTravelModes = [defaultLocalTravelMode].concat(babelHelpers.toConsumableArray(localTravelModes));
+
+  stayTypes = [];
+
+  defaultStayType = {
+
+    "label": "Select stay Type",
+    "value": -1
+  };
+
+  defaultTravelClass = {
+
+    "label": "Select Travel Class",
+    "value": -1
+  };
+
+  stayTypes = [defaultStayType].concat(babelHelpers.toConsumableArray(stayTypes));
+
+  for (var _iterator11 = result.data.expenseHeadsList, _isArray11 = Array.isArray(_iterator11), _i11 = 0, _iterator11 = _isArray11 ? _iterator11 : _iterator11[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref11;
+
+    if (_isArray11) {
+      if (_i11 >= _iterator11.length) break;
+      _ref11 = _iterator11[_i11++];
+    } else {
+      _i11 = _iterator11.next();
+      if (_i11.done) break;
+      _ref11 = _i11.value;
+    }
+
+    var expenseHead = _ref11;
+
+
+    switch (expenseHead.expense_Head_Code) {
+      case "T":
+
+        var travelClass = {
+
+          "label": expenseHead.expense_Head_Class,
+          "value": expenseHead.expense_Head_Id,
+          "type": expenseHead.expense_Type,
+          "travelType": expenseHead.type,
+          "isApplicableToEmployee": expenseHead.isTravelClassApplicableToEmployee
+        };
+
+        if (!isExpenseHeadExist(travelModes, expenseHead)) {
+
+          console.log("Inside travel");
+
+          var travelMode = {
+
+            "label": expenseHead.expense_Head_Mode,
+            "value": expenseHead.expense_Head_Id,
+            "travelType": expenseHead.type,
+            "travelModeId": travelModes.length,
+            "isApplicableToEmployee": expenseHead.isTravelModeApplicableToEmployee
+          };
+
+          travelModes.push(travelMode);
+
+          travelClasses[expenseHead.expense_Head_Mode] = [];
+
+          travelClasses[expenseHead.expense_Head_Mode].push(defaultTravelClass);
+          travelClasses[expenseHead.expense_Head_Mode].push(travelClass);
+        } else travelClasses[expenseHead.expense_Head_Mode].push(travelClass);
+
+        break;
+
+      case "C":
+
+        if (!isExpenseHeadExist(localTravelModes, expenseHead)) {
+
+          var localTravelMode = {
+
+            "label": expenseHead.expense_Head_Mode,
+            "value": expenseHead.expense_Head_Id,
+            "travelType": expenseHead.type,
+            "isApplicableToEmployee": expenseHead.isApplicableToEmployee
+          };
+
+          localTravelModes.push(localTravelMode);
+        }
+
+        break;
+
+      case "S":
+
+        if (!isExpenseHeadExist(stayTypes, expenseHead)) {
+
+          var stayType = {
+
+            "label": expenseHead.expense_Head_Type,
+            "value": expenseHead.expense_Head_Id,
+            "travelType": expenseHead.type,
+            "isApplicableToEmployee": expenseHead.isApplicableToEmployee
+          };
+
+          stayTypes.push(stayType);
+        }
+
+        break;
+
+    }
+  }
+
+  console.log("travelModes", travelModes);
+  console.log("travelClasses", travelClasses);
+  console.log("localTravelModes", localTravelModes);
+
+  result.data["travelModes"] = travelModes;
+  result.data["travelClasses"] = travelClasses;
+
+  result.data["localTravelModes"] = localTravelModes;
+
+  result.data["stayTypes"] = stayTypes;
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetTravelInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetTravelInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetTravelInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetTravelInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetTravelCityCategoryInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetTravelCityCategoryInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + travelApiEndPoints.GET_CITY_CATEGORY_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&countryId=" + params.countryId + "&cityName=" + params.cityName + "&travelType=" + params.travelType + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var travelCityCategoryInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", travelCityCategoryInformationRequest);
+
+  return travelCityCategoryInformationRequest;
+}
+
+function buildSuccessGetTravelCityCategoryInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetTravelCityCategoryInformationResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetTravelCityCategoryInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetTravelCityCategoryInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data
+  };
+
+  return response;
+}
+
+function buildServerErrorGetTravelCityCategoryInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetTravelCityCategoryInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetAppliedTravelListRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetAppliedTravelListRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + travelApiEndPoints.GET_APPLIED_TRAVEL_LIST + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&request_type=" + params.requestType + "&current_id=" + params.currentId + "&no_of_record=" + params.numberOfRecords + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var appliedTravelListRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", appliedTravelListRequest);
+
+  return appliedTravelListRequest;
+}
+
+function buildSuccesGetAppliedTravelListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetAppliedTravelListResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetAppliedTravelListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetAppliedTravelListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetAppliedTravelListResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetAppliedTravelListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function isExpenseHeadExist(expenseList, expenseHead) {
+
+  for (var _iterator12 = expenseList, _isArray12 = Array.isArray(_iterator12), _i12 = 0, _iterator12 = _isArray12 ? _iterator12 : _iterator12[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref12;
+
+    if (_isArray12) {
+      if (_i12 >= _iterator12.length) break;
+      _ref12 = _iterator12[_i12++];
+    } else {
+      _i12 = _iterator12.next();
+      if (_i12.done) break;
+      _ref12 = _i12.value;
+    }
+
+    var expense = _ref12;
+
+
+    if (expense.label == expenseHead.expense_Head_Mode) return true;
+  }
+
+  return false;
+}
+
+function compareTravelDate(date1, date2) {
+
+  console.log("Inside compareTravelDate");
+
+  date1 = (0, _utils.convertServerDateToMilliseconds)(date1 + " 00:00:00");
+  date2 = (0, _utils.convertServerDateToMilliseconds)(date2 + " 00:00:00");
+  console.log("Inside compareTravelDate", date1);
+  return date1 - date2;
+}

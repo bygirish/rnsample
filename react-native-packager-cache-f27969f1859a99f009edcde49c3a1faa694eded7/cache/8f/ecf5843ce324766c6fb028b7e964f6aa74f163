@@ -1,0 +1,6 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var PAY_SLIP_EARNINGS = exports.PAY_SLIP_EARNINGS = "1";
+var PAY_SLIP_DEDUCTIONS = exports.PAY_SLIP_DEDUCTIONS = "2";
+var PAY_SLIP_CHARGES = exports.PAY_SLIP_CHARGES = "3";

@@ -1,0 +1,48 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var EwIcon = function (_Component) {
+  babelHelpers.inherits(EwIcon, _Component);
+
+  function EwIcon() {
+    babelHelpers.classCallCheck(this, EwIcon);
+    return babelHelpers.possibleConstructorReturn(this, (EwIcon.__proto__ || Object.getPrototypeOf(EwIcon)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(EwIcon, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          iconSource = _props.iconSource,
+          onIconPressed = _props.onIconPressed,
+          customIconStyle = _props.customIconStyle;
+
+
+      if (onIconPressed == null) {
+
+        return _react2.default.createElement(_reactNative.Image, { style: [_styles2.default.iconStyle, customIconStyle], source: iconSource });
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          { onPress: onIconPressed },
+          _react2.default.createElement(_reactNative.Image, { style: [_styles2.default.iconStyle, customIconStyle], source: iconSource })
+        );
+      }
+    }
+  }]);
+  return EwIcon;
+}(_react.Component);
+
+exports.default = EwIcon;

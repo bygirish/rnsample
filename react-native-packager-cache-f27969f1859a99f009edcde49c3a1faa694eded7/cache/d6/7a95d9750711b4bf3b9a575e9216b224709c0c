@@ -1,0 +1,136 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _reactNativeStarsRating = require('react-native-stars-rating');
+
+var _reactNativeStarsRating2 = babelHelpers.interopRequireDefault(_reactNativeStarsRating);
+
+var _nativeBase = require('native-base');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewfloatinglabel = require('../ewfloatinglabel/ewfloatinglabel');
+
+var _ewfloatinglabel2 = babelHelpers.interopRequireDefault(_ewfloatinglabel);
+
+var _ewbutton = require('../ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _ewh2text = require('../ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _dashboardutils = require('../../ewscreens/dashboard/dashboardutils');
+
+var STARS_SIZE = 30;
+
+var FILE_NAME = "EwRating.js : ";
+
+var EwRating = function (_Component) {
+  babelHelpers.inherits(EwRating, _Component);
+
+  function EwRating(props, context) {
+    babelHelpers.classCallCheck(this, EwRating);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwRating.__proto__ || Object.getPrototypeOf(EwRating)).call(this, props, context));
+
+    _this.initialState = {
+
+      rating: _dashboardutils.DEFAULT_RATING
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwRating, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + "In componentWillMount");
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          rating = _props.rating,
+          onRatingChanged = _props.onRatingChanged,
+          isRatingActive = _props.isRatingActive;
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(_reactNativeStarsRating2.default, {
+          isActive: isRatingActive,
+          rateMax: _dashboardutils.MAX_RATING,
+          isHalfStarEnabled: false,
+          color: appstyleguide.APP_BLUE,
+          onStarPress: onRatingChanged,
+          rate: rating,
+          size: STARS_SIZE
+        })
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }]);
+  return EwRating;
+}(_react.Component);
+
+exports.default = EwRating;

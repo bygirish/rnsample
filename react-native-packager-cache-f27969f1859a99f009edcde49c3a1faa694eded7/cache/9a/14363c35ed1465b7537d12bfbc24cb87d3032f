@@ -1,0 +1,110 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = eipReducer;
+
+var _eipactiontypes = require("./eipactiontypes");
+
+var eipActionTypes = babelHelpers.interopRequireWildcard(_eipactiontypes);
+
+var FILE_NAME = "eipreducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+
+  employeesInformationData: null,
+  employeesInformationError: null,
+
+  myTeamEmployeesInformationData: null,
+  myTeamEmployeesInformationError: null
+
+};
+
+function eipReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method eipReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case eipActionTypes.SUCCESS_GET_EMPLOYEES_LIST:
+
+      console.log("In method eipReducer SUCCESS_GET_EMPLOYEES_LIST");
+
+      return {
+
+        employeesInformationData: action.response.data,
+        employeesInformationError: action.response.error
+      };
+
+      break;
+
+    case eipActionTypes.FAILURE_GET_EMPLOYEES_LIST:
+
+      console.log("In method eipReducer FAILURE_GET_EMPLOYEES_LIST");
+
+      return babelHelpers.extends({}, state, {
+        employeesInformationData: action.response.data,
+        employeesInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case eipActionTypes.SUCCESS_GET_MY_TEAM_EMPLOYEES_LIST:
+
+      console.log("In method eipReducer SUCCESS_GET_MY_TEAM_EMPLOYEES_LIST");
+
+      return {
+
+        myTeamEmployeesInformationData: action.response.data,
+        myTeamEmployeesInformationError: action.response.error
+      };
+
+      break;
+
+    case eipActionTypes.FAILURE_GET_MY_TEAM_EMPLOYEES_LIST:
+
+      console.log("In method eipReducer FAILURE_GET_MY_TEAM_EMPLOYEES_LIST");
+
+      return babelHelpers.extends({}, state, {
+        myTeamEmployeesInformationData: action.response.data,
+        myTeamEmployeesInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case eipActionTypes.CLEAR_EIP_ERROR:
+
+      console.log("In method eipReducer CLEAR_EIP_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        myTeamEmployeesInformationError: null,
+        employeesInformationError: null
+      });
+
+      break;
+
+    case eipActionTypes.CLEAR_EIP_STATE_DATA:
+
+      console.log("In method eipReducer CLEAR_EIP_STATE_DATA");
+
+      return {
+        errorCounter: action.response.errorCounter,
+        employeesInformationData: action.response.employeesInformationData,
+        employeesInformationError: action.response.employeesInformationError
+      };
+
+      break;
+
+    default:
+
+      console.log("In method eipReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

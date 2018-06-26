@@ -1,0 +1,308 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../utils');
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewcomponents = require('../../../utils/ewcomponents');
+
+var _commonactions = require('../../../services/common/commonactions');
+
+var FILE_NAME = "appupdatemodal.js";
+
+var AppUpdateModal = function (_Component) {
+  babelHelpers.inherits(AppUpdateModal, _Component);
+
+  function AppUpdateModal(props, context) {
+    babelHelpers.classCallCheck(this, AppUpdateModal);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (AppUpdateModal.__proto__ || Object.getPrototypeOf(AppUpdateModal)).call(this, props, context));
+
+    _this._handleAppStateChange = function (nextAppState) {
+
+      console.log("Appstateis -", nextAppState);
+    };
+
+    _this.initialState = {
+
+      appUpdateConfiguartion: null,
+      isAppUpdateModalVisible: false
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(AppUpdateModal, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.appUpdateConfigurationData != null && nextProps.appUpdateConfigurationError == null) {
+        var isNewUpdateAvailable = nextProps.appUpdateConfigurationData.isNewUpdateAvailable;
+
+
+        var updatedModalVisibility = this.state.isAppUpdateModalVisible;
+
+        if (isNewUpdateAvailable) updatedModalVisibility = true;
+
+        if (updatedModalVisibility) this.props.updateLastPromptTimestamp(null);
+
+        this.setState({
+
+          appUpdateConfiguartion: nextProps.appUpdateConfigurationData,
+          isAppUpdateModalVisible: updatedModalVisibility
+        });
+
+        this.clearAppUpdateReduxData();
+      }
+
+      if (nextProps.appUpdateConfigurationData == null && nextProps.appUpdateConfigurationError != null) {}
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        this.renderAppUpdateModal()
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+
+      _reactNative.AppState.addEventListener('change', this._handleAppStateChange);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+
+      if (this.props.pendingNeedToActData != null) this.getAppUpdateConfigurationFromServer(this.props.pendingNeedToActData.moduleSubscribed.moduleId);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+
+      _reactNative.AppState.removeEventListener('change', this._handleAppStateChange);
+    }
+  }, {
+    key: 'clearAppUpdateReduxData',
+    value: function clearAppUpdateReduxData() {
+
+      var params = {
+
+        0: 'CLEAR_STATE_APP_UPDATE_CONFIGURATION_DATA'
+      };
+
+      this.props.clearCommonStateData(params);
+    }
+  }, {
+    key: 'getAppUpdateConfigurationFromServer',
+    value: function getAppUpdateConfigurationFromServer(modulesSubscribed) {
+
+      if (this.isAppUpdateConfigurationRequired()) {
+
+        var params = {
+
+          "modulesSubscribed": modulesSubscribed
+        };
+
+        this.props.getAppUpdateConfiguration(params);
+        this.props.updateAppUpdateApiConfigurationTimestamp(null);
+      }
+    }
+  }, {
+    key: 'isAppUpdateConfigurationRequired',
+    value: function isAppUpdateConfigurationRequired() {
+      var appUpdateConfigurationApiTimestamp = this.props.appUpdateConfigurationApiTimestamp;
+
+
+      currentTime = new Date((0, _utils.getCurrentTime)());
+
+      console.log("appUpdateConfigurationApiTimestamp", appUpdateConfigurationApiTimestamp);
+
+      if (appUpdateConfigurationApiTimestamp == null) return true;else {
+
+        appUpdateConfigurationApiDate = new Date(appUpdateConfigurationApiTimestamp);
+
+        var days = (0, _utils.getDayDifference)(currentTime, appUpdateConfigurationApiDate);
+
+        if (days >= 1) return true;
+      }
+
+      return false;
+    }
+  }, {
+    key: 'renderAppUpdateModal',
+    value: function renderAppUpdateModal() {
+      var _this2 = this;
+
+      var _state = this.state,
+          appUpdateConfiguartion = _state.appUpdateConfiguartion,
+          isAppUpdateModalVisible = _state.isAppUpdateModalVisible;
+
+
+      if (isAppUpdateModalVisible) {
+        var newUpdateDetails = appUpdateConfiguartion.newUpdateDetails,
+            isForceUpdateRequired = appUpdateConfiguartion.isForceUpdateRequired;
+
+
+        return _react2.default.createElement(
+          _ewcomponents.EwModal,
+          {
+            onBackButtonPress: function onBackButtonPress() {
+              return _this2.changeModalState(isForceUpdateRequired);
+            },
+            isModalVisible: isAppUpdateModalVisible,
+            onBackdropPress: function onBackdropPress() {
+              return _this2.changeModalState(isForceUpdateRequired);
+            }
+          },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { margin: appstyleguide.DEFAULT_MARGIN } },
+            _react2.default.createElement(_ewcomponents.EwH1Text, {
+              text: 'Latest App Updates ',
+              customStyle: { alignSelf: "center", fontWeight: "bold" }
+            }),
+            _react2.default.createElement(_ewcomponents.EwBar, {
+              customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN }
+            })
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { margin: appstyleguide.DEFAULT_MARGIN } },
+            Object.keys(newUpdateDetails).map(function (key) {
+              return _react2.default.createElement(_ewcomponents.EwH1Text, {
+                text: newUpdateDetails[key]
+              });
+            })
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", justifyContent: "space-around" } },
+            !isForceUpdateRequired ? _react2.default.createElement(_ewcomponents.EwButton, {
+              label: 'Skip',
+              onButonClicked: function onButonClicked() {
+                return _this2.changeModalState(isForceUpdateRequired);
+              },
+              customStyle: { margin: appstyleguide.DEFAULT_MARGIN }
+            }) : null,
+            _react2.default.createElement(_ewcomponents.EwButton, {
+              label: 'Update App',
+              onButonClicked: function onButonClicked() {
+                return (0, _utils.redirectToAppStore)();
+              },
+              customStyle: { margin: appstyleguide.DEFAULT_MARGIN }
+            })
+          )
+        );
+      }
+    }
+  }, {
+    key: 'changeModalState',
+    value: function changeModalState(isForceUpdateRequired) {
+
+      if (isForceUpdateRequired != null && !isForceUpdateRequired) {
+
+        this.setState({
+
+          isAppUpdateModalVisible: !this.state.isAppUpdateModalVisible
+        });
+      }
+    }
+  }]);
+  return AppUpdateModal;
+}(_react.Component);
+
+function bindActions(dispatch) {
+
+  console.log(FILE_NAME, "In bindActions Method");
+
+  return {
+
+    getAppUpdateConfiguration: function getAppUpdateConfiguration(params) {
+      return dispatch((0, _commonactions.getAppUpdateConfiguration)(params));
+    },
+    updateAppUpdateApiConfigurationTimestamp: function updateAppUpdateApiConfigurationTimestamp(params) {
+      return dispatch((0, _commonactions.updateAppUpdateApiConfigurationTimestamp)(params));
+    },
+    updateLastPromptTimestamp: function updateLastPromptTimestamp(params) {
+      return dispatch((0, _commonactions.updateLastPromptTimestamp)(params));
+    },
+    clearCommonStateData: function clearCommonStateData(params) {
+      return dispatch((0, _commonactions.clearCommonStateData)(params));
+    }
+
+  };
+}
+
+function mapStateToProps(state) {
+
+  console.log("State Updated state is -");
+
+  console.log(state);
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    appUpdateConfigurationData: state.common.appUpdateConfigurationData,
+    appUpdateConfigurationError: state.common.appUpdateConfigurationError,
+
+    pendingNeedToActData: state.needtoact.needToActData,
+
+    appUpdateConfigurationApiTimestamp: state.common.appUpdateConfigurationApiTimestamp
+
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(AppUpdateModal);

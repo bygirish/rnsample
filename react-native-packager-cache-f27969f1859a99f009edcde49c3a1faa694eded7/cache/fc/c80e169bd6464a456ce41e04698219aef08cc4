@@ -1,0 +1,371 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeImageCropPicker = require('react-native-image-crop-picker');
+
+var _reactNativeImageCropPicker2 = babelHelpers.interopRequireDefault(_reactNativeImageCropPicker);
+
+var _ewcomponents = require('../../utils/ewcomponents');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _utils = require('../../utils');
+
+var FILE_NAME = "ewimageslider.js : ";
+
+var leftArrowIcon = require('../../../img/leftarrow.png');
+var rightArrowIcon = require('../../../img/rightarrowicon.png');
+
+var addIcon = require('../../../img/addimage.png');
+var deleteIcon = require('../../../img/trashIcon.png');
+
+var leftIconIndex = 0;
+var rightIconIndex = 1;
+
+var defaultMargin = 10;
+
+var EwImageSlider = function (_Component) {
+  babelHelpers.inherits(EwImageSlider, _Component);
+
+  function EwImageSlider(props, context) {
+    babelHelpers.classCallCheck(this, EwImageSlider);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwImageSlider.__proto__ || Object.getPrototypeOf(EwImageSlider)).call(this, props, context));
+
+    console.log("propsreceived", props);
+
+    imagesArray = [];
+
+    if (_this.props.initialState != null) imagesArray = [].concat(babelHelpers.toConsumableArray(_this.props.initialState));
+
+    _this.initialState = {
+
+      imagesArray: imagesArray,
+
+      currentVisibleImageIndex: 0,
+
+      opacity: new _reactNative.Animated.Value(0)
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwImageSlider, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + " In componentWillReceiveProps", nextProps);
+
+      if (JSON.stringify(this.state.imagesArray) != JSON.stringify(nextProps.initialState)) {
+
+        this.setState({
+
+          imagesArray: [].concat(babelHelpers.toConsumableArray(nextProps.initialState))
+        });
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + " In render");
+
+      var _state = this.state,
+          imagesArray = _state.imagesArray,
+          currentVisibleImageIndex = _state.currentVisibleImageIndex;
+      var _props = this.props,
+          sliderHeight = _props.sliderHeight,
+          updateParentState = _props.updateParentState,
+          isAddButtonVisible = _props.isAddButtonVisible,
+          isDeleteButtonVisible = _props.isDeleteButtonVisible;
+
+
+      console.log("images array", imagesArray);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { flexDirection: "row", flex: 1, height: sliderHeight } },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { justifyContent: "center", margin: defaultMargin, flexDirection: "row", flex: 0.8 } },
+          this.renderLeftArrowIcon(imagesArray, currentVisibleImageIndex),
+          this.renderImages(),
+          this.renderRightArrowIcon(imagesArray, currentVisibleImageIndex)
+        ),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.2, margin: 10, justifyContent: "space-around", alignItems: "center" } },
+          isAddButtonVisible ? _react2.default.createElement(
+            _reactNative.TouchableOpacity,
+            { onPress: function onPress() {
+                return _this2.addNewImage(updateParentState);
+              } },
+            _react2.default.createElement(_reactNative.Image, {
+              style: _styles2.default.actionIconStyle,
+              source: addIcon
+            })
+          ) : null,
+          isDeleteButtonVisible && imagesArray.length > 0 ? _react2.default.createElement(
+            _reactNative.TouchableOpacity,
+            { onPress: function onPress() {
+                return _this2.deleteCurrentImage(imagesArray, currentVisibleImageIndex);
+              } },
+            _react2.default.createElement(_reactNative.Image, {
+              style: _styles2.default.actionIconStyle,
+              source: deleteIcon
+            })
+          ) : null
+        )
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+
+      console.log("props after update", this.props, this.state);
+
+      if (JSON.stringify(this.props.initialState) != JSON.stringify(this.state.imagesArray)) {
+
+        this.props.updateParentState(this.state.imagesArray);
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }, {
+    key: 'renderLeftArrowIcon',
+    value: function renderLeftArrowIcon(imagesArray, currentVisibleImageIndex) {
+      var _this3 = this;
+
+      console.log(FILE_NAME + " In renderLeftArrowIcon", currentVisibleImageIndex);
+
+      if (imagesArray.length != 0 && currentVisibleImageIndex != 0) {
+
+        return _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          { style: { alignSelf: "center" }, onPress: function onPress() {
+              return _this3.arrowIconPressed(leftIconIndex);
+            } },
+          _react2.default.createElement(_reactNative.Image, {
+            style: _styles2.default.arrowIconStyle,
+            source: leftArrowIcon
+          })
+        );
+      }
+    }
+  }, {
+    key: 'renderRightArrowIcon',
+    value: function renderRightArrowIcon(imagesArray, currentVisibleImageIndex) {
+      var _this4 = this;
+
+      console.log(FILE_NAME + " In renderRightArrowIcon");
+
+      if (imagesArray.length != 0 && currentVisibleImageIndex != imagesArray.length - 1) {
+
+        return _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          { style: { alignSelf: "center" }, onPress: function onPress() {
+              return _this4.arrowIconPressed(rightIconIndex);
+            } },
+          _react2.default.createElement(_reactNative.Image, {
+            style: _styles2.default.arrowIconStyle,
+            source: rightArrowIcon
+          })
+        );
+      }
+    }
+  }, {
+    key: 'arrowIconPressed',
+    value: function arrowIconPressed(iconIndex) {
+
+      console.log(FILE_NAME + " In arrowIconPressed");
+
+      var currentVisibleImageIndex = this.state.currentVisibleImageIndex;
+
+
+      if (iconIndex == leftIconIndex) {
+
+        this.setState({
+          currentVisibleImageIndex: this.state.currentVisibleImageIndex - 1
+        });
+      } else {
+
+        this.setState({
+          currentVisibleImageIndex: this.state.currentVisibleImageIndex + 1
+        });
+      }
+    }
+  }, {
+    key: 'renderImages',
+    value: function renderImages() {
+
+      console.log(FILE_NAME + " In renderImages");
+
+      var _state2 = this.state,
+          imagesArray = _state2.imagesArray,
+          currentVisibleImageIndex = _state2.currentVisibleImageIndex;
+      var _props2 = this.props,
+          sliderHeight = _props2.sliderHeight,
+          imageWidth = _props2.imageWidth,
+          defaultImageText = _props2.defaultImageText;
+
+
+      console.log("images", imagesArray);
+
+      if (defaultImageText == null) defaultImageText = "Attach Invoice Image";
+
+      if (imagesArray.length != 0) {
+
+        var base64Icon = 'data:' + imagesArray[currentVisibleImageIndex].imageType + ';base64,' + imagesArray[currentVisibleImageIndex].imageData;
+
+        return _react2.default.createElement(_reactNative.Animated.Image, { source: { uri: base64Icon },
+          style: [].concat(babelHelpers.toConsumableArray(_styles2.default.imageStyle), [{ opacity: this.state.opacity, height: sliderHeight - 2 * defaultMargin, width: imageWidth }]),
+          key: this.state.image,
+          onLoad: this.onLoad()
+        });
+      } else {
+        return _react2.default.createElement(_ewcomponents.EwH1Text, {
+          text: defaultImageText,
+          customStyle: { alignSelf: "center" }
+        });
+      }
+    }
+  }, {
+    key: 'onLoad',
+    value: function onLoad() {
+
+      console.log(FILE_NAME + " In onLoad");
+
+      _reactNative.Animated.timing(this.state.opacity, {
+
+        toValue: 1,
+        duration: 2000
+
+      }).start();
+    }
+  }, {
+    key: 'addNewImage',
+    value: function addNewImage() {
+      var _this5 = this;
+
+      console.log(FILE_NAME + " In addNewImage");
+
+      if (this.props.openGallery) {
+
+        _reactNativeImageCropPicker2.default.openPicker({
+          width: _utils.DEVICE_WIDTH,
+          height: _utils.DEVICE_HEIGHT,
+          includeBase64: true,
+          compressImageQuality: 0.8,
+          cropping: true
+        }).then(function (image) {
+
+          var imageProperties = {
+
+            imageData: image.data,
+            imageType: image.mime,
+            imagePath: image.path
+
+          };
+
+          updatedImages = _this5.state.imagesArray;
+
+          updatedImages.push(imageProperties);
+
+          _this5.setState({
+
+            imagesArray: updatedImages
+
+          });
+        }).catch(function (err) {
+          if (err == "Error: Cannot find image data") _reactNative.Alert.alert("Error", "Upload correct format");
+        });
+      } else {
+
+        _reactNativeImageCropPicker2.default.openCamera({
+          width: _utils.DEVICE_WIDTH,
+          height: _utils.DEVICE_HEIGHT,
+          cropping: true,
+          includeBase64: true,
+          compressImageQuality: 0.8
+        }).then(function (image) {
+
+          console.log("imageData is ", image);
+
+          var imageProperties = {
+
+            imageData: image.data,
+            imageType: image.mime,
+            imagePath: image.path
+
+          };
+
+          updatedImages = _this5.state.imagesArray;
+
+          updatedImages.push(imageProperties);
+
+          _this5.setState({
+
+            imagesArray: updatedImages
+
+          });
+        }).catch(function (err) {
+
+          if (err == "Error: Cannot find image data") _reactNative.Alert.alert("Error", "Upload correct format");
+        });
+      }
+    }
+  }, {
+    key: 'deleteCurrentImage',
+    value: function deleteCurrentImage(imagesArray, currentVisibleImageIndex) {
+
+      console.log(FILE_NAME + " In deleteCurrentImage");
+
+      updatedImages = imagesArray;
+
+      if (updatedImages.length != 0) {
+
+        updatedImages.splice(currentVisibleImageIndex, 1);
+
+        updatedCurrentVisibleImageIndex = 0;
+
+        if (currentVisibleImageIndex != 0) updatedCurrentVisibleImageIndex = currentVisibleImageIndex - 1;
+
+        this.setState({
+
+          imagesArray: updatedImages,
+          currentVisibleImageIndex: updatedCurrentVisibleImageIndex
+        });
+      }
+    }
+  }]);
+  return EwImageSlider;
+}(_react.Component);
+
+exports.default = EwImageSlider;

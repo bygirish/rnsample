@@ -1,0 +1,476 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getPastAttendanceInformation = getPastAttendanceInformation;
+exports.applyPastAttendance = applyPastAttendance;
+exports.pastAttendanceAction = pastAttendanceAction;
+exports.getPendingPastAttendanceInformation = getPendingPastAttendanceInformation;
+exports.getAppliedPastAttendanceList = getAppliedPastAttendanceList;
+exports.getRosterInformation = getRosterInformation;
+exports.clearPastAttendanceError = clearPastAttendanceError;
+exports.clearPastAttendanceStateData = clearPastAttendanceStateData;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _pastattendanceprocessing = require('./pastattendanceprocessing');
+
+var pastAttendanceProcessing = babelHelpers.interopRequireWildcard(_pastattendanceprocessing);
+
+var _pastattendanceactiontypes = require('./pastattendanceactiontypes');
+
+var pastAttendanceActionTypes = babelHelpers.interopRequireWildcard(_pastattendanceactiontypes);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var FILE_NAME = "pastattendanceactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+function getPastAttendanceInformation(params) {
+
+  console.log(FILE_NAME + " In getPastAttendanceInformation - ");
+  console.log("params - ");console.log(params);
+
+  return function (dispatch, getState) {
+
+    var getPastAttendanceInformationRequest = pastAttendanceProcessing.buildGetPastAttendanceInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ");console.log(getState());
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getPastAttendanceInformationRequest.url, getPastAttendanceInformationRequest.data, getPastAttendanceInformationRequest.config).then(function (result) {
+
+      console.log("getPastAttendanceInformationRequest Result - ");console.log(result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPastAttendanceInformation', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: pastAttendanceActionTypes.SUCCESS_PAST_ATTENDANCE_INFORMATION,
+          response: pastAttendanceProcessing.buildSuccessGetPastAttendanceInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPastAttendanceInformation', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: pastAttendanceActionTypes.FAILURE_PAST_ATTENDANCE_INFORMATION,
+          response: pastAttendanceProcessing.buildFailedGetPastAttendanceInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPastAttendanceInformation', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("gettPastAttendanceInformation Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: pastAttendanceActionTypes.FAILURE_PAST_ATTENDANCE_INFORMATION,
+        response: pastAttendanceProcessing.buildServerErrorGetPastAttendanceInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function applyPastAttendance(params) {
+
+  console.log(FILE_NAME + " In applyPastAttendance - ");
+  console.log("params - ");console.log(params);
+
+  return function (dispatch, getState) {
+
+    var applyPastAttendanceRequest = pastAttendanceProcessing.buildApplyPastAttendance(params, getState());
+
+    console.log("Current GetState Value is - ");console.log(getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(applyPastAttendanceRequest.url, applyPastAttendanceRequest.data, applyPastAttendanceRequest.config).then(function (result) {
+
+      console.log("applyPastAttendanceRequest Result - ");console.log(result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'applyPastAttendance', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: pastAttendanceActionTypes.SUCCESS_APPLY_PAST_ATTENDANCE,
+          response: pastAttendanceProcessing.buildSuccessApplyPastAttendanceResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'applyPastAttendance', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: pastAttendanceActionTypes.FAILURE_APPLY_PAST_ATTENDANCE,
+          response: pastAttendanceProcessing.buildFailedApplyPastAttendanceResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'applyPastAttendance', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("gettPastAttendanceInformation Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: pastAttendanceActionTypes.FAILURE_APPLY_PAST_ATTENDANCE,
+        response: pastAttendanceProcessing.buildServerErrorApplyPastAttendanceResponse(err, params)
+      });
+    });
+  };
+}
+
+function pastAttendanceAction(params) {
+
+  console.log(FILE_NAME + " In pastAttendanceAction method- ");
+  console.log("params - ");console.log(params);
+
+  return function (dispatch, getState) {
+
+    var pastAttendanceActionRequest = pastAttendanceProcessing.buildPastAttendanceActionRequest(params, getState());
+
+    console.log("Current GetState Value is - ");console.log(getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.put(pastAttendanceActionRequest.url, pastAttendanceActionRequest.data, pastAttendanceActionRequest.config).then(function (result) {
+
+      console.log("pastAttendanceActionRequest Result - ");console.log(result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'pastAttendanceAction', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: pastAttendanceActionTypes.SUCCESS_PAST_ATTENDANCE_ACTION_TAKEN,
+          response: pastAttendanceProcessing.buildSuccessPastAttendanceActionResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'pastAttendanceAction', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: pastAttendanceActionTypes.FAILURE_PAST_ATTENDANCE_ACTION_TAKEN,
+          response: pastAttendanceProcessing.buildFailedPastAttendanceActionResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'pastAttendanceAction', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("pastAttendanceActionRequest Error - ");console.log(err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: pastAttendanceActionTypes.FAILURE_PAST_ATTENDANCE_ACTION_TAKEN,
+        response: pastAttendanceProcessing.buildServerErrorPastAttendanceActionResponse(err, params)
+      });
+    });
+  };
+}
+
+function getPendingPastAttendanceInformation(params) {
+
+  console.log(FILE_NAME + " In getPendingPastAttendanceInformation method - ");
+  console.log("params - ");console.log(params);
+
+  return function (dispatch, getState) {
+
+    var getPendingPastAttendanceInformationRequest = pastAttendanceProcessing.buildGetPendingPastAttendanceInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ");
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getPendingPastAttendanceInformationRequest.url, getPendingPastAttendanceInformationRequest.data, getPendingPastAttendanceInformationRequest.config).then(function (result) {
+
+      console.log("getPendingPastAttendanceInformationRequest Result - ");console.log(result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPendingPastAttendanceInformation', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: pastAttendanceActionTypes.SUCCESS_PENDING_PAST_ATTENDANCE_INFORMATION,
+          response: pastAttendanceProcessing.buildSuccessGetPendingPastAttendanceInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPendingPastAttendanceInformation', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: pastAttendanceActionTypes.FAILURE_PENDING_PAST_ATTENDANCE_INFORMATION,
+          response: pastAttendanceProcessing.buildFailedGetPendingPastAttendanceInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPendingPastAttendanceInformation', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getPendingPastAttendanceInformation Error - ");console.log(err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: pastAttendanceActionTypes.FAILURE_PENDING_PAST_ATTENDANCE_INFORMATION,
+        response: pastAttendanceProcessing.buildServerErrorGetPendingPastAttendanceInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function getAppliedPastAttendanceList(params) {
+
+  var functionName = "getAppliedPastAttendanceList";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getAppliedPastAttendanceRequest = pastAttendanceProcessing.buildGetAppliedPastAttendanceListRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getAppliedPastAttendanceRequest.url, getAppliedPastAttendanceRequest.data, getAppliedPastAttendanceRequest.config).then(function (result) {
+
+      console.log("getAppliedPastAttendanceRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: pastAttendanceActionTypes.SUCCESS_APPLIED_PAST_ATTENDANCE_LIST,
+          response: pastAttendanceProcessing.buildSuccesGetAppliedPastAttendanceListResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: pastAttendanceActionTypes.FAILURE_APPLIED_PAST_ATTENDANCE_LIST,
+          response: pastAttendanceProcessing.buildFailedGetAppliedPastAttendanceListResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getAppliedPastAttendanceRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: pastAttendanceActionTypes.FAILURE_APPLIED_PAST_ATTENDANCE_LIST,
+        response: pastAttendanceProcessing.buildServerErrorGetAppliedPastAttendanceListResponse(err, params)
+      });
+    });
+  };
+}
+
+function getRosterInformation(params) {
+
+  console.log(FILE_NAME + " In getRosterInformation method - ");
+  console.log("params - ");console.log(params);
+
+  return function (dispatch, getState) {
+
+    var rosterInformationRequest = pastAttendanceProcessing.buildGetRosterInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ");console.log(getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(rosterInformationRequest.url, rosterInformationRequest.data, rosterInformationRequest.config).then(function (result) {
+
+      console.log("rosterInformationRequest Result - ");console.log(result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getRosterInformation', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: pastAttendanceActionTypes.SUCCESS_ROSTER_INFORMATION,
+          response: pastAttendanceProcessing.buildSuccessGetRosterInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getRosterInformation', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: pastAttendanceActionTypes.FAILURE_ROSTER_INFORMATION,
+          response: pastAttendanceProcessing.buildFailedGetRosterInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getRosterInformation', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("rosterInformationRequest Error - ");console.log(err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: pastAttendanceActionTypes.FAILURE_ROSTER_INFORMATION,
+        response: pastAttendanceProcessing.buildServerErrorGetRosterInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearPastAttendanceError(params) {
+
+  return {
+    type: pastAttendanceActionTypes.CLEAR_PAST_ATTENDANCE_ERROR,
+    response: null
+  };
+}
+
+function clearPastAttendanceStateData(params) {
+
+  console.log(FILE_NAME + " In clearPastAttendanceStateData - ");
+  console.log("Type of Data to be cleared - ");console.log(params);
+
+  CLEAR_STATE_DATA_ALL = 'CLEAR_STATE_DATA_ALL';
+  CLEAR_STATE_DATA_PAST_ATTENDANCE_INFORMATION = 'CLEAR_STATE_DATA_PAST_ATTENDANCE_INFORMATION';
+  CLEAR_STATE_DATA_PAST_ATTENDANCE_ACTION = 'CLEAR_STATE_DATA_PAST_ATTENDANCE_ACTION';
+  CLEAR_STATE_DATA_APPLIED_PAST_ATTENDANCE = 'CLEAR_STATE_DATA_APPLIED_PAST_ATTENDANCE';
+  CLEAR_STATE_DATA_PENDING_PAST_ATTENDANCE_INFORMATION = 'CLEAR_STATE_DATA_PENDING_PAST_ATTENDANCE_INFORMATION';
+  CLEAR_STATE_ERROR_COUNTER = 'CLEAR_STATE_ERROR_COUNTER';
+  CLEAR_STATE_ROSTER_INFORMATION = 'CLEAR_ROSTER_INFORMATION';
+  CLEAR_STATE_DATA_APPLIED_PAST_ATTENDANCE = 'CLEAR_STATE_DATA_APPLIED_PAST_ATTENDANCE';
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var errorCounter = getState().pastattendance.errorCounter;
+
+    var pastAttendanceInformationData = getState().pastattendance.pastAttendanceInformationData;
+    var pastAttendanceInformationError = getState().pastattendance.pastAttendanceInformationError;
+
+    var pastAttendanceAppliedData = getState().pastattendance.pastAttendanceAppliedData;
+    var pastAttendanceAppliedError = getState().pastattendance.pastAttendanceAppliedError;
+
+    var pastAttendanceActionData = getState().pastattendance.pastAttendanceActionData;
+    var pastAttendanceActionError = getState().pastattendance.pastAttendanceActionError;
+
+    var pendingPastAttendanceInformationData = getState().pastattendance.pendingPastAttendanceInformationData;
+    var pendingPastAttendanceInformationError = getState().pastattendance.pendingPastAttendanceInformationError;
+
+    var pastAttendanceRosterInformationData = getState().pastattendance.pastAttendanceRosterInformationData;
+    var pastAttendanceRosterInformationError = getState().pastattendance.pastAttendanceRosterInformationError;
+
+    var appliedPastAttendanceData = getState().pastattendance.appliedPastAttendanceData;
+    var appliedPastAttendanceError = getState().pastattendance.appliedPastAttendanceError;
+
+    Object.keys(params).map(function (key) {
+
+      console.log("params attribute " + key + " value is - " + params[key]);
+
+      switch (params[key]) {
+        case CLEAR_STATE_DATA_ALL:
+          errorCounter = 0;
+          pastAttendanceInformationData = null;
+          pastAttendanceInformationError = null;
+          pastAttendanceActionData = null;
+          pastAttendanceActionError = null;
+          pastAttendanceAppliedData = null;
+          pastAttendanceAppliedError = null;
+          pendingPastAttendanceInformationData = null;
+          pendingPastAttendanceInformationError = null;
+          pastAttendanceRosterInformationData = null;
+          pastAttendanceRosterInformationError = null;
+          appliedPastAttendanceData = null;
+          appliedPastAttendanceError = null;
+          break;
+
+        case CLEAR_STATE_ERROR_COUNTER:
+          errorCounter = null;
+          break;
+
+        case CLEAR_STATE_DATA_PAST_ATTENDANCE_INFORMATION:
+          pastAttendanceInformationData = null;
+          pastAttendanceInformationError = null;
+
+          break;
+
+        case CLEAR_STATE_DATA_PAST_ATTENDANCE_ACTION:
+          pastAttendanceActionData = null;
+          pastAttendanceActionError = null;
+
+          break;
+
+        case CLEAR_STATE_DATA_APPLIED_PAST_ATTENDANCE:
+          pastAttendanceAppliedData = null;
+          pastAttendanceAppliedError = null;
+
+          break;
+
+        case CLEAR_STATE_DATA_PENDING_PAST_ATTENDANCE_INFORMATION:
+          pendingPastAttendanceInformationData = null;
+          pendingPastAttendanceInformationError = null;
+
+          break;
+
+        case CLEAR_STATE_ROSTER_INFORMATION:
+          pastAttendanceRosterInformationData = null;
+          pastAttendanceRosterInformationError = null;
+
+          break;
+
+        case CLEAR_STATE_DATA_APPLIED_PAST_ATTENDANCE:
+
+          appliedPastAttendanceData = null;
+          appliedPastAttendanceError = null;
+
+          break;
+
+        default:
+
+      }
+    });
+
+    var response = {
+
+      errorCounter: errorCounter,
+      pastAttendanceInformationData: pastAttendanceInformationData,
+      pastAttendanceInformationError: pastAttendanceInformationError,
+      pastAttendanceActionData: pastAttendanceActionData,
+      pastAttendanceActionError: pastAttendanceActionError,
+      pastAttendanceAppliedData: pastAttendanceAppliedData,
+      pastAttendanceAppliedError: pastAttendanceAppliedError,
+      pendingPastAttendanceInformationData: pendingPastAttendanceInformationData,
+      pendingPastAttendanceInformationError: pendingPastAttendanceInformationError,
+      pastAttendanceRosterInformationData: pastAttendanceRosterInformationData,
+      pastAttendanceRosterInformationError: pastAttendanceRosterInformationError,
+      appliedPastAttendanceData: appliedPastAttendanceData,
+      appliedPastAttendanceError: appliedPastAttendanceError
+    };
+
+    dispatch({
+      type: pastAttendanceActionTypes.CLEAR_PAST_ATTENDANCE_STATE_DATA,
+      response: response
+    });
+  };
+}

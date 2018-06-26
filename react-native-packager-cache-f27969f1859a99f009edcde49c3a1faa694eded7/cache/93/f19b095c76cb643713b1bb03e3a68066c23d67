@@ -1,0 +1,29 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = configureStore;
+
+var _reactNative = require('react-native');
+
+var _remoteReduxDevtools = require('remote-redux-devtools');
+
+var _remoteReduxDevtools2 = babelHelpers.interopRequireDefault(_remoteReduxDevtools);
+
+var _redux = require('redux');
+
+var _reduxThunk = require('redux-thunk');
+
+var _reduxThunk2 = babelHelpers.interopRequireDefault(_reduxThunk);
+
+var _reduxPersist = require('redux-persist');
+
+var _services = require('./services');
+
+var _services2 = babelHelpers.interopRequireDefault(_services);
+
+function configureStore(onCompletion) {
+
+  var store = (0, _redux.createStore)(_services2.default, undefined, (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxThunk2.default), (0, _reduxPersist.autoRehydrate)()));
+
+  return store;
+}

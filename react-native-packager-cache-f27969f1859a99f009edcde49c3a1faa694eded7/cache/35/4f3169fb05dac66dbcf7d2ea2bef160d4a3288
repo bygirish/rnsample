@@ -1,0 +1,26 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = require('react-native');
+
+var StyleSheet = React.StyleSheet,
+    Platform = React.Platform;
+exports.default = {
+
+  shiftTimeStyle: {
+    fontWeight: 'bold'
+  },
+
+  dataDisplayContainerStyle: {
+    marginLeft: 10,
+    marginTop: 15
+  },
+
+  eventIndicatorViewStyle: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10
+  }
+};

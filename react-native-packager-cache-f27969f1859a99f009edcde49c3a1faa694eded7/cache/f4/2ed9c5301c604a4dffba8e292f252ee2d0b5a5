@@ -1,0 +1,1091 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EwInvoiceDetailsScreen = undefined;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _ewloadingindicator = require('../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _ewcomponents = require('../../utils/ewcomponents');
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _animationutils = require('../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _utils = require('../../utils');
+
+var _vendordetails = require('./components/ewinvoicecomponents/vendordetails');
+
+var _vendordetails2 = babelHelpers.interopRequireDefault(_vendordetails);
+
+var _beneficiarydetails = require('./components/ewinvoicecomponents/beneficiarydetails');
+
+var _beneficiarydetails2 = babelHelpers.interopRequireDefault(_beneficiarydetails);
+
+var _expenseutils = require('./expenseutils');
+
+var expenseConstant = babelHelpers.interopRequireWildcard(_expenseutils);
+
+var _screennameidentifiers = require('../../utils/screennameidentifiers');
+
+var FILE_NAME = "ewinvoicedetailsscreen.js : ";
+
+var SCREEN_NAME = "Invoice Details Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_TRAVEL_AND_EXPENSE;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var styles = {
+
+  textStyle: {
+    marginBottom: 5,
+    color: appstyleguide.APP_GRAY
+
+  }
+};
+
+var defaultMargin = 10;
+
+var EwInvoiceDetailsScreen = exports.EwInvoiceDetailsScreen = function (_Component) {
+  babelHelpers.inherits(EwInvoiceDetailsScreen, _Component);
+
+  function EwInvoiceDetailsScreen(props, context) {
+    babelHelpers.classCallCheck(this, EwInvoiceDetailsScreen);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwInvoiceDetailsScreen.__proto__ || Object.getPrototypeOf(EwInvoiceDetailsScreen)).call(this, props, context));
+
+    _this.handleBackButtonPress = function () {
+
+      console.log(FILE_NAME + " Inside handleBackButtonPress");
+
+      var isReveiwMode = _this.state.isReveiwMode;
+
+
+      if (!isReveiwMode) {
+
+        _reactNative.Alert.alert('Invoice Details', 'Do you want to leave without saving ?', [{ text: 'Ok', onPress: function onPress() {
+            return _reactNativeRouterFlux.Actions.pop();
+          } }, { text: 'Cancel' }]);
+      } else _reactNativeRouterFlux.Actions.pop();
+
+      return true;
+    };
+
+    _this._handleEwDateTimePicked = function (date, mode, elementKey) {
+
+      console.log(FILE_NAME, "In _handleEwDateTimePicked method");
+
+      console.log("Returned Date value is - ", date);
+      console.log("Mod is - ", mode);
+      console.log("For Element is - ", elementKey);
+
+      var valueDateTimePicker;
+
+      var dateSelected = new Date(date).getTime();
+
+      switch (elementKey) {
+        case expenseConstant.INVOICE_DATE_KEY:
+
+          _this.setState({
+            invoiceDate: {
+              mode: _this.state.invoiceDate.mode,
+              key: _this.state.invoiceDate.key,
+              value: dateSelected
+            }
+          });
+          break;
+
+        default:
+
+      }
+    };
+
+    console.log("props receive invoice ", props);
+
+    elementValues = _this.handleElementValues(_this.props.invoiceState);
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      isReveiwMode: elementValues.isReveiwMode,
+      isInvoiceInCompanyName: elementValues.isInvoiceInCompanyName,
+      isGstCharged: elementValues.isGstCharged,
+
+      taxConfiguration: elementValues.taxConfiguration,
+
+      invoiceDate: {
+        key: expenseConstant.INVOICE_DATE_KEY,
+        value: elementValues.invoiceDate,
+        mode: 'date'
+      },
+
+      vendorDetails: elementValues.vendorDetails,
+      beneficiaryDetails: elementValues.beneficiaryDetails,
+
+      expenseCurrency: elementValues.expenseCurrency,
+
+      paymentMode: elementValues.paymentMode,
+      isPaymentDropdownVisible: elementValues.isPaymentDropdownVisible,
+      preTaxAmount: elementValues.preTaxAmount,
+      postTaxAmount: elementValues.postTaxAmount,
+
+      imagesArray: elementValues.imagesArray,
+
+      isExchangeRateVisible: elementValues.isExchangeRateVisible,
+      exchangeRate: elementValues.exchangeRate,
+
+      invoiceNumber: elementValues.invoiceNumber,
+
+      isbeneficiaryDropdownVisible: elementValues.isbeneficiaryDropdownVisible,
+
+      componentInitializeTime: new Date().getTime()
+    };
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwInvoiceDetailsScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage();
+              }
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+
+      _reactNative.BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonPress);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      _reactNative.BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonPress);
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In renderScreen");
+
+      var _state = this.state,
+          invoiceDate = _state.invoiceDate,
+          vendorDetails = _state.vendorDetails,
+          invoiceNumber = _state.invoiceNumber,
+          postTaxAmount = _state.postTaxAmount,
+          isPaymentDropdownVisible = _state.isPaymentDropdownVisible,
+          paymentMode = _state.paymentMode,
+          isReveiwMode = _state.isReveiwMode;
+
+
+      console.log("State of invoice - ", this.state, this.props);
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            null,
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _this2.handleBackButtonPress();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewcomponents.EwScreenTitle, {
+              text: 'Invoice Details'
+            })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Right,
+            null,
+            _react2.default.createElement(_ewcomponents.EwReportIssue, {
+              screenId: _screennameidentifiers.CREATE_INVOICE_DETAILS_ID
+            })
+          )
+        ),
+        _react2.default.createElement(
+          _nativeBase.Content,
+          null,
+          this.renderImageSlider(isReveiwMode),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { margin: appstyleguide.DEFAULT_MARGIN } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+              this.renderExpenseAmountView(isReveiwMode)
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flexDirection: 'row', marginTop: 20 } },
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { flex: 0.5 } },
+                isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+                  heading: expenseConstant.EXPENSE_INVOICE_DATE_LABEL,
+                  value: (0, _utils.showDeviceDateFormat)(invoiceDate.value)
+                }) : _react2.default.createElement(_ewcomponents.EwDateButton, {
+                  label: expenseConstant.EXPENSE_INVOICE_DATE_LABEL,
+                  customViewStyle: { marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+                  dateObject: invoiceDate,
+                  _handleEwDateTimePicked: function _handleEwDateTimePicked(date, mode, elementKey) {
+                    return _this2._handleEwDateTimePicked(date, mode, elementKey);
+                  }
+                })
+              ),
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { flex: 0.5 } },
+                this.renderPaymentDropdownpicker(isPaymentDropdownVisible, isReveiwMode)
+              )
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              null,
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { marginTop: defaultMargin } },
+                isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+                  heading: expenseConstant.INVOICE_NUMBER_LABEL,
+                  value: invoiceNumber
+                }) : _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+                  label: expenseConstant.INVOICE_NUMBER_LABEL,
+                  placeholderlabel: expenseConstant.INVOICE_NUMBER_PLACEHOLDER_LABEL,
+                  autoCorrect: false,
+                  autoCapitalize: 'none',
+                  onChangeText: function onChangeText(invoiceNumber) {
+                    return _this2.setState({ invoiceNumber: invoiceNumber });
+                  },
+                  value: invoiceNumber,
+                  keyboardType: 'numeric'
+                })
+              ),
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { marginTop: defaultMargin * 2, marginLeft: -10 } },
+                this.renderInvoiceCompanyNameCheckbox(isReveiwMode),
+                this.renderGstApplicableCheckbox(isReveiwMode)
+              )
+            ),
+            this.renderVendorDetails(isReveiwMode),
+            this.renderBeneficiaryDetails(isReveiwMode),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flexDirection: "row", marginTop: defaultMargin, alignItems: "center" } },
+              _react2.default.createElement(_ewcomponents.EwH2Text, {
+                text: "Total Tax Amount"
+              }),
+              this.renderTaxAmountCurrencyView(),
+              _react2.default.createElement(_ewcomponents.EwH2Text, {
+                text: postTaxAmount,
+                customStyle: { marginLeft: 5 }
+
+              })
+            ),
+            isExchangeRateVisible ? _react2.default.createElement(_ewcomponents.EwH2Text, {
+              text: expenseConstant.EXHANGE_RATE_LABEL + " - " + this.getExchangeRate(),
+              customStyle: { marginTop: defaultMargin }
+
+            }) : null,
+            !isReveiwMode ? _react2.default.createElement(
+              _reactNative.View,
+              { style: { margin: defaultMargin, alignSelf: "center" } },
+              _react2.default.createElement(_ewcomponents.EwButton, {
+                label: 'Done',
+                onButonClicked: function onButonClicked() {
+                  return _this2.saveInvoice();
+                }
+              })
+            ) : null
+          )
+        )
+      );
+    }
+  }, {
+    key: 'getExchangeRate',
+    value: function getExchangeRate() {
+      var expenseCurrency = this.state.expenseCurrency;
+
+
+      if (expenseCurrency != expenseConstant.DEFAULT_PICKER_VALUE) {
+        var currencyPicker = this.props.invoiceState.otherProps.currencyPicker;
+
+
+        return currencyPicker[expenseCurrency].conversionRate;
+      }
+
+      return '';
+    }
+  }, {
+    key: 'renderImageSlider',
+    value: function renderImageSlider(isReveiwMode) {
+      var _this3 = this;
+
+      var attachments_applicable = this.props.invoiceState.configuration.attachments_applicable;
+      var imagesArray = this.state.imagesArray;
+
+
+      if (attachments_applicable) {
+
+        if (!isReveiwMode || imagesArray.length > 0) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { backgroundColor: appstyleguide.APP_LIGHT_GRAY } },
+            _react2.default.createElement(_ewcomponents.EwImageSlider, {
+              initialState: imagesArray,
+              isAddButtonVisible: imagesArray.length == 0 && !isReveiwMode,
+              isDeleteButtonVisible: !isReveiwMode,
+              updateParentState: function updateParentState(componentState) {
+                return _this3.updateInvoiceDetailState(expenseConstant.IMAGE_SLIDER_ID, componentState);
+              },
+              sliderHeight: _utils.DEVICE_HEIGHT * 0.4,
+              imageWidth: _utils.DEVICE_WIDTH * 0.5
+            })
+          );
+        }
+      }
+    }
+  }, {
+    key: 'renderInvoiceCompanyNameCheckbox',
+    value: function renderInvoiceCompanyNameCheckbox(isReveiwMode) {
+      var _this4 = this;
+
+      var isInvoiceInCompanyName = this.state.isInvoiceInCompanyName;
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+          heading: expenseConstant.INVOICE_NOT_IN_COMPANY_NAME_LABEL,
+          value: isInvoiceInCompanyName ? expenseConstant.CHECKBOX_CHECKED_LABEL : expenseConstant.CHECKBOX_UNCHECKED_LABEL,
+          customViewStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN }
+        }) : _react2.default.createElement(_ewcomponents.EwCheckbox, {
+          label: expenseConstant.INVOICE_NOT_IN_COMPANY_NAME_LABEL,
+          isChecked: isInvoiceInCompanyName,
+          onCheckboxClick: function onCheckboxClick() {
+            _this4.setState({ isInvoiceInCompanyName: !isInvoiceInCompanyName });
+          }
+        })
+      );
+    }
+  }, {
+    key: 'renderGstApplicableCheckbox',
+    value: function renderGstApplicableCheckbox(isReveiwMode) {
+      var _this5 = this;
+
+      if (expenseConstant.isGstApplicable(this.props.invoiceState.otherProps.expenseDateInMilliseconds)) {
+        var isGstCharged = this.state.isGstCharged;
+
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstant.GST_CHARGED_LABEL,
+            value: isGstCharged ? expenseConstant.CHECKBOX_CHECKED_LABEL : expenseConstant.CHECKBOX_UNCHECKED_LABEL,
+            customViewStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN }
+
+          }) : _react2.default.createElement(_ewcomponents.EwCheckbox, {
+
+            label: expenseConstant.GST_CHARGED_LABEL,
+            isChecked: isGstCharged,
+            onCheckboxClick: function onCheckboxClick() {
+              _this5.changeGstValues();
+            }
+          })
+        );
+      }
+    }
+  }, {
+    key: 'renderPaymentDropdownpicker',
+    value: function renderPaymentDropdownpicker(isPaymentDropdownVisible, isReveiwMode) {
+      var _this6 = this;
+
+      var paymentModes = this.props.invoiceState.otherProps.paymentModes;
+      var _state2 = this.state,
+          paymentMode = _state2.paymentMode,
+          isReveiwMode = _state2.isReveiwMode;
+
+
+      if (isPaymentDropdownVisible) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstant.PAYMENT_MODE_LABEL,
+            value: paymentMode
+          }) : _react2.default.createElement(_ewcomponents.EwDropdownPicker, {
+            pickerLabel: expenseConstant.PAYMENT_MODE_LABEL,
+            pickerPlaceholderLabel: paymentModes[0].value,
+            isDefaultPickerValueSelected: paymentMode == expenseConstant.DEFAULT_PICKER_VALUE,
+            customViewStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+            dataArray: paymentModes,
+            selectedValue: paymentMode,
+            onPickerValueChange: function onPickerValueChange(paymentMode) {
+              _this6.setState({ paymentMode: paymentMode });
+            }
+          })
+        );
+      }
+    }
+  }, {
+    key: 'renderTaxAmountCurrencyView',
+    value: function renderTaxAmountCurrencyView() {
+      var _this7 = this;
+
+      var currencyPicker = this.props.invoiceState.otherProps.currencyPicker;
+      var expenseCurrency = this.state.expenseCurrency;
+
+
+      if (currencyPicker.length > 1) {
+
+        return _react2.default.createElement(_ewcomponents.EwDropdownPicker, {
+          pickerLabel: expenseConstant.CURRENCY_PICKER_LABEL,
+          pickerPlaceholderLabel: currencyPicker[0].value,
+          isDefaultPickerValueSelected: expenseCurrency == expenseConstant.DEFAULT_PICKER_VALUE,
+          customViewStyle: { flex: 0.6, marginLeft: 10 },
+          dataArray: currencyPicker,
+          selectedValue: expenseCurrency,
+          onPickerValueChange: function onPickerValueChange(expenseCurrency) {
+            _this7.setState({ expenseCurrency: expenseCurrency });
+          }
+
+        });
+      } else {
+
+        return _react2.default.createElement(_ewcomponents.EwH2Text, {
+          text: currencyPicker[0].currency_Symbol,
+          customStyle: { marginLeft: 5 }
+        });
+      }
+    }
+  }, {
+    key: 'changeGstValues',
+    value: function changeGstValues() {
+      var _state3 = this.state,
+          isGstCharged = _state3.isGstCharged,
+          beneficiaryDetails = _state3.beneficiaryDetails,
+          preTaxAmount = _state3.preTaxAmount;
+
+
+      updatedGstCharged = !isGstCharged;
+      postTaxAmount = preTaxAmount;
+
+      if (updatedGstCharged) {
+        postTaxAmount = this.getPostTaxAmount(preTaxAmount, beneficiaryDetails);
+      }
+
+      this.setState({
+        isGstCharged: updatedGstCharged,
+        postTaxAmount: postTaxAmount
+      });
+    }
+  }, {
+    key: 'updateInvoiceDetailState',
+    value: function updateInvoiceDetailState(componentKey, data) {
+
+      switch (componentKey) {
+        case expenseConstant.IMAGE_SLIDER_ID:
+
+          this.setState({
+
+            imagesArray: data
+          });
+          break;
+
+        case expenseConstant.VENDOR_ID:
+
+          this.setState({
+
+            vendorDetails: data
+          });
+          break;
+
+        case expenseConstant.BENEFICIARY_DETAILS_ID:
+
+          postTaxAmount = this.getPostTaxAmount(this.state.preTaxAmount, data);
+
+          this.setState({
+
+            beneficiaryDetails: data,
+            postTaxAmount: postTaxAmount
+          });
+          break;
+
+        default:
+
+      }
+    }
+  }, {
+    key: 'getPostTaxAmount',
+    value: function getPostTaxAmount(preTaxAmount, taxAmount) {
+
+      console.log("getPostTaxAmount", preTaxAmount, taxAmount);
+
+      postTaxAmount = 0;
+
+      if (preTaxAmount != "") postTaxAmount = parseFloat(preTaxAmount);
+
+      if (expenseConstant.isGstApplicable(this.props.invoiceState.otherProps.expenseDateInMilliseconds)) {
+
+        if (taxAmount != undefined) {
+
+          if (taxAmount.cgstAmount != "") postTaxAmount += parseFloat(taxAmount.cgstAmount);
+
+          if (taxAmount.sgstAmount != "") postTaxAmount += parseFloat(taxAmount.sgstAmount);
+
+          if (taxAmount.igstAmount != "") postTaxAmount += parseFloat(taxAmount.igstAmount);
+        }
+      } else {
+
+        if (taxAmount != undefined) {
+
+          if (taxAmount.taxAmount != "") postTaxAmount += parseFloat(taxAmount.taxAmount);
+        }
+      }
+
+      return postTaxAmount.toFixed(2);
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(data) {
+
+      console.log("Invoice data receive is -", data);
+
+      expenseCurrency = -1;
+      imagesArray = [];
+      preTaxAmount = "";
+      invoiceDate = (0, _utils.getCurrentDate)();
+      taxConfiguration = {};
+      invoiceNumber = "";
+      postTaxAmount = "";
+      isInvoiceInCompanyName = false;
+      isGstCharged = false;
+      vendorDetails = null;
+      beneficiaryDetails = null;
+      paymentMode = -1;
+      isbeneficiaryDropdownVisible = false;
+      isPaymentDropdownVisible = false;
+      isExchangeRateVisible = false;
+      exchangeRate = "";
+      isReveiwMode = false;
+
+      if (data.initialState != null) {
+
+        propsData = data.initialState;
+
+        expenseCurrency = propsData.expenseCurrency;
+        imagesArray = propsData.imagesArray;
+        preTaxAmount = propsData.preTaxAmount;
+        invoiceDate = propsData.invoiceDate.value;
+        taxConfiguration = propsData.taxConfiguration;
+        invoiceNumber = propsData.invoiceNumber;
+        postTaxAmount = propsData.postTaxAmount;
+        isInvoiceInCompanyName = propsData.isInvoiceInCompanyName;
+        isGstCharged = propsData.isGstCharged;
+        vendorDetails = propsData.vendorDetails;
+        beneficiaryDetails = propsData.beneficiaryDetails;
+        isbeneficiaryDropdownVisible = propsData.isbeneficiaryDropdownVisible;
+        isPaymentDropdownVisible = propsData.isPaymentDropdownVisible;
+        isExchangeRateVisible = propsData.isExchangeRateVisible;
+        exchangeRate = propsData.exchangeRate;
+        isReveiwMode = propsData.isReveiwMode;
+        paymentMode = propsData.paymentMode;
+      } else {
+
+        propsData = data.otherProps;
+
+        expenseCurrency = this.getExpenseCurrency(propsData.baseCurrency, propsData.currencyPicker);
+        imagesArray = propsData.imagesArray;
+        preTaxAmount = propsData.expenseAmount.toString();
+        postTaxAmount = parseFloat(preTaxAmount);
+        invoiceNumber = propsData.invoiceNumber.toString();
+        isReveiwMode = propsData.isReveiwMode;
+
+        if (propsData.expenseDateInMilliseconds != 0) invoiceDate = propsData.expenseDateInMilliseconds;
+
+        switch (propsData.expenseName) {
+          case expenseConstant.EXPENSE_MILEAGE:
+
+            taxConfiguration["isVendorNameVisible"] = false;
+            taxConfiguration["isSachcnCodeVisible"] = false;
+            taxConfiguration["isbenficiaryGstVisible"] = false;
+
+            break;
+
+          case expenseConstant.EXPENSE_OTHER:
+
+            taxConfiguration["isVendorNameVisible"] = false;
+            taxConfiguration["isSachcnCodeVisible"] = false;
+            taxConfiguration["isbenficiaryGstVisible"] = false;
+            isPaymentDropdownVisible = true;
+            isExchangeRateVisible = true;
+
+            break;
+
+          default:
+
+        }
+      }
+
+      elementValues = {
+
+        expenseCurrency: expenseCurrency,
+        imagesArray: imagesArray,
+        preTaxAmount: preTaxAmount,
+        invoiceDate: invoiceDate,
+        taxConfiguration: taxConfiguration,
+        invoiceNumber: invoiceNumber,
+        postTaxAmount: postTaxAmount,
+        isInvoiceInCompanyName: isInvoiceInCompanyName,
+        isGstCharged: isGstCharged,
+        vendorDetails: vendorDetails,
+        beneficiaryDetails: beneficiaryDetails,
+        paymentMode: paymentMode,
+        isPaymentDropdownVisible: isPaymentDropdownVisible,
+        isbeneficiaryDropdownVisible: isbeneficiaryDropdownVisible,
+        isExchangeRateVisible: isExchangeRateVisible,
+        exchangeRate: exchangeRate,
+        isReveiwMode: isReveiwMode
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: 'getExpenseCurrency',
+    value: function getExpenseCurrency(baseCurrency, otherCurrency) {
+
+      console.log("baseCurrency", baseCurrency, otherCurrency);
+
+      for (var _iterator = otherCurrency, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref;
+
+        if (_isArray) {
+          if (_i >= _iterator.length) break;
+          _ref = _iterator[_i++];
+        } else {
+          _i = _iterator.next();
+          if (_i.done) break;
+          _ref = _i.value;
+        }
+
+        var currency = _ref;
+
+
+        if (currency.currencyId == baseCurrency) return currency.value;
+      }
+
+      return expenseConstant.DEFAULT_PICKER_VALUE;
+    }
+  }, {
+    key: 'saveInvoice',
+    value: function saveInvoice() {
+
+      console.log(FILE_NAME, "In saveInvoice method");
+
+      if (this.localValidation()) {
+
+        this.props.invoiceState.updateParentState(this.state);
+
+        _reactNativeRouterFlux.Actions.pop();
+      }
+    }
+  }, {
+    key: 'localValidation',
+    value: function localValidation() {
+      var _state4 = this.state,
+          beneficiaryDetails = _state4.beneficiaryDetails,
+          isGstCharged = _state4.isGstCharged,
+          vendorDetails = _state4.vendorDetails,
+          paymentMode = _state4.paymentMode;
+      var showAlertMessage = this.props.invoiceState.showAlertMessage;
+
+
+      if (beneficiaryDetails != null) {
+
+        if (expenseConstant.isGstApplicable(this.props.invoiceState.otherProps.expenseDateInMilliseconds)) {
+
+          console.log("Inside is gst Applicable");
+
+          if (isGstCharged) {
+            var cgstRate = beneficiaryDetails.cgstRate,
+                cgstAmount = beneficiaryDetails.cgstAmount,
+                igstRate = beneficiaryDetails.igstRate,
+                igstAmount = beneficiaryDetails.igstAmount,
+                sgstRate = beneficiaryDetails.sgstRate,
+                sgstAmount = beneficiaryDetails.sgstAmount,
+                activeGstView = beneficiaryDetails.activeGstView;
+
+
+            if (activeGstView == expenseConstant.CGST_SGST_VIEW) {
+
+              if (cgstRate.trim() == "") {
+
+                showAlertMessage(expenseConstant.EXPENSE_CGST_RATE_EMPTY);
+                return false;
+              }
+
+              if (cgstAmount.trim() == "") {
+
+                showAlertMessage(expenseConstant.EXPENSE_CGST_AMOUNT_EMPTY);
+                return false;
+              }
+
+              if (sgstRate.trim() == "") {
+
+                showAlertMessage(expenseConstant.EXPENSE_SGST_RATE_EMPTY);
+                return false;
+              }
+
+              if (sgstAmount.trim() == "") {
+
+                showAlertMessage(expenseConstant.EXPENSE_SGST_AMOUNT_EMPTY);
+                return false;
+              }
+            }
+
+            if (activeGstView == expenseConstant.IGST_VIEW) {
+
+              if (igstRate.trim() == "") {
+
+                showAlertMessage(expenseConstant.EXPENSE_IGST_RATE_EMPTY);
+                return false;
+              }
+
+              if (igstAmount.trim() == "") {
+
+                showAlertMessage(expenseConstant.EXPENSE_IGST_AMOUNT_EMPTY);
+                return false;
+              }
+            }
+
+            if (activeGstView == expenseConstant.NO_GST_VIEW_SELECTED) {
+
+              showAlertMessage(expenseConstant.EXPENSE_CGST_SGST_IGST_AMOUNT_EMPTY);
+              return false;
+            }
+          }
+        } else {
+          var taxAmount = beneficiaryDetails.taxAmount;
+
+
+          if (taxAmount.trim() == "") {
+
+            showAlertMessage(expenseConstant.EXPENSE_TAX_AMOUNT_EMPTY);
+            return false;
+          }
+        }
+      }
+
+      if (vendorDetails != null) {
+        var gstinNumber = vendorDetails.gstinNumber;
+
+
+        if (isGstCharged) {
+
+          if (gstinNumber.trim() == "") {
+
+            showAlertMessage(expenseConstant.EXPENSE_GSTIN_NUMBER_EMPTY);
+            return false;
+          }
+        }
+      }
+
+      if (this.props.invoiceState.otherProps.expenseName == expenseConstant.EXPENSE_OTHER) {
+
+        if (paymentMode == expenseConstant.DEFAULT_PICKER_VALUE) {
+
+          showAlertMessage(expenseConstant.PAYMENT_MODE_EMPTY);
+          return false;
+        }
+
+        if (this.getExchangeRate() == '' || this.getExchangeRate() <= 0) {
+
+          showAlertMessage(expenseConstant.EXCHANGE_RATE_NOT_EXIST);
+          return false;
+        }
+      }
+
+      return true;
+    }
+  }, {
+    key: 'renderExpenseAmountView',
+    value: function renderExpenseAmountView(isReveiwMode) {
+      var _this8 = this;
+
+      var preTaxAmount = this.state.preTaxAmount;
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { flexDirection: "row" } },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.6 } },
+          isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstant.EXPENSE_AMOUNT_PRE_TAX_LABEL,
+            value: preTaxAmount
+          }) : _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+            label: expenseConstant.EXPENSE_AMOUNT_PRE_TAX_LABEL,
+            placeholderlabel: expenseConstant.EXPENSE_AMOUNT_PRE_TAX_PLACEHOLDER_LABEL,
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            editable: this.props.invoiceState.otherProps.isExpenseAmountEditable,
+            onChangeText: function onChangeText(preTaxAmount) {
+              return _this8.setState({ preTaxAmount: preTaxAmount, postTaxAmount: _this8.getPostTaxAmount(preTaxAmount, _this8.state.beneficiaryDetails) });
+            },
+            value: preTaxAmount,
+            keyboardType: 'numeric'
+          })
+        )
+      );
+    }
+  }, {
+    key: 'renderVendorDetails',
+    value: function renderVendorDetails(isReveiwMode) {
+      var _this9 = this;
+
+      console.log(FILE_NAME + "In renderVendorDetails");
+
+      var _state5 = this.state,
+          taxConfiguration = _state5.taxConfiguration,
+          isGstCharged = _state5.isGstCharged;
+
+
+      if (expenseConstant.isGstApplicable(this.props.invoiceState.otherProps.expenseDateInMilliseconds)) {
+
+        var configuration = {
+
+          "isGstNumbervisible": isGstCharged,
+          "isVendorNameVisible": taxConfiguration.isVendorNameVisible,
+          "isSachcnCodeVisible": taxConfiguration.isSachcnCodeVisible,
+          "isReveiwMode": isReveiwMode
+
+        };
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+          _react2.default.createElement(_vendordetails2.default, {
+            initialState: this.state.vendorDetails,
+            configuration: configuration,
+            updateParentState: function updateParentState(componentState) {
+              return _this9.updateInvoiceDetailState(expenseConstant.VENDOR_ID, componentState);
+            }
+          })
+        );
+      }
+    }
+  }, {
+    key: 'renderBeneficiaryDetails',
+    value: function renderBeneficiaryDetails() {
+      var _this10 = this;
+
+      console.log(FILE_NAME + "In renderBeneficiaryDetails");
+
+      var _state6 = this.state,
+          taxConfiguration = _state6.taxConfiguration,
+          isGstCharged = _state6.isGstCharged,
+          preTaxAmount = _state6.preTaxAmount;
+
+
+      var configuration = {
+
+        isbenficiaryGstVisible: taxConfiguration.isbenficiaryGstVisible,
+        isGstVisible: isGstCharged,
+        isGstApplicable: expenseConstant.isGstApplicable(this.props.invoiceState.otherProps.expenseDateInMilliseconds),
+        isReveiwMode: isReveiwMode,
+        preTaxAmount: preTaxAmount
+      };
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+        _react2.default.createElement(_beneficiarydetails2.default, {
+          initialState: this.state.beneficiaryDetails,
+          configuration: configuration,
+          updateParentState: function updateParentState(componentState) {
+            return _this10.updateInvoiceDetailState(expenseConstant.BENEFICIARY_DETAILS_ID, componentState);
+          }
+        })
+      );
+    }
+  }]);
+  return EwInvoiceDetailsScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction");
+
+  return {};
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.auth.isLoggedIn,
+    errorWebService: state.auth.errorWebService,
+    sessionToken: state.auth.sessionToken
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwInvoiceDetailsScreen);

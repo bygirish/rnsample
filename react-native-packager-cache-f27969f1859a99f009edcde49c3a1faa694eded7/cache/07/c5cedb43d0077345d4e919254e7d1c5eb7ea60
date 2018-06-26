@@ -1,0 +1,11 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var ISSUE_SELECTED_ERROR = exports.ISSUE_SELECTED_ERROR = "Please select issue type";
+var DESCRIPTION_ERROR = exports.DESCRIPTION_ERROR = "Please enter description";
+var SCREEN_NAME_ERROR = exports.SCREEN_NAME_ERROR = "Please select screen name";
+
+var PICKER_SCREEN_NAME_KEY = exports.PICKER_SCREEN_NAME_KEY = "PICKER_SCREEN_NAME_KEY";
+var PICKER_ISSUE_KEY = exports.PICKER_ISSUE_KEY = "PICKER_ISSUE_KEY";
+
+var IMAGE_SLIDER_ID = exports.IMAGE_SLIDER_ID = 1;

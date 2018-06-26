@@ -1,0 +1,80 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.openDrawer = openDrawer;
+exports.closeDrawer = closeDrawer;
+exports.changeMaterial = changeMaterial;
+exports.changePlatform = changePlatform;
+exports.disableDrawer = disableDrawer;
+exports.enableDrawer = enableDrawer;
+exports.navigateTo = navigateTo;
+
+var _draweractiontypes = require("./draweractiontypes");
+
+var drawerActionTypes = babelHelpers.interopRequireWildcard(_draweractiontypes);
+
+var FILE_NAME = "draweractions.js : ";
+
+function openDrawer() {
+
+  console.log(FILE_NAME + "In openDrawer method");
+
+  return {
+    type: drawerActionTypes.OPEN_DRAWER
+  };
+}
+
+function closeDrawer() {
+
+  console.log(FILE_NAME + "In closeDrawer method");
+
+  return {
+    type: drawerActionTypes.CLOSE_DRAWER
+  };
+}
+
+function changeMaterial() {
+
+  console.log(FILE_NAME + "In changeMaterial method");
+
+  return {
+    type: drawerActionTypes.CHANGE_MATERIAL
+  };
+}
+
+function changePlatform() {
+
+  console.log(FILE_NAME + "In changePlatform method");
+
+  return {
+    type: drawerActionTypes.CHANGE_PLATFORM
+  };
+}
+
+function disableDrawer() {
+
+  console.log(FILE_NAME + "In disableDrawer method");
+
+  return {
+    type: drawerActionTypes.DISABLE_DRAWER
+  };
+}
+
+function enableDrawer() {
+
+  console.log(FILE_NAME + "In enableDrawer method");
+
+  return {
+    type: drawerActionTypes.ENABLE_DRAWER
+  };
+}
+
+function navigateTo(sceneKeyNavigation) {
+
+  console.log(FILE_NAME + "In navigateTo method");
+
+  return {
+    type: drawerActionTypes.NAVIGATE_TO_SCENE,
+    sceneKey: sceneKeyNavigation
+  };
+}

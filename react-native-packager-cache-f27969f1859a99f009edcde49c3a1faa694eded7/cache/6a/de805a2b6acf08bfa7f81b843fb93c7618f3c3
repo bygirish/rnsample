@@ -1,0 +1,45 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+
+var React = require('react-native');
+
+var StyleSheet = React.StyleSheet,
+    Dimensions = React.Dimensions,
+    Platform = React.Platform;
+exports.default = {
+
+  ewbarContainerStyle: {
+    marginBottom: 10,
+    marginTop: 5,
+    backgroundColor: 'transparent',
+    alignSelf: 'stretch'
+  },
+
+  ewbarTextStyle: {
+    marginLeft: 10,
+    marginTop: 5,
+    marginBottom: 5,
+    alignSelf: 'auto',
+    color: 'black'
+  },
+
+  contentContainerStyle: {
+    marginLeft: 5,
+    marginRight: 5,
+    alignSelf: 'stretch'
+  },
+
+  footerContainerStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10
+  }
+
+};

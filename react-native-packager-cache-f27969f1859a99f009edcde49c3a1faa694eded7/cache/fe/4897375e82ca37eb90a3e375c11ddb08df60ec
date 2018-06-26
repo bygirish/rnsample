@@ -1,0 +1,187 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _ewh1text = require('../../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewnetworkimage = require('../../../../components/ewnetworkimage/ewnetworkimage');
+
+var _ewnetworkimage2 = babelHelpers.interopRequireDefault(_ewnetworkimage);
+
+var _utils = require('../../../../utils');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _expenseutils = require('../../expenseutils');
+
+var expenseConstants = babelHelpers.interopRequireWildcard(_expenseutils);
+
+var EwListitem = function (_Component) {
+  babelHelpers.inherits(EwListitem, _Component);
+
+  function EwListitem() {
+    babelHelpers.classCallCheck(this, EwListitem);
+    return babelHelpers.possibleConstructorReturn(this, (EwListitem.__proto__ || Object.getPrototypeOf(EwListitem)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(EwListitem, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props = this.props,
+          listItemData = _props.listItemData,
+          otherDetails = _props.otherDetails,
+          onListItemClicked = _props.onListItemClicked;
+
+
+      console.log(" props received are ", this.props);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(
+          _nativeBase.ListItem,
+          { avatar: true, onPress: function onPress() {
+              return _this2.props.onListItemClicked(listItemData);
+            } },
+          _react2.default.createElement(
+            _nativeBase.Left,
+            null,
+            _react2.default.createElement(_ewnetworkimage2.default, { networkUrl: (0, _utils.getImageUrl)(otherDetails.sessionToken, listItemData.gen_id, 'My Applied Expense Claim', otherDetails.currentImageTimestamp) })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            null,
+            _react2.default.createElement(_ewh1text2.default, {
+              text: listItemData.requestType
+            }),
+            this.getExpenseDate(listItemData),
+            _react2.default.createElement(_ewh2text2.default, {
+              text: listItemData.total_expense_amount + " " + listItemData.currency
+            }),
+            this.getStatusOfExpenseClaim(listItemData.pi_Txn_Subtype)
+          )
+        )
+      );
+    }
+  }, {
+    key: 'getExpenseDate',
+    value: function getExpenseDate(listItemData) {
+
+      expenseDate = (0, _utils.showDeviceDateFormat)(listItemData.pi_App_On);
+
+      if (listItemData.pi_St_Dt != null) {
+        expenseDate = (0, _utils.showDeviceDateFormat)(listItemData.pi_St_Dt) + " - " + (0, _utils.showDeviceDateFormat)(listItemData.pi_End_Dt);
+      }
+
+      return _react2.default.createElement(_ewh2text2.default, {
+        text: expenseDate
+      });
+    }
+  }, {
+    key: 'getStatusOfExpenseClaim',
+    value: function getStatusOfExpenseClaim(expenseClaimStatus) {
+
+      console.log(" In getStatusOfExpenseClaim method");
+
+      expenseClaimStatusText = expenseClaimStatus;
+      expenseClaimStatusColor = appstyleguide.APP_BLACK;
+
+      switch (expenseClaimStatus) {
+        case expenseConstants.PENDING_APPROVAL:
+
+          expenseClaimStatusText = expenseConstants.PENDING_APPROVAL_LABEL;
+          expenseClaimStatusColor = appstyleguide.APP_ORANGE;
+          break;
+
+        case expenseConstants.APPROVED:
+
+          expenseClaimStatusText = expenseConstants.APPROVED_LABEL;
+          expenseClaimStatusColor = appstyleguide.APP_GREEN;
+          break;
+
+        case expenseConstants.REJECTED:
+
+          expenseClaimStatusText = expenseConstants.REJECTED_LABEL;
+          expenseClaimStatusColor = appstyleguide.APP_RED;
+          break;
+
+        case expenseConstants.RECONSIDER:
+
+          expenseClaimStatusText = expenseConstants.RECONSIDER_LABEL;
+          expenseClaimStatusColor = appstyleguide.APP_LIGHT_BLUE;
+          break;
+
+        case expenseConstants.CANCELLED:
+
+          expenseClaimStatusText = expenseConstants.CANCELLED_LABEL;
+          expenseClaimStatusColor = appstyleguide.APP_BLACK;
+          break;
+
+        case expenseConstants.CANCELLATION_REQUESTED:
+
+          expenseClaimStatusText = expenseConstants.CANCELLATION_REQUESTED_LABEL;
+          expenseClaimStatusColor = appstyleguide.APP_GRAY;
+          break;
+
+        case expenseConstants.CANCELLATION_APPROVED:
+
+          expenseClaimStatusText = expenseConstants.CANCELLATION_APPROVED_LABEL;
+          expenseClaimStatusColor = appstyleguide.APP_GREEN;
+          break;
+
+        case expenseConstants.PAID:
+
+          expenseClaimStatusText = expenseConstants.PAID_LABEL;
+          expenseClaimStatusColor = appstyleguide.APP_GREEN;
+          break;
+
+        case expenseConstants.VERIFIED:
+
+          expenseClaimStatusText = expenseConstants.VERIFIED_LABEL;
+          expenseClaimStatusColor = appstyleguide.APP_GREEN;
+          break;
+
+        default:
+
+      }
+
+      console.log("expenseClaimStatusColor", expenseClaimStatusColor, expenseClaimStatusText);
+
+      return _react2.default.createElement(_ewh3text2.default, {
+        text: expenseClaimStatusText,
+        customStyle: { color: expenseClaimStatusColor }
+      });
+    }
+  }]);
+  return EwListitem;
+}(_react.Component);
+
+;
+
+exports.default = EwListitem;

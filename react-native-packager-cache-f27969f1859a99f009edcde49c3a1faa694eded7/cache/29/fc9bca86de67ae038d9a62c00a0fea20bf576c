@@ -1,0 +1,13 @@
+var ScrollableMixin = {
+  getInnerViewNode: function getInnerViewNode() {
+    return this.getScrollResponder().getInnerViewNode();
+  },
+  scrollTo: function scrollTo(destY, destX) {
+    this.getScrollResponder().scrollTo(destY, destX);
+  },
+  scrollWithoutAnimationTo: function scrollWithoutAnimationTo(destY, destX) {
+    this.getScrollResponder().scrollWithoutAnimationTo(destY, destX);
+  }
+};
+
+module.exports = ScrollableMixin;

@@ -1,0 +1,110 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _ewimageuploadscreen = require('./../../ewscreens/common/ewimageuploadscreen.js');
+
+var _ewimageuploadscreen2 = babelHelpers.interopRequireDefault(_ewimageuploadscreen);
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var EwNetworkImage = function (_Component) {
+  babelHelpers.inherits(EwNetworkImage, _Component);
+
+  function EwNetworkImage(props, context) {
+    babelHelpers.classCallCheck(this, EwNetworkImage);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwNetworkImage.__proto__ || Object.getPrototypeOf(EwNetworkImage)).call(this, props, context));
+
+    console.log("propsreceived", props);
+
+    _this.initialState = {
+      image: { uri: _this.props.networkUrl },
+      opacity: new _reactNative.Animated.Value(0)
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwNetworkImage, [{
+    key: 'onError',
+    value: function onError(error) {
+
+      this.setState({ image: require('../../../img/profile_icon.png') });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("ewnetworkingimage.js : In componentWillReceiveProps");
+
+      if (nextProps.networkUrl != this.props.networkUrl) {
+
+        this.setState({
+          image: {
+            uri: nextProps.networkUrl
+          }
+        });
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log("ewnetworkimage.js : In render", this.state);
+
+      if (this.props.isClickable) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _reactNative.TouchableOpacity,
+            { onPress: this.props.onPress },
+            _react2.default.createElement(_reactNative.Animated.Image, { source: this.state.image,
+
+              style: babelHelpers.extends({}, _styles2.default.imageStyle, { opacity: this.state.opacity }),
+              onError: this.onError.bind(this),
+              key: this.state.image,
+              onLoad: this.onLoad()
+            })
+          )
+        );
+      } else {
+
+        return _react2.default.createElement(_reactNative.Animated.Image, { source: this.state.image,
+
+          style: babelHelpers.extends({}, _styles2.default.imageStyle, { opacity: this.state.opacity }),
+          onError: this.onError.bind(this),
+          key: this.state.image,
+          onLoad: this.onLoad()
+        });
+      }
+    }
+  }, {
+    key: 'onLoad',
+    value: function onLoad() {
+
+      _reactNative.Animated.timing(this.state.opacity, {
+
+        toValue: 1,
+        duration: 1000
+
+      }).start();
+    }
+  }]);
+  return EwNetworkImage;
+}(_react.Component);
+
+exports.default = EwNetworkImage;

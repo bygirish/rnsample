@@ -1,0 +1,1436 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _travelutils = require('../../travelutils');
+
+var travelConstants = babelHelpers.interopRequireWildcard(_travelutils);
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewfloatinglabel = require('../../../../components/ewfloatinglabel/ewfloatinglabel');
+
+var _ewfloatinglabel2 = babelHelpers.interopRequireDefault(_ewfloatinglabel);
+
+var _ewbutton = require('../../../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _ewcard = require('../../../../components/ewcard/ewcard');
+
+var _ewcard2 = babelHelpers.interopRequireDefault(_ewcard);
+
+var _ewh1text = require('../../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewh4text = require('../../../../components/ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewicon = require('../../../../components/ewicon/ewicon');
+
+var _ewicon2 = babelHelpers.interopRequireDefault(_ewicon);
+
+var _ewbar = require('../../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewcheckbox = require('../../../../components/ewcheckbox/ewcheckbox');
+
+var _ewcheckbox2 = babelHelpers.interopRequireDefault(_ewcheckbox);
+
+var _ewradiobutton = require('../../../../components/ewradiobutton/ewradiobutton');
+
+var _ewradiobutton2 = babelHelpers.interopRequireDefault(_ewradiobutton);
+
+var _ewautocompleteinput = require('../../../../components/ewautocompleteinput/ewautocompleteinput');
+
+var _ewautocompleteinput2 = babelHelpers.interopRequireDefault(_ewautocompleteinput);
+
+var _ewdropdownpicker = require('../../../../components/ewdropdownpicker/ewdropdownpicker');
+
+var _ewdropdownpicker2 = babelHelpers.interopRequireDefault(_ewdropdownpicker);
+
+var _travelactions = require('../../../../services/travel/travelactions');
+
+var _utils = require('../../../../utils');
+
+var _animationutils = require('../../../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _ewtravelpurposescreenstyles = require('../../styles/ewtravelpurposescreenstyles');
+
+var _ewtravelpurposescreenstyles2 = babelHelpers.interopRequireDefault(_ewtravelpurposescreenstyles);
+
+var FILE_NAME = "travelPurpose.js : ";
+
+var deleteIcon = require('../../../../../img/travelicons/cancel.png');
+
+travelTypePicker = [{
+  "value": travelConstants.TRAVEL_TYPE_DOMESTIC,
+  "label": travelConstants.TRAVEL_TYPE_DOMESTIC_LABEL
+}, {
+  "value": travelConstants.TRAVEL_TYPE_INTERNATIONAL,
+  "label": travelConstants.TRAVEL_TYPE_INTERNATIONAL_LABEL
+}];
+
+var EwTravelPurpose = function (_Component) {
+  babelHelpers.inherits(EwTravelPurpose, _Component);
+
+  function EwTravelPurpose(props) {
+    babelHelpers.classCallCheck(this, EwTravelPurpose);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwTravelPurpose.__proto__ || Object.getPrototypeOf(EwTravelPurpose)).call(this, props));
+
+    _this.renderClientDetails = function (reveiwMode) {
+
+      console.log(FILE_NAME, "In renderClientDetails Method");
+
+      if (_this.state.isClientWork) {
+        var currentTravelState = _this.props.currentTravelState;
+
+
+        if (!_this.isDataEmpty(currentTravelState) && !_this.isDataEmpty(currentTravelState.travelInformation)) {
+          var askClientNameOrAccount = currentTravelState.travelInformation.askClientNameOrAccount;
+
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            askClientNameOrAccount == travelConstants.SERVER_ACCOUNT_LABEL ? _this.renderClientAccountView(reveiwMode) : _this.renderClientNameView(reveiwMode),
+            _this.renderClientBillableView(reveiwMode)
+          );
+        }
+      }
+    };
+
+    _this.onRadioButtonSelected = function (travelType) {
+
+      console.log(FILE_NAME, "In onRadioButtonSelected Method");
+
+      isTravelTypeDomestic = false;
+      isTravelTypeInternational = false;
+
+      switch (travelType) {
+
+        case travelConstants.TRAVEL_TYPE_INTERNATIONAL:
+
+          isTravelTypeInternational = true;
+          break;
+
+        case travelConstants.TRAVEL_TYPE_DOMESTIC:
+
+          isTravelTypeDomestic = true;
+          break;
+
+        default:
+
+      }
+
+      _this.setState({
+        isTravelTypeDomestic: isTravelTypeDomestic,
+        isTravelTypeInternational: isTravelTypeInternational
+
+      });
+    };
+
+    _this.renderTravelPurposePicker = function (currentTravelState, reveiwMode) {
+
+      console.log(FILE_NAME, "In renderTravelPurposePicker Method");
+
+      var _this$state = _this.state,
+          travelPurposeValues = _this$state.travelPurposeValues,
+          travelPurpose = _this$state.travelPurpose;
+
+
+      if (reveiwMode) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+          _react2.default.createElement(_ewh4text2.default, {
+            text: travelConstants.TRAVEL_PURPOSE_LABEL
+          }),
+          _react2.default.createElement(_ewh3text2.default, {
+            text: _this.getTravelPurposeText(travelPurpose),
+            customStyle: _ewtravelpurposescreenstyles2.default.textStyle
+          })
+        );
+      } else {
+
+        return _react2.default.createElement(_ewdropdownpicker2.default, {
+          pickerLabel: travelConstants.TRAVEL_PURPOSE_LABEL,
+          pickerPlaceholderLabel: 'Select Travel Purpose',
+          customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+          isDefaultPickerValueSelected: _this.state.travelPurpose == "-1",
+          dataArray: travelPurposeValues,
+          selectedValue: travelPurpose,
+          onPickerValueChange: function onPickerValueChange(travelPurpose) {
+            return _this.setState({ travelPurpose: travelPurpose });
+          }
+        });
+      }
+    };
+
+    _this.textInputRef = [];
+
+    console.log("Receivedpropstravelpurposeare", _this.props);
+
+    if (_this.props.initialState == null) {
+
+      elementValues = _this.handleElementsValues(_this.props.customTravelData);
+
+      _this.state = {
+
+        travelPurpose: elementValues.travelPurpose,
+        isTravelTypeDomestic: elementValues.isTravelTypeDomestic,
+        isTravelTypeInternational: elementValues.isTravelTypeInternational,
+
+        enableScrollViewScroll: true,
+
+        travelPurposeValues: elementValues.travelPurposeValues,
+
+        currentFocussedTextInput: "",
+
+        accountsData: [],
+
+        isClientWork: elementValues.isClientWork,
+        isPersonalTravel: elementValues.isPersonalTravel,
+
+        clientDetails: elementValues.clientDetails,
+
+        isClientBillable: elementValues.isClientBillable };
+
+      if (_this.props.customTravelData != null) {
+
+        _this.updateParentState(_this.state);
+      }
+    } else _this.state = _this.props.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwTravelPurpose, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      if (this.props.customTravelData != null) {
+
+        this.getClientProjectInformation();
+      }
+
+      this.props.getValidationMethod(this.doLocalValidation.bind(this));
+      this.props.getComponentState(this.getCurrentState.bind(this));
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.travelClientAccountInformationData != null && nextProps.travelClientAccountInformationError == null) {
+
+        this.setState({
+
+          accountsData: nextProps.travelClientAccountInformationData
+
+        });
+      }
+
+      if (nextProps.travelClientAccountInformationData == null && nextProps.travelClientAccountInformationError != null) {
+
+        this.setState({
+
+          accountsData: []
+
+        });
+      }
+
+      if (nextProps.travelClientAccountProjectsInformationData != null && nextProps.travelClientAccountProjectsInformationError == null) {
+
+        if (nextProps.travelClientAccountProjectsInformationData.length != 0) {
+
+          updatedClientDetails = this.state.clientDetails;
+
+          for (var _iterator = updatedClientDetails, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+            var _ref;
+
+            if (_isArray) {
+              if (_i >= _iterator.length) break;
+              _ref = _iterator[_i++];
+            } else {
+              _i = _iterator.next();
+              if (_i.done) break;
+              _ref = _i.value;
+            }
+
+            var clientDetail = _ref;
+
+
+            console.log("clientDetail11", clientDetail);
+
+            if (clientDetail.clientAccountId == nextProps.travelClientAccountProjectsInformationData[1].proj_acct_id) {
+
+              clientDetail.accountProjectsData = nextProps.travelClientAccountProjectsInformationData;
+
+              if (clientDetail.clientProject == "") clientDetail.clientProject = nextProps.travelClientAccountProjectsInformationData[0].value;
+            }
+          }
+
+          this.setState({
+
+            clientDetails: updatedClientDetails
+          });
+        }
+      }
+
+      if (nextProps.travelClientAccountProjectsInformationData == null && nextProps.travelClientAccountProjectsInformationError != null) {}
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log(FILE_NAME + "In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In Render Method");
+
+      console.log("clientDetails", this.state.clientDetails);
+
+      var _props = this.props,
+          currentTravelState = _props.currentTravelState,
+          reveiwMode = _props.reveiwMode;
+
+
+      console.log("currentState", this.state);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        {
+          style: { flex: 1 },
+          onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+
+            console.log("Inside onStartShouldSetResponderCapture");
+
+            _this2.setState({
+              enableScrollViewScroll: true,
+              currentFocussedTextInput: ""
+            });
+          }
+        },
+        _react2.default.createElement(
+          _nativeBase.Content,
+          {
+            keyboardShouldPersistTaps: 'always',
+            scrollEnabled: this.state.enableScrollViewScroll
+
+          },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: this.getReveiwModeStyles(this.props.reveiwMode) },
+              this.renderTravelPurposePicker(currentTravelState, reveiwMode),
+              this.renderTravelTypeView(reveiwMode),
+              this.renderPersonalTravelCheckbox(currentTravelState, reveiwMode),
+              this.renderClientWorkCheckbox(currentTravelState, reveiwMode),
+              this.renderClientDetails(reveiwMode)
+            )
+          ),
+          this.renderAddTravelPlan(reveiwMode, currentTravelState)
+        )
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }, {
+    key: 'getClientProjectInformation',
+    value: function getClientProjectInformation() {
+      var clientDetails = this.state.clientDetails;
+
+
+      for (var clientDetailIndex in clientDetails) {
+
+        if (clientDetails[clientDetailIndex].clientProject != "") {
+
+          this.getAccountsProjectInformation(this.state.clientDetails, clientDetailIndex);
+        }
+      }
+    }
+  }, {
+    key: 'updateParentState',
+    value: function updateParentState() {
+
+      console.log(FILE_NAME + "In updateParentState");
+
+      if (this.doLocalValidation()) {
+        this.props.updateParentState(this.state);
+      }
+    }
+  }, {
+    key: 'handleElementsValues',
+    value: function handleElementsValues(customTravelData) {
+      var purpose = this.props.currentTravelState.travelInformation.purpose;
+
+
+      var travelPurpose = purpose[0].value;
+      var isTravelTypeDomestic = true;
+      var isTravelTypeInternational = false;
+      var isClientWork = false;
+      var isPersonalTravel = false;
+      var clientDetailsArray = [];
+      var isClientBillable = false;
+
+      if (customTravelData != null) {
+        var _customTravelData$oth = customTravelData.otherDetails,
+            purposeId = _customTravelData$oth.purposeId,
+            Travel_Type = _customTravelData$oth.Travel_Type,
+            Work_Type = _customTravelData$oth.Work_Type,
+            personalTravel = _customTravelData$oth.personalTravel,
+            Billable = _customTravelData$oth.Billable,
+            clientName = _customTravelData$oth.clientName,
+            clientDetails = _customTravelData$oth.clientDetails;
+
+
+        travelPurpose = purposeId;
+
+        if (Travel_Type == travelConstants.TRAVEL_TYPE_OVERSEAS_SERVER_LABEL) {
+
+          isTravelTypeDomestic = false;
+          isTravelTypeInternational = true;
+        }
+
+        if (Work_Type == travelConstants.WORK_TYPE_CLIENT) {
+
+          isClientWork = true;
+
+          clientDetailsArray.push(this.getClientDetailsModel());
+
+          if (clientName != "") {
+            clientDetailsArray[0].clientAccount = clientName;
+          } else {
+
+            if (clientDetails.length != 0) {
+
+              clientIndex = 0;
+
+              for (var _iterator2 = clientDetails, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+                var _ref2;
+
+                if (_isArray2) {
+                  if (_i2 >= _iterator2.length) break;
+                  _ref2 = _iterator2[_i2++];
+                } else {
+                  _i2 = _iterator2.next();
+                  if (_i2.done) break;
+                  _ref2 = _i2.value;
+                }
+
+                var clientDetail = _ref2;
+
+
+                if (clientIndex == 0) {
+
+                  clientDetailsArray[0].clientAccount = clientDetail.Account_Name;
+                  clientDetailsArray[0].clientProject = clientDetail.Project_Id;
+                  clientDetailsArray[0].clientAccountId = clientDetail.Account_Id;
+                } else {
+
+                  clientDetailsArray.push(this.getClientDetailsModel(clientDetail));
+                }
+
+                clientIndex += 1;
+              }
+            }
+          }
+        }
+
+        if (personalTravel == "Y") isPersonalTravel = true;
+
+        if (Billable == "Y") isClientBillable = true;
+      }
+
+      elementValues = {
+
+        travelPurpose: travelPurpose,
+        isTravelTypeDomestic: isTravelTypeDomestic,
+        isTravelTypeInternational: isTravelTypeInternational,
+
+        travelPurposeValues: purpose,
+
+        isClientWork: isClientWork,
+        isPersonalTravel: isPersonalTravel,
+
+        clientDetails: clientDetailsArray,
+
+        isClientBillable: isClientBillable };
+
+      return elementValues;
+    }
+  }, {
+    key: 'getCurrentState',
+    value: function getCurrentState() {
+
+      return this.state;
+    }
+  }, {
+    key: 'renderAddTravelPlan',
+    value: function renderAddTravelPlan(reveiwMode, currentTravelState) {
+      var _this3 = this;
+
+      if (!reveiwMode && !currentTravelState.istravelPlanVisible) {
+
+        return _react2.default.createElement(_ewbutton2.default, {
+          customStyle: { alignSelf: "center", marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+          label: 'Travel Plan',
+          onButonClicked: function onButonClicked() {
+            return _this3.updateParentState();
+          }
+        });
+      }
+    }
+  }, {
+    key: 'getReveiwModeStyles',
+    value: function getReveiwModeStyles(reveiwMode) {
+
+      var styles = {};
+      if (reveiwMode) {
+
+        styles = {
+
+          marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN
+
+        };
+      }
+
+      return styles;
+    }
+  }, {
+    key: 'renderTravelTypeView',
+    value: function renderTravelTypeView(reveiwMode) {
+      var _this4 = this;
+
+      if (reveiwMode) {
+
+        travelTypeLabel = travelConstants.TRAVEL_TYPE_DOMESTIC_LABEL;
+
+        if (this.state.isTravelTypeInternational) travelTypeLabel = travelConstants.TRAVEL_TYPE_INTERNATIONAL_LABEL;
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewh4text2.default, {
+            customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+            text: travelConstants.TRAVEL_TYPE_LABEL
+          }),
+          _react2.default.createElement(_ewh3text2.default, {
+            text: travelTypeLabel,
+            customStyle: _ewtravelpurposescreenstyles2.default.textStyle
+          })
+        );
+      } else {
+
+        if ((0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", margin: 10, justifyContent: 'space-around' } },
+            _react2.default.createElement(_ewradiobutton2.default, {
+              label: travelConstants.TRAVEL_TYPE_DOMESTIC_LABEL,
+              isSelected: this.state.isTravelTypeDomestic,
+              onRadioButtonClick: function onRadioButtonClick() {
+                return _this4.onRadioButtonSelected(travelConstants.TRAVEL_TYPE_DOMESTIC);
+              }
+            }),
+            _react2.default.createElement(_ewradiobutton2.default, {
+              label: travelConstants.TRAVEL_TYPE_INTERNATIONAL_LABEL,
+              isSelected: this.state.isTravelTypeInternational,
+              onRadioButtonClick: function onRadioButtonClick() {
+                return _this4.onRadioButtonSelected(travelConstants.TRAVEL_TYPE_INTERNATIONAL);
+              }
+            })
+          );
+        } else {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", margin: 10, justifyContent: 'space-around' } },
+            _react2.default.createElement(_ewcheckbox2.default, {
+              isChecked: this.state.isTravelTypeDomestic,
+              onCheckboxClick: function onCheckboxClick() {
+                return _this4.onRadioButtonSelected(travelConstants.TRAVEL_TYPE_DOMESTIC);
+              },
+              label: travelConstants.TRAVEL_TYPE_DOMESTIC_LABEL
+            }),
+            _react2.default.createElement(_ewcheckbox2.default, {
+              isChecked: this.state.isTravelTypeInternational,
+              onCheckboxClick: function onCheckboxClick() {
+                return _this4.onRadioButtonSelected(travelConstants.TRAVEL_TYPE_INTERNATIONAL);
+              },
+              label: travelConstants.TRAVEL_TYPE_INTERNATIONAL_LABEL
+            })
+          );
+        }
+      }
+    }
+  }, {
+    key: 'getTravelTypeSelected',
+    value: function getTravelTypeSelected() {
+
+      if (this.state.isTravelTypeDomestic) return travelConstants.TRAVEL_TYPE_DOMESTIC;
+
+      return travelConstants.TRAVEL_TYPE_INTERNATIONAL;
+    }
+  }, {
+    key: 'renderPersonalTravelCheckbox',
+    value: function renderPersonalTravelCheckbox(currentTravelState, reveiwMode) {
+      var _this5 = this;
+
+      console.log(FILE_NAME, "In renderPersonalTravelCheckbox Method");
+
+      var personal_travel_request = currentTravelState.travelInformation.personal_travel_request;
+
+
+      if (personal_travel_request == travelConstants.SERVER_PERSONAL_TRAVEL_REQUIRED_LABEL) {
+
+        if (reveiwMode) {
+
+          personalTravelRequest = this.getCheckboxReveiwText(this.state.isPersonalTravel);
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            _react2.default.createElement(_ewh4text2.default, {
+
+              text: travelConstants.PERSONAL_TRAVEL_REQUEST_LABEL,
+              customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+            }),
+            _react2.default.createElement(_ewh3text2.default, {
+
+              text: personalTravelRequest,
+              customStyle: _ewtravelpurposescreenstyles2.default.textStyle
+            })
+          );
+        } else {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+            _react2.default.createElement(_ewcheckbox2.default, {
+              isChecked: this.state.isPersonalTravel,
+              onCheckboxClick: function onCheckboxClick() {
+                return _this5.setState({ isPersonalTravel: !_this5.state.isPersonalTravel });
+              },
+              label: travelConstants.PERSONAL_TRAVEL_REQUEST_LABEL
+            })
+          );
+        }
+      }
+    }
+  }, {
+    key: 'renderClientWorkCheckbox',
+    value: function renderClientWorkCheckbox(currentTravelState, reveiwMode) {
+      var _this6 = this;
+
+      console.log(FILE_NAME, "In renderClientWorkCheckbox Method");
+
+      if (!this.isDataEmpty(currentTravelState) && !this.isDataEmpty(currentTravelState.travelInformation)) {
+        var clientTracking = currentTravelState.travelInformation.clientTracking;
+
+
+        if (clientTracking == 'Y') {
+
+          if (reveiwMode) {
+
+            clientWork = this.getCheckboxReveiwText(this.state.isClientWork);
+
+            return _react2.default.createElement(
+              _reactNative.View,
+              null,
+              _react2.default.createElement(_ewh4text2.default, {
+                text: travelConstants.TRAVEL_FOR_CLIENT_WORK_LABEL,
+                customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+              }),
+              _react2.default.createElement(_ewh3text2.default, {
+
+                text: clientWork,
+                customStyle: _ewtravelpurposescreenstyles2.default.textStyle
+              })
+            );
+          } else {
+
+            return _react2.default.createElement(
+              _reactNative.View,
+              { style: { flexDirection: 'row', marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+              _react2.default.createElement(_ewcheckbox2.default, {
+                isChecked: this.state.isClientWork,
+                onCheckboxClick: function onCheckboxClick() {
+                  return _this6.onCheckboxStateChanged();
+                },
+                label: travelConstants.TRAVEL_FOR_CLIENT_WORK_LABEL
+              })
+            );
+          }
+        }
+      }
+    }
+  }, {
+    key: 'doLocalValidation',
+    value: function doLocalValidation() {
+
+      console.log(FILE_NAME + "In doLocalValidation");
+
+      var _state = this.state,
+          isClientWork = _state.isClientWork,
+          clientDetails = _state.clientDetails,
+          travelPurpose = _state.travelPurpose;
+      var currentTravelState = this.props.currentTravelState;
+      var _currentTravelState$t = currentTravelState.travelInformation,
+          askClientNameOrAccount = _currentTravelState$t.askClientNameOrAccount,
+          projectRequired = _currentTravelState$t.projectRequired;
+
+
+      if (travelPurpose == "-1") {
+
+        this.props.showAlertMessage(travelConstants.TRAVEL_PURPOSE_NOT_SELECTED_MESSAGE);
+
+        return false;
+      }
+
+      if (isClientWork) {
+
+        for (var client in clientDetails) {
+
+          if (askClientNameOrAccount == travelConstants.SERVER_ACCOUNT_LABEL) {
+
+            if (clientDetails[client].clientAccount.trim() == "") {
+
+              this.props.showAlertMessage(travelConstants.CLIENT_ACCOUNT_EMPTY_MESSAGE);
+
+              this.textInputRef[travelConstants.CLIENT_ACCOUNT_KEY + client].focus();
+
+              return false;
+            }
+
+            if (projectRequired == travelConstants.SERVER_PROJECT_REQUIRED_LABEL) {
+
+              if (clientDetails[client].clientProject == "" || clientDetails[client].clientProject == "-1") {
+
+                this.props.showAlertMessage(travelConstants.CLIENT_PROJECT_EMPTY_MESSAGE);
+
+                this.refs[travelConstants.CLIENT_PROJECT_KEY + client].focus();
+
+                return false;
+              }
+            }
+          } else {
+
+            if (clientDetails[client].clientAccount.trim() == "") {
+
+              this.props.showAlertMessage(travelConstants.CLIENT_NAME_EMPTY_MESSAGE);
+
+              this.textInputRef[travelConstants.CLIENT_ACCOUNT_KEY + client].focus();
+
+              return false;
+            }
+          }
+        }
+      }
+
+      return true;
+    }
+  }, {
+    key: 'onCheckboxStateChanged',
+    value: function onCheckboxStateChanged() {
+
+      console.log(FILE_NAME, "In onCheckboxStateChanged Method");
+
+      updatedClientDetails = this.state.clientDetails;
+
+      this.setState({
+        isClientWork: !this.state.isClientWork
+      });
+
+      if (updatedClientDetails.length == 0) this.addClientDetails(updatedClientDetails);
+    }
+  }, {
+    key: 'getClientDetailsModel',
+    value: function getClientDetailsModel(clientData) {
+
+      console.log(FILE_NAME, "In getClientDetailsModel Method");
+
+      clientAccount = "";
+      clientAccountId = "";
+      clientProject = "";
+
+      if (clientData != null) {
+
+        clientAccount = clientData.Account_Name;
+        clientProject = clientData.Project_Id;
+        clientAccountId = clientData.Account_Id;
+      }
+
+      clientModel = {
+
+        clientAccount: clientAccount,
+        clientAccountId: clientAccountId,
+        clientProject: clientProject,
+        accountProjectsData: []
+      };
+
+      return clientModel;
+    }
+  }, {
+    key: 'addClientDetails',
+    value: function addClientDetails(clientDetails) {
+
+      console.log(FILE_NAME + "In addClientDetails method");
+
+      updatedClientDetails = clientDetails;
+
+      updatedClientDetails.push(this.getClientDetailsModel());
+
+      this.setState({
+        clientDetails: updatedClientDetails
+      });
+    }
+  }, {
+    key: 'getCheckboxReveiwText',
+    value: function getCheckboxReveiwText(fieldName) {
+
+      if (fieldName) return "Yes";
+
+      return "No";
+    }
+  }, {
+    key: 'renderClientBillableView',
+    value: function renderClientBillableView(reveiwMode) {
+      var _this7 = this;
+
+      if (reveiwMode) {
+
+        billableText = this.getCheckboxReveiwText(this.state.isClientBillable);
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewh4text2.default, {
+            text: travelConstants.TRAVEL_BILLABLE_LABEL,
+            customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+          }),
+          _react2.default.createElement(_ewh3text2.default, {
+            text: billableText,
+            customStyle: _ewtravelpurposescreenstyles2.default.textStyle
+          })
+        );
+      } else {
+
+        return _react2.default.createElement(_ewcheckbox2.default, {
+          customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+          label: travelConstants.TRAVEL_BILLABLE_LABEL,
+          isChecked: this.state.isClientBillable,
+          onCheckboxClick: function onCheckboxClick() {
+            _this7.setState({ isClientBillable: !_this7.state.isClientBillable });
+          }
+        });
+      }
+    }
+  }, {
+    key: 'renderClientAccountView',
+    value: function renderClientAccountView(reveiwMode) {
+      var _this8 = this;
+
+      console.log(FILE_NAME, "In renderClientAccountView Method");
+
+      var clientDetails = this.state.clientDetails;
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        Object.keys(clientDetails).map(function (key, clientIndex) {
+          return _this8.renderClientDetailView(clientDetails, clientIndex, reveiwMode);
+        }),
+        !reveiwMode ? _react2.default.createElement(
+          _reactNative.View,
+          { style: { alignItems: "flex-end", flexDirection: "row", justifyContent: "flex-end", marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginRight: appstyleguide.DEFAULT_LEFT_MARGIN } },
+          _react2.default.createElement(_ewbutton2.default, {
+            label: 'Add Account',
+            customStyle: { backgroundColor: appstyleguide.APP_GRAY },
+            onButonClicked: function onButonClicked() {
+              return _this8.addClientDetails(_this8.state.clientDetails);
+            }
+          })
+        ) : null
+      );
+    }
+  }, {
+    key: 'renderClientNameView',
+    value: function renderClientNameView(reveiwMode) {
+      var _this9 = this;
+
+      console.log(FILE_NAME, "In renderClientNameView Method");
+
+      var clientDetails = this.state.clientDetails;
+
+
+      if (reveiwMode) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewh4text2.default, {
+            text: travelConstants.CLIENT_NAME_LABEL,
+            customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+          }),
+          _react2.default.createElement(_ewh3text2.default, {
+            text: clientDetails[0].clientAccount,
+            customStyle: _ewtravelpurposescreenstyles2.default.textStyle
+          })
+        );
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { margin: appstyleguide.DEFAULT_MARGIN } },
+          _react2.default.createElement(_ewfloatinglabel2.default, {
+            label: travelConstants.CLIENT_NAME_LABEL,
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            ref: function ref(textinputref) {
+              return _this9.textInputRef[travelConstants.CLIENT_ACCOUNT_KEY + 0] = textinputref;
+            },
+            onChangeText: function onChangeText(clientAccount) {
+              return _this9.onClientDetailsChanged(clientDetails, 0, travelConstants.CLIENT_ACCOUNT_KEY, clientAccount);
+            },
+            value: clientDetails[0].clientAccount
+          })
+        );
+      }
+    }
+  }, {
+    key: 'isDataEmpty',
+    value: function isDataEmpty(data) {
+
+      console.log(FILE_NAME, "In isDataEmpty Method");
+
+      if (data == null || data == undefined) return true;
+
+      return false;
+    }
+  }, {
+    key: 'renderClientDetailView',
+    value: function renderClientDetailView(clientDetails, clientIndex, reveiwMode) {
+
+      console.log(FILE_NAME, "In renderClientDetailView Method");
+
+      return _react2.default.createElement(
+        _ewcard2.default,
+        {
+          customStyle: { margin: appstyleguide.DEFAULT_MARGIN }
+        },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flexDirection: "row", margin: appstyleguide.DEFAULT_MARGIN } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flex: 0.9 } },
+            this.renderAccountView(clientDetails, clientIndex, reveiwMode),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN } },
+              this.renderProjectView(clientDetails, clientIndex, reveiwMode)
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { alignItems: "flex-end", margin: appstyleguide.DEFAULT_MARGIN, flex: 0.1 } },
+            this.renderDeleteClientView(clientDetails, clientIndex, reveiwMode)
+          )
+        )
+      );
+    }
+  }, {
+    key: 'renderDeleteClientView',
+    value: function renderDeleteClientView(clientDetails, clientIndex, reveiwMode) {
+      var _this10 = this;
+
+      if (!reveiwMode && clientDetails.length > 1) {
+
+        return _react2.default.createElement(_ewicon2.default, {
+          iconSource: deleteIcon,
+          onIconPressed: function onIconPressed() {
+            return _this10.renderClientRemoveAlert(clientDetails, clientIndex);
+          }
+        });
+      }
+    }
+  }, {
+    key: 'deleteClientDetails',
+    value: function deleteClientDetails(clientDetails, deletKey) {
+
+      console.log(FILE_NAME + "In deleteClientDetails method");
+
+      updatedClientDetails = clientDetails;
+
+      updatedClientDetails.splice(deletKey, 1);
+
+      this.setState({
+        clientDetails: updatedClientDetails
+      });
+    }
+  }, {
+    key: 'renderClientRemoveAlert',
+    value: function renderClientRemoveAlert(clientDetails, deletKey) {
+      var _this11 = this;
+
+      _reactNative.Alert.alert('Account', 'Do you want to delete this ', [{ text: 'Ok', onPress: function onPress() {
+          return _this11.deleteClientDetails(clientDetails, deletKey);
+        } }, { text: 'Cancel' }]);
+    }
+  }, {
+    key: 'renderAccountView',
+    value: function renderAccountView(clientDetails, clientIndex, reveiwMode) {
+      var _this12 = this;
+
+      if (reveiwMode) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewh4text2.default, {
+            text: travelConstants.CLIENT_ACCOUNT_LABEL,
+            customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+
+          }),
+          _react2.default.createElement(_ewh3text2.default, {
+            text: clientDetails[clientIndex].clientAccount,
+            styles: _ewtravelpurposescreenstyles2.default.textStyle
+          })
+        );
+      } else {
+        var accountsData = this.state.accountsData;
+
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          {
+
+            onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+
+              _this12.setState({
+
+                currentFocussedTextInput: travelConstants.CLIENT_ACCOUNT_KEY + clientIndex
+              });
+            }
+
+          },
+          _react2.default.createElement(_ewautocompleteinput2.default, {
+            dropdownData: accountsData,
+            hideResults: !this.isAutoCompleteDropdownVisible(travelConstants.CLIENT_ACCOUNT_KEY + clientIndex, clientDetails[clientIndex].clientAccount),
+            updateScrollState: function updateScrollState(scrollViewState) {
+              return _this12.setState({ enableScrollViewScroll: scrollViewState });
+            },
+            scrollViewVisibility: this.state.enableScrollViewScroll,
+            renderListItem: function renderListItem(data) {
+              return _this12.renderAccountListItem(clientDetails, clientIndex, travelConstants.CLIENT_ACCOUNT_KEY, data);
+            },
+
+            customTextInput: function customTextInput() {
+              return _react2.default.createElement(_ewfloatinglabel2.default, {
+                label: travelConstants.CLIENT_ACCOUNT_LABEL,
+                autoCorrect: false,
+                autoCapitalize: 'none',
+                ref: function ref(textinputref) {
+                  return _this12.textInputRef[travelConstants.CLIENT_ACCOUNT_KEY + clientIndex] = textinputref;
+                },
+                onChangeText: function onChangeText(clientAccount) {
+                  return _this12.onClientDetailsChanged(clientDetails, clientIndex, travelConstants.CLIENT_ACCOUNT_KEY, clientAccount);
+                },
+                value: clientDetails[clientIndex].clientAccount
+              });
+            }
+
+          })
+        );
+      }
+    }
+  }, {
+    key: 'getClientProjectName',
+    value: function getClientProjectName(projectData, projectId) {
+
+      projectName = "";
+
+      if (projectData != null && projectData.length != 0 && projectId != -1) {
+
+        for (var _iterator3 = projectData, _isArray3 = Array.isArray(_iterator3), _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+          var _ref3;
+
+          if (_isArray3) {
+            if (_i3 >= _iterator3.length) break;
+            _ref3 = _iterator3[_i3++];
+          } else {
+            _i3 = _iterator3.next();
+            if (_i3.done) break;
+            _ref3 = _i3.value;
+          }
+
+          var project = _ref3;
+
+
+          if (project.project_id == projectId) {
+
+            projectName = project.project_name;
+
+            break;
+          }
+        }
+      }
+
+      return projectName;
+    }
+  }, {
+    key: 'renderProjectView',
+    value: function renderProjectView(clientDetails, clientIndex, reveiwMode) {
+      var _this13 = this;
+
+      console.log(FILE_NAME, "In renderProjectView Method");
+
+      var _clientDetails$client = clientDetails[clientIndex],
+          accountProjectsData = _clientDetails$client.accountProjectsData,
+          clientProject = _clientDetails$client.clientProject;
+
+
+      console.log("accountProjectsData", clientProject);
+
+      if (accountProjectsData.length != 0) {
+
+        if (reveiwMode) {
+
+          clientProjectText = this.getClientProjectName(accountProjectsData, clientProject);
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            _react2.default.createElement(_ewh4text2.default, {
+              text: travelConstants.CLIENT_PROJECT_LABEL
+
+            }),
+            _react2.default.createElement(_ewh3text2.default, {
+              text: clientProjectText,
+              styles: _ewtravelpurposescreenstyles2.default.textStyle
+            })
+          );
+        } else {
+
+          return _react2.default.createElement(_ewdropdownpicker2.default, {
+            pickerLabel: travelConstants.CLIENT_PROJECT_LABEL,
+            pickerPlaceholderLabel: 'Select Project',
+            customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+            isDefaultPickerValueSelected: clientProject == "-1",
+            dataArray: accountProjectsData,
+            selectedValue: clientProject,
+            onPickerValueChange: function onPickerValueChange(clientProject) {
+              return _this13.onClientDetailsChanged(clientDetails, clientIndex, travelConstants.CLIENT_PROJECT_KEY, clientProject);
+            }
+          });
+        }
+      }
+    }
+  }, {
+    key: 'renderAccountListItem',
+    value: function renderAccountListItem(clientDetails, clientIndex, clientKey, data) {
+      var _this14 = this;
+
+      console.log(FILE_NAME, "In renderAccountListItem Method");
+
+      if (data != null) {
+
+        return _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          { style: { margin: 5 }, onPress: function onPress() {
+              return _this14.onClientDetailsChanged(clientDetails, clientIndex, clientKey, data, true);
+            } },
+          _react2.default.createElement(_ewh3text2.default, {
+            text: data.ACCT_NAME
+          })
+        );
+      }
+    }
+  }, {
+    key: 'isAutoCompleteDropdownVisible',
+    value: function isAutoCompleteDropdownVisible(textInputKey, textInputValue) {
+
+      console.log(FILE_NAME, "In isAutoCompleteDropdownVisible Method");
+
+      var currentFocussedTextInput = this.state.currentFocussedTextInput;
+
+
+      console.log("isAutoCompleteDropdownVisible", textInputKey, currentFocussedTextInput, textInputValue, currentFocussedTextInput == textInputKey && textInputValue.length > 2);
+
+      if (currentFocussedTextInput != "") {
+
+        if (currentFocussedTextInput == textInputKey && textInputValue.length > 2) {
+
+          return true;
+        }
+      }
+
+      return false;
+    }
+  }, {
+    key: 'onClientDetailsChanged',
+    value: function onClientDetailsChanged(clientDetails, clientKeyIndex, textInputKey, newText) {
+      var isDropdownItemPressed = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+
+
+      console.log(FILE_NAME + "In onClientDetailsChanged method");
+
+      var currentTravelState = this.props.currentTravelState;
+      var askClientNameOrAccount = currentTravelState.travelInformation.askClientNameOrAccount;
+
+
+      textinputRefKey = textInputKey + clientKeyIndex;
+
+      focussedTextinput = this.state.currentFocussedTextInput;
+
+      updatedClientDetails = clientDetails;
+
+      switch (textInputKey) {
+        case travelConstants.CLIENT_ACCOUNT_KEY:
+
+          if (isDropdownItemPressed) {
+
+            updatedClientDetails[clientKeyIndex].clientAccount = newText.ACCT_NAME;
+            updatedClientDetails[clientKeyIndex].clientAccountId = newText.ACCT_ID;
+          } else {
+
+            updatedClientDetails[clientKeyIndex].clientAccount = newText;
+            updatedClientDetails[clientKeyIndex].clientAccountId = "";
+            updatedClientDetails[clientKeyIndex].accountProjectsData = [];
+            updatedClientDetails[clientKeyIndex].clientProject = "";
+          }
+
+          focussedTextinput = textinputRefKey;
+
+          if (askClientNameOrAccount == travelConstants.SERVER_ACCOUNT_LABEL) this.handleDropDownPress(updatedClientDetails, clientKeyIndex, isDropdownItemPressed, newText);
+
+          break;
+
+        case travelConstants.CLIENT_PROJECT_KEY:
+
+          updatedClientDetails[clientKeyIndex].clientProject = newText;
+
+          break;
+
+        default:
+
+      }
+
+      this.setState({
+        clientDetails: updatedClientDetails,
+        currentFocussedTextInput: focussedTextinput
+      });
+    }
+  }, {
+    key: 'handleDropDownPress',
+    value: function handleDropDownPress(clientDetails, clientDetailIndex, isDropdownItemPressed, newText) {
+
+      console.log(FILE_NAME, "In handleDropDownPress Method");
+
+      if (isDropdownItemPressed) {
+
+        cacheProjectList = this.getCacheProjectList(clientDetails, clientDetailIndex);
+
+        updatedClientDetails = clientDetails;
+
+        if (cacheProjectList != null) {
+
+          updatedClientDetails[clientDetailIndex].accountProjectsData = cacheProjectList;
+          updatedClientDetails[clientDetailIndex].clientProject = cacheProjectList[0].value;
+        }
+
+        this.setState({
+          accountsData: [],
+          clientDetails: updatedClientDetails
+        });
+
+        if (cacheProjectList == null) this.getAccountsProjectInformation(clientDetails, clientDetailIndex);
+      } else {
+
+        this.getAccountsData(newText);
+      }
+    }
+  }, {
+    key: 'getCacheProjectList',
+    value: function getCacheProjectList(clientDetails, clientDetailIndex) {
+
+      console.log(FILE_NAME, "In getCacheProjectList Method");
+
+      projectList = null;
+
+      for (var clientIndex in clientDetails) {
+
+        if (clientDetailIndex != clientIndex && clientDetails[clientIndex].clientAccountId == clientDetails[clientDetailIndex].clientAccountId) {
+
+          projectList = clientDetails[clientIndex].accountProjectsData;
+
+          break;
+        }
+      }
+
+      return projectList;
+    }
+  }, {
+    key: 'getAccountsProjectInformation',
+    value: function getAccountsProjectInformation(clientDetails, clientDetailIndex) {
+
+      console.log(FILE_NAME, "In getAccountsProjectInformation Method");
+
+      var params = {
+
+        accountId: clientDetails[clientDetailIndex].clientAccountId
+      };
+
+      this.props.getTravelClientAccountProjects(params);
+    }
+  }, {
+    key: 'getAccountsData',
+    value: function getAccountsData(newText) {
+
+      console.log(FILE_NAME, "In getAccountsData Method");
+
+      if (newText.length > travelConstants.MINIMUM_AUTOCOMPLETE_TEXT_REQUIRED) {
+
+        var params = {
+
+          QueryString: newText
+        };
+
+        this.props.getTravelClientAccounts(params);
+      }
+    }
+  }, {
+    key: 'getTravelPurposeText',
+    value: function getTravelPurposeText(purposeId) {
+      var travelPurposeValues = this.state.travelPurposeValues;
+
+
+      for (var _iterator4 = travelPurposeValues, _isArray4 = Array.isArray(_iterator4), _i4 = 0, _iterator4 = _isArray4 ? _iterator4 : _iterator4[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref4;
+
+        if (_isArray4) {
+          if (_i4 >= _iterator4.length) break;
+          _ref4 = _iterator4[_i4++];
+        } else {
+          _i4 = _iterator4.next();
+          if (_i4.done) break;
+          _ref4 = _i4.value;
+        }
+
+        var purpose = _ref4;
+
+
+        if (purpose.value == purposeId) {
+          return purpose.label;
+        }
+      }
+    }
+  }]);
+  return EwTravelPurpose;
+}(_react.Component);
+
+function bindActions(dispatch) {
+
+  console.log(FILE_NAME, "In bindActions Method");
+
+  return {
+
+    getTravelClientAccounts: function getTravelClientAccounts(params) {
+      return dispatch((0, _travelactions.getTravelClientAccounts)(params));
+    },
+    getTravelClientAccountProjects: function getTravelClientAccountProjects(params) {
+      return dispatch((0, _travelactions.getTravelClientAccountProjects)(params));
+    }
+  };
+}
+
+function mapStateToProps(state) {
+
+  console.log("State Updated state is -");
+
+  console.log(state);
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    travelClientAccountInformationData: state.travel.travelClientAccountInformationData,
+    travelClientAccountInformationError: state.travel.travelClientAccountInformationError,
+
+    travelClientAccountProjectsInformationData: state.travel.travelClientAccountProjectsInformationData,
+    travelClientAccountProjectsInformationError: state.travel.travelClientAccountProjectsInformationError
+
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(EwTravelPurpose);

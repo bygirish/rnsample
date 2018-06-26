@@ -1,0 +1,18 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+
+var React = require('react-native');
+
+var StyleSheet = React.StyleSheet,
+    Dimensions = React.Dimensions,
+    Platform = React.Platform;
+exports.default = {
+
+  textStyle: {
+
+    marginTop: 5
+  }
+
+};

@@ -1,0 +1,17 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var GET_EXPENSE_COMMENTS = exports.GET_EXPENSE_COMMENTS = '/expense?scope=I';
+var SAVE_EXPENSE_COMMENT = exports.SAVE_EXPENSE_COMMENT = '/expense?scope=I';
+
+var GET_APPLIED_EXPENSE_CLAIM_LIST = exports.GET_APPLIED_EXPENSE_CLAIM_LIST = '/HomePageM?scope=I';
+var GET_EXPENSE_CLAIM_INFORMATION = exports.GET_EXPENSE_CLAIM_INFORMATION = '/expense?scope=I';
+var EXPENSE_CLAIM_ACTION = exports.EXPENSE_CLAIM_ACTION = '/expense?scope=I';
+
+var GET_COMPANY_INFORMATION = exports.GET_COMPANY_INFORMATION = '/expense?scope=I';
+var GET_BUSINESS_UNIT_INFORMATION = exports.GET_BUSINESS_UNIT_INFORMATION = '/expense?scope=I';
+var GET_LOCATION_INFORMATION = exports.GET_LOCATION_INFORMATION = '/expense?scope=I';
+var GET_FUNCTION_INFORMATION = exports.GET_FUNCTION_INFORMATION = '/expense?scope=I';
+var GET_GRADE_INFORMATION = exports.GET_GRADE_INFORMATION = '/expense?scope=I';
+var GET_COST_CENTRE_INFORMATION = exports.GET_COST_CENTRE_INFORMATION = '/expense?scope=I';
+var GET_ALLOCATION_PROJECTS_INFORMATION = exports.GET_ALLOCATION_PROJECTS_INFORMATION = '/expense?scope=I';

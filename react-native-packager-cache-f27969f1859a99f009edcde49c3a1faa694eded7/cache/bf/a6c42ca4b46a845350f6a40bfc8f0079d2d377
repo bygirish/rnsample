@@ -1,0 +1,1436 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EwEmployeeDirectoryScreen = undefined;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _reactNativePhoneCall = require('react-native-phone-call');
+
+var _reactNativePhoneCall2 = babelHelpers.interopRequireDefault(_reactNativePhoneCall);
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _utils = require('../../utils');
+
+var _ewcomponents = require('../../utils/ewcomponents');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _animationutils = require('../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _eipactions = require('../../services/eip/eipactions');
+
+var _eiperrorhandling = require('../../services/eip/eiperrorhandling');
+
+var eipError = babelHelpers.interopRequireWildcard(_eiperrorhandling);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _screennameidentifiers = require('../../utils/screennameidentifiers');
+
+var _employeelistutils = require('./employeelistutils');
+
+var employeeDirectoryConstants = babelHelpers.interopRequireWildcard(_employeelistutils);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var FILE_NAME = "ewemployeedirectory.js : ";
+
+var SCREEN_NAME = "Company directory Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_EMPLOYEE_INFORMATION_PORTAL;
+
+var callIcon = require('../../../img/calling.png');
+var emailIcon = require('../../../img/email.png');
+
+var filterIcon = require('../../../img/filtericon.png');
+
+var LIST_PAGE_SIZE = 20;
+
+var FILTER_KEYS = [employeeDirectoryConstants.FILTER_FUNCTION, employeeDirectoryConstants.FILTER_BUSINESS_UNIT, employeeDirectoryConstants.FILTER_COMPANY];
+
+var platform = _reactNative.Platform.OS;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwEmployeeDirectoryScreen = exports.EwEmployeeDirectoryScreen = function (_Component) {
+  babelHelpers.inherits(EwEmployeeDirectoryScreen, _Component);
+
+  function EwEmployeeDirectoryScreen(props, context) {
+    var _this2 = this;
+
+    babelHelpers.classCallCheck(this, EwEmployeeDirectoryScreen);
+
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    console.log(FILE_NAME + "In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwEmployeeDirectoryScreen.__proto__ || Object.getPrototypeOf(EwEmployeeDirectoryScreen)).call(this, props, context));
+
+    _this.onChangeTab = function (currentTab) {
+
+      console.log("currentTab", currentTab);
+
+      newEmployeeListVisible = [];
+
+      var _this$state = _this.state,
+          myTeamEmployeesList = _this$state.myTeamEmployeesList,
+          myTeamFiltersSelected = _this$state.myTeamFiltersSelected,
+          companyDirectoryFiltersSelected = _this$state.companyDirectoryFiltersSelected,
+          employeesList = _this$state.employeesList;
+
+
+      if (currentTab.i == employeeDirectoryConstants.MY_TEAM_TAB) {
+
+        console.log("currentTab", "Inside my team");
+
+        console.log("currentTab", _this.props.myTeamEmployeesInformationData);
+
+        if (myTeamEmployeesList == null) {
+
+          console.log("currentTab", "Inside myTeamEmployeesInformationData");
+
+          _this.getTeamEmployeeList();
+
+          _this.setState({
+            activeEmployeesList: employeeDirectoryConstants.MY_TEAM_TAB,
+            currentEmployeeListVisible: newEmployeeListVisible,
+            currentEmployeeListPageIndex: 0,
+            searchText: ''
+          });
+        } else {
+
+          _this.changeEmployeeListState(myTeamEmployeesList, employeeDirectoryConstants.MY_TEAM_TAB, myTeamFiltersSelected);
+        }
+      } else {
+
+        console.log("currentTab", "Inside all");
+
+        if (employeesList == null) {
+
+          _this.getEmployeesList();
+
+          _this.setState({
+            activeEmployeesList: employeeDirectoryConstants.COMPANY_DIRECTORY_TAB,
+            currentEmployeeListVisible: newEmployeeListVisible,
+            currentEmployeeListPageIndex: 0,
+            searchText: ''
+          });
+        } else {
+
+          _this.changeEmployeeListState(employeesList, employeeDirectoryConstants.COMPANY_DIRECTORY_TAB, companyDirectoryFiltersSelected);
+        }
+      }
+    };
+
+    _this.showFilterModal = function () {
+
+      console.log("Inside showFilterModal");
+
+      if (_this.state.modalVisible) return _react2.default.createElement(
+        _reactNative.Modal,
+        {
+          animationType: "slide",
+          transparent: false,
+          visible: _this.state.modalVisible,
+          onRequestClose: function onRequestClose() {
+            return _this.setState({
+              modalVisible: false
+            });
+          }
+        },
+        _react2.default.createElement(
+          _nativeBase.Container,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Header,
+            null,
+            _react2.default.createElement(
+              _nativeBase.Left,
+              null,
+              _react2.default.createElement(
+                _nativeBase.Button,
+                { transparent: true, onPress: function onPress() {
+                    return _this.changeFilterModalState();
+                  } },
+                _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+              )
+            ),
+            _react2.default.createElement(
+              _nativeBase.Body,
+              null,
+              _react2.default.createElement(
+                _nativeBase.Title,
+                null,
+                _this.getFilterTitle()
+              )
+            ),
+            _react2.default.createElement(
+              _nativeBase.Right,
+              null,
+              _react2.default.createElement(
+                _nativeBase.Button,
+                { transparent: true, onPress: function onPress() {
+                    return _this.applyFilters();
+                  } },
+                _react2.default.createElement(
+                  _nativeBase.Text,
+                  null,
+                  'Apply'
+                )
+              )
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Content,
+            null,
+            _this.showFilterCheckboxesList()
+          )
+        )
+      );
+    };
+
+    _this.isFilterSelected = function (key, subFilter) {
+
+      console.log("Inside isFilterSelected");
+
+      var temporaryFiltersSelected = _this.state.temporaryFiltersSelected;
+
+
+      if (temporaryFiltersSelected.hasOwnProperty(key)) {
+        if (temporaryFiltersSelected[key].includes(subFilter)) return true;
+      }
+
+      return false;
+    };
+
+    _this.addToFilters = function (key, subFilter) {
+
+      currentFiltersSelected = babelHelpers.extends({}, _this.state.temporaryFiltersSelected);
+
+      console.log('currentFiltersSelected', currentFiltersSelected, _this.state.temporaryFiltersSelected);
+
+      if (currentFiltersSelected.hasOwnProperty(key)) {
+        if (currentFiltersSelected[key].includes(subFilter)) {
+
+          index = currentFiltersSelected[key].indexOf(subFilter);
+
+          currentFiltersSelected[key].splice(index, 1);
+        } else currentFiltersSelected[key].push(subFilter);
+      } else {
+        currentFiltersSelected[key] = [];
+        currentFiltersSelected[key].push(subFilter);
+      }
+
+      _this.setState({
+
+        temporaryFiltersSelected: currentFiltersSelected
+      });
+
+      console.log('currentFiltersSelected', currentFiltersSelected, _this.state.temporaryFiltersSelected);
+    };
+
+    _this.setActiveAccordian = function (filterKey) {
+
+      console.log("Inside setActiveAccordian");
+
+      newFilterKey = filterKey;
+
+      if (_this.state.activeAccordian == filterKey) newFilterKey = null;
+
+      _this.setState({
+        activeAccordian: newFilterKey
+      });
+    };
+
+    _this.isActiveAccordian = function (filterKey) {
+
+      console.log("Inside isActiveAccordian");
+
+      if (filterKey == _this.state.activeAccordian) return false;
+
+      return true;
+    };
+
+    _this.getTeamEmployeeList = function () {
+
+      console.log("Inside getTeamEmployeeList");
+
+      var params = {};
+
+      _this.props.getMyTeamEmployeesList(params);
+    };
+
+    _this.getEmployeesList = function () {
+
+      console.log("Inside getEmployeesList");
+
+      var params = {};
+
+      _this.props.getEmployeesList(params);
+    };
+
+    _this.renderEmployeeList = function () {
+
+      console.log("this.state.EmployeeDataSource", _this.state.EmployeeDataSource);
+
+      return _react2.default.createElement(_reactNative.ListView, {
+
+        dataSource: _this.state.EmployeeDataSource,
+        renderRow: function renderRow(employeeInfo) {
+          return _this.renderListItem(employeeInfo);
+        },
+        enableEmptySections: true,
+        onEndReached: _this._loadMoreEmployeesAsync.bind(_this),
+        onEndReachedThreshold: 10,
+        renderSeparator: function renderSeparator(sectionId, rowId) {
+          return _react2.default.createElement(_reactNative.View, { key: rowId, style: { flex: 1, height: 1, backgroundColor: '#F2F4F7' } });
+        },
+        renderFooter: function renderFooter() {
+          return _this.renderListViewFooter();
+        }
+      });
+    };
+
+    _this._loadMoreEmployeesAsync = function _callee() {
+      var _this$state2, searchText, currentEmployeeListVisible, filteredList, _this$state3, currentEmployeeListPageIndex;
+
+      return regeneratorRuntime.async(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+
+              console.log(FILE_NAME + "In _loadMoreEmployeesAsync");
+
+              _this$state2 = _this.state, searchText = _this$state2.searchText, currentEmployeeListVisible = _this$state2.currentEmployeeListVisible, filteredList = _this$state2.filteredList;
+
+
+              if (searchText == '' && currentEmployeeListVisible.length != filteredList.length) {
+                _this$state3 = _this.state, currentEmployeeListPageIndex = _this$state3.currentEmployeeListPageIndex, currentEmployeeListVisible = _this$state3.currentEmployeeListVisible;
+
+
+                elementValues = _this.handleElementValues(filteredList, currentEmployeeListPageIndex, currentEmployeeListVisible);
+
+                console.log("customEmployeeData", elementValues);
+
+                updatedCurrentEmployeeListPageIndex = currentEmployeeListPageIndex + 1;
+
+                _this.setState({
+                  currentEmployeeListVisible: elementValues.currentEmployeeListVisible,
+                  currentEmployeeListPageIndex: updatedCurrentEmployeeListPageIndex,
+                  EmployeeDataSource: _this.getUpdatedEmployeeDataSource(elementValues.currentEmployeeListVisible)
+                });
+
+                console.log("loadMoreContentAsync");
+              }
+
+            case 3:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, null, _this2);
+    };
+
+    _this.renderListItem = function (employeeInfo) {
+
+      h3Text = employeeInfo.function + " , " + employeeInfo.bu + _this.showCompanyName(employeeInfo);
+
+      return _react2.default.createElement(
+        _ewcomponents.EwCard,
+        null,
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: _styles2.default.outerContainer },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _styles2.default.innerContainer },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.15, flexDirection: "row" } },
+              _react2.default.createElement(_ewcomponents.EwNetworkImage, { networkUrl: (0, _utils.getImageUrl)(_this.props.sessionToken, employeeInfo.employee_code, 'employee directory', _this.props.currentImageTimestamp) })
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.85, flexDirection: "row" } },
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { flex: 0.70, flexDirection: "column", marginLeft: 10 } },
+                _react2.default.createElement(_ewcomponents.EwH1Text, {
+                  text: employeeInfo.user_name
+                }),
+                _react2.default.createElement(_ewcomponents.EwH2LightText, {
+                  text: employeeInfo.designation
+
+                })
+              ),
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { flex: 0.15, alignItems: "center", flexDirection: "row", justifyContent: "space-between" } },
+                _this.renderCallIcon(employeeInfo),
+                _this.renderEmailIcon(employeeInfo)
+              )
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginTop: 5 } },
+            _react2.default.createElement(_ewcomponents.EwH3LightText, {
+              text: h3Text
+
+            })
+          )
+        )
+      );
+    };
+
+    _this.showCompanyName = function (employeeInfo) {
+      companyName = "";
+
+      if (employeeInfo.company != null) {
+
+        companyName = " , " + employeeInfo.company;
+      }
+
+      return companyName;
+    };
+
+    _this.renderCallIcon = function (employeeInfo) {
+
+      if (!(0, _utils.checkIfNullOrEmptyString)(employeeInfo.work_phone)) {
+        return _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          { style: { marginLeft: 10 }, onPress: function onPress() {
+              return _this.initiateCall(employeeInfo);
+            } },
+          _react2.default.createElement(_reactNative.Image, { source: callIcon })
+        );
+      } else {
+        return _react2.default.createElement(_nativeBase.Text, null);
+      }
+    };
+
+    _this.renderEmailIcon = function (employeeInfo) {
+
+      if (!(0, _utils.checkIfNullOrEmptyString)(employeeInfo.email)) {
+        return _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          { style: { marginLeft: 10 }, onPress: function onPress() {
+              return _this.sendMail(employeeInfo);
+            } },
+          _react2.default.createElement(_reactNative.Image, { source: emailIcon })
+        );
+      } else {
+        return _react2.default.createElement(_nativeBase.Text, null);
+      }
+    };
+
+    _this.searchEmployeesList = function (searchText, employeesList) {
+
+      console.log("In searchEmployeesList");
+
+      if (!(0, _utils.checkIfNullOrEmptyString)(searchText) && employeesList != null) {
+
+        text = searchText.toLowerCase();
+
+        return employeesList.filter(function (employee) {
+
+          if (!(0, _utils.checkIfNullOrEmptyString)(employee.user_name)) {
+
+            employeeName = employee.user_name.toLowerCase();
+
+            return employeeName.search(text) !== -1;
+          }
+
+          return 1;
+        });
+      } else {
+
+        return employeesList;
+      }
+    };
+
+    _this.getFilteredEmployeeList = function (activeEmployeeList, filtersSelected) {
+
+      console.log("In getFilteredEmployeeList");
+
+      filteredList = activeEmployeeList;
+
+      Object.keys(filtersSelected).map(function (filterKey) {
+
+        switch (filterKey) {
+
+          case employeeDirectoryConstants.FILTER_FUNCTION:
+
+            filteredList = filteredList.filter(function (employee) {
+
+              if (filtersSelected[filterKey].length != 0 && !(0, _utils.checkIfNullOrEmptyString)(employee.function)) {
+
+                employeeFunction = employee.function;
+
+                return filtersSelected[filterKey].includes(employeeFunction);
+              }
+
+              return true;
+            });
+
+            break;
+
+          case employeeDirectoryConstants.FILTER_BUSINESS_UNIT:
+
+            filteredList = filteredList.filter(function (employee) {
+
+              if (filtersSelected[filterKey].length != 0 && !(0, _utils.checkIfNullOrEmptyString)(employee.bu)) {
+
+                employeeBu = employee.bu;
+
+                return filtersSelected[filterKey].includes(employeeBu);
+              }
+
+              return true;
+            });
+
+            break;
+          case employeeDirectoryConstants.FILTER_COMPANY:
+
+            filteredList = filteredList.filter(function (employee) {
+
+              if (filtersSelected[filterKey].length != 0 && !(0, _utils.checkIfNullOrEmptyString)(employee.company)) {
+
+                employeeCompany = employee.company;
+
+                return filtersSelected[filterKey].includes(employeeCompany);
+              }
+
+              return true;
+            });
+            break;
+          default:
+
+        }
+      });
+      console.log("filteredList", filteredList);
+
+      return filteredList;
+    };
+
+    _this.showEmployeesList = function (employeeDataState, employeeErrorState, employeeRenderView, employeeLoadAgainAction) {
+
+      console.log("showEmployeesList", employeeDataState, employeeErrorState, employeeRenderView, employeeLoadAgainAction);
+
+      if (employeeDataState != null && employeeErrorState == null) {
+
+        return employeeRenderView;
+      } else if (employeeDataState == null && employeeErrorState == null) {
+
+        console.log("2nd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _styles2.default.spinnerContainer },
+          _react2.default.createElement(_nativeBase.Spinner, { size: 'small' }),
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: _styles2.default.spinnerElement },
+            'Loading...'
+          )
+        );
+      } else if (employeeDataState == null && employeeErrorState != null) {
+
+        console.log("3rd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _styles2.default.loadAgainButtonContainer },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { onPress: function onPress() {
+                return employeeLoadAgainAction();
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Load Again'
+            )
+          )
+        );
+      } else {
+        console.log("4th Case");
+        console.log("employeeDataState, ", employeeDataState);
+        console.log("employeeErrorState ", employeeErrorState);
+
+        (function () {
+          return employeeLoadAgainAction;
+        });
+      }
+    };
+
+    _this.renderListViewFooter = function () {
+
+      console.log("In renderListViewFooter");
+
+      var _this$state4 = _this.state,
+          currentEmployeeListVisible = _this$state4.currentEmployeeListVisible,
+          filteredList = _this$state4.filteredList,
+          searchText = _this$state4.searchText;
+
+
+      if (filteredList != null && currentEmployeeListVisible != null) {
+        console.log("In renderListViewFooter", currentEmployeeListVisible.length, filteredList);
+
+        if (searchText == '' && currentEmployeeListVisible.length != filteredList.length) {
+          return _react2.default.createElement(_nativeBase.Spinner, { size: 'small' });
+        }
+      }
+    };
+
+    _this.sendMail = function (data) {
+
+      if (!(0, _utils.checkIfNullOrEmptyString)(data.email)) {
+        tracker.trackEvent(SCREEN_CATEGORY, 'email event');
+
+        url = _reactNative.Linking.openURL('mailto:' + data.email);
+
+        var openeEmail = _reactNative.Linking.getInitialURL().then(function (url) {
+          if (url) {
+            console.log('Initial email url is: ' + url);
+          }
+        }).catch(function (err) {
+          return console.error('An error occurred', err);
+        });
+      } else {
+        _this.showWarningMessage("No email id exist");
+      }
+    };
+
+    _this.initiateCall = function (data) {
+
+      if (!(0, _utils.checkIfNullOrEmptyString)(data.work_phone)) {
+
+        tracker.trackEvent(SCREEN_CATEGORY, 'call event');
+
+        var args = {
+          number: data.work_phone,
+          prompt: false };
+
+        (0, _reactNativePhoneCall2.default)(args).catch(console.error);
+      } else {
+
+        _this.showWarningMessage("No phone number exist");
+      }
+    };
+
+    _this.getActiveEmployeeList = function () {
+      var _this$state5 = _this.state,
+          activeEmployeesList = _this$state5.activeEmployeesList,
+          myTeamEmployeesList = _this$state5.myTeamEmployeesList,
+          employeesList = _this$state5.employeesList;
+
+
+      switch (activeEmployeesList) {
+        case employeeDirectoryConstants.MY_TEAM_TAB:
+          return myTeamEmployeesList;
+
+          break;
+
+        case employeeDirectoryConstants.COMPANY_DIRECTORY_TAB:
+          return employeesList;
+
+          break;
+
+        default:
+
+      }
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+    };
+
+    defaultTab = employeeDirectoryConstants.MY_TEAM_TAB;
+
+    if (_this.props.employeedirectoryData != null && _this.props.employeedirectoryData.defaultTab == employeeDirectoryConstants.COMPANY_DIRECTORY_TAB) {
+      defaultTab = employeeDirectoryConstants.COMPANY_DIRECTORY_TAB;
+    }
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      isSpinnerActive: false,
+      searchText: '',
+
+      employeesList: null,
+      myTeamEmployeesList: null,
+      filteredList: [],
+
+      activeEmployeesList: defaultTab,
+
+      currentEmployeeListPageIndex: 0,
+      currentEmployeeListVisible: [],
+
+      activeAccordian: null,
+
+      modalVisible: false,
+
+      myTeamFiltersSelected: {},
+      companyDirectoryFiltersSelected: {},
+
+      uniqueMyTeamSubfilters: {},
+      uniqueAllSubfilters: {},
+
+      temporaryFiltersSelected: {},
+      EmployeeDataSource: new _reactNative.ListView.DataSource({
+        rowHasChanged: _this._rowHasChanged.bind(_this)
+      }),
+
+      componentInitializeTime: new Date().getTime()
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwEmployeeDirectoryScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.employeesInformationData != null && nextProps.employeesInformationError == null) {
+
+        uniqueAllSubfilters = this.getUniqueSubFilters(nextProps.employeesInformationData);
+
+        if (this.state.activeEmployeesList == employeeDirectoryConstants.COMPANY_DIRECTORY_TAB) {
+
+          elementValues = this.handleElementValues(nextProps.employeesInformationData, this.state.currentEmployeeListPageIndex, this.state.currentEmployeeListVisible);
+
+          updatedCurrentEmployeeListPageIndex = this.state.currentEmployeeListPageIndex + 1;
+
+          (0, _utils.showAnimation)(animationUtils.DEFAULT_SCREEN_ANIMATION);
+
+          this.setState({
+            isLoading: false,
+            uniqueAllSubfilters: uniqueAllSubfilters,
+            employeesList: nextProps.employeesInformationData,
+            filteredList: nextProps.employeesInformationData,
+            currentEmployeeListVisible: elementValues.currentEmployeeListVisible,
+            currentEmployeeListPageIndex: updatedCurrentEmployeeListPageIndex,
+            EmployeeDataSource: this.getUpdatedEmployeeDataSource(elementValues.currentEmployeeListVisible)
+          });
+        } else {
+
+          this.setState({
+            isLoading: false,
+            uniqueAllSubfilters: uniqueAllSubfilters,
+            employeesList: nextProps.employeesInformationData
+
+          });
+        }
+      }
+
+      if (nextProps.employeesInformationData == null && nextProps.employeesInformationError != null) {
+
+        this.setState({
+          isLoading: false,
+          currentError: nextProps.employeesInformationError
+        });
+      }
+
+      if (nextProps.myTeamEmployeesInformationData != null && nextProps.myTeamEmployeesInformationError == null) {
+
+        uniqueMyTeamSubfilters = this.getUniqueSubFilters(nextProps.myTeamEmployeesInformationData);
+
+        if (this.state.activeEmployeesList == employeeDirectoryConstants.MY_TEAM_TAB) {
+
+          elementValues = this.handleElementValues(nextProps.myTeamEmployeesInformationData, this.state.currentEmployeeListPageIndex, this.state.currentEmployeeListVisible);
+
+          updatedCurrentEmployeeListPageIndex = this.state.currentEmployeeListPageIndex + 1;
+
+          (0, _utils.showAnimation)(animationUtils.DEFAULT_SCREEN_ANIMATION);
+
+          this.setState({
+            isLoading: false,
+            isDataPreLoaded: true,
+            uniqueMyTeamSubfilters: uniqueMyTeamSubfilters,
+            filteredList: nextProps.myTeamEmployeesInformationData,
+            myTeamEmployeesList: nextProps.myTeamEmployeesInformationData,
+            currentEmployeeListVisible: elementValues.currentEmployeeListVisible,
+            currentEmployeeListPageIndex: updatedCurrentEmployeeListPageIndex,
+            EmployeeDataSource: this.getUpdatedEmployeeDataSource(elementValues.currentEmployeeListVisible)
+          });
+        } else {
+
+          this.setState({
+            isLoading: false,
+            uniqueMyTeamSubfilters: uniqueMyTeamSubfilters,
+            myTeamEmployeesList: nextProps.myTeamEmployeesInformationData
+          });
+        }
+      }
+
+      if (nextProps.myTeamEmployeesInformationData == null && nextProps.myTeamEmployeesInformationError != null) {
+
+        this.setState({
+          isLoading: false,
+          isDataPreLoaded: false,
+          currentError: nextProps.myTeamEmployeesInformationError
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      console.log("stateemployeedirec", this.state);
+
+      console.log("employeesList", this.state.employeesList);
+
+      console.log("employeesList", this.state.myTeamEmployeesList);
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewcomponents.EwLoadingIndicator, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage();
+              }
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      if (this.props.employeedirectoryData != null && this.props.employeedirectoryData.defaultTab == employeeDirectoryConstants.COMPANY_DIRECTORY_TAB) {
+        this.getEmployeesList();
+      } else {
+        this.getTeamEmployeeList();
+      }
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_ALL'
+      };
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this3 = this;
+
+      console.log("In  render screen");
+
+      var _state = this.state,
+          employeesList = _state.employeesList,
+          myTeamEmployeesList = _state.myTeamEmployeesList;
+      var _props = this.props,
+          employeesInformationError = _props.employeesInformationError,
+          myTeamEmployeesInformationError = _props.myTeamEmployeesInformationError,
+          getEmployeesList = _props.getEmployeesList,
+          getMyTeamEmployeesList = _props.getMyTeamEmployeesList;
+
+
+      console.log("this.state.isSpinnerActive", this.state.isSpinnerActive);
+      console.log("customEmployeeData", this.state.EmployeeDataSource);
+      console.log("currentEmployeeListVisible", this.state.currentEmployeeListVisible);
+      console.log("employeesList", employeesList);
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          { hasTabs: true, searchBar: true },
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.1 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Item,
+            { rounded: true, style: { flex: 0.70 } },
+            _react2.default.createElement(_nativeBase.Icon, { name: 'ios-search', style: { marginLeft: 5 } }),
+            _react2.default.createElement(_nativeBase.Input, { placeholder: 'Search by name',
+              value: this.state.searchText,
+              onChange: this.setSearchText.bind(this),
+              style: {
+                marginTop: platform === 'ios' ? 1 : 5
+              }
+
+            })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Right,
+            { style: { flex: 0.20 } },
+            _react2.default.createElement(_ewcomponents.EwReportIssue, {
+              screenId: _screennameidentifiers.VIEW_DIRECTORY_ID,
+              customStyle: { marginRight: 12 }
+            }),
+            _react2.default.createElement(
+              _reactNative.TouchableOpacity,
+              { onPress: function onPress() {
+                  return _this3.onFilterButtonPressed();
+                } },
+              _react2.default.createElement(_reactNative.Image, { style: { height: 30, width: 30 }, source: filterIcon })
+            )
+          )
+        ),
+        _react2.default.createElement(
+          _nativeBase.Tabs,
+          { onChangeTab: function onChangeTab(currentTab) {
+              return _this3.onChangeTab(currentTab);
+            } },
+          _react2.default.createElement(
+            _nativeBase.Tab,
+            { heading: 'My Team' },
+            this.showEmployeesList(myTeamEmployeesList, myTeamEmployeesInformationError, this.renderEmployeeList(), getMyTeamEmployeesList)
+          ),
+          this.renderAllTab(employeesList, employeesInformationError, getEmployeesList)
+        ),
+        this.showFilterModal()
+      );
+    }
+  }, {
+    key: 'renderAllTab',
+    value: function renderAllTab(employeesList, employeesInformationError, getEmployeesList) {
+
+      isApplicable = true;
+
+      if (isApplicable) {
+
+        return _react2.default.createElement(
+          _nativeBase.Tab,
+          { heading: 'All' },
+          this.showEmployeesList(employeesList, employeesInformationError, this.renderEmployeeList(), getEmployeesList)
+        );
+      }
+    }
+  }, {
+    key: 'onFilterButtonPressed',
+    value: function onFilterButtonPressed() {
+
+      if (this.getActiveEmployeeList() != null) {
+
+        this.changeFilterModalState();
+      }
+    }
+  }, {
+    key: 'changeEmployeeListState',
+    value: function changeEmployeeListState(employeeList, activeEmployeesList, filtersSelected) {
+
+      filteredList = this.getFilteredEmployeeList(employeeList, filtersSelected);
+
+      elementValues = this.handleElementValues(filteredList, 0, []);
+
+      updatedCurrentEmployeeListPageIndex = 1;
+
+      myTeamFiltersSelected = this.state.myTeamFiltersSelected;
+
+      companyDirectoryFiltersSelected = this.state.companyDirectoryFiltersSelected;
+
+      if (activeEmployeesList == employeeDirectoryConstants.MY_TEAM_TAB) myTeamFiltersSelected = filtersSelected;else companyDirectoryFiltersSelected = filtersSelected;
+
+      this.setState({
+
+        modalVisible: false,
+        myTeamFiltersSelected: myTeamFiltersSelected,
+        companyDirectoryFiltersSelected: companyDirectoryFiltersSelected,
+        filteredList: filteredList,
+        searchText: '',
+        activeEmployeesList: activeEmployeesList,
+        currentEmployeeListVisible: elementValues.currentEmployeeListVisible,
+        currentEmployeeListPageIndex: updatedCurrentEmployeeListPageIndex,
+        EmployeeDataSource: this.getUpdatedEmployeeDataSource(elementValues.currentEmployeeListVisible)
+      });
+    }
+  }, {
+    key: 'changeFilterModalState',
+    value: function changeFilterModalState() {
+
+      console.log("Inside changeFilterModalState");
+
+      var _state2 = this.state,
+          activeEmployeesList = _state2.activeEmployeesList,
+          modalVisible = _state2.modalVisible,
+          myTeamFiltersSelected = _state2.myTeamFiltersSelected,
+          companyDirectoryFiltersSelected = _state2.companyDirectoryFiltersSelected;
+
+
+      if (activeEmployeesList == employeeDirectoryConstants.MY_TEAM_TAB) filtersSelected = myTeamFiltersSelected;else filtersSelected = companyDirectoryFiltersSelected;
+
+      temporaryFiltersSelected = JSON.parse(JSON.stringify(filtersSelected));
+
+      this.setState({
+        modalVisible: !modalVisible,
+        temporaryFiltersSelected: temporaryFiltersSelected
+      });
+    }
+  }, {
+    key: 'getFilterTitle',
+    value: function getFilterTitle() {
+
+      console.log("Inside getFilterTitle");
+
+      var activeEmployeesList = this.state.activeEmployeesList;
+
+
+      if (activeEmployeesList == employeeDirectoryConstants.MY_TEAM_TAB) filterTitle = 'My Team Filters';else filterTitle = 'All Filters';
+
+      return filterTitle;
+    }
+  }, {
+    key: 'showFilterCheckboxesList',
+    value: function showFilterCheckboxesList() {
+      var _this4 = this;
+
+      console.log("Inside showFilterModal");
+
+      var _state3 = this.state,
+          activeEmployeesList = _state3.activeEmployeesList,
+          uniqueAllSubfilters = _state3.uniqueAllSubfilters,
+          uniqueMyTeamSubfilters = _state3.uniqueMyTeamSubfilters;
+
+
+      console.log("Inside showFilterModal", activeEmployeesList, uniqueAllSubfilters, uniqueMyTeamSubfilters);
+
+      if (activeEmployeesList == employeeDirectoryConstants.MY_TEAM_TAB) subFilterList = uniqueMyTeamSubfilters;else subFilterList = uniqueAllSubfilters;
+
+      console.log("subFilterList", subFilterList);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { marginTop: 10 } },
+        FILTER_KEYS.map(function (filterKey) {
+          return _react2.default.createElement(
+            _ewcomponents.EwAccordion,
+            {
+              accordionLabel: filterKey,
+              isActive: _this4.isActiveAccordian(filterKey),
+              onAccordionPress: function onAccordionPress() {
+                return _this4.setActiveAccordian(filterKey);
+              }
+            },
+            subFilterList[filterKey].map(function (subFilter) {
+              return _react2.default.createElement(
+                _nativeBase.ListItem,
+                null,
+                _react2.default.createElement(_nativeBase.CheckBox, { checked: _this4.isFilterSelected(filterKey, subFilter), onPress: function onPress() {
+                    return _this4.addToFilters(filterKey, subFilter);
+                  } }),
+                _react2.default.createElement(
+                  _nativeBase.Text,
+                  { style: { marginLeft: 5 } },
+                  subFilter
+                )
+              );
+            })
+          );
+        })
+      );
+    }
+  }, {
+    key: 'applyFilters',
+    value: function applyFilters() {
+
+      console.log("Inside applyFilters");
+
+      filtersSelected = JSON.parse(JSON.stringify(this.state.temporaryFiltersSelected));
+
+      this.changeEmployeeListState(this.getActiveEmployeeList(), this.state.activeEmployeesList, filtersSelected);
+    }
+  }, {
+    key: 'getUniqueSubFilters',
+    value: function getUniqueSubFilters(employeeList) {
+
+      console.log("Inside getUniqueSubFilters");
+
+      subFilters = {};
+
+      for (var _iterator = FILTER_KEYS, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        if (_isArray) {
+          if (_i >= _iterator.length) break;
+          filter = _iterator[_i++];
+        } else {
+          _i = _iterator.next();
+          if (_i.done) break;
+          filter = _i.value;
+        }
+
+        switch (filter) {
+
+          case employeeDirectoryConstants.FILTER_FUNCTION:
+
+            uniqueSubFilters = [].concat(babelHelpers.toConsumableArray(new Set(employeeList.map(function (employee) {
+              return employee.function;
+            }))));
+            console.log("Inside getUniqueSubFilters", uniqueSubFilters);
+            break;
+
+          case employeeDirectoryConstants.FILTER_BUSINESS_UNIT:
+
+            uniqueSubFilters = [].concat(babelHelpers.toConsumableArray(new Set(employeeList.map(function (employee) {
+              return employee.bu;
+            }))));
+            console.log("Inside getUniqueSubFilters", uniqueSubFilters);
+            break;
+
+          case employeeDirectoryConstants.FILTER_COMPANY:
+
+            uniqueSubFilters = [].concat(babelHelpers.toConsumableArray(new Set(employeeList.map(function (employee) {
+              return employee.company;
+            }))));
+            console.log("Inside getUniqueSubFilters", uniqueSubFilters);
+            break;
+
+          default:
+
+        }
+
+        subFilters[filter] = uniqueSubFilters;
+      }
+
+      return subFilters;
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(employeesList, currentEmployeeListPageIndex, currentListVisible) {
+
+      console.log("Inside handleElementValues");
+
+      console.log("currentEmployeeListPageIndex", this.state.currentEmployeeListVisible);
+
+      updatedEmployeeListVisible = [].concat(babelHelpers.toConsumableArray(currentListVisible));
+
+      var updatedEmployeeIndex = (currentEmployeeListPageIndex + 1) * LIST_PAGE_SIZE;
+
+      var currentEmployeeIndex = currentEmployeeListPageIndex * LIST_PAGE_SIZE;
+
+      if (updatedEmployeeIndex > employeesList.length) {
+
+        updatedEmployeeIndex = employeesList.length;
+      }
+
+      for (employeeIndex = currentEmployeeIndex; employeeIndex < updatedEmployeeIndex; employeeIndex++) {
+
+        updatedEmployeeListVisible.push(employeesList[employeeIndex]);
+      }
+
+      console.log("currentEmployeeListPageIndex", this.state.currentEmployeeListVisible);
+
+      elementvalues = {
+
+        currentEmployeeListVisible: updatedEmployeeListVisible
+      };
+
+      console.log("currentEmployeeListPageIndex", this.state.currentEmployeeListVisible);
+
+      console.log("elementvalues", elementvalues);
+
+      return elementvalues;
+    }
+  }, {
+    key: 'getUpdatedEmployeeDataSource',
+    value: function getUpdatedEmployeeDataSource(employeesList) {
+
+      console.log(FILE_NAME + "In getUpdatedEmployeeDataSource");
+      console.log(FILE_NAME + "In getUpdatedEmployeeDataSource", employeesList);
+
+      if (employeesList != null) {
+        console.log(FILE_NAME + "In getUpdatedEmployeeDataSource", employeesList);
+
+        updatedEmployeesList = employeesList;
+
+        var ids = updatedEmployeesList.map(function (obj, index) {
+          return index;
+        });
+
+        return this.state.EmployeeDataSource.cloneWithRows(updatedEmployeesList, ids);
+      } else {
+        console.log(FILE_NAME + "In getUpdatedEmployeeDataSource empty", (0, _utils.checkIfNullOrEmptyString)(employeesList));
+        return this.state.EmployeeDataSource;
+      }
+    }
+  }, {
+    key: '_rowHasChanged',
+    value: function _rowHasChanged(r1, r2) {
+
+      console.log("inside row has changed");
+
+      return JSON.stringify(r1) !== JSON.stringify(r2);
+    }
+  }, {
+    key: 'setSearchText',
+    value: function setSearchText(event) {
+
+      console.log("In setSearchText");
+
+      searchText = event.nativeEvent.text;
+
+      console.log("searchText", searchText);
+
+      filteredData = this.searchEmployeesList(searchText, this.state.filteredList);
+
+      console.log("filteredData", filteredData);
+
+      this.setState({
+        EmployeeDataSource: this.getUpdatedEmployeeDataSource(filteredData),
+        searchText: searchText
+      });
+    }
+  }, {
+    key: 'showWarningMessage',
+    value: function showWarningMessage(message) {
+
+      _reactNative.Alert.alert('Oops!', message);
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME + "In handleError method");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      console.log("handleerror", this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (this.state.currentError) {
+
+          case eipError.SERVER_EXCEPTION:
+            this.showAlertMessage(eipError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          default:
+            this.showAlertMessage();
+            return this.renderScreen();
+
+        }
+      }
+    }
+  }]);
+  return EwEmployeeDirectoryScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction");
+
+  return {
+    getEmployeesList: function getEmployeesList(params) {
+      return dispatch((0, _eipactions.getEmployeesList)(params));
+    },
+    getMyTeamEmployeesList: function getMyTeamEmployeesList(params) {
+      return dispatch((0, _eipactions.getMyTeamEmployeesList)(params));
+    },
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    },
+    clearEipError: function clearEipError(params) {
+      return dispatch((0, _eipactions.clearEipError)(params));
+    }
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    isLoggedIn: state.auth.isLoggedIn,
+    errorWebService: state.auth.errorWebService,
+    sessionToken: state.auth.sessionToken,
+
+    currentImageTimestamp: state.common.currentImageTimestamp,
+
+    employeesInformationData: state.eip.employeesInformationData,
+    employeesInformationError: state.eip.employeesInformationError,
+
+    myTeamEmployeesInformationData: state.eip.myTeamEmployeesInformationData,
+    myTeamEmployeesInformationError: state.eip.myTeamEmployeesInformationError
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwEmployeeDirectoryScreen);

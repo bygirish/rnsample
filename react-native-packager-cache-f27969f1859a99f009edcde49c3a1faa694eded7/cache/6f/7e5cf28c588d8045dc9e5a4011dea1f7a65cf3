@@ -1,0 +1,84 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = attendanceReducer;
+
+var _attendanceactiontypes = require('./attendanceactiontypes');
+
+var attendanceActionTypes = babelHelpers.interopRequireWildcard(_attendanceactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var FILE_NAME = "attendancereducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+  attendanceData: null,
+  attendanceError: null
+
+};
+
+function attendanceReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method attendanceReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case attendanceActionTypes.SUCCESS_ATTENDANCE:
+
+      console.log("In method attendanceReducer SUCCESS_MARK_IN");
+
+      return {
+        attendanceData: action.response.data,
+        attendanceError: action.response.error
+      };
+
+      break;
+
+    case attendanceActionTypes.FAILURE_ATTENDANCE:
+
+      console.log("In method attendanceReducer SUCCESS_MARK_IN");
+
+      return babelHelpers.extends({}, state, {
+        attendanceData: action.response.data,
+        attendanceError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case attendanceActionTypes.CLEAR_STATE_DATA:
+
+      console.log("In method attendanceReducer CLEAR_STATE_DATA");
+
+      return {
+        errorCounter: action.response.errorCounter,
+        attendanceData: action.response.attendanceData,
+        attendanceError: action.response.attendanceError
+      };
+
+      break;
+
+    case attendanceActionTypes.CLEAR_ATTENDANCE_ERROR:
+
+      console.log("In method leavereducer CLEAR_ATTENDANCE_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        attendanceError: null
+      });
+
+      break;
+
+    default:
+
+      console.log("In method attendanceReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

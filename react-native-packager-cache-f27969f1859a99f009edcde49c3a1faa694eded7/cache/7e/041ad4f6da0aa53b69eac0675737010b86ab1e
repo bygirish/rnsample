@@ -1,0 +1,17 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+exports.default = {
+
+  footerContainerStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10
+  }
+
+};

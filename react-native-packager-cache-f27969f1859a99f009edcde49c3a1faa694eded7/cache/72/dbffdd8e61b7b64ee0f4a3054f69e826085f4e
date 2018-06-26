@@ -1,0 +1,141 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetEmployeesListRequest = buildGetEmployeesListRequest;
+exports.buildSuccessGetEmployeesListResponse = buildSuccessGetEmployeesListResponse;
+exports.buildFailedGetEmployeesListResponse = buildFailedGetEmployeesListResponse;
+exports.buildServerErrorGetEmployeesListResponse = buildServerErrorGetEmployeesListResponse;
+exports.buildGetMyTeamEmployeesListRequest = buildGetMyTeamEmployeesListRequest;
+exports.buildSuccessGetMyTeamEmployeesListResponse = buildSuccessGetMyTeamEmployeesListResponse;
+exports.buildFailedGetMyTeamEmployeesListResponse = buildFailedGetMyTeamEmployeesListResponse;
+exports.buildServerErrorGetMyTeamEmployeesListResponse = buildServerErrorGetMyTeamEmployeesListResponse;
+
+var _eipapiendpoints = require('./eipapiendpoints');
+
+var eipApiEndPoints = babelHelpers.interopRequireWildcard(_eipapiendpoints);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var FILE_NAME = "eipprocessing.js : ";
+
+function buildGetEmployeesListRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetEmployeesListRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + eipApiEndPoints.GET_EMPLOYEES_LIST + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var employeesRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", employeesRequest);
+
+  return employeesRequest;
+}
+
+function buildSuccessGetEmployeesListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetEmployeesListResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetEmployeesListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetEmployeesListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetEmployeesListResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetEmployeesListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetMyTeamEmployeesListRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetMyTeamEmployeesListRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + eipApiEndPoints.GET_MY_TEAM_EMPLOYEES_LIST + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=team" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var myTeamEmployeesRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", myTeamEmployeesRequest);
+
+  return myTeamEmployeesRequest;
+}
+
+function buildSuccessGetMyTeamEmployeesListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetMyTeamEmployeesListResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetMyTeamEmployeesListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetMyTeamEmployeesListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetMyTeamEmployeesListResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetMyTeamEmployeesListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

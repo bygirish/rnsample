@@ -1,0 +1,89 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = drawerReducer;
+
+var _draweractiontypes = require('./draweractiontypes');
+
+var drawerActionTypes = babelHelpers.interopRequireWildcard(_draweractiontypes);
+
+var FILE_NAME = "drawerreducer.js : ";
+var initialState = {
+  drawerState: 'closed',
+  drawerDisabled: false,
+  themeState: 'platform',
+  sceneKey: null
+};
+
+function drawerReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In drawerReducer method");
+
+  if (action.type === drawerActionTypes.OPEN_DRAWER) {
+
+    console.log("Opening drawer");
+
+    return babelHelpers.extends({}, state, {
+      drawerState: 'opened'
+    });
+  }
+
+  if (action.type === drawerActionTypes.CLOSE_DRAWER) {
+
+    console.log("Closing drawer");
+
+    return babelHelpers.extends({}, state, {
+      drawerState: 'closed'
+    });
+  }
+
+  if (action.type === drawerActionTypes.CHANGE_PLATFORM) {
+
+    console.log("Changing platform");
+
+    return babelHelpers.extends({}, state, {
+      themeState: 'platform'
+    });
+  }
+
+  if (action.type === drawerActionTypes.CHANGE_MATERIAL) {
+
+    console.log("Changing Material");
+
+    return babelHelpers.extends({}, state, {
+      themeState: 'material'
+    });
+  }
+
+  if (action.type === drawerActionTypes.DISABLE_DRAWER) {
+
+    console.log("Disabling Drawer");
+
+    return babelHelpers.extends({}, state, {
+      drawerDisabled: true
+    });
+  }
+
+  if (action.type === drawerActionTypes.ENABLE_DRAWER) {
+
+    console.log("Enabling drawer");
+
+    return babelHelpers.extends({}, state, {
+      drawerDisabled: false
+    });
+  }
+
+  if (action.type === drawerActionTypes.NAVIGATE_TO_SCENE) {
+
+    console.log("SceneKey is - " + action.sceneKey);
+
+    return babelHelpers.extends({}, state, {
+      sceneKey: action.sceneKey
+    });
+  }
+
+  return state;
+}

@@ -1,0 +1,127 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var LoadEarlier = function (_React$Component) {
+  babelHelpers.inherits(LoadEarlier, _React$Component);
+
+  function LoadEarlier() {
+    babelHelpers.classCallCheck(this, LoadEarlier);
+    return babelHelpers.possibleConstructorReturn(this, (LoadEarlier.__proto__ || Object.getPrototypeOf(LoadEarlier)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(LoadEarlier, [{
+    key: 'renderLoading',
+    value: function renderLoading() {
+      if (this.props.isLoadingEarlier === false) {
+        return _react2.default.createElement(
+          _reactNative.Text,
+          { style: [styles.text, this.props.textStyle] },
+          this.props.label
+        );
+      }
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(
+          _reactNative.Text,
+          { style: [styles.text, this.props.textStyle, {
+              opacity: 0
+            }] },
+          this.props.label
+        ),
+        _react2.default.createElement(_reactNative.ActivityIndicator, {
+          color: 'white',
+          size: 'small',
+          style: [styles.activityIndicator, this.props.activityIndicatorStyle]
+        })
+      );
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      return _react2.default.createElement(
+        _reactNative.TouchableOpacity,
+        {
+          style: [styles.container, this.props.containerStyle],
+          onPress: function onPress() {
+            if (_this2.props.onLoadEarlier) {
+              _this2.props.onLoadEarlier();
+            }
+          },
+          disabled: this.props.isLoadingEarlier === true,
+          accessibilityTraits: 'button'
+        },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: [styles.wrapper, this.props.wrapperStyle] },
+          this.renderLoading()
+        )
+      );
+    }
+  }]);
+  return LoadEarlier;
+}(_react2.default.Component);
+
+exports.default = LoadEarlier;
+
+
+var styles = _reactNative.StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    marginTop: 5,
+    marginBottom: 10
+  },
+  wrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#b2b2b2',
+    borderRadius: 15,
+    height: 30,
+    paddingLeft: 10,
+    paddingRight: 10
+  },
+  text: {
+    backgroundColor: 'transparent',
+    color: '#fff',
+    fontSize: 12
+  },
+  activityIndicator: {
+    marginTop: _reactNative.Platform.select({
+      ios: -14,
+      android: -16
+    })
+  }
+});
+
+LoadEarlier.defaultProps = {
+  onLoadEarlier: function onLoadEarlier() {},
+  isLoadingEarlier: false,
+  label: 'Load earlier messages',
+  containerStyle: {},
+  wrapperStyle: {},
+  textStyle: {},
+  activityIndicatorStyle: {}
+};
+
+LoadEarlier.propTypes = {
+  onLoadEarlier: _propTypes2.default.func,
+  isLoadingEarlier: _propTypes2.default.bool,
+  label: _propTypes2.default.string,
+  containerStyle: _reactNative.ViewPropTypes.style,
+  wrapperStyle: _reactNative.ViewPropTypes.style,
+  textStyle: _reactNative.Text.propTypes.style,
+  activityIndicatorStyle: _reactNative.ViewPropTypes.style
+};

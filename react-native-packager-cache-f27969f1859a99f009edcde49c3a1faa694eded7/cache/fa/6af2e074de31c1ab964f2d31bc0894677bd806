@@ -1,0 +1,160 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var GiftedAvatar = function (_React$Component) {
+  babelHelpers.inherits(GiftedAvatar, _React$Component);
+
+  function GiftedAvatar() {
+    babelHelpers.classCallCheck(this, GiftedAvatar);
+    return babelHelpers.possibleConstructorReturn(this, (GiftedAvatar.__proto__ || Object.getPrototypeOf(GiftedAvatar)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(GiftedAvatar, [{
+    key: 'setAvatarColor',
+    value: function setAvatarColor() {
+      var userName = this.props.user.name || '';
+      var name = userName.toUpperCase().split(' ');
+      if (name.length === 1) {
+        this.avatarName = '' + name[0].charAt(0);
+      } else if (name.length > 1) {
+        this.avatarName = '' + name[0].charAt(0) + name[1].charAt(0);
+      } else {
+        this.avatarName = '';
+      }
+
+      var sumChars = 0;
+      for (var i = 0; i < userName.length; i++) {
+        sumChars += userName.charCodeAt(i);
+      }
+
+      var colors = ['#e67e22', '#2ecc71', '#3498db', '#8e44ad', '#e74c3c', '#1abc9c', '#2c3e50'];
+
+      this.avatarColor = colors[sumChars % colors.length];
+    }
+  }, {
+    key: 'renderAvatar',
+    value: function renderAvatar() {
+      if (typeof this.props.user.avatar === 'function') {
+        return this.props.user.avatar();
+      } else if (typeof this.props.user.avatar === 'string') {
+        return _react2.default.createElement(_reactNative.Image, {
+          source: { uri: this.props.user.avatar },
+          style: [defaultStyles.avatarStyle, this.props.avatarStyle]
+        });
+      } else if (typeof this.props.user.avatar === 'number') {
+        return _react2.default.createElement(_reactNative.Image, {
+          source: this.props.user.avatar,
+          style: [defaultStyles.avatarStyle, this.props.avatarStyle]
+        });
+      }
+      return null;
+    }
+  }, {
+    key: 'renderInitials',
+    value: function renderInitials() {
+      return _react2.default.createElement(
+        _reactNative.Text,
+        { style: [defaultStyles.textStyle, this.props.textStyle] },
+        this.avatarName
+      );
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      if (!this.props.user.name && !this.props.user.avatar) {
+        return _react2.default.createElement(_reactNative.View, {
+          style: [defaultStyles.avatarStyle, { backgroundColor: 'transparent' }, this.props.avatarStyle],
+          accessibilityTraits: 'image'
+        });
+      }
+      if (this.props.user.avatar) {
+        return _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          {
+            disabled: this.props.onPress ? false : true,
+            onPress: function onPress() {
+              var _props = _this2.props,
+                  onPress = _props.onPress,
+                  other = babelHelpers.objectWithoutProperties(_props, ['onPress']);
+
+              _this2.props.onPress && _this2.props.onPress(other);
+            },
+            accessibilityTraits: 'image'
+          },
+          this.renderAvatar()
+        );
+      }
+
+      if (!this.avatarColor) {
+        this.setAvatarColor();
+      }
+
+      return _react2.default.createElement(
+        _reactNative.TouchableOpacity,
+        {
+          disabled: this.props.onPress ? false : true,
+          onPress: function onPress() {
+            var _props2 = _this2.props,
+                onPress = _props2.onPress,
+                other = babelHelpers.objectWithoutProperties(_props2, ['onPress']);
+
+            _this2.props.onPress && _this2.props.onPress(other);
+          },
+          style: [defaultStyles.avatarStyle, { backgroundColor: this.avatarColor }, this.props.avatarStyle],
+          accessibilityTraits: 'image'
+        },
+        this.renderInitials()
+      );
+    }
+  }]);
+  return GiftedAvatar;
+}(_react2.default.Component);
+
+exports.default = GiftedAvatar;
+
+
+var defaultStyles = {
+  avatarStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 40,
+    height: 40,
+    borderRadius: 20
+  },
+  textStyle: {
+    color: '#fff',
+    fontSize: 16,
+    backgroundColor: 'transparent',
+    fontWeight: '100'
+  }
+};
+
+GiftedAvatar.defaultProps = {
+  user: {
+    name: null,
+    avatar: null
+  },
+  onPress: null,
+  avatarStyle: {},
+  textStyle: {}
+};
+
+GiftedAvatar.propTypes = {
+  user: _propTypes2.default.object,
+  onPress: _propTypes2.default.func,
+  avatarStyle: _reactNative.Image.propTypes.style,
+  textStyle: _reactNative.Text.propTypes.style
+};

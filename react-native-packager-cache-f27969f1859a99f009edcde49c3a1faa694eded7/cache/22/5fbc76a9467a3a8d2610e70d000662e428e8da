@@ -1,0 +1,386 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = commonExpenseClaimReducer;
+
+var _commonexpenseclaimactiontypes = require('./commonexpenseclaimactiontypes');
+
+var commonExpenseClaimActionTypes = babelHelpers.interopRequireWildcard(_commonexpenseclaimactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var FILE_NAME = "commonexpenseclaimreducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+  appliedExpenseClaimData: null,
+  appliedExpenseClaimError: null,
+
+  expenseClaimInformationData: null,
+  expenseClaimInformationError: null,
+
+  expenseClaimActionData: null,
+  expenseClaimActionError: null,
+
+  companyInformationData: null,
+  companyInformationError: null,
+
+  businessUnitInformationData: null,
+  businessUnitInformationError: null,
+
+  locationInformationData: null,
+  locationInformationError: null,
+
+  functionInformationData: null,
+  functionInformationError: null,
+
+  gradeInformationData: null,
+  gradeInformationError: null,
+
+  costCenterInformationData: null,
+  costCenterInformationError: null,
+
+  allocationProjectInformationData: null,
+  allocationProjectInformationError: null,
+
+  commentsInformationData: null,
+  commentsInformationError: null,
+
+  saveCommentInformationData: null,
+  saveCommentInformationError: null
+
+};
+
+function commonExpenseClaimReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method expenseClaimReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case commonExpenseClaimActionTypes.SUCCESS_APPLIED_EXPENSE_CLAIM_LIST:
+
+      console.log("In method expenseClaimReducer SUCCESS_APPLIED_EXPENSE_CLAIM_LIST");
+
+      return {
+        appliedExpenseClaimData: action.response.data,
+        appliedExpenseClaimError: action.response.error
+      };
+
+      break;
+
+    case commonExpenseClaimActionTypes.FAILURE_APPLIED_EXPENSE_CLAIM_LIST:
+
+      console.log("In method expenseClaimReducer FAILURE_APPLIED_EXPENSE_CLAIM_LIST");
+
+      return babelHelpers.extends({}, state, {
+        appliedExpenseClaimData: action.response.data,
+        appliedExpenseClaimError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonExpenseClaimActionTypes.SUCCESS_GET_EXPENSE_COMMENTS:
+
+      console.log("In method expenseClaimReducer SUCCESS_GET_EXPENSE_COMMENTS");
+
+      return {
+        commentsInformationData: action.response.data,
+        commentsInformationError: action.response.error
+      };
+
+      break;
+
+    case commonExpenseClaimActionTypes.FAILURE_GET_EXPENSE_COMMENTS:
+
+      console.log("In method expenseClaimReducer FAILURE_GET_EXPENSE_COMMENTS");
+
+      return babelHelpers.extends({}, state, {
+        commentsInformationData: action.response.data,
+        commentsInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonExpenseClaimActionTypes.SUCCESS_SAVE_EXPENSE_COMMENT:
+
+      console.log("In method expenseClaimReducer SUCCESS_SAVE_EXPENSE_COMMENT");
+
+      return {
+        saveCommentInformationData: action.response.data,
+        saveCommentInformationError: action.response.error
+      };
+
+      break;
+
+    case commonExpenseClaimActionTypes.FAILURE_SAVE_EXPENSE_COMMENT:
+
+      console.log("In method expenseClaimReducer FAILURE_SAVE_EXPENSE_COMMENT");
+
+      return babelHelpers.extends({}, state, {
+        saveCommentInformationData: action.response.data,
+        saveCommentInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonExpenseClaimActionTypes.SUCCESS_EXPENSE_CLAIM_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_EXPENSE_CLAIM_INFORMATION");
+
+      return {
+        expenseClaimInformationData: action.response.data,
+        expenseClaimInformationError: action.response.error
+      };
+
+      break;
+
+    case commonExpenseClaimActionTypes.FAILURE_EXPENSE_CLAIM_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_EXPENSE_CLAIM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        expenseClaimInformationData: action.response.data,
+        expenseClaimInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonExpenseClaimActionTypes.SUCCESS_EXPENSE_CLAIM_ACTION_TAKEN:
+
+      console.log("In method expenseClaimReducer SUCCESS_EXPENSE_CLAIM_ACTION_TAKEN");
+
+      return {
+        expenseClaimActionData: action.response.data,
+        expenseClaimActionError: action.response.error
+      };
+
+      break;
+
+    case commonExpenseClaimActionTypes.FAILURE_EXPENSE_CLAIM_ACTION_TAKEN:
+
+      console.log("In method expenseClaimReducer FAILURE_EXPENSE_CLAIM_ACTION_TAKEN");
+
+      return babelHelpers.extends({}, state, {
+        expenseClaimActionData: action.response.data,
+        expenseClaimActionError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonExpenseClaimActionTypes.SUCCESS_GET_COMPANY_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_GET_COMPANY_INFORMATION");
+
+      return {
+        companyInformationData: action.response.data,
+        companyInformationError: action.response.error
+      };
+
+      break;
+
+    case commonExpenseClaimActionTypes.FAILURE_GET_COMPANY_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_GET_COMPANY_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        companyInformationData: action.response.data,
+        companyInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonExpenseClaimActionTypes.SUCCESS_GET_BUSINESS_UNIT_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_GET_BUSINESS_UNIT_INFORMATION");
+
+      return {
+        businessUnitInformationData: action.response.data,
+        businessUnitInformationError: action.response.error
+      };
+
+      break;
+
+    case commonExpenseClaimActionTypes.FAILURE_GET_BUSINESS_UNIT_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_GET_BUSINESS_UNIT_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        businessUnitInformationData: action.response.data,
+        businessUnitInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonExpenseClaimActionTypes.SUCCESS_GET_LOCATION_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_GET_LOCATION_INFORMATION");
+
+      return {
+        locationInformationData: action.response.data,
+        locationInformationError: action.response.error
+      };
+
+      break;
+
+    case commonExpenseClaimActionTypes.FAILURE_GET_LOCATION_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_GET_LOCATION_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        locationInformationData: action.response.data,
+        locationInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonExpenseClaimActionTypes.SUCCESS_GET_FUNCTION_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_GET_FUNCTION_INFORMATION");
+
+      return {
+        functionInformationData: action.response.data,
+        functionInformationError: action.response.error
+      };
+
+      break;
+
+    case commonExpenseClaimActionTypes.FAILURE_GET_FUNCTION_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_GET_FUNCTION_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        functionInformationData: action.response.data,
+        functionInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonExpenseClaimActionTypes.SUCCESS_GET_GRADE_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_GET_GRADE_INFORMATION");
+
+      return {
+        gradeInformationData: action.response.data,
+        gradeInformationError: action.response.error
+      };
+
+      break;
+
+    case commonExpenseClaimActionTypes.FAILURE_GET_FUNCTION_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_GET_FUNCTION_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        gradeInformationData: action.response.data,
+        gradeInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonExpenseClaimActionTypes.SUCCESS_GET_COST_CENTER_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_GET_COST_CENTER_INFORMATION");
+
+      return {
+        costCenterInformationData: action.response.data,
+        costCenterInformationError: action.response.error
+      };
+
+      break;
+
+    case commonExpenseClaimActionTypes.FAILURE_GET_COST_CENTER_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_GET_COST_CENTER_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        costCenterInformationData: action.response.data,
+        costCenterInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonExpenseClaimActionTypes.SUCCESS_GET_ALLOCATION_PROJECT_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_GET_ALLOCATION_PROJECT_INFORMATION");
+
+      return {
+        allocationProjectInformationData: action.response.data,
+        allocationProjectInformationError: action.response.error
+      };
+
+      break;
+
+    case commonExpenseClaimActionTypes.FAILURE_GET_ALLOCATION_PROJECT_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_GET_ALLOCATION_PROJECT_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        allocationProjectInformationData: action.response.data,
+        allocationProjectInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonExpenseClaimActionTypes.CLEAR_EXPENSE_CLAIM_ERROR:
+
+      console.log("In method expenseClaimReducer CLEAR_EXPENSE_CLAIM_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        appliedExpenseClaimError: null,
+        companyInformationError: null,
+        businessUnitInformationError: null,
+        locationInformationError: null,
+        functionInformationError: null,
+        gradeInformationError: null,
+        costCenterInformationError: null,
+        allocationProjectInformationError: null,
+        expenseClaimInformationError: null
+
+      });
+
+      break;
+
+    case commonExpenseClaimActionTypes.CLEAR_COMMON_EXPENSE_CLAIM_STATE_DATA:
+
+      console.log("In method expenseClaimReducer CLEAR_COMMON_EXPENSE_CLAIM_STATE_DATA");
+
+      return {
+        errorCounter: action.response.errorCounter,
+        appliedExpenseClaimData: action.response.appliedExpenseClaimData,
+        appliedExpenseClaimError: action.response.appliedExpenseClaimError,
+
+        allocationProjectInformationData: action.response.allocationProjectInformationData,
+        allocationProjectInformationError: action.response.allocationProjectInformationError,
+
+        expenseClaimInformationData: action.response.expenseClaimInformationData,
+        expenseClaimInformationError: action.response.expenseClaimInformationError
+
+      };
+
+      break;
+
+    default:
+
+      console.log("In method expenseClaimReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

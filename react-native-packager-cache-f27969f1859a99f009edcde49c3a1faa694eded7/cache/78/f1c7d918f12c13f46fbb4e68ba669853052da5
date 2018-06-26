@@ -1,0 +1,39 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var EwBar = function (_Component) {
+  babelHelpers.inherits(EwBar, _Component);
+
+  function EwBar() {
+    babelHelpers.classCallCheck(this, EwBar);
+    return babelHelpers.possibleConstructorReturn(this, (EwBar.__proto__ || Object.getPrototypeOf(EwBar)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(EwBar, [{
+    key: 'render',
+    value: function render() {
+      var customStyle = this.props.customStyle;
+
+
+      return _react2.default.createElement(_reactNative.View, { style: [_styles2.default.bar, customStyle] });
+    }
+  }]);
+  return EwBar;
+}(_react.Component);
+
+;
+
+exports.default = EwBar;

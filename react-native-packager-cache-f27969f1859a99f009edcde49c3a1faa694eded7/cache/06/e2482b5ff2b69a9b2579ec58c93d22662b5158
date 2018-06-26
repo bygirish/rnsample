@@ -1,0 +1,270 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../utils');
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewcomponents = require('../../../utils/ewcomponents');
+
+var _dashboardutils = require('../dashboardutils');
+
+var dashboardConstants = babelHelpers.interopRequireWildcard(_dashboardutils);
+
+var _ewdashboardstyle = require('../styles/ewdashboardstyle');
+
+var _ewdashboardstyle2 = babelHelpers.interopRequireDefault(_ewdashboardstyle);
+
+var FILE_NAME = "ewnpsscore.js";
+
+var AppRatingModal = function (_Component) {
+  babelHelpers.inherits(AppRatingModal, _Component);
+
+  function AppRatingModal(props, context) {
+    babelHelpers.classCallCheck(this, AppRatingModal);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (AppRatingModal.__proto__ || Object.getPrototypeOf(AppRatingModal)).call(this, props, context));
+
+    _this.initialState = {
+
+      easeOfUse: dashboardConstants.DEFAULT_RATING,
+      productFeatures: dashboardConstants.DEFAULT_RATING,
+      supportHelpdesk: dashboardConstants.DEFAULT_RATING,
+      uptimeAndSpeed: dashboardConstants.DEFAULT_RATING
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(AppRatingModal, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+
+      if (this.props.initialState == null) {
+
+        this.props.updateParentState(this.getNpsScoreObject());
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (this.isStateChanged(nextProps.initialState)) {
+
+        this.setState({
+
+          easeOfUse: nextProps.initialState.easeOfUse,
+          productFeatures: nextProps.initialState.productFeatures,
+          supportHelpdesk: nextProps.initialState.supportHelpdesk,
+          uptimeAndSpeed: nextProps.initialState.uptimeAndSpeed
+
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log("rating is", this.state.rating);
+
+      var _state = this.state,
+          easeOfUse = _state.easeOfUse,
+          productFeatures = _state.productFeatures,
+          supportHelpdesk = _state.supportHelpdesk,
+          uptimeAndSpeed = _state.uptimeAndSpeed;
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(_ewcomponents.EwH1Text, {
+          text: 'Please help us by Rating us',
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: 5 }
+        }),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { backgroundColor: appstyleguide.APP_LIGHT_BLUE } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN, marginBottom: appstyleguide.DEFAULT_LEFT_MARGIN } },
+            this.renderRatingsComponent(dashboardConstants.EASE_USE_HEADING, easeOfUse, dashboardConstants.EASE_USE_ID),
+            this.renderRatingsComponent(dashboardConstants.PRODUCT_FEATURES_HEADING, productFeatures, dashboardConstants.PRODUCT_FEATURES_ID),
+            this.renderRatingsComponent(dashboardConstants.SUPPORT_HELPDESK_HEADING, supportHelpdesk, dashboardConstants.SUPPORT_HELPDESK_ID),
+            this.renderRatingsComponent(dashboardConstants.UPTIME_SPEED_HEADING, uptimeAndSpeed, dashboardConstants.UPTIME_SPEED_ID)
+          )
+        )
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+
+      if (this.isStateChanged(this.props.initialState)) {
+
+        console.log("updating master screen", this.getNpsScoreObject());
+
+        this.props.updateParentState(this.getNpsScoreObject());
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'doLocalValidation',
+    value: function doLocalValidation() {
+      var _state2 = this.state,
+          rating = _state2.rating,
+          reason = _state2.reason;
+
+
+      console.log("propsreceived", this.props);
+
+      return true;
+    }
+  }, {
+    key: 'renderRatingsComponent',
+    value: function renderRatingsComponent(heading, ratingValue, ratingId) {
+      var _this2 = this;
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, flexDirection: "row" } },
+        _react2.default.createElement(_ewcomponents.EwH2Text, {
+          text: heading,
+          customStyle: { flex: 0.4, alignSelf: "center", marginLeft: 5 }
+        }),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.6, justifyContent: "center", alignItems: "center" } },
+          _react2.default.createElement(_ewcomponents.EwRatings, {
+            rating: ratingValue,
+            isRatingActive: ratingValue == dashboardConstants.DEFAULT_RATING,
+            onRatingChanged: function onRatingChanged(rating) {
+              return _this2.changeRating(rating, ratingId);
+            }
+          })
+        )
+      );
+    }
+  }, {
+    key: 'changeRating',
+    value: function changeRating(rating, ratingId) {
+
+      switch (ratingId) {
+
+        case dashboardConstants.EASE_USE_ID:
+
+          this.setState({
+
+            easeOfUse: rating
+          });
+
+          break;
+
+        case dashboardConstants.PRODUCT_FEATURES_ID:
+
+          this.setState({
+
+            productFeatures: rating
+          });
+
+          break;
+
+        case dashboardConstants.SUPPORT_HELPDESK_ID:
+
+          this.setState({
+
+            supportHelpdesk: rating
+          });
+
+          break;
+
+        case dashboardConstants.UPTIME_SPEED_ID:
+
+          this.setState({
+
+            uptimeAndSpeed: rating
+          });
+
+          break;
+
+        default:
+
+      }
+    }
+  }, {
+    key: 'isStateChanged',
+    value: function isStateChanged(initialState) {
+
+      if (JSON.stringify(initialState) != JSON.stringify(this.getNpsScoreObject())) return true;
+
+      return false;
+    }
+  }, {
+    key: 'getNpsScoreObject',
+    value: function getNpsScoreObject() {
+
+      var npsScoreStateObject = {
+
+        easeOfUse: this.state.easeOfUse,
+        productFeatures: this.state.productFeatures,
+        supportHelpdesk: this.state.supportHelpdesk,
+        uptimeAndSpeed: this.state.uptimeAndSpeed
+
+      };
+
+      return npsScoreStateObject;
+    }
+  }]);
+  return AppRatingModal;
+}(_react.Component);
+
+exports.default = AppRatingModal;

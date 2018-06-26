@@ -1,0 +1,9 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var GET_MY_COMPENSATION = exports.GET_MY_COMPENSATION = '/compensation/path2?scope=I';
+
+var GET_MY_CTC_CLAIM_LIST = exports.GET_MY_CTC_CLAIM_LIST = '/fetchClaimdata?scope=I';
+var GET_MY_CLAIM_INFORMATION = exports.GET_MY_CLAIM_INFORMATION = '/ViewClaimDetails?scope=I';
+
+var GET_ENTITLEMENT_SUMMARY = exports.GET_ENTITLEMENT_SUMMARY = '/entitlementDetailsdata?scope=I';

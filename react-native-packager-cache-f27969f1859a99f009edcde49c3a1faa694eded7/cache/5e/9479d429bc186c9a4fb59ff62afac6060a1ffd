@@ -1,0 +1,545 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getTravelClaimModel = getTravelClaimModel;
+exports.getServerMileageLineItemModel = getServerMileageLineItemModel;
+exports.getAllocationProjectModel = getAllocationProjectModel;
+exports.getServerMileageLineItemDeleteModel = getServerMileageLineItemDeleteModel;
+exports.getSubmitMileageExpenseClaimModel = getSubmitMileageExpenseClaimModel;
+
+var _utils = require('../../../utils');
+
+var _expenseutils = require('../../../ewscreens/expense/expenseutils');
+
+var expenseConstants = babelHelpers.interopRequireWildcard(_expenseutils);
+function getTravelClaimModel(serverData) {
+
+  console.log("server data is ", serverData);
+
+  baseCurrency = {
+
+    label: serverData.baseCurrency.currency_Symbol,
+    value: serverData.baseCurrency.currency_Id
+  };
+
+  travelRequestData = getTravelRequestData(serverData.ExpenseRequestInfo);
+
+  otherCurrencyInfo = [];
+
+  defaultCurrency = {
+
+    label: expenseConstants.DEFAULT_CURRENCY_LABEL,
+    value: expenseConstants.DEFAULT_PICKER_VALUE
+  };
+
+  otherCurrencyInfo.push(defaultCurrency);
+
+  currencyIndex = 1;
+
+  for (var _iterator = serverData.currencyinfo, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref;
+
+    if (_isArray) {
+      if (_i >= _iterator.length) break;
+      _ref = _iterator[_i++];
+    } else {
+      _i = _iterator.next();
+      if (_i.done) break;
+      _ref = _i.value;
+    }
+
+    var currency = _ref;
+
+
+    console.log("Currecy is ", currency);
+
+    if (currency != null) {
+
+      var currencyModel = {
+
+        label: currency.currency_Symbol,
+        value: currencyIndex,
+        currencyId: currency.currency_Id
+      };
+
+      otherCurrencyInfo.push(currencyModel);
+      currencyIndex++;
+    }
+  }
+
+  defaultPaymentMode = {
+
+    label: expenseConstants.DEFAULT_PAYMENT_MODE_LABEL,
+    value: expenseConstants.DEFAULT_PICKER_VALUE
+
+  };
+
+  paymentModeInfo = [];
+  paymentModeInfo.push(defaultPaymentMode);
+
+  paymentModeIndex = 1;
+
+  for (var _iterator2 = serverData.paymentmodeinfo, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref2;
+
+    if (_isArray2) {
+      if (_i2 >= _iterator2.length) break;
+      _ref2 = _iterator2[_i2++];
+    } else {
+      _i2 = _iterator2.next();
+      if (_i2.done) break;
+      _ref2 = _i2.value;
+    }
+
+    var paymentMode = _ref2;
+
+
+    var paymentModeModel = {
+
+      label: paymentMode.pm_MODE_NAME,
+      value: paymentModeIndex,
+      paymentModeId: paymentMode.pm_ID
+    };
+
+    paymentModeInfo.push(paymentModeModel);
+    paymentModeIndex++;
+  }
+
+  defaultExpenseType = {
+
+    label: expenseConstants.DEFAULT_EXPENSE_TYPE_LABEL,
+    value: expenseConstants.DEFAULT_PICKER_VALUE
+
+  };
+
+  expenseTypeInfo = [];
+  expenseTypeInfo.push(defaultExpenseType);
+
+  expenseTypeIndex = 1;
+
+  for (var _iterator3 = serverData.expenseHeadsList, _isArray3 = Array.isArray(_iterator3), _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref3;
+
+    if (_isArray3) {
+      if (_i3 >= _iterator3.length) break;
+      _ref3 = _iterator3[_i3++];
+    } else {
+      _i3 = _iterator3.next();
+      if (_i3.done) break;
+      _ref3 = _i3.value;
+    }
+
+    var expenseType = _ref3;
+
+
+    var expenseTypeModel = {
+
+      label: expenseType.expenseType_Label,
+      value: expenseTypeIndex,
+      expenseId: expenseType.expenseType_Code,
+      taxRequired: expenseType.tax_amount_required,
+      gstRequired: expenseType.gst_required
+    };
+
+    expenseTypeInfo.push(expenseTypeModel);
+    expenseTypeIndex++;
+  }
+
+  defaultFirstApprover = {
+
+    label: expenseConstants.DEFAULT_FIRST_APPROVER_LABEL,
+    value: expenseConstants.DEFAULT_PICKER_VALUE
+  };
+
+  defaultSecondApprover = {
+
+    label: expenseConstants.DEFAULT_SECOND_APPROVER_LABEL,
+    value: expenseConstants.DEFAULT_PICKER_VALUE
+  };
+
+  firstApproverData = {
+    approverInfo: [],
+    isForAllRequest: false
+  };
+
+  secondApproverData = {
+    approverInfo: [],
+    isForAllRequest: false
+  };
+
+  if (serverData.firstDomesticexpenseapprovalinfo != null && serverData.firstDomesticexpenseapprovalinfo.approvalinfo != null) {
+
+    firstApproverData.approverInfo.push(defaultFirstApprover);
+    firstApproverData.isForAllRequest = serverData.firstDomesticexpenseapprovalinfo.forAllRequest == "Y" ? true : false;
+
+    for (var _iterator4 = serverData.firstDomesticexpenseapprovalinfo.approvalinfo, _isArray4 = Array.isArray(_iterator4), _i4 = 0, _iterator4 = _isArray4 ? _iterator4 : _iterator4[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+      var _ref4;
+
+      if (_isArray4) {
+        if (_i4 >= _iterator4.length) break;
+        _ref4 = _iterator4[_i4++];
+      } else {
+        _i4 = _iterator4.next();
+        if (_i4.done) break;
+        _ref4 = _i4.value;
+      }
+
+      var approver = _ref4;
+
+
+      var approverModel = {
+
+        label: approver.userName,
+        value: approver.userId
+      };
+
+      firstApproverData.approverInfo.push(approverModel);
+    }
+  }
+
+  if (serverData.secondDomesticexpenseapprovalinfo != null && serverData.secondDomesticexpenseapprovalinfo.approvalinfo != null) {
+
+    secondApproverData.approverInfo.push(defaultSecondApprover);
+    secondApproverData.isForAllRequest = serverData.secondDomesticexpenseapprovalinfo.forAllRequest == "Y" ? true : false;
+
+    for (var _iterator5 = serverData.secondDomesticexpenseapprovalinfo.approvalinfo, _isArray5 = Array.isArray(_iterator5), _i5 = 0, _iterator5 = _isArray5 ? _iterator5 : _iterator5[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+      var _ref5;
+
+      if (_isArray5) {
+        if (_i5 >= _iterator5.length) break;
+        _ref5 = _iterator5[_i5++];
+      } else {
+        _i5 = _iterator5.next();
+        if (_i5.done) break;
+        _ref5 = _i5.value;
+      }
+
+      var approver = _ref5;
+
+
+      var approverModel = {
+
+        label: approver.userName,
+        value: approver.userId
+      };
+
+      secondApproverData.approverInfo.push(approverModel);
+    }
+  }
+
+  var clientData = {
+
+    baseCurrency: baseCurrency,
+    otherCurrency: otherCurrencyInfo,
+    paymentModeData: paymentModeInfo,
+    expenseTypeData: expenseTypeInfo,
+    firstApproverData: firstApproverData,
+    secondApproverData: secondApproverData,
+    travelRequestData: travelRequestData,
+    isDefaultTravelRequest: serverData.default_travelRequest,
+    isVendorCaptured: serverData.vendor_to_be_captured,
+    bu_id: serverData.bu_id,
+    company_id: serverData.company_id,
+    emp_costcenter_id: serverData.emp_costcenter_id,
+    function_id: serverData.function_id,
+    grade_id: serverData.grade_id,
+    location_id: serverData.location_id,
+    expenseSetupInfo: serverData.expenseSetupInfo
+  };
+
+  return clientData;
+}
+
+function getTravelRequestData(serverTravelData) {
+
+  travelData = [];
+
+  if (serverTravelData != null) {
+
+    var defaultTravelModel = {
+
+      label: expenseConstants.DEFAULT_TRAVEL_REQUEST_LABEL,
+      value: expenseConstants.DEFAULT_PICKER_VALUE
+    };
+
+    travelData.push(defaultTravelModel);
+
+    travelIndex = 1;
+
+    for (var _iterator6 = serverTravelData, _isArray6 = Array.isArray(_iterator6), _i6 = 0, _iterator6 = _isArray6 ? _iterator6 : _iterator6[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+      var _ref6;
+
+      if (_isArray6) {
+        if (_i6 >= _iterator6.length) break;
+        _ref6 = _iterator6[_i6++];
+      } else {
+        _i6 = _iterator6.next();
+        if (_i6.done) break;
+        _ref6 = _i6.value;
+      }
+
+      var travelDetail = _ref6;
+
+
+      travelDateLabel = (0, _utils.showDeviceDateFormat)(travelDetail.From_Date + " 00:00:00") + " - " + (0, _utils.showDeviceDateFormat)(travelDetail.To_Date + " 00:00:00");
+
+      var travelModel = {
+
+        label: travelDateLabel,
+        value: travelIndex,
+        travelRequestId: travelDetail.request_Id,
+        travelStartDate: (0, _utils.convertServerDateToMilliseconds)(travelDetail.From_Date + " 00:00:00"),
+        travelEndDate: (0, _utils.convertServerDateToMilliseconds)(travelDetail.To_Date + " 00:00:00")
+
+      };
+
+      travelIndex++;
+
+      travelData.push(travelModel);
+    }
+  }
+
+  return travelData;
+}
+
+function getServerMileageLineItemModel(serverData, getState) {
+
+  var params = {
+    "expenses": {
+      "exp_data": {
+        "exp_details": {
+          "lineitem": {
+
+            "li_invoice_date": serverData.invoiceDate,
+            "li_claim_amt": serverData.postTaxAmount,
+            "li_claimed_sgst_rate": serverData.sgstRate,
+            "li_claimed_sgst_amount": serverData.sgstAmount,
+
+            "li_claimed_cgst_rate": serverData.cgstRate,
+            "li_claimed_cgst_amount": serverData.cgstAmount,
+
+            "li_claimed_igst_rate": serverData.igstRate,
+            "li_claimed_igst_amount": serverData.igstAmount,
+
+            "li_tax_amt": serverData.taxAmount,
+            "li_gstin_number": serverData.gstNumber,
+            "li_from_to": serverData.source + " - " + serverData.destination,
+            "li_inv_no": serverData.invoiceNumber,
+            "li_pre_tax_amt": serverData.preTaxAmount,
+            "li_purpose": serverData.purpose,
+            "li_exp_id": serverData.expenseid,
+            "li_date": serverData.expenseDate,
+            "li_mode_id": serverData.travelMode,
+            "li_grade_id": serverData.gradeId,
+            "li_company_id": serverData.companyId,
+            "li_function_id": serverData.functionId,
+            "li_business_unit_id": serverData.businessUnitId,
+            "li_location_id": serverData.locationId,
+            "li_costcenter_id": serverData.costCenterId
+
+          }
+        },
+        "token": getState.auth.sessionToken,
+        "device_id": serverData.device_id,
+        "scope": "I"
+      }
+    },
+    "expenseApiMode": "saveConveyanceLineItem"
+  };
+
+  if (serverData.logId != null) {
+
+    params.expenses.exp_data.exp_details.lineitem.li_log_id = serverData.logId;
+    params.expenseApiMode = "updateConveyanceLineItem";
+  }
+
+  if (serverData.comments != null) {
+
+    commentArray = [];
+
+    for (var _iterator7 = serverData.comments, _isArray7 = Array.isArray(_iterator7), _i7 = 0, _iterator7 = _isArray7 ? _iterator7 : _iterator7[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+      var _ref7;
+
+      if (_isArray7) {
+        if (_i7 >= _iterator7.length) break;
+        _ref7 = _iterator7[_i7++];
+      } else {
+        _i7 = _iterator7.next();
+        if (_i7.done) break;
+        _ref7 = _i7.value;
+      }
+
+      var commentData = _ref7;
+
+
+      var commentModel = {
+
+        "comment": commentData.comment,
+        "comment_by": getState.auth.userId
+      };
+
+      commentArray.push(commentModel);
+    }
+
+    params.expenses.exp_data.exp_details.lineitem.Comment_details = {};
+    params.expenses.exp_data.exp_details.lineitem.Comment_details.Comment_details_line_item = commentArray;
+  }
+
+  if (serverData.invoiceImage != null) params.expenses.exp_data.exp_details.lineitem.file = serverData.invoiceImage.imageData;
+
+  if (serverData.workType != undefined) params.expenses.exp_data.exp_details.lineitem.li_type_of_work = serverData.workType;
+
+  if (serverData.accountDetails != undefined) {
+
+    clientAccountDetails = {
+
+      "Account_details_line_item": serverData.accountDetails
+
+    };
+
+    params.expenses.exp_data.exp_details.lineitem.Account_details = clientAccountDetails;
+  }
+
+  if (serverData.distanceCovered != undefined) {
+
+    params.expenses.exp_data.exp_details.lineitem.li_distance = serverData.distanceCovered;
+    params.expenses.exp_data.exp_details.lineitem.li_unit = serverData.rate;
+  }
+
+  if (serverData.projectDetails != null) {
+
+    projectArray = [];
+
+    for (var _iterator8 = projectDetails, _isArray8 = Array.isArray(_iterator8), _i8 = 0, _iterator8 = _isArray8 ? _iterator8 : _iterator8[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+      var _ref8;
+
+      if (_isArray8) {
+        if (_i8 >= _iterator8.length) break;
+        _ref8 = _iterator8[_i8++];
+      } else {
+        _i8 = _iterator8.next();
+        if (_i8.done) break;
+        _ref8 = _i8.value;
+      }
+
+      var project = _ref8;
+
+
+      if (project.selectedProjectData != null) {
+
+        var projectModel = {
+
+          "project_id": project.selectedProjectData.projectId,
+          "project_code": project.selectedProjectData.projectCode,
+          "assigned": project.selectedProjectData.assigned,
+          "amount": project.projectAmount
+
+        };
+
+        projectArray.push(projectModel);
+      }
+    }
+
+    serverProjectModel = {
+
+      "Allocation_project_details": projectArray
+    };
+
+    params.expenses.exp_data.exp_details.lineitem.Allocation_project = serverProjectModel;
+  }
+
+  return params;
+}
+
+function getAllocationProjectModel(serverData) {
+
+  projectList = [];
+
+  for (var _iterator9 = serverData, _isArray9 = Array.isArray(_iterator9), _i9 = 0, _iterator9 = _isArray9 ? _iterator9 : _iterator9[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref9;
+
+    if (_isArray9) {
+      if (_i9 >= _iterator9.length) break;
+      _ref9 = _iterator9[_i9++];
+    } else {
+      _i9 = _iterator9.next();
+      if (_i9.done) break;
+      _ref9 = _i9.value;
+    }
+
+    var project = _ref9;
+
+
+    var projectModel = {
+
+      "projectName": project.project_name,
+      "projectId": project.project_id,
+      "projectCode": project.project_code,
+      "assigned": project.assigned
+    };
+
+    projectList.push(projectModel);
+  }
+
+  return projectList;
+}
+
+function getServerMileageLineItemDeleteModel(clientData) {
+
+  var params = {
+
+    "expenses": {
+      "exp_data": {
+        "exp_details": {
+          "lineitem": {
+
+            "li_exp_id": clientData.expenseId,
+            "li_log_id": clientData.lineitemId
+
+          }
+
+        },
+
+        "token": clientData.token,
+        "device_id": clientData.deviceId,
+        "scope": "I"
+
+      }
+
+    }
+
+  };
+
+  return params;
+}
+
+function getSubmitMileageExpenseClaimModel(clientData) {
+
+  var params = {
+
+    "expenses": {
+      "exp_data": {
+
+        "exp_id": clientData.expenseId,
+        "conveyance_start_date": clientData.startDate,
+        "conveyance_end_date": clientData.endDate,
+        "exp_approver_id": clientData.approverId,
+
+        "token": clientData.token,
+        "device_id": clientData.deviceId,
+        "scope": "I",
+        "status": "Pending Approval"
+
+      }
+
+    }
+
+  };
+
+  if (clientData.approverId2 != null) {
+
+    params.expenses.exp_data.approver_id2 = clientData.approverId2;
+  }
+
+  return params;
+}

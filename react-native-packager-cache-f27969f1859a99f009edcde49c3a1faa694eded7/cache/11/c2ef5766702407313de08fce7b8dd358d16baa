@@ -1,0 +1,2085 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _reactNativeModalDatetimePicker = require('react-native-modal-datetime-picker');
+
+var _reactNativeModalDatetimePicker2 = babelHelpers.interopRequireDefault(_reactNativeModalDatetimePicker);
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _ewapplyleavescreenstyle = require('./styles/ewapplyleavescreenstyle');
+
+var _ewapplyleavescreenstyle2 = babelHelpers.interopRequireDefault(_ewapplyleavescreenstyle);
+
+var _ewcomponents = require('../../utils/ewcomponents');
+
+var _leaveUtils = require('./leaveUtils');
+
+var leaveConstants = babelHelpers.interopRequireWildcard(_leaveUtils);
+
+var _leaveerrorhandling = require('../../services/leave/leaveerrorhandling');
+
+var leaveError = babelHelpers.interopRequireWildcard(_leaveerrorhandling);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _utils = require('../../utils');
+
+var _animationutils = require('../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _authactions = require('../../services/auth/authactions');
+
+var _draweractions = require('../../services/drawer/draweractions');
+
+var _leaveactions = require('../../services/leave/leaveactions');
+
+var _screennameidentifiers = require('../../utils/screennameidentifiers');
+
+var FILE_NAME = "ewapplyleavescreen.js : ";
+
+var SCREEN_NAME = "Create Leave Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var defaultLeaveType = {
+  leaveType: 'Select Leave Type',
+  balance: -1,
+  leavetype_id: -1,
+  leavetype_category_id: -1
+};
+
+var leaveDayDurations = [{
+  label: 'Full Day',
+  value: 1
+}, {
+  label: '1st Half',
+  value: 2
+}, {
+  label: '2nd Half',
+  value: 3
+}];
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwApplyLeaveScreen = function (_Component) {
+  babelHelpers.inherits(EwApplyLeaveScreen, _Component);
+
+  function EwApplyLeaveScreen(props) {
+    babelHelpers.classCallCheck(this, EwApplyLeaveScreen);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwApplyLeaveScreen.__proto__ || Object.getPrototypeOf(EwApplyLeaveScreen)).call(this, props));
+
+    _this.getAppliedLeaveData = function (leaveId) {
+
+      console.log(FILE_NAME + "In getAppliedLeaveData");
+
+      var params = {
+        leaveId: leaveId
+      };
+
+      _this.props.getPendingLeaveInformation(params);
+
+      _this.setState({
+        isLoading: true
+      });
+    };
+
+    _this._keyboardDidShow = function (event) {
+
+      scrollView._root.scrollToEnd({ animated: true });
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentError();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentError = function () {
+
+      _this.setState({ currentError: '' });
+
+      _this.props.clearLeaveError(null);
+    };
+
+    _this.addEwDateTimePicker = function () {
+
+      console.log(FILE_NAME, "In addEwDateTimePicker method");
+
+      return _react2.default.createElement(_ewcomponents.EwDateTimePicker, {
+        isEwDateTimePickerVisible: _this.state.isEwDateTimePickerVisible,
+        modeEwDateTimePicker: _this.state.modeEwDateTimePicker,
+        _handleEwDateTimePicked: function _handleEwDateTimePicked(date, mode, elementKey) {
+          return _this._handleEwDateTimePicked(date, mode, elementKey);
+        },
+        _hideEwDateTimePicker: function _hideEwDateTimePicker(elementKey) {
+          return _this._hideEwDateTimePicker(elementKey);
+        },
+        elementKey: _this.state.activeEwDateTimePickerElementKey,
+        minDateTimePicker: _this.state.minDateTimePicker,
+        maxDateTimePicker: _this.state.maxDateTimePicker,
+        setDateTimePicker: _this.state.setDateTimePicker,
+        set24TimeFormat: false
+      });
+    };
+
+    _this._showEwDateTimePicker = function (elementKey, mode) {
+      var date = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new Date();
+
+
+      console.log(FILE_NAME, "In _showEwDateTimePicker method");
+
+      _this.setState({
+        isEwDateTimePickerVisible: true,
+        activeEwDateTimePickerElementKey: elementKey,
+        modeEwDateTimePicker: mode,
+        setDateTimePicker: date
+      });
+    };
+
+    _this._hideEwDateTimePicker = function (elementKey) {
+
+      console.log(FILE_NAME, "In _hideEwDateTimePicker method");
+
+      _this.setState({
+        isEwDateTimePickerVisible: false,
+        activeEwDateTimePickerElementKey: '',
+        modeEwDateTimePicker: ''
+      });
+    };
+
+    _this._handleEwDateTimePicked = function (date, mode, elementKey) {
+      var _this$state = _this.state,
+          inTime = _this$state.inTime,
+          outTime = _this$state.outTime,
+          startDate = _this$state.startDate;
+
+
+      console.log(FILE_NAME, "In _handleEwDateTimePicked method");
+
+      console.log("Returned Date value is - ", date);
+      console.log("Mod is - ", mode);
+      console.log("For Element is - ", elementKey);
+
+      var valueDateTimePicker;
+      var d = new Date(date);
+
+      console.log("Date object d is - ", d);
+
+      valueDateTimePicker = d.getTime();
+
+      console.log("valueDateTimePicker is - ", valueDateTimePicker);
+
+      if (mode == 'time') {
+        if (elementKey == inTime.key) valueDateTimePicker = (0, _utils.changeTimeDateAndConvertToMilliseconds)(d.getTime(), startDate.value);
+
+        if (elementKey == outTime.key) valueDateTimePicker = (0, _utils.changeTimeDateAndConvertToMilliseconds)(d.getTime(), startDate.value);
+      }
+
+
+      switch (elementKey) {
+        case _this.state.startDate.key:
+
+          endDate = _this.state.endDate.value;
+
+          if (!_this.state.isMultipleDays || endDate - valueDateTimePicker < 0) endDate = valueDateTimePicker;
+
+          _this.getNumberOfDays(valueDateTimePicker, endDate, _this.state.startDateHalf, _this.state.endDateHalf);
+
+          _this.setState({
+            startDate: {
+              mode: mode,
+              key: elementKey,
+              value: valueDateTimePicker
+            },
+
+            endDate: {
+              mode: _this.state.endDate.mode,
+              key: _this.state.endDate.key,
+              value: endDate
+            },
+            inTime: {
+              mode: _this.state.inTime.mode,
+              key: _this.state.inTime.key,
+              value: (0, _utils.changeTimeDateAndConvertToMilliseconds)(_this.state.inTime.value, valueDateTimePicker)
+            },
+
+            outTime: {
+              mode: _this.state.outTime.mode,
+              key: _this.state.outTime.key,
+              value: (0, _utils.changeTimeDateAndConvertToMilliseconds)(_this.state.outTime.value, valueDateTimePicker)
+            },
+
+            isleaveContinued: 0
+          });
+
+          break;
+
+        case _this.state.endDate.key:
+
+          _this.getNumberOfDays(_this.state.startDate.value, valueDateTimePicker, _this.state.startDateHalf, _this.state.endDateHalf);
+
+          if (valueDateTimePicker - new Date(_this.state.startDate.value).getTime() > 0) {
+
+            console.log("Changing State", _this.state.endDate.value - _this.state.startDate.value);
+            _this.setState({
+              endDate: {
+                mode: mode,
+                key: elementKey,
+                value: valueDateTimePicker
+              },
+              isleaveContinued: 0
+            });
+          } else {
+
+            _this.showAlertMessage("End Date can't be behind Start Date");
+          }
+
+          break;
+
+        case _this.state.inTime.key:
+
+          _this.setState({
+            inTime: {
+              mode: mode,
+              key: elementKey,
+              value: valueDateTimePicker
+            },
+
+            isleaveContinued: 0
+          });
+
+          break;
+
+        case _this.state.outTime.key:
+
+          _this.setState({
+            outTime: {
+              mode: mode,
+              key: elementKey,
+              value: valueDateTimePicker
+            },
+            isleaveContinued: 0
+          });
+
+          break;
+
+        default:
+
+      }
+    };
+
+    console.log(FILE_NAME + "In Constructor");
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      isLeaveTypesAndBalancesLoaded: false,
+
+      isEwDateTimePickerVisible: false,
+      modeEwDateTimePicker: 'date',
+      activeEwDateTimePickerElementKey: '',
+      minDateTimePicker: undefined,
+      maxDateTimePicker: undefined,
+      setDateTimePicker: new Date(),
+
+      leaveRenderingData: [],
+      isMultipleDays: false,
+      isMultipleDaysVisible: false,
+
+      isDeclarationGiven: false,
+
+      isPlanned: 0,
+
+      reason: null,
+      leaveTypeId: null,
+      leaveTypeCategoryId: null,
+      isForDateActive: true,
+
+      isDiversityLeaveDayDropdownVisible: false,
+      selectedDiversityLeaveDayId: 'diversity',
+      leaveDays: 1,
+
+      isStartDateVisible: false,
+      isShortLeave: false,
+      isleaveContinued: 0,
+      isLeaveReapplied: 0,
+      reapplyLeaveData: null,
+      startDate: {
+        key: "startDate",
+        value: (0, _utils.getCurrentDate)(),
+        mode: 'date'
+      },
+
+      endDate: {
+        key: "endDate",
+        value: (0, _utils.getCurrentDate)(),
+        mode: 'date'
+      },
+
+      inTime: {
+        key: "inTime",
+        value: (0, _utils.getCurrentTime)(),
+        mode: 'time'
+      },
+
+      outTime: {
+        key: "outTime",
+        value: (0, _utils.getCurrentTime)(),
+        mode: 'time'
+      },
+
+      startDateHalf: 1,
+      isDayPickerVisible: false,
+
+      endDateHalf: 1,
+      remarks: '',
+
+      componentInitializeTime: (0, _utils.getCurrentTime)()
+
+    };
+
+    _this.state = _this.initialState;
+
+    console.log("Current Component State - ", _this.state);
+    return _this;
+  }
+
+  babelHelpers.createClass(EwApplyLeaveScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      var params = {
+        source: FILE_NAME
+      };
+
+      this.props.getLeaveTypesAndBalances(params);
+
+      this.setState({
+        isDataPreLoaded: false,
+        isLoading: true
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.leaveBalanceData != null && nextProps.leaveBalanceError == null || nextProps.leaveBalanceData == null && nextProps.leaveBalanceError == null) {
+        this.setState({
+          isLeaveTypesAndBalancesLoaded: true
+        });
+      } else {
+        this.setState({
+          isLeaveTypesAndBalancesLoaded: false
+        });
+      }
+
+      if (nextProps.leaveDaysData != null && nextProps.leaveDaysError == null) {
+        this.setState({
+          leaveDays: nextProps.leaveDaysData.days
+        });
+      }
+
+      if (nextProps.leaveDaysData == null && nextProps.leaveDaysError != null) {
+        this.setState({
+          leaveDays: 0
+        });
+      }
+
+      if (nextProps.leaveRenderingData != null && !this.state.isDataPreLoaded && nextProps.leaveRenderingError == null) {
+        customleaveRenderingData = [defaultLeaveType].concat(babelHelpers.toConsumableArray(nextProps.leaveRenderingData));
+
+        if (this.props.reapplyLeaveData != null) {
+
+          var customReapplyLeaveData = this.props.reapplyLeaveData;
+
+          customReapplyLeaveData['typeOfLeave'] = leaveConstants.REAPPLY_LEAVE;
+
+          elementValues = this.handleElementsValues(customReapplyLeaveData);
+          elementVisibility = this.handleElementsVisibility(this.props.reapplyLeaveData.leavecategory_id);
+        } else {
+
+          elementValues = this.handleElementsValues(customleaveRenderingData[0]);
+          elementVisibility = this.handleElementsVisibility(customleaveRenderingData[0].leavetype_category_id);
+        }
+
+        (0, _utils.showAnimation)(animationUtils.DEFAULT_SCREEN_ANIMATION);
+
+        this.initializeState(elementVisibility, elementValues, customleaveRenderingData);
+      }
+
+      if (nextProps.leaveRenderingData == null && nextProps.leaveRenderingError != null) {
+        this.setState({
+          isLoading: false,
+          isDataPreLoaded: false,
+          currentError: nextProps.leaveRenderingError
+        });
+      }
+
+      if (nextProps.applyLeaveStatusData != null && nextProps.applyLeaveStatusError == null) {
+
+        console.log(FILE_NAME + "Apply Leave Successfull");
+
+        this.setState({
+          isDone: true,
+          isLoading: false,
+          currentError: ''
+        });
+
+        this.props.updateTotalActivityCount(null);
+      }
+
+      if (nextProps.applyLeaveStatusData == null && nextProps.applyLeaveStatusError != null) {
+
+        console.log(FILE_NAME + "Apply Leave Not Successfull");
+
+        startDate = this.state.startDate.value;
+
+        endDate = this.state.endDate.value;
+
+        console.log("enddateis", new Date(endDate));
+
+        isMultipleDays = this.state.isMultipleDays;
+
+        var _nextProps$applyLeave = nextProps.applyLeaveStatusError,
+            error_flag = _nextProps$applyLeave.error_flag,
+            isContinue = _nextProps$applyLeave.isContinue,
+            contigous_start_date = _nextProps$applyLeave.contigous_start_date,
+            contigous_end_date = _nextProps$applyLeave.contigous_end_date,
+            contigous_Leave_Id = _nextProps$applyLeave.contigous_Leave_Id;
+
+        console.log("startdate", new Date(startDate), new Date(endDate));
+
+        if (isContinue == 1) {
+
+          console.log();
+
+          if (contigous_start_date != null) startDate = (0, _utils.convertServerDateToMilliseconds)(contigous_start_date);
+
+          if (contigous_end_date != null) endDate = (0, _utils.convertServerDateToMilliseconds)(contigous_end_date);
+
+          if (!(0, _utils.areDatesEqual)(startDate, endDate)) isMultipleDays = true;
+
+          this.setState({
+            isDone: false,
+            isLoading: false,
+            isleaveContinued: isContinue,
+            currentError: error_flag,
+
+            isMultipleDays: isMultipleDays,
+
+            startDate: {
+
+              key: "startDate",
+              mode: 'date',
+              value: startDate
+            },
+
+            endDate: {
+              key: "endDate",
+              value: endDate,
+              mode: 'date'
+            }
+          });
+
+          this.getNumberOfDays(startDate, endDate, this.state.startDateHalf, this.state.endDateHalf);
+        } else {
+
+          if (contigous_Leave_Id > 0) {
+
+            _reactNative.Alert.alert('Leave', error_flag, [{ text: 'Ok', onPress: function onPress() {
+                return _this2.getAppliedLeaveData(contigous_Leave_Id);
+              } }, { text: 'Cancel' }]);
+
+            this.clearCurrentError();
+
+            this.setState({
+              isDone: false,
+              isLoading: false,
+              isleaveContinued: isContinue
+            });
+          } else {
+
+            this.setState({
+              isDone: false,
+              isLoading: false,
+              isleaveContinued: isContinue,
+              currentError: error_flag
+            });
+          }
+        }
+      }
+
+      if (nextProps.pendingLeaveInformation != null && nextProps.pendingLeaveInformationError == null) {
+
+        this.setState({
+          isLoading: false
+        });
+
+        var customReapplyLeaveData = nextProps.pendingLeaveInformation;
+
+        customReapplyLeaveData['typeOfLeave'] = leaveConstants.REAPPLY_LEAVE;
+
+        elementValues = this.handleElementsValues(customReapplyLeaveData);
+        elementVisibility = this.handleElementsVisibility(customReapplyLeaveData.leavetype_category_id);
+
+        (0, _utils.showAnimation)(animationUtils.DEFAULT_SCREEN_ANIMATION);
+
+        this.initializeState(elementVisibility, elementValues, this.state.leaveRenderingData);
+      }
+
+      if (nextProps.pendingLeaveInformation == null && nextProps.pendingLeaveInformationError != null) {
+
+        this.setState({
+          isLoading: false
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      console.log("LeaveTypeId is - ", this.state.leaveTypeId);
+      console.log("props received - ", this.props.reapplyLeaveData);
+      console.log("currentstate is - ", this.state);
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewcomponents.EwLoadingIndicator, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage('Successfully', 'Leave Applied', 'success');
+              }
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+
+              return null;
+            } else {
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      this.keyboardDidShowListener = _reactNative.Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      this.keyboardDidShowListener.remove();
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      if (this.state.isDone && this.state.currentError == '') {
+
+        var params = {
+          "0": 'CLEAR_STATE_DATA_ALL'
+        };
+        this.props.clearLeaveStateData(params);
+      }
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this3 = this;
+
+      console.log(FILE_NAME + "In renderScreen() method");
+
+      var _state = this.state,
+          leaveRenderingData = _state.leaveRenderingData,
+          leaveDays = _state.leaveDays;
+
+
+      var leaveDataMap = {};
+
+      var supervisorInfo = {
+        name: "",
+        designation: "",
+        imageUrl: (0, _utils.getImageUrl)(this.props.sessionToken, leaveRenderingData[1].approver_Empcode, 'Apply Leave', this.props.currentImageTimestamp)
+      };
+
+      if (leaveRenderingData.length != 0) {
+
+        for (var id in leaveRenderingData) {
+          leaveDataMap[leaveRenderingData[id].leavetype_id] = leaveRenderingData[id];
+        }
+
+        var supervisorInfo = {
+          name: leaveRenderingData[1].approver_Name,
+          designation: leaveRenderingData[1].approver_Designation,
+          imageUrl: (0, _utils.getImageUrl)(this.props.sessionToken, leaveRenderingData[1].approver_Empcode, 'Apply Leave', this.props.currentImageTimestamp)
+        };
+      }
+
+      console.log("LeaveDataMap is - ", leaveDataMap);
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            null,
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _this3.onPressBackButton();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewcomponents.EwScreenTitle, {
+              text: 'Apply Leave'
+            })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Right,
+            null,
+            _react2.default.createElement(_ewcomponents.EwReportIssue, {
+              screenId: _screennameidentifiers.APPLY_LEAVE_ID
+            })
+          )
+        ),
+        _react2.default.createElement(
+          _nativeBase.Content,
+          {
+            ref: function ref(_ref) {
+              return scrollView = _ref;
+            },
+            contentContainerStyle: _ewapplyleavescreenstyle2.default.content,
+            keyboardShouldPersistTaps: 'always'
+          },
+          _react2.default.createElement(_ewcomponents.SupervisorInfo, { info: supervisorInfo }),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewapplyleavescreenstyle2.default.totalInfoContainer },
+            this.showLeaveTypesAndBalance(leaveDataMap),
+            this.showStartDate(),
+            this.showShortLeaveTiming(),
+            this.showMultipleCheckbox(),
+            this.showEndDate(),
+            this.showDiversityDropdown(leaveDataMap),
+            this.getTextForLeaveDays(),
+            this.showReason(),
+            this.showDeclaration(leaveDataMap),
+            this.showPlannedLayout(leaveDataMap),
+            this.addEwDateTimePicker()
+          ),
+          this.showApplyButton(leaveDataMap)
+        )
+      );
+    }
+  }, {
+    key: 'initializeState',
+    value: function initializeState(elementVisibility, elementValues, leaveRenderingData) {
+
+      console.log(FILE_NAME + "In initializeState");
+
+      this.setState({
+
+        isLoading: false,
+        isDataPreLoaded: true,
+
+        leaveRenderingData: leaveRenderingData,
+
+        leaveTypeId: elementValues.leaveTypeId,
+        reason: elementValues.reason,
+        leaveTypeCategoryId: elementValues.leaveTypeCategoryId,
+        leaveDays: elementValues.leaveDays,
+        selectedDiversityLeaveDayId: elementValues.selectedDiversityLeaveDayId,
+        startDateHalf: elementValues.startDateHalf,
+        endDateHalf: elementValues.endDateHalf,
+        startDate: {
+          key: "startDate",
+          mode: 'date',
+          value: elementValues.startDate
+        },
+        endDate: {
+          key: "endDate",
+          value: elementValues.endDate,
+          mode: 'date'
+        },
+
+        inTime: {
+          key: "inTime",
+          value: elementValues.inTime,
+          mode: 'time'
+        },
+        outTime: {
+          key: "outTime",
+          value: elementValues.outTime,
+          mode: 'time'
+        },
+        isMultipleDays: elementValues.isMultipleDays,
+
+        isStartDateVisible: elementVisibility.isStartDateVisible,
+        isDayPickerVisible: elementVisibility.isDayPickerVisible,
+        isMultipleDaysVisible: elementVisibility.isMultipleDaysVisible,
+        isShortLeave: elementVisibility.isShortLeave,
+        isDiversityLeaveDayDropdownVisible: elementVisibility.isDiversityLeaveDayDropdownVisible,
+        isForDateActive: elementVisibility.isForDateActive,
+        isDeclarationGiven: elementValues.isDeclarationGiven,
+        isPlanned: elementValues.isPlanned,
+        remarks: elementValues.remarks,
+
+        isLeaveReapplied: elementValues.isLeaveReapplied,
+        reapplyLeaveData: elementValues.reapplyLeaveData,
+        isleaveContinued: elementValues.isContinue
+
+      });
+    }
+  }, {
+    key: 'onPressBackButton',
+    value: function onPressBackButton() {
+
+      console.log(FILE_NAME, "In onPressBackButton Method");
+
+      if (this.props.reapplyLeaveData == null) {
+
+        _reactNativeRouterFlux.Actions.pop();
+      } else _reactNativeRouterFlux.Actions.popTo('ewmyrequestscreen');
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME, "In handleError Method");
+
+      console.log("this.state.currentError", this.state.currentError);
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+
+          this.showAlertMessage("Session expired, Please login again");
+
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+          console.log("isNetworkAvailable ", (0, _utils.isNetworkAvailable)());
+
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+        case leaveError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        console.log("Handling Post Rendering Error");
+        switch (this.state.currentError) {
+
+          case leaveError.SERVER_EXCEPTION:
+
+            this.showAlertMessage(leaveError.SERVER_ERROR);
+            return this.renderScreen();
+
+            break;
+
+          case leaveError.LEAVE_APPROVAL_SETUP_NOT_DEFINED:
+          case leaveError.LEAVE_APPROVAL_NOT_FOUND:
+          case leaveError.LEAVE_REQUEST_BEFORE_DOJ:
+          case leaveError.LEAVE_END_DATE_AFTER_START_DATE:
+          case leaveError.LEAVE_OF_PREVIOUS_YR_NOT_ALLOWED:
+          case leaveError.LEAVE_OF_CONTIGEOUS_SAME_TYPE:
+          case leaveError.LEAVE_OF_CONTIGEOUS_DIFFERENT_TYPE:
+          case leaveError.LEAVE_TRAVEL_EXISTS:
+          case leaveError.COMP_APPROVER_NOT_FOUND:
+          case leaveError.COMP_OFF_ALREADY_EXISTS:
+          case leaveError.LEAVE_EXIST_FOR_APPLIED_DATE:
+          case leaveError.LEAVE_EXIST_FOR_FIRST_HALF:
+          case leaveError.LEAVE_EXIST_FOR_SECOND_HALF:
+          case leaveError.TWO_HALF_DAY_LEAVE_EXIST_FOR_APPLIED_DATE:
+          case leaveError.OD_EXIST_FOR_APPLIED_DATE:
+          case leaveError.TRAVEL_ALREADY_EXIST:
+          case leaveError.SHORT_LEAVE_EXIST:
+          case leaveError.HALF_DAY_AND_SHORT_LEAVE_EXIST:
+          case leaveError.DATE_CANNOT_BE_BEFORE_ABSENCE_PERIOD:
+          case leaveError.REQUEST_BEFORE_DOJ:
+          case leaveError.APPLY_IN_DATE_CAN_NOT_BE_FUTURE:
+          case leaveError.APPLY_OUT_DATE_CAN_NOT_BE_FUTURE:
+          case leaveError.IN_TIME_CAN_NOT_BE_FUTURE:
+          case leaveError.OUT_TIME_CAN_NOT_BE_FUTURE:
+          case leaveError.IN_TIME_CAN_NOT_BE_AFTER_OUT_TIME:
+          case leaveError.LEAVE_BALANCE_EXHAUSTED:
+          case leaveError.LEAVE_POLICY_VIOLATION:
+          case leaveError.LEAVE_MIN_DAYS_REQUIRED:
+          case leaveError.LEAVE_PRIOR_APPROVAL_REQUIRED:
+          case leaveError.MAX_LEAVE_YEAR_EXCEEDED:
+          case leaveError.MAX_LEAVE_TENURE_EXCEEDED:
+          case leaveError.MIN_SERVE_PERIOD_REQUIRED:
+          case leaveError.LEAVE_CANNOT_BE_CLUBBED:
+          case leaveError.LEAVE_TIME_EXCEEDED:
+          case leaveError.LEAVE_BALANCE_NOT_AVAILABLE_DUE_TO_PENDING_LEAVE:
+          case leaveError.LEAVE_FOR_CONFIRMED_EMPLOYEE:
+          case leaveError.ENOUGH_BALANCE_NOT_AVAILABLE_FOR_NEXT_YEAR:
+          case leaveError.ENOUGH_BALANCE_NOT_AVAILABLE_FOR_NEXT_YEAR_DUE_TO_PENDING_LEAVE:
+          case leaveError.ENOUGH_BALANCE_NOT_AVAILABLE_FOR_LAST_YEAR:
+          case leaveError.ENOUGH_BALANCE_NOT_AVAILABLE_FOR_LAST_YEAR_DUE_TO_PENDING_LEAVE:
+          case leaveError.PENDING_ENCASHMENT_REQUEST_EXISTS:
+          case leaveError.LEAVE_BEFORE_COMP_OFF:
+          case leaveError.MAX_LEAVE_IN_PERIOD_EXCEEDED:
+          case leaveError.MAX_LEAVE_MUST_BE_GREATER_THAN_ZERO:
+          case leaveError.MAX_LEAVE_IN_YEAR_MUST_BE_GREATER_THAN_ZERO:
+          case leaveError.MAX_TIMES_LEAVE_ALLOWED_IN_YEAR_MUST_BE_GREATER_THAN_ZERO:
+          case leaveError.START_AND_END_DATE_MANDATORY:
+          case leaveError.END_DATE_MUST_BE_GREATER_THAN_START_DATE:
+          case leaveError.END_DATE_MUST_BE_SMALLER_YEAR_END_DATE:
+          case leaveError.INVALID_DATE:
+          case leaveError.START_DATE_IS_WEEKLY_OFF:
+          case leaveError.END_DATE_IS_WEEKLY_OFF:
+          case leaveError.START_DATE_IS_HOLIDAY:
+          case leaveError.END_DATE_IS_HOLIDAY:
+          case leaveError.LEAVE_DATE_IS_NOT_BIRTHDAY:
+          case leaveError.LEAVE_DATE_IS_NOT_ANNIVERSARY:
+          case leaveError.LEAVE_DATE_IS_AFTER_COMP_OFF:
+            this.showAlertMessage();
+            return this.renderScreen();
+            break;
+
+          default:
+            this.showAlertMessage();
+            return this.renderScreen();
+            break;
+
+        }
+      }
+    }
+  }, {
+    key: 'getTextForLeaveDays',
+    value: function getTextForLeaveDays() {
+
+      console.log(FILE_NAME, "In getTextForLeaveDays Method");
+
+      if (this.state.leaveTypeId != leaveConstants.DEFAULT_LEAVE) {
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewapplyleavescreenstyle2.default.leaveDaysContainer },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            null,
+            'Leave for Day(s) - ',
+            this.state.leaveDays
+          )
+        );
+      }
+    }
+  }, {
+    key: 'showReason',
+    value: function showReason() {
+      var _this4 = this;
+
+      console.log(FILE_NAME, "In showReason Method", this.state.leaveTypeId);
+
+      if (this.state.leaveTypeId != leaveConstants.DEFAULT_LEAVE) {
+
+        return _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+          label: 'Reason',
+          autoCorrect: false,
+          onChangeText: function onChangeText(reason) {
+            return _this4.setState({ reason: reason });
+          },
+          value: this.state.reason
+        });
+      }
+    }
+  }, {
+    key: 'showApplyButton',
+    value: function showApplyButton(leaveDataMap) {
+      var _this5 = this;
+
+      console.log(FILE_NAME, "In showApplyButton Method");
+
+      if (this.state.leaveTypeId != leaveConstants.DEFAULT_LEAVE) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 10 } },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { style: { marginRight: 10 }, onPress: function onPress() {
+                return _this5.onPressCancel();
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Cancel'
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { style: { marginLeft: 10 }, disabled: !this.shouldActionButtonActive(), onPress: function onPress() {
+                return _this5.onPressApply(leaveDataMap);
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              this.props.reapplyLeaveData == null ? 'Apply' : 'Re-Apply'
+            )
+          )
+        );
+      }
+    }
+  }, {
+    key: 'handleElementsVisibility',
+    value: function handleElementsVisibility(leaveTypeCategoryId) {
+
+      console.log(FILE_NAME, "In handleElementsVisibility Method");
+
+      console.log(FILE_NAME, "In handleElementsVisibility Method", leaveTypeCategoryId);
+
+      isStartDateVisible = true;
+      isDayPickerVisible = true;
+      isForDateActive = true;
+      isShortLeave = false;
+      isMultipleDaysVisible = true;
+      isDiversityLeaveDayDropdownVisible = false;
+
+      switch (leaveTypeCategoryId) {
+        case leaveConstants.BIRTHDAY_LEAVE:
+
+          isForDateActive = false;
+          isMultipleDaysVisible = false;
+
+          break;
+
+        case leaveConstants.ANNIVERSARY_LEAVE:
+
+          isForDateActive = false;
+          isMultipleDaysVisible = false;
+
+          break;
+
+        case leaveConstants.SHORT_LEAVE:
+
+          isShortLeave = true;
+          isDayPickerVisible = false;
+          isMultipleDaysVisible = false;
+
+          break;
+
+        case leaveConstants.DIVERSITY_LEAVE:
+
+          isDiversityLeaveDayDropdownVisible = true;
+          isForDateActive = false;
+          isDayPickerVisible = false;
+          isMultipleDaysVisible = false;
+
+          break;
+
+        case leaveConstants.DEFAULT_LEAVE:
+
+          isStartDateVisible = false;
+          isDayPickerVisible = false;
+          isMultipleDaysVisible = false;
+
+          break;
+
+      };
+
+      elementVisibility = {
+        isStartDateVisible: isStartDateVisible,
+        isDayPickerVisible: isDayPickerVisible,
+        isMultipleDaysVisible: isMultipleDaysVisible,
+        isShortLeave: isShortLeave,
+        isDiversityLeaveDayDropdownVisible: isDiversityLeaveDayDropdownVisible,
+        isForDateActive: isForDateActive
+      };
+
+      return elementVisibility;
+    }
+  }, {
+    key: 'handleElementsValues',
+    value: function handleElementsValues(leaveRenderingData) {
+
+      console.log(FILE_NAME, "In handleElementsValues Method");
+
+      var diversityLeaveId = null;
+      var endDate = (0, _utils.getCurrentDate)();
+      var startDate = null;
+      var isMultipleDays = false;
+      var leaveDays = 1;
+      var reason = '';
+      var startDateHalf = 1;
+      var endDateHalf = 1;
+      var inTime = (0, _utils.getCurrentTime)();
+      var outTime = (0, _utils.getCurrentTime)();
+      var leaveTypeCategoryId = null;
+      var isDeclarationGiven = false;
+      var isPlanned = 0;
+      var remarks = '';
+      var isLeaveReapplied = 0;
+      var reapplyLeaveData = null;
+      var isContinue = 0;
+
+      console.log("leaveRenderingdata", leaveRenderingData);
+      if (leaveRenderingData.leavetype_category_id != leaveConstants.DEFAULT_LEAVE) {
+
+        if (leaveRenderingData['typeOfLeave'] == leaveConstants.REAPPLY_LEAVE) {
+
+          startDate = (0, _utils.convertServerDateToMilliseconds)(leaveRenderingData.start_Date_Timestamp);
+          endDate = (0, _utils.convertServerDateToMilliseconds)(leaveRenderingData.end_Date_Timestamp);
+
+          isLeaveReapplied = 1;
+          reapplyLeaveData = leaveRenderingData;
+
+          if (!(0, _utils.areDatesEqual)(startDate, endDate)) isMultipleDays = true;
+
+          leaveDays = leaveRenderingData.no_Days;
+          reason = leaveRenderingData.reason;
+          startDateHalf = leaveRenderingData.half_Day;
+          endDateHalf = leaveRenderingData.half_Day2;
+          leaveTypeCategoryId = leaveRenderingData.leavecategory_id;
+
+          if (leaveRenderingData.leavecategory_id == leaveConstants.SHORT_LEAVE) {
+
+            inTime = (0, _utils.convertServerDateTimeToMilliseconds)(leaveRenderingData.start_Date_Timestamp);
+            outTime = (0, _utils.convertServerDateTimeToMilliseconds)(leaveRenderingData.end_Date_Timestamp);
+          }
+        } else {
+
+            startDate = (0, _utils.convertServerDateToMilliseconds)(leaveRenderingData.applied_on);
+            endDate = (0, _utils.convertServerDateToMilliseconds)(leaveRenderingData.applied_on);
+
+            leaveTypeCategoryId = leaveRenderingData.leavetype_category_id;
+
+            if (leaveRenderingData.leavetype_category_id == leaveConstants.DIVERSITY_LEAVE) {
+
+              if (leaveRenderingData.diversityHolidayInfo.length > 0) {
+
+                startDate = (0, _utils.convertServerDateToMilliseconds)(leaveRenderingData.diversityHolidayInfo[0].holiday_Date);
+                endDate = (0, _utils.convertServerDateToMilliseconds)(leaveRenderingData.diversityHolidayInfo[0].holiday_Date);
+                diversityLeaveId = leaveRenderingData.diversityHolidayInfo[0].id;
+              }
+            }
+          }
+      }
+
+      elementValues = {
+        startDate: startDate,
+        endDate: endDate,
+        selectedDiversityLeaveDayId: diversityLeaveId,
+        isMultipleDays: isMultipleDays,
+        leaveDays: leaveDays,
+        reason: reason,
+        startDateHalf: startDateHalf,
+        endDateHalf: endDateHalf,
+        inTime: inTime,
+        outTime: outTime,
+        leaveTypeId: leaveRenderingData.leavetype_id,
+        leaveTypeCategoryId: leaveTypeCategoryId,
+        isDeclarationGiven: isDeclarationGiven,
+        isPlanned: isPlanned,
+        remarks: remarks,
+
+        isLeaveReapplied: isLeaveReapplied,
+        reapplyLeaveData: reapplyLeaveData,
+        isContinue: isContinue
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: 'showPlannedLayout',
+    value: function showPlannedLayout(leaveDetail) {
+      var _this6 = this;
+
+      console.log(FILE_NAME, "In showPlannedLayout method");
+
+      if (this.state.leaveTypeId != -1) {
+
+        var leaveData = leaveDetail[this.state.leaveTypeId];
+
+        if (leaveData.track_planned == 1) {
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", marginTop: 15 } },
+            _react2.default.createElement(_ewcomponents.EwRadioButton, {
+              label: 'Planned',
+              isSelected: this.state.isPlanned,
+              onRadioButtonClick: function onRadioButtonClick() {
+                return _this6.onPressPlanned();
+              }
+            }),
+            _react2.default.createElement(_ewcomponents.EwRadioButton, {
+              label: 'Unplanned',
+              customViewStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN },
+              isSelected: !this.state.isPlanned,
+              onRadioButtonClick: function onRadioButtonClick() {
+                return _this6.onPressPlanned();
+              }
+            })
+          );
+        }
+      }
+    }
+  }, {
+    key: 'onPressPlanned',
+    value: function onPressPlanned() {
+
+      console.log(FILE_NAME, "In onPressPlanned method");
+
+      this.setState({
+        isPlanned: 1 ^ this.state.isPlanned
+      });
+
+      console.log("radiobuttonclicked");
+    }
+  }, {
+    key: 'showDiversityDropdown',
+    value: function showDiversityDropdown(leaveDataMap) {
+      var _this7 = this;
+
+      console.log(FILE_NAME, "In showDiversityDropdown method");
+
+      if (this.state.isDiversityLeaveDayDropdownVisible) {
+        var reapplyLeaveData = this.state.reapplyLeaveData;
+
+        if (reapplyLeaveData != null && leaveConstants.STATUS_APPROVED == reapplyLeaveData.status) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewapplyleavescreenstyle2.default.spinnerContainer },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Diversity Leave Type - ',
+              reapplyLeaveData.diversity_holiday
+            )
+          );
+        } else {
+
+          leaveDetail = leaveDataMap[this.state.leaveTypeId];
+          console.log("showdiversity");
+
+          contents = leaveDetail.diversityHolidayInfo.map(function (data) {
+            var itemLabel = data.holiday_Name;
+            return _react2.default.createElement(_nativeBase.Item, { label: itemLabel, value: data.id });
+          });
+
+          return _react2.default.createElement(_ewcomponents.EwDropdownPicker, {
+            pickerLabel: leaveConstants.DIVERSITY_LEAVE_TYPE_LABEL,
+            isDefaultPickerValueSelected: false,
+            customPickerView: contents,
+            customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+            selectedValue: this.state.selectedDiversityLeaveDayId,
+            onPickerValueChange: function onPickerValueChange(updatedValue) {
+              return _this7.onDiversityLeaveValueChange(updatedValue, leaveDetail.diversityHolidayInfo);
+            }
+          });
+
+          console.log(leaveDetail);
+        }
+      }
+    }
+  }, {
+    key: 'onDiversityLeaveValueChange',
+    value: function onDiversityLeaveValueChange(newDiversityValue, diversityHolidays) {
+
+      console.log(FILE_NAME, "In onDiversityLeaveValueChange method");
+
+      startDate = this.state.startDate;
+      endDate = this.state.endDate;
+
+      for (var _iterator = diversityHolidays, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref2;
+
+        if (_isArray) {
+          if (_i >= _iterator.length) break;
+          _ref2 = _iterator[_i++];
+        } else {
+          _i = _iterator.next();
+          if (_i.done) break;
+          _ref2 = _i.value;
+        }
+
+        var diversityHoliday = _ref2;
+
+
+        if (diversityHoliday.id == newDiversityValue) {
+          startDate.value = (0, _utils.convertServerDateToMilliseconds)(diversityHoliday.holiday_Date);
+          endDate.value = (0, _utils.convertServerDateToMilliseconds)(diversityHoliday.holiday_Date);
+          break;
+        }
+      }
+
+      this.setState({
+        selectedDiversityLeaveDayId: newDiversityValue,
+        startDate: startDate,
+        endDate: endDate
+      });
+    }
+  }, {
+    key: 'getDiversityLeaveDate',
+    value: function getDiversityLeaveDate() {}
+  }, {
+    key: 'showDeclaration',
+    value: function showDeclaration(leaveData) {
+      var _this8 = this;
+
+      console.log(FILE_NAME, "In showDeclaration method");
+
+      var leaveDetail = leaveData[this.state.leaveTypeId];
+
+      if (leaveDetail != null) {
+        if (leaveDetail.declaration_Required == "Y") {
+
+          return _react2.default.createElement(_ewcomponents.EwCheckbox, {
+            isChecked: this.state.isDeclarationGiven,
+            onCheckboxClick: function onCheckboxClick() {
+              return _this8.setState({ isDeclarationGiven: !_this8.state.isDeclarationGiven });
+            },
+            customViewStyle: { marginTop: 20, marginLeft: -10 },
+            label: leaveDetail.declarationText
+          });
+        }
+      }
+
+      return _react2.default.createElement(_reactNative.View, null);
+    }
+  }, {
+    key: 'showMultipleCheckbox',
+    value: function showMultipleCheckbox() {
+      var _this9 = this;
+
+      console.log(FILE_NAME, "In showMultipleCheckbox method");
+
+      if (this.state.isMultipleDaysVisible) {
+        return _react2.default.createElement(_ewcomponents.EwCheckbox, {
+          isChecked: this.state.isMultipleDays,
+          onCheckboxClick: function onCheckboxClick() {
+            return _this9.onMultipleDaysClicked();
+          },
+          customViewStyle: { marginTop: 10, marginLeft: -10 },
+          label: 'Multiple Days'
+        });
+      }
+    }
+  }, {
+    key: 'onMultipleDaysClicked',
+    value: function onMultipleDaysClicked() {
+
+      console.log(FILE_NAME, "In onMultipleDaysClicked method");
+
+      (0, _utils.showAnimation)(animationUtils.ANIMATION_SPRING);
+
+      this.setState({
+        isMultipleDays: !this.state.isMultipleDays,
+
+        endDate: {
+          key: "endDate",
+          value: this.state.startDate.value,
+          mode: 'date'
+        },
+
+        leaveDays: 1
+      });
+    }
+  }, {
+    key: 'showShortLeaveTiming',
+    value: function showShortLeaveTiming() {
+
+      console.log(FILE_NAME, "In showShortLeaveTiming method");
+
+      if (this.state.isShortLeave) {
+        var _state2 = this.state,
+            inTime = _state2.inTime,
+            outTime = _state2.outTime,
+            leaveTypeCategoryId = _state2.leaveTypeCategoryId;
+
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewcomponents.EwText, {
+            text: leaveConstants.SHORT_LEAVE_HEADING,
+            customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: 5 }
+          }),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewapplyleavescreenstyle2.default.timePickerContainerStyle },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: _ewapplyleavescreenstyle2.default.timePickerStyle },
+              _react2.default.createElement(_ewcomponents.EwText, {
+                text: leaveConstants.SHORT_LEAVE_IN_TIME_HEADING,
+                customStyle: { marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN }
+              }),
+              this.showTimePicker(inTime)
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: _ewapplyleavescreenstyle2.default.timePickerStyle },
+              _react2.default.createElement(_ewcomponents.EwText, {
+                text: leaveConstants.SHORT_LEAVE_OUT_TIME_HEADING,
+                customStyle: { marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN }
+              }),
+              this.showTimePicker(outTime)
+            )
+          )
+        );
+      }
+    }
+  }, {
+    key: 'onLeaveTypeChange',
+    value: function onLeaveTypeChange(value) {
+
+      console.log(FILE_NAME, "In onLeaveTypeChange method");
+      console.log("Value of changed leavetype id is - ", value);
+
+      var leaveRenderingData = this.state.leaveRenderingData;
+
+
+      for (var id in leaveRenderingData) {
+        console.log("reached3");
+
+        if (leaveRenderingData[id].leavetype_id == value) {
+
+          console.log(leaveRenderingData[id].balance);
+
+          elementValues = this.handleElementsValues(leaveRenderingData[id]);
+          elementVisibility = this.handleElementsVisibility(leaveRenderingData[id].leavetype_category_id);
+
+          (0, _utils.showAnimation)(animationUtils.ANIMATION_EASE_IN_EASE_OUT);
+
+          this.initializeState(elementVisibility, elementValues, leaveRenderingData);
+
+
+          break;
+        }
+      }
+    }
+  }, {
+    key: 'showLeaveTypesAndBalance',
+    value: function showLeaveTypesAndBalance(leaveData) {
+      var _this10 = this;
+
+      var reapplyLeaveData = this.state.reapplyLeaveData;
+
+
+      if (reapplyLeaveData != null && leaveConstants.STATUS_APPROVED == reapplyLeaveData.status) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewapplyleavescreenstyle2.default.spinnerContainer },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            null,
+            'Leave Type - ',
+            reapplyLeaveData.leaveType
+          )
+        );
+      } else {
+
+        console.log(FILE_NAME, "In showLeaveTypesAndBalance method");
+
+        console.log("Selected Leave Type Id is ", this.state.leaveTypeId);
+        console.log("Leave Datamap is ", leaveData);
+        console.log("Current State is -", this.state);
+        console.log("Leave Rendering Data is  -", this.state.leaveRenderingData);
+
+        var leaveRenderingData = this.state.leaveRenderingData;
+
+
+        console.log("leaveRenderingData is -", leaveRenderingData);
+
+        contents = Object.keys(leaveRenderingData).map(function (key) {
+
+          if (leaveRenderingData[key].balance >= 0) var itemLabel = leaveRenderingData[key].leaveType + " (" + leaveRenderingData[key].balance + ")";else var itemLabel = leaveRenderingData[key].leaveType;
+
+          console.log("showLeaveTypesAndBalance", key, itemLabel);
+
+          return _react2.default.createElement(_nativeBase.Item, { label: itemLabel, value: leaveRenderingData[key].leavetype_id });
+        });
+
+        return _react2.default.createElement(_ewcomponents.EwDropdownPicker, {
+          pickerLabel: leaveConstants.LEAVE_TYPE_LABEL,
+          pickerPlaceholderLabel: leaveRenderingData[0].itemLabel,
+          isDefaultPickerValueSelected: this.state.leaveTypeId == -1,
+          customPickerView: contents,
+          selectedValue: this.state.leaveTypeId,
+          onPickerValueChange: function onPickerValueChange(newPickerValue) {
+            return _this10.onLeaveTypeChange(newPickerValue);
+          }
+        });
+      }
+    }
+  }, {
+    key: 'startDateHalfValueChange',
+    value: function startDateHalfValueChange(value) {
+
+      console.log(FILE_NAME, "In startDateHalfValueChange method");
+
+      if (value != 1) {
+
+        if (this.isHalfDayAllowed()) {
+
+          this.setState({
+            startDateHalf: value
+          });
+
+          this.getNumberOfDays(this.state.startDate.value, this.state.endDate.value, value, this.state.endDateHalf);
+        } else {
+
+          this.showAlertMessage("Sorry you can't apply for half day leave");
+        }
+      } else {
+        this.setState({
+          startDateHalf: value
+        });
+
+        this.getNumberOfDays(this.state.startDate.value, this.state.endDate.value, value, this.state.endDateHalf);
+      }
+    }
+  }, {
+    key: 'isHalfDayAllowed',
+    value: function isHalfDayAllowed() {
+
+      console.log(FILE_NAME, "In isHalfDayAllowed method");
+
+      for (var id in this.state.leaveRenderingData) {
+
+        if (this.state.leaveRenderingData[id].leavetype_id == this.state.leaveTypeId) {
+          if (this.state.leaveRenderingData[id].allow_Halfday === 'Y') return true;
+        }
+      }
+
+      return false;
+    }
+  }, {
+    key: 'endDateHalfValueChange',
+    value: function endDateHalfValueChange(value) {
+
+      console.log(FILE_NAME, "In endDateHalfValueChange method");
+
+      if (value != 1) {
+        if (this.isHalfDayAllowed()) {
+
+          this.setState({
+            endDateHalf: value
+          });
+          this.getNumberOfDays(this.state.startDate.value, this.state.endDate.value, this.state.startDateHalf, value);
+        } else {
+
+          this.showAlertMessage("Sorry you can't apply for half day leave");
+        }
+      } else {
+        this.setState({
+          endDateHalf: value });
+        this.getNumberOfDays(this.state.startDate.value, this.state.endDate.value, this.state.startDateHalf, value);
+      }
+    }
+  }, {
+    key: 'showStartDate',
+    value: function showStartDate() {
+      var _this11 = this;
+
+      console.log(FILE_NAME, "In showStartDate method");
+
+      console.log("Current State of Start Date  is -", this.state.startDate.value, this.state.startDate.mode);
+
+      if (this.state.isStartDateVisible) {
+
+        if (this.state.isMultipleDays && this.state.startDateHalf == 2) {
+          this.setState({
+            startDateHalf: 1
+          });
+        }
+
+        var filteredItems = leaveDayDurations.filter(function (item) {
+          if (item.value === '2' && _this11.state.isMultipleDays) {
+            return false;
+          }
+          return true;
+        });
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: _ewapplyleavescreenstyle2.default.labelElement },
+            this.state.isMultipleDaysVisible && this.state.isMultipleDays ? 'From' : 'For'
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewapplyleavescreenstyle2.default.dateButtonContainerStyle },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: _ewapplyleavescreenstyle2.default.dateButtonElementStyle },
+              _react2.default.createElement(
+                _nativeBase.Button,
+                {
+                  disabled: !this.state.isForDateActive,
+                  onPress: function onPress() {
+                    return _this11._showEwDateTimePicker(_this11.state.startDate.key, _this11.state.startDate.mode, new Date(_this11.state.startDate.value));
+                  }
+                },
+                _react2.default.createElement(
+                  _nativeBase.Text,
+                  null,
+                  (0, _utils.showDeviceDateFormat)(this.state.startDate.value)
+                )
+              )
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: _ewapplyleavescreenstyle2.default.dayDurationPrimaryContainer },
+              this.showDayDurationPicker(this.state.startDateHalf, this.startDateHalfValueChange, filteredItems)
+            )
+          )
+        );
+      }
+    }
+  }, {
+    key: 'showDayDurationPicker',
+    value: function showDayDurationPicker(selectedValue, onValuechangeFunction, filteredItems) {
+
+      console.log(FILE_NAME, "In showDayDurationPicker method");
+
+      if (this.state.isDayPickerVisible) {
+        if (filteredItems == null) {
+          filteredItems = leaveDayDurations.filter(function (item) {
+            return true;
+          });
+        }
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewapplyleavescreenstyle2.default.dayDurationSecondaryContainer },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewapplyleavescreenstyle2.default.spinnerContainer },
+            _react2.default.createElement(
+              _nativeBase.Picker,
+              {
+                style: _ewapplyleavescreenstyle2.default.spinnerElement,
+                supportedOrientations: ['portrait', 'landscape'],
+                iosHeader: 'Select one',
+                mode: 'dropdown',
+                selectedValue: selectedValue,
+                onValueChange: onValuechangeFunction.bind(this) },
+              filteredItems.map(function (item, key) {
+                return _react2.default.createElement(_nativeBase.Item, { key: key, label: item.label, value: item.value });
+              })
+            )
+          )
+        );
+      }
+    }
+  }, {
+    key: 'showEndDate',
+    value: function showEndDate() {
+      var _this12 = this;
+
+      console.log(FILE_NAME, "In showEndDate method");
+
+      if (this.state.isMultipleDaysVisible && this.state.isMultipleDays) {
+
+        var filteredItems = leaveDayDurations.filter(function (item) {
+
+          if (item.value === '3' && _this12.state.isMultipleDays) {
+            return false;
+          }
+          return true;
+        });
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: _ewapplyleavescreenstyle2.default.labelElement },
+            'To '
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewapplyleavescreenstyle2.default.dateButtonContainerStyle },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: _ewapplyleavescreenstyle2.default.dateButtonElementStyle },
+              _react2.default.createElement(
+                _nativeBase.Button,
+                {
+                  onPress: function onPress() {
+                    return _this12._showEwDateTimePicker(_this12.state.endDate.key, _this12.state.endDate.mode, new Date(_this12.state.endDate.value));
+                  }
+                },
+                _react2.default.createElement(
+                  _nativeBase.Text,
+                  null,
+                  (0, _utils.showDeviceDateFormat)(this.state.endDate.value)
+                )
+              )
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: _ewapplyleavescreenstyle2.default.dayDurationPrimaryContainer },
+              this.showDayDurationPicker(this.state.endDateHalf, this.endDateHalfValueChange, filteredItems)
+            )
+          )
+        );
+      }
+    }
+  }, {
+    key: 'showTimePicker',
+    value: function showTimePicker(dateObject) {
+      var _this13 = this;
+
+      console.log(FILE_NAME, "In showTimePicker method");
+
+      console.log("startdate:", dateObject);
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Button,
+          {
+            onPress: function onPress() {
+              return _this13._showEwDateTimePicker(dateObject.key, dateObject.mode, new Date(dateObject.value));
+            }
+          },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            null,
+            (0, _utils.showDeviceTimeFormat)(dateObject.value)
+          )
+        )
+      );
+    }
+  }, {
+    key: 'getNumberOfDays',
+    value: function getNumberOfDays(startDate, endDate, startDateHalf, endDateHalf) {
+
+      console.log(FILE_NAME, "In getNumberOfDays method");
+
+      var _state3 = this.state,
+          leaveRenderingData = _state3.leaveRenderingData,
+          inTime = _state3.inTime,
+          outTime = _state3.outTime,
+          leaveTypeId = _state3.leaveTypeId,
+          leaveTypeCategoryId = _state3.leaveTypeCategoryId;
+
+
+      start_date = (0, _utils.convertMillisecondsToServerDate)(startDate);
+      end_date = (0, _utils.convertMillisecondsToServerDate)(endDate);
+
+      console.log(FILE_NAME, "In getNumberOfDays method", start_date, end_date);
+
+      var isshortLeave = false;
+      var startTime = null,
+          endTime = null;
+
+
+      if (leaveTypeCategoryId == leaveConstants.SHORT_LEAVE) {
+        isshortLeave = true;
+
+        startTime = (0, _utils.convertMillisecondsToServerTime)(inTime.value);
+        endTime = (0, _utils.convertMillisecondsToServerTime)(outTime.value);
+      };
+
+      var params = {
+        leaveId: leaveTypeId,
+        halfDay: startDateHalf,
+        halfDay2: endDateHalf,
+        isShortLeave: isshortLeave,
+        startDate: start_date,
+        endDate: end_date,
+        startTime: startTime,
+        endTime: endTime
+      };
+
+      this.props.getLeaveDays(params);
+    }
+  }, {
+    key: 'doLocalValidation',
+    value: function doLocalValidation(leaveData) {
+
+      console.log(FILE_NAME, "In doLocalValidation method");
+
+      var _state4 = this.state,
+          reason = _state4.reason,
+          leaveTypeId = _state4.leaveTypeId,
+          inTime = _state4.inTime,
+          outTime = _state4.outTime;
+
+
+      var leaveId = leaveData[leaveTypeId].leavetype_category_id;
+      var declarationRequired = leaveData[leaveTypeId].declaration_mandatory;
+
+      console.log("doLocalValidation", leaveId);
+
+      if (leaveId == leaveConstants.SHORT_LEAVE) {
+
+        console.log("doLocalValidation", inTime, outTime);
+
+        if (inTime.value === '00:00' || outTime.value === '00:00') {
+
+          if (inTime.value === '00:00') this.showAlertMessage("Please select in time ");else this.showAlertMessage("Please select out time");
+          return false;
+        } else {
+
+          if (outTime.value < inTime.value) {
+
+            this.showAlertMessage("Out time is before in time");
+            return false;
+          }
+        }
+      }
+
+      if (reason === null || reason === '') {
+
+        this.showAlertMessage("Please enter reason");
+        return false;
+      }
+
+      if (declarationRequired == "Y") {
+
+        if (!this.state.isDeclarationGiven) {
+
+          this.showAlertMessage("Declaration is mandatory");
+          return false;
+        }
+      }
+      return true;
+    }
+  }, {
+    key: 'onPressApply',
+    value: function onPressApply(leaveData) {
+
+      console.log(FILE_NAME, "In onPressApply method");
+
+      if (this.doLocalValidation(leaveData)) {
+
+        tracker.trackEvent(SCREEN_CATEGORY, 'leave applied');
+
+        console.log("diversity leavetype is", this.state.selectedDiversityLeaveDayId);
+
+        var leaveType = leaveData[this.state.leaveTypeId].leaveType;
+        var diversityInfo = leaveData[this.state.leaveTypeId].diversityHolidayInfo;
+
+        start_date = (0, _utils.convertMillisecondsToServerDate)(this.state.startDate.value);
+        end_date = (0, _utils.convertMillisecondsToServerDate)(this.state.endDate.value);
+
+        console.log("Start Date is ", start_date);
+        console.log("End Date is ", end_date);
+
+        var action = 0;
+        var status = null;
+        var leave_id = 0;
+
+        if (this.state.isLeaveReapplied) {
+
+          action = 2;
+          status = this.state.reapplyLeaveData.status;
+          leave_id = this.state.reapplyLeaveData.leave_id;
+        }
+
+        if (this.state.leaveTypeCategoryId == leaveConstants.SHORT_LEAVE) {
+
+          start_time = (0, _utils.convertMillisecondsToServerTime)(this.state.inTime.value);
+          end_time = (0, _utils.convertMillisecondsToServerTime)(this.state.outTime.value);
+        } else {
+          start_time = null;
+          end_time = null;
+        }
+
+        var params = {
+          "Approver2": 0,
+          "Approver_Id": 0,
+          "MaxHourLeave": 0,
+          "action": action,
+          "allow_Halfday": "N",
+          "allow_attachment": 0,
+          "applied_on": "",
+          "isContinue": this.state.isleaveContinued,
+          "approver_Designation": "AssssBCD23232",
+          "approver_Empcode": "CHAKRRAN",
+          "approver_Name": "David Dole",
+          "attach_Mandatory": 0,
+          "balance": 0,
+          "declaration_Required": "N",
+          "declaration_mandatory": "N",
+          "diversity_Id": this.state.selectedDiversityLeaveDayId,
+          "end_Date": end_date,
+          "end_time": end_time,
+          "half_Day": this.state.startDateHalf,
+          "half_Day2": this.state.endDateHalf,
+          "httpStatus": 0,
+          "isAdditionalNotificationRequired": 1,
+          "is_Planned": this.state.isPlanned,
+          "leaveType": leaveType,
+          "leave_id": leave_id,
+          "leavetype_category_id": this.state.leaveTypeCategoryId,
+          "leavetype_id": this.state.leaveTypeId,
+          "no_Days": this.state.leaveDays,
+          "pi_Module_Id": 0,
+          "pi_Txn_Subtype": 0,
+          "pi_Txn_Type": 0,
+          "previous_No_Days": 0,
+          "reason": this.state.reason,
+          "start_Date": start_date,
+          "start_time": start_time,
+          "track_planned": 0,
+          "status": status,
+          "authToken": this.props.sessionToken,
+          "deviceId": _utils.DEVICE_ID,
+          "scope": "I",
+          "versionCode": "",
+          "versionName": ""
+        };
+
+        console.log("Leave Request Params are - ", params);
+        this.props.applyLeave(params);
+
+        this.setState({
+          isLoading: true,
+          isDone: false
+
+        });
+      }
+    }
+  }, {
+    key: 'onPressCancel',
+    value: function onPressCancel() {
+
+      console.log(FILE_NAME + "In onPressCancel Method");
+
+      _reactNativeRouterFlux.Actions.pop();
+    }
+  }, {
+    key: 'shouldActionButtonActive',
+    value: function shouldActionButtonActive() {
+
+      console.log(FILE_NAME + "In shouldActionButtonActive method");
+
+      if (this.state.isLeaveTypesAndBalancesLoaded) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }]);
+  return EwApplyLeaveScreen;
+}(_react.Component);
+
+EwApplyLeaveScreen.propTypes = {
+  isLoggedIn: _react2.default.PropTypes.bool,
+  emailId: _react2.default.PropTypes.string,
+  userId: _react2.default.PropTypes.string,
+  errorWebService: _react2.default.PropTypes.string };
+
+
+function bindActions(dispatch) {
+
+  return {
+    getLeaveTypesAndBalances: function getLeaveTypesAndBalances(params) {
+      return dispatch((0, _leaveactions.getLeaveTypesAndBalances)(params));
+    },
+    getPendingLeaveInformation: function getPendingLeaveInformation(params) {
+      return dispatch((0, _leaveactions.getPendingLeaveInformation)(params));
+    },
+    applyLeave: function applyLeave(params) {
+      return dispatch((0, _leaveactions.applyLeave)(params));
+    },
+    getLeaveDays: function getLeaveDays(params) {
+      return dispatch((0, _leaveactions.getLeaveDays)(params));
+    },
+    clearLeaveStateData: function clearLeaveStateData(params) {
+      return dispatch((0, _leaveactions.clearLeaveStateData)(params));
+    },
+    clearLeaveError: function clearLeaveError(params) {
+      return dispatch((0, _leaveactions.clearLeaveError)(params));
+    },
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    },
+    updateTotalActivityCount: function updateTotalActivityCount(params) {
+      return dispatch((0, _commonactions.updateTotalActivityCount)(params));
+    }
+
+  };
+}
+
+function mapStateToProps(state) {
+  console.log("State Updated state is -");
+  console.log(state);
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+    errorWebService: state.auth.errorWebService,
+
+    leaveRenderingData: state.leave.leaveBalanceData,
+    leaveRenderingError: state.leave.leaveBalanceError,
+
+    pendingLeaveInformation: state.leave.pendingLeaveInformationData,
+    pendingLeaveInformationError: state.leave.pendingLeaveInformationError,
+
+    applyLeaveStatusData: state.leave.applyLeaveStatusData,
+    applyLeaveStatusError: state.leave.applyLeaveStatusError,
+
+    leaveDaysData: state.leave.leaveDaysData,
+    leaveDaysError: state.leave.leaveDaysError,
+
+    currentImageTimestamp: state.common.currentImageTimestamp,
+
+    leaveErrorCounter: state.leave.errorCounter
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(EwApplyLeaveScreen);

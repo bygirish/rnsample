@@ -1,0 +1,14 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DEFAULT_SCREEN_ANIMATION = exports.ANIMATION_EASE_IN_EASE_OUT = exports.ANIMATION_LINEAR = exports.ANIMATION_SPRING = undefined;
+
+var _reactNative = require('react-native');
+
+var ANIMATION_SPRING = exports.ANIMATION_SPRING = _reactNative.LayoutAnimation.Presets.spring;
+
+var ANIMATION_LINEAR = exports.ANIMATION_LINEAR = _reactNative.LayoutAnimation.Presets.linear;
+
+var ANIMATION_EASE_IN_EASE_OUT = exports.ANIMATION_EASE_IN_EASE_OUT = _reactNative.LayoutAnimation.Presets.easeInEaseOut;
+
+var DEFAULT_SCREEN_ANIMATION = exports.DEFAULT_SCREEN_ANIMATION = ANIMATION_LINEAR;

@@ -1,0 +1,10 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var GET_LEAVE_INFORMATION = exports.GET_LEAVE_INFORMATION = '/leaveM?scope=I';
+var GET_LEAVE_BALANCE_LIST = exports.GET_LEAVE_BALANCE_LIST = '/leaveM?scope=I';
+var GET_APPLIED_LEAVES_LIST = exports.GET_APPLIED_LEAVES_LIST = '/HomePageM?scope=I';
+var APPLY_LEAVE = exports.APPLY_LEAVE = '/leaveM?scope=I';
+var LEAVE_ACTION = exports.LEAVE_ACTION = '/leaveM?scope=I';
+var GET_LEAVE_DAYS = exports.GET_LEAVE_DAYS = '/leavedays?scope=I';
+var GET_PENDING_LEAVE_INFORMATION = exports.GET_PENDING_LEAVE_INFORMATION = '/leaveM?scope=I';

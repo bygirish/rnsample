@@ -1,0 +1,570 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _components = require('../native-base-theme/components');
+
+var _components2 = babelHelpers.interopRequireDefault(_components);
+
+var _reactNativeDropdownalert = require('react-native-dropdownalert');
+
+var _reactNativeDropdownalert2 = babelHelpers.interopRequireDefault(_reactNativeDropdownalert);
+
+var _commonactions = require('./services/common/commonactions');
+
+var _draweractions = require('./services/drawer/draweractions');
+
+var _authactions = require('./services/auth/authactions');
+
+var _variables = require('./themes/variables');
+
+var _variables2 = babelHelpers.interopRequireDefault(_variables);
+
+var _ewapplaunch = require('./ewscreens/ewapplaunch');
+
+var _ewapplaunch2 = babelHelpers.interopRequireDefault(_ewapplaunch);
+
+var _ewdeeplinkscreen = require('./ewscreens/ewdeeplinkscreen');
+
+var _ewdeeplinkscreen2 = babelHelpers.interopRequireDefault(_ewdeeplinkscreen);
+
+var _ewratingscreen = require('./ewscreens/ewratingscreen');
+
+var _ewratingscreen2 = babelHelpers.interopRequireDefault(_ewratingscreen);
+
+var _ewfeedbackscreen = require('./ewscreens/common/ewfeedbackscreen');
+
+var _ewfeedbackscreen2 = babelHelpers.interopRequireDefault(_ewfeedbackscreen);
+
+var _ewdashboard = require('./ewscreens/dashboard/ewdashboard');
+
+var _ewdashboard2 = babelHelpers.interopRequireDefault(_ewdashboard);
+
+var _ewlogin = require('./ewscreens/auth/ewlogin');
+
+var _ewlogin2 = babelHelpers.interopRequireDefault(_ewlogin);
+
+var _ewlogout = require('./ewscreens/auth/ewlogout');
+
+var _ewlogout2 = babelHelpers.interopRequireDefault(_ewlogout);
+
+var _ewdashboarddrawer = require('./ewscreens/dashboard/ewdashboarddrawer');
+
+var _ewdashboarddrawer2 = babelHelpers.interopRequireDefault(_ewdashboarddrawer);
+
+var _ewsettings = require('./ewscreens/ewsettings');
+
+var _ewsettings2 = babelHelpers.interopRequireDefault(_ewsettings);
+
+var _ewholidays = require('./ewscreens/holidays/ewholidays');
+
+var _ewholidays2 = babelHelpers.interopRequireDefault(_ewholidays);
+
+var _ewcreateexpensescreen = require('./ewscreens/expense/ewcreateexpensescreen');
+
+var _ewcreateexpensescreen2 = babelHelpers.interopRequireDefault(_ewcreateexpensescreen);
+
+var _ewstayexpensescreen = require('./ewscreens/expense/ewstayexpensescreen');
+
+var _ewstayexpensescreen2 = babelHelpers.interopRequireDefault(_ewstayexpensescreen);
+
+var _ewpublictransportexpensescreen = require('./ewscreens/expense/ewpublictransportexpensescreen');
+
+var _ewpublictransportexpensescreen2 = babelHelpers.interopRequireDefault(_ewpublictransportexpensescreen);
+
+var _ewmileageexpensescreen = require('./ewscreens/expense/mileageclaim/ewmileageexpensescreen');
+
+var _ewmileageexpensescreen2 = babelHelpers.interopRequireDefault(_ewmileageexpensescreen);
+
+var _ewmileageclaimscreen = require('./ewscreens/expense/mileageclaim/ewmileageclaimscreen');
+
+var _ewmileageclaimscreen2 = babelHelpers.interopRequireDefault(_ewmileageclaimscreen);
+
+var _ewotherexpensescreen = require('./ewscreens/expense/otherclaim/ewotherexpensescreen');
+
+var _ewotherexpensescreen2 = babelHelpers.interopRequireDefault(_ewotherexpensescreen);
+
+var _ewotherclaimscreen = require('./ewscreens/expense/otherclaim/ewotherclaimscreen');
+
+var _ewotherclaimscreen2 = babelHelpers.interopRequireDefault(_ewotherclaimscreen);
+
+var _ewtravelexpensescreen = require('./ewscreens/expense/travelclaim/ewtravelexpensescreen');
+
+var _ewtravelexpensescreen2 = babelHelpers.interopRequireDefault(_ewtravelexpensescreen);
+
+var _ewtravelclaimscreen = require('./ewscreens/expense/travelclaim/ewtravelclaimscreen');
+
+var _ewtravelclaimscreen2 = babelHelpers.interopRequireDefault(_ewtravelclaimscreen);
+
+var _ewallocationdetailsscreen = require('./ewscreens/expense/ewallocationdetailsscreen');
+
+var _ewallocationdetailsscreen2 = babelHelpers.interopRequireDefault(_ewallocationdetailsscreen);
+
+var _ewinvoicedetailsscreen = require('./ewscreens/expense/ewinvoicedetailsscreen');
+
+var _ewinvoicedetailsscreen2 = babelHelpers.interopRequireDefault(_ewinvoicedetailsscreen);
+
+var _ewmyappliedexpenseclaimscreen = require('./ewscreens/expense/ewmyappliedexpenseclaimscreen');
+
+var _ewmyappliedexpenseclaimscreen2 = babelHelpers.interopRequireDefault(_ewmyappliedexpenseclaimscreen);
+
+var _ewexpenseclaimactionscreen = require('./ewscreens/expense/ewexpenseclaimactionscreen');
+
+var _ewexpenseclaimactionscreen2 = babelHelpers.interopRequireDefault(_ewexpenseclaimactionscreen);
+
+var _ewmyappliedexpenseclaimactionscreen = require('./ewscreens/expense/ewmyappliedexpenseclaimactionscreen');
+
+var _ewmyappliedexpenseclaimactionscreen2 = babelHelpers.interopRequireDefault(_ewmyappliedexpenseclaimactionscreen);
+
+var _ewmycompensationscreen = require('./ewscreens/compensation/ewmycompensationscreen');
+
+var _ewmycompensationscreen2 = babelHelpers.interopRequireDefault(_ewmycompensationscreen);
+
+var _ewmyappliedctcclaimscreen = require('./ewscreens/compensation/ewmyappliedctcclaimscreen');
+
+var _ewmyappliedctcclaimscreen2 = babelHelpers.interopRequireDefault(_ewmyappliedctcclaimscreen);
+
+var _ewmyappliedclaimactionscreen = require('./ewscreens/compensation/ewmyappliedclaimactionscreen');
+
+var _ewmyappliedclaimactionscreen2 = babelHelpers.interopRequireDefault(_ewmyappliedclaimactionscreen);
+
+var _ewentitlementsummaryscreen = require('./ewscreens/compensation/ewentitlementsummaryscreen');
+
+var _ewentitlementsummaryscreen2 = babelHelpers.interopRequireDefault(_ewentitlementsummaryscreen);
+
+var _ewapplyleavescreen = require('./ewscreens/leave/ewapplyleavescreen');
+
+var _ewapplyleavescreen2 = babelHelpers.interopRequireDefault(_ewapplyleavescreen);
+
+var _ewleaveactionscreen = require('./ewscreens/leave/ewleaveactionscreen');
+
+var _ewleaveactionscreen2 = babelHelpers.interopRequireDefault(_ewleaveactionscreen);
+
+var _ewmyappliedleavesscreen = require('./ewscreens/leave/ewmyappliedleavesscreen');
+
+var _ewmyappliedleavesscreen2 = babelHelpers.interopRequireDefault(_ewmyappliedleavesscreen);
+
+var _ewmyleaveactionscreen = require('./ewscreens/leave/ewmyleaveactionscreen');
+
+var _ewmyleaveactionscreen2 = babelHelpers.interopRequireDefault(_ewmyleaveactionscreen);
+
+var _ewtravelactionscreen = require('./ewscreens/travel/ewtravelactionscreen');
+
+var _ewtravelactionscreen2 = babelHelpers.interopRequireDefault(_ewtravelactionscreen);
+
+var _ewapplytravelscreen = require('./ewscreens/travel/ewapplytravelscreen');
+
+var _ewapplytravelscreen2 = babelHelpers.interopRequireDefault(_ewapplytravelscreen);
+
+var _ewmyappliedtravelscreen = require('./ewscreens/travel/ewmyappliedtravelscreen');
+
+var _ewmyappliedtravelscreen2 = babelHelpers.interopRequireDefault(_ewmyappliedtravelscreen);
+
+var _ewmytravelactionscreen = require('./ewscreens/travel/ewmytravelactionscreen');
+
+var _ewmytravelactionscreen2 = babelHelpers.interopRequireDefault(_ewmytravelactionscreen);
+
+var _ewapplypastattendancescreen = require('./ewscreens/attendance/pastattendance/ewapplypastattendancescreen');
+
+var _ewapplypastattendancescreen2 = babelHelpers.interopRequireDefault(_ewapplypastattendancescreen);
+
+var _ewpastattendanceactionscreen = require('./ewscreens/attendance/pastattendance/ewpastattendanceactionscreen');
+
+var _ewpastattendanceactionscreen2 = babelHelpers.interopRequireDefault(_ewpastattendanceactionscreen);
+
+var _ewmyappliedpastattendancescreen = require('./ewscreens/attendance/pastattendance/ewmyappliedpastattendancescreen');
+
+var _ewmyappliedpastattendancescreen2 = babelHelpers.interopRequireDefault(_ewmyappliedpastattendancescreen);
+
+var _ewmypastattendanceactionscreen = require('./ewscreens/attendance/pastattendance/ewmypastattendanceactionscreen');
+
+var _ewmypastattendanceactionscreen2 = babelHelpers.interopRequireDefault(_ewmypastattendanceactionscreen);
+
+var _ewapplyodscreen = require('./ewscreens/attendance/od/ewapplyodscreen');
+
+var _ewapplyodscreen2 = babelHelpers.interopRequireDefault(_ewapplyodscreen);
+
+var _ewodactionscreen = require('./ewscreens/attendance/od/ewodactionscreen');
+
+var _ewodactionscreen2 = babelHelpers.interopRequireDefault(_ewodactionscreen);
+
+var _ewmyappliedodscreen = require('./ewscreens/attendance/od/ewmyappliedodscreen');
+
+var _ewmyappliedodscreen2 = babelHelpers.interopRequireDefault(_ewmyappliedodscreen);
+
+var _ewmyodactionscreen = require('./ewscreens/attendance/od/ewmyodactionscreen');
+
+var _ewmyodactionscreen2 = babelHelpers.interopRequireDefault(_ewmyodactionscreen);
+
+var _ewdatetimepickertester = require('./components/ewdatetimepicker/ewdatetimepickertester');
+
+var _ewdatetimepickertester2 = babelHelpers.interopRequireDefault(_ewdatetimepickertester);
+
+var _ewcalendar = require('./ewscreens/calendar/ewcalendar');
+
+var _ewcalendar2 = babelHelpers.interopRequireDefault(_ewcalendar);
+
+var _ewloadingindicator = require('./components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewemployeedirectoryscreen = require('./ewscreens/eip/ewemployeedirectoryscreen');
+
+var _ewemployeedirectoryscreen2 = babelHelpers.interopRequireDefault(_ewemployeedirectoryscreen);
+
+var _ewimageuploadscreen = require('./ewscreens/common/ewimageuploadscreen');
+
+var _ewimageuploadscreen2 = babelHelpers.interopRequireDefault(_ewimageuploadscreen);
+
+var _ewpayslipscreen = require('./ewscreens/payroll/ewpayslipscreen');
+
+var _ewpayslipscreen2 = babelHelpers.interopRequireDefault(_ewpayslipscreen);
+
+var _ewmyrequestscreen = require('./ewscreens/common/ewmyrequestscreen');
+
+var _ewmyrequestscreen2 = babelHelpers.interopRequireDefault(_ewmyrequestscreen);
+
+var _ewchatbotscreen = require('./ewscreens/chatbot/ewchatbotscreen');
+
+var _ewchatbotscreen2 = babelHelpers.interopRequireDefault(_ewchatbotscreen);
+
+var _ewtestingscreen = require('./ewscreens/common/ewtestingscreen');
+
+var _ewtestingscreen2 = babelHelpers.interopRequireDefault(_ewtestingscreen);
+
+var _ewonboardingscreen = require('./ewscreens/onboarding/ewonboardingscreen');
+
+var _ewonboardingscreen2 = babelHelpers.interopRequireDefault(_ewonboardingscreen);
+
+var _appstyleguide = require('../appstyleguide/appstyleguide');
+
+var appStyle = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _routerscenekeys = require('./utils/routerscenekeys');
+
+var routerSceneKeys = babelHelpers.interopRequireWildcard(_routerscenekeys);
+
+var FILE_NAME = "EwAppNavigator.js : ";
+
+var sceneConfig = {
+  cardStyle: {
+    backgroundColor: appStyle.APP_WHITE
+  }
+};
+
+var context;
+
+var EwAppNavigator = function (_Component) {
+  babelHelpers.inherits(EwAppNavigator, _Component);
+
+  function EwAppNavigator(props, context) {
+    babelHelpers.classCallCheck(this, EwAppNavigator);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwAppNavigator.__proto__ || Object.getPrototypeOf(EwAppNavigator)).call(this, props, context));
+
+    _this.handleFirstConnectivityChange = function (isConnected) {
+
+      console.log(FILE_NAME + "In handleFirstConnectivityChange method");
+
+      console.log('Then, is ' + (isConnected ? 'online' : 'offline'));
+
+      console.log("props are - ", _this.props);
+
+      _this.props.updateNetworkStatus(isConnected);
+    };
+
+    _this.handleBackButtonPress = function () {
+
+      console.log(FILE_NAME + "In handleBackButtonPress method", _reactNativeRouterFlux.Actions.currentScene);
+
+      if (_reactNativeRouterFlux.Actions.currentScene === 'ewdashboarddrawer' || _reactNativeRouterFlux.Actions.currentScene === 'ewlogin') {
+
+        _reactNative.BackHandler.exitApp();
+
+        return true;
+      }
+
+      return false;
+    };
+
+    console.log(FILE_NAME + "In constructor");
+
+    _this.initialState = {};
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwAppNavigator, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      this.props.updateImageTimestamp(null);
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps, this.props);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      if (nextProps.alertMessage != null) {
+        if (nextProps.alertMessage != '') {
+          var alertMessage = nextProps.alertMessage;
+
+
+          console.log("alertmessage is ", alertMessage);
+
+          this.dropdown.alertWithType(alertMessage.messageType, alertMessage.messageHeading, alertMessage.messageText);
+
+          this.props.clearAlertMessage(null);
+        }
+
+        return false;
+      }
+
+      if (this.props.isNetworkConnected != nextProps.isNetworkConnected) return false;
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In render method ");
+
+
+      return _react2.default.createElement(
+        _nativeBase.StyleProvider,
+        { style: (0, _components2.default)(undefined) },
+        _react2.default.createElement(
+          _nativeBase.Container,
+          null,
+          _react2.default.createElement(
+            _reactNativeRouterFlux.Router,
+            null,
+            _react2.default.createElement(
+              _reactNativeRouterFlux.Scene,
+              babelHelpers.extends({ key: 'root' }, sceneConfig),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewlaunchapp', component: _ewapplaunch2.default, hideNavBar: true }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewlogin', initial: true, type: _reactNativeRouterFlux.ActionConst.RESET, hideNavBar: true, component: _ewlogin2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewlogout', hideNavBar: true, component: _ewlogout2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewsettings', hideNavBar: true, component: _ewsettings2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewholidayscreen', hideNavBar: true, component: _ewholidays2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewdashboard', title: 'Dashboard', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewdashboard2.default, direction: 'vertical' }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewdashboarddrawer', type: _reactNativeRouterFlux.ActionConst.REPLACE, title: 'Dashboard', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewdashboarddrawer2.default, direction: 'vertical' }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewapplyleavescreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewapplyleavescreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewleaveactionscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewleaveactionscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmyappliedleavesscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmyappliedleavesscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmyleaveactionscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmyleaveactionscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewapplyodscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewapplyodscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewodactionscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewodactionscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmyappliedodscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmyappliedodscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmyodactionscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmyodactionscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewapplypastattendancescreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewapplypastattendancescreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewpastattendanceactionscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewpastattendanceactionscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmyappliedpastattendancescreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmyappliedpastattendancescreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmypastattendanceactionscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmypastattendanceactionscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewtravelactionscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewtravelactionscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewapplytravelscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewapplytravelscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmyappliedtravelscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmyappliedtravelscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmytravelactionscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmytravelactionscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewdatetimepickertester', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewdatetimepickertester2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmycalendarscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewcalendar2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewemployeedirectoryscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewemployeedirectoryscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewimageuploadscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewimageuploadscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewpayslipscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewpayslipscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewdeeplinkscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewdeeplinkscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewratingscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewratingscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewfeedbackscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewfeedbackscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewcreateexpensescreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewcreateexpensescreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewstayexpensescreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewstayexpensescreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewpublictransportexpensescreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewpublictransportexpensescreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: routerSceneKeys.EW_MILEAGE_CLAIM_KEY, hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmileageclaimscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: routerSceneKeys.EW_MILEAGE_EXPENSE_KEY, hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmileageexpensescreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: routerSceneKeys.EW_OTHER_CLAIM_KEY, hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewotherclaimscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: routerSceneKeys.EW_OTHER_EXPENSE_KEY, hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewotherexpensescreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: routerSceneKeys.EW_TRAVEL_CLAIM_KEY, hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewtravelclaimscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: routerSceneKeys.EW_TRAVEL_EXPENSE_KEY, hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewtravelexpensescreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: routerSceneKeys.EW_ALLOCATION_DETAILS_KEY, hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewallocationdetailsscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: routerSceneKeys.EW_INVOICE_DETAILS_KEY, hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewinvoicedetailsscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: routerSceneKeys.EW_MY_APPLIED_EXPENSE_CLAIMS_KEY, hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmyappliedexpenseclaimscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: routerSceneKeys.EW_EXPENSE_CLAIM_ACTION_KEY, hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewexpenseclaimactionscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmyappliedexpenseclaimaction', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmyappliedexpenseclaimactionscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmycompensationscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmycompensationscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmyappliedctcclaimscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmyappliedctcclaimscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmyappliedclaimactionscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmyappliedclaimactionscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewentitlementsummaryscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewentitlementsummaryscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewmyrequestscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewmyrequestscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewchatbotscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewchatbotscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewtestingscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewtestingscreen2.default }),
+              _react2.default.createElement(_reactNativeRouterFlux.Scene, { key: 'ewonboardingscreen', hideNavBar: true, navigationBarStyle: { backgroundColor: 'white' }, component: _ewonboardingscreen2.default })
+            )
+          ),
+          _react2.default.createElement(_reactNativeDropdownalert2.default, {
+            ref: function ref(_ref) {
+              return _this2.dropdown = _ref;
+            }
+          })
+        )
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this3 = this;
+
+      context = this;
+
+      console.log(FILE_NAME + "In componentDidMount method");
+
+      _reactNative.Linking.getInitialURL().then(function (url) {
+        console.log(FILE_NAME + "In componentDidMountiniated", url);
+        if (url != null) {
+
+          console.log("url receive is ", url);
+
+          _this3.renderDeepLinkScreen(url);
+        }
+      });
+
+      _reactNative.Linking.addEventListener('url', this.renderDeepLinkScreen);
+
+      _reactNative.BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonPress);
+
+      _reactNative.NetInfo.isConnected.fetch().then(function (isConnected) {
+        console.log('First, is ' + (isConnected ? 'online' : 'offline'));
+
+        _this3.props.updateNetworkStatus(isConnected);
+      });
+
+      _reactNative.NetInfo.isConnected.addEventListener('change', this.handleFirstConnectivityChange);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount method");
+
+      _reactNative.NetInfo.isConnected.removeEventListener('change', this.handleFirstConnectivityChange);
+
+      _reactNative.BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonPress);
+    }
+  }, {
+    key: 'renderDeepLinkScreen',
+    value: function renderDeepLinkScreen(event) {
+
+      console.log(FILE_NAME + "In renderDeepLinkScreen method");
+
+      deepLinkUrl = event;
+
+      if (event.url != null) deepLinkUrl = event.url;
+
+      context.props.setLoginRedirectState(deepLinkUrl);
+    }
+  }]);
+  return EwAppNavigator;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction method ");
+
+  return {
+
+    navigateToNull: function navigateToNull() {
+      return dispatch(navigateTo(null));
+    },
+    openDrawer: function openDrawer() {
+      return dispatch((0, _draweractions.openDrawer)());
+    },
+    closeDrawer: function closeDrawer() {
+      return dispatch((0, _draweractions.closeDrawer)());
+    },
+    disableDrawer: function disableDrawer() {
+      return dispatch((0, _draweractions.disableDrawer)());
+    },
+    enableDrawer: function enableDrawer() {
+      return dispatch((0, _draweractions.enableDrawer)());
+    },
+
+    updateNetworkStatus: function updateNetworkStatus(status) {
+      return dispatch((0, _authactions.updateNetworkStatus)(status));
+    },
+    clearAlertMessage: function clearAlertMessage(params) {
+      return dispatch((0, _commonactions.clearAlertMessage)(params));
+    },
+    setLoginRedirectState: function setLoginRedirectState(params) {
+      return dispatch((0, _authactions.setLoginRedirectState)(params));
+    },
+    updateImageTimestamp: function updateImageTimestamp(params) {
+      return dispatch((0, _commonactions.updateImageTimestamp)(params));
+    }
+
+  };
+}
+
+function mapStateToProps(state) {
+
+  console.log(FILE_NAME + "In mapStateToProps method ");
+
+  console.log("Current State is - ", state);
+
+  return {
+
+    drawerState: state.drawer.drawerState,
+    drawerDisabled: state.drawer.drawerDisabled,
+    sceneKey: state.drawer.sceneKey,
+    themeState: state.drawer.themeState,
+    isNetworkConnected: state.auth.isNetworkConnected,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    alertMessage: state.common.alertMessage
+
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwAppNavigator);

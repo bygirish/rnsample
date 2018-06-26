@@ -1,0 +1,313 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildPerformLoginRequest = buildPerformLoginRequest;
+exports.buildSuccessPerformLoginResponse = buildSuccessPerformLoginResponse;
+exports.buildFailedPerformLoginResponse = buildFailedPerformLoginResponse;
+exports.buildServerErrorPerformLoginResponse = buildServerErrorPerformLoginResponse;
+exports.buildPerformLogoutRequest = buildPerformLogoutRequest;
+exports.buildSuccessPerformLogoutResponse = buildSuccessPerformLogoutResponse;
+exports.buildFailedPerformLogoutResponse = buildFailedPerformLogoutResponse;
+exports.buildServerErrorPerformLogoutResponse = buildServerErrorPerformLogoutResponse;
+exports.changePassword = changePassword;
+exports.verifySession = verifySession;
+exports.getProfileData = getProfileData;
+exports.getMyNeedToAct = getMyNeedToAct;
+exports.markAttendance = markAttendance;
+exports.getMyAppliedLeaves = getMyAppliedLeaves;
+exports.applyForLeave = applyForLeave;
+exports.getLeaveInfo = getLeaveInfo;
+exports.getLeaveBalance = getLeaveBalance;
+exports.approveLeave = approveLeave;
+exports.rejectLeave = rejectLeave;
+exports.applyForPastAttendance = applyForPastAttendance;
+exports.getPastAttendanceInfo = getPastAttendanceInfo;
+exports.approvePastAttendance = approvePastAttendance;
+exports.rejectPastAttendance = rejectPastAttendance;
+exports.applyForOD = applyForOD;
+exports.getOdInfo = getOdInfo;
+exports.approveOdRequest = approveOdRequest;
+exports.rejectOdRequest = rejectOdRequest;
+
+var _authapiendpoints = require('./authapiendpoints');
+
+var authApiEndPoints = babelHelpers.interopRequireWildcard(_authapiendpoints);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+
+var FILE_NAME = "authprocessing.js : ";
+
+function buildPerformLoginRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildPerformLoginRequest Method");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + authApiEndPoints.LOGIN;
+  var login_basis = null;
+
+  if (params.empCode != null) {
+    login_basis = 'e';
+  }
+
+  if (params.custCode != null) {
+    login_basis = 'c';
+  }
+
+  var data = {
+    "email": params.emailId,
+    "password": params.password,
+    "device_id": _utils.DEVICE_ID,
+    "version": _utils.VERSION,
+    "login_basis": login_basis,
+    "cust_code": params.custCode,
+    "emp_code": params.empCode,
+    "registration_id": getState.appnotifications.fcmToken != null ? getState.appnotifications.fcmToken : null,
+    "notification_active": 1,
+    "notification_mode": 1
+  };
+
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var loginRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", loginRequest);
+
+  return loginRequest;
+}
+
+function buildSuccessPerformLoginResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessPerformLoginResponse Method");
+
+  var response = {
+    sessionToken: result.data.token,
+    isLoggedIn: true,
+    emailId: params.emailId,
+    userId: result.data.user_name,
+    loginError: null,
+    loginData: result.data
+  };
+
+  return response;
+}
+
+function buildFailedPerformLoginResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedPerformLoginResponse Method");
+
+  var response = {
+    sessionToken: '',
+    isLoggedIn: false,
+    emailId: '',
+    userId: '',
+    loginError: 'Check Your Details',
+    loginData: result.data.login_basis != '' ? result.data : null
+  };
+
+  return response;
+}
+
+function buildServerErrorPerformLoginResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorPerformLoginResponse Method");
+
+  var response = {
+    sessionToken: '',
+    isLoggedIn: false,
+    emailId: '',
+    userId: '',
+    loginError: globalErrors.LOCAL_SERVER_ACCESS_ERROR,
+    loginData: null
+  };
+
+  return response;
+}
+
+function buildPerformLogoutRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildPerformLogoutRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + authApiEndPoints.LOGOUT + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME;
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var logoutRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("logoutRequest is -", logoutRequest);
+
+  return logoutRequest;
+}
+
+function buildSuccessPerformLogoutResponse(result, getState) {
+
+  console.log(FILE_NAME + "In buildSuccessPerformLogoutResponse Method");
+
+  var response = {
+    sessionToken: '',
+    isLoggedIn: false,
+    emailId: '',
+    userId: '',
+    loginError: null,
+    logoutData: null
+  };
+
+  return response;
+}
+
+function buildFailedPerformLogoutResponse(result, getState) {
+
+  console.log(FILE_NAME + "In buildFailedPerformLogoutResponse Method");
+
+  var response = {
+    isLoggedIn: true,
+    loginError: 'Not able to logout'
+  };
+
+  return response;
+}
+
+function buildServerErrorPerformLogoutResponse(err, getState) {
+
+  console.log(FILE_NAME + "In buildServerErrorPerformLogoutResponse Method");
+
+  var response = {
+    isLoggedIn: true,
+    loginError: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function changePassword(params) {
+
+  console.log("File apinetworking.js: " + "changePassword" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.CHANGE_PASSWORD);
+}
+
+function verifySession(params) {
+
+  console.log("File apinetworking.js: " + "logout" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.VERIFY_SESSION);
+}
+
+function getProfileData(params) {
+
+  console.log("File apinetworking.js: " + "getProfileData" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.GET_PROFILE_DATA);
+}
+
+function getMyNeedToAct(params) {
+
+  console.log("File apinetworking.js: " + "getMyNeedToAct" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.GET_NEED_TO_ACT);
+}
+
+function markAttendance(params) {
+
+  console.log("File apinetworking.js: " + "markAttendance" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.MARK_ATTENDANCE);
+}
+
+function getMyAppliedLeaves(params) {
+
+  console.log("File apinetworking.js: " + "getMyAppliedLeaves" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.GET_MY_APPLIED_LEAVES);
+}
+
+function applyForLeave(params) {
+
+  console.log("File apinetworking.js: " + "applyForLeave" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.APPLY_FOR_LEAVE);
+}
+
+function getLeaveInfo(params) {
+
+  console.log("File apinetworking.js: " + "getLeaveInfo" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.GET_LEAVE_INFO);
+}
+
+function getLeaveBalance(params) {
+
+  console.log("File apinetworking.js: " + "getLeaveBalance" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.APPROVE_LEAVE);
+}
+
+function approveLeave(params) {
+
+  console.log("File apinetworking.js: " + "approveLeave" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.APPROVE_LEAVE);
+}
+
+function rejectLeave(params) {
+
+  console.log("File apinetworking.js: " + "rejectLeave" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.REJECT_LEAVE);
+}
+
+function applyForPastAttendance(params) {
+
+  console.log("File apinetworking.js: " + "applyForPastAttendance" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.APPLY_FOR_PAST_ATTENDANCE);
+}
+
+function getPastAttendanceInfo(params) {
+
+  console.log("File apinetworking.js: " + "getPastAttendanceInfo" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.GET_PAST_ATTENDANCE_INFO);
+}
+
+function approvePastAttendance(params) {
+
+  console.log("File apinetworking.js: " + "approvePastAttendance" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.APPROVE_PAST_ATTENDANCE);
+}
+
+function rejectPastAttendance(params) {
+
+  console.log("File apinetworking.js: " + "rejectPastAttendance" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.REJECT_PAST_ATTENDANCE);
+}
+
+function applyForOD(params) {
+
+  console.log("File apinetworking.js: " + "applyForOD" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.APPLY_FOR_OD);
+}
+
+function getOdInfo(params) {
+
+  console.log("File apinetworking.js: " + "getOdInfo" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.GET_OD_INFO);
+}
+
+function approveOdRequest(params) {
+
+  console.log("File apinetworking.js: " + "approveOdRequest" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.APPROVE_OD_REQUEST);
+}
+
+function rejectOdRequest(params) {
+
+  console.log("File apinetworking.js: " + "rejectOdRequest" + " Method - ");
+  console.log("API endpoint is - " + authApiEndPoints.BASIC_URL + authApiEndPoints.REJECT_OD_REQUEST);
+}

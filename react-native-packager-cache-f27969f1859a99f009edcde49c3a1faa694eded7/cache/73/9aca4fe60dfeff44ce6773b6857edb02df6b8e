@@ -1,0 +1,39 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appStyleGuide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../utils');
+
+exports.default = {
+
+  bubbleStyle: {
+
+    left: {},
+    right: {
+      backgroundColor: appStyleGuide.APP_LIGHT_BLUE
+    }
+  },
+
+  customAvatarStyle: {
+
+    left: {
+      height: 26,
+      width: 26,
+      borderRadius: 5
+    },
+    right: {
+      height: 36,
+      width: 36,
+      borderRadius: 25
+    }
+  },
+
+  submitButtonStyle: {
+
+    color: appStyleGuide.APP_BLUE
+  }
+};

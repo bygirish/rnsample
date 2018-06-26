@@ -1,0 +1,616 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _reactRedux = require('react-redux');
+
+var _utils = require('../../../../../utils');
+
+var _appstyleguide = require('../../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewcomponents = require('../../../../../utils/ewcomponents');
+
+var _travelactions = require('../../../../../services/travel/travelactions');
+
+var _travelutils = require('../../../travelutils');
+
+var travelConstants = babelHelpers.interopRequireWildcard(_travelutils);
+
+
+var FILE_NAME = " travelsclientaccoutn.js";
+
+var TravelClientAccount = function (_Component) {
+  babelHelpers.inherits(TravelClientAccount, _Component);
+
+  function TravelClientAccount(props, context) {
+    babelHelpers.classCallCheck(this, TravelClientAccount);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (TravelClientAccount.__proto__ || Object.getPrototypeOf(TravelClientAccount)).call(this, props, context));
+
+    elementValues = _this.handleElementValues(_this.props.initialState);
+
+    _this.initialState = {
+
+      currentFocussedTextInput: "",
+
+      accountsData: [],
+
+      clientAccount: elementValues.clientAccount,
+      clientAccountId: elementValues.clientAccountId,
+      clientProject: elementValues.clientProject,
+      accountProjectsData: elementValues.accountProjectsData
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(TravelClientAccount, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+
+      if (this.props.initialState == null) {
+
+        this.props.updateParentState(this.getClientStateObject());
+      }
+
+      if (this.props.initialState != null && accountProjectsData.length == 0) {
+
+        this.getAccountsProjectInformation(this.state.clientAccountId);
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (this.isStateChanged(nextProps.initialState)) {
+
+        this.setState({
+
+          clientAccount: nextProps.initialState.clientAccount,
+          clientAccountId: nextProps.initialState.clientAccountId,
+          clientProject: nextProps.initialState.clientProject,
+          accountProjectsData: nextProps.initialState.accountProjectsData
+
+        });
+      }
+
+      if (this.props.currentFocussedComponent == this.props.index) {
+
+        if (nextProps.travelClientAccountInformationData != null && nextProps.travelClientAccountInformationError == null && this.state.accountsData != nextProps.travelClientAccountInformationData) {
+
+          console.log("Inside is State changed travel client account ");
+
+          this.setState({
+
+            accountsData: nextProps.travelClientAccountInformationData
+
+          });
+        }
+
+        if (nextProps.travelClientAccountInformationData == null && nextProps.travelClientAccountInformationError != null && this.state.accountsData != nextProps.travelClientAccountInformationData) {
+
+          console.log("Inside is State changed travel client account ");
+
+          this.setState({
+
+            accountsData: []
+
+          });
+        }
+
+        if (nextProps.travelClientAccountProjectsInformationData != null && nextProps.travelClientAccountProjectsInformationError == null) {
+
+          console.log("Inside is State changed travel client account project ", nextProps.travelClientAccountProjectsInformationData);
+
+          console.log("isReveiwMode", nextProps.otherDetails.reveiwMode);
+
+          if (nextProps.travelClientAccountProjectsInformationData.length != 0) {
+
+            clientProject = this.state.clientProject;
+
+            if (nextProps.travelClientAccountProjectsInformationData != null || nextProps.travelClientAccountProjectsInformationData != "") {
+
+              if (!nextProps.otherDetails.reveiwMode) clientProject = nextProps.travelClientAccountProjectsInformationData[0].value;
+            }
+
+            this.setState({
+
+              accountProjectsData: nextProps.travelClientAccountProjectsInformationData,
+              clientProject: clientProject
+            });
+          }
+
+          this.clearAccountProjectReduxData();
+        }
+
+        if (nextProps.travelClientAccountProjectsInformationData == null && nextProps.travelClientAccountProjectsInformationError != null) {}
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var reveiwMode = this.props.otherDetails.reveiwMode;
+      var _state = this.state,
+          accountsData = _state.accountsData,
+          clientAccount = _state.clientAccount;
+
+
+      console.log("State of client account", this.state);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        {
+          style: { flex: 1 },
+          onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+
+            console.log("Inside onStartShouldSetResponderCapture");
+
+            _this2.setState({
+              currentFocussedTextInput: ""
+            });
+          }
+        },
+        _react2.default.createElement(
+          _ewcomponents.EwCard,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { margin: appstyleguide.DEFAULT_TOP_MARGIN } },
+            reveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+              heading: travelConstants.CLIENT_ACCOUNT_LABEL,
+              value: clientAccount
+            }) : _react2.default.createElement(
+              _reactNative.View,
+              {
+
+                onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+                  console.log("Inside onStartShouldSetResponderCapture internal");
+                  _this2.setState({
+
+                    currentFocussedTextInput: travelConstants.CLIENT_ACCOUNT_KEY
+                  });
+                }
+
+              },
+              _react2.default.createElement(_ewcomponents.EwAutocompleteInput, {
+                dropdownData: accountsData,
+                hideResults: !this.isAutoCompleteDropdownVisible(travelConstants.CLIENT_ACCOUNT_KEY, clientAccount),
+                updateScrollState: function updateScrollState(scrollViewState) {
+                  return _this2.setState({ enableScrollViewScroll: scrollViewState });
+                },
+                scrollViewVisibility: this.state.enableScrollViewScroll,
+                renderListItem: function renderListItem(data) {
+                  return _this2.renderAccountListItem(travelConstants.CLIENT_ACCOUNT_KEY, data);
+                },
+
+                customTextInput: function customTextInput() {
+                  return _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+                    label: travelConstants.CLIENT_ACCOUNT_LABEL,
+                    autoCorrect: false,
+                    autoCapitalize: 'none',
+                    onChangeText: function onChangeText(clientAccount) {
+                      return _this2.onClientDetailsChanged(travelConstants.CLIENT_ACCOUNT_KEY, clientAccount);
+                    },
+                    value: clientAccount
+                  });
+                }
+
+              })
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN } },
+              this.renderProjectView(reveiwMode)
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+
+      if (this.isStateChanged(this.props.initialState)) {
+
+        console.log("updating master screen", this.getClientStateObject());
+
+        this.props.updateParentState(this.getClientStateObject());
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(propsData) {
+
+      clientAccount = "";
+      clientAccountId = "";
+      clientProject = "";
+      accountProjectsData = [];
+
+      if (propsData != null) {
+
+        clientAccount = propsData.clientAccount;
+        clientAccountId = propsData.clientAccountId;
+        clientProject = propsData.clientProject;
+        accountProjectsData = propsData.accountProjectsData;
+      }
+
+      elementValues = {
+
+        clientAccount: clientAccount,
+        clientAccountId: clientAccountId,
+        clientProject: clientProject,
+        accountProjectsData: accountProjectsData
+
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: 'renderProjectView',
+    value: function renderProjectView(reveiwMode) {
+      var _this3 = this;
+
+      console.log(FILE_NAME, "In renderProjectView Method");
+
+      var _state2 = this.state,
+          accountProjectsData = _state2.accountProjectsData,
+          clientProject = _state2.clientProject;
+
+
+      console.log("accountProjectsData", accountProjectsData, clientProject);
+
+      if (accountProjectsData.length != 0) {
+
+        return reveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+          heading: travelConstants.CLIENT_PROJECT_LABEL,
+          value: this.getClientProjectName(accountProjectsData, clientProject)
+        }) : _react2.default.createElement(_ewcomponents.EwDropdownPicker, {
+          pickerLabel: travelConstants.CLIENT_PROJECT_LABEL,
+          pickerPlaceholderLabel: 'Select Project',
+          customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+          isDefaultPickerValueSelected: clientProject == "-1",
+          dataArray: accountProjectsData,
+          selectedValue: clientProject,
+          onPickerValueChange: function onPickerValueChange(clientProject) {
+            return _this3.onClientDetailsChanged(travelConstants.CLIENT_PROJECT_KEY, clientProject);
+          }
+        });
+      }
+    }
+  }, {
+    key: 'isAutoCompleteDropdownVisible',
+    value: function isAutoCompleteDropdownVisible(textInputkey, textInputValue) {
+
+      console.log(FILE_NAME, "In isAutoCompleteDropdownVisible Method");
+
+      if (this.state.currentFocussedTextInput == textInputkey && textInputValue.length > 2) {
+
+        return true;
+      }
+
+      return false;
+    }
+  }, {
+    key: 'renderAccountListItem',
+    value: function renderAccountListItem(clientKey, data) {
+      var _this4 = this;
+
+      console.log(FILE_NAME, "In renderAccountListItem Method", data);
+
+      if (data != null) {
+
+        return _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          { style: { margin: 5 }, onPress: function onPress() {
+              return _this4.onClientDetailsChanged(clientKey, data, true);
+            } },
+          _react2.default.createElement(_ewcomponents.EwH3Text, {
+            text: data.ACCT_NAME
+          })
+        );
+      }
+    }
+  }, {
+    key: 'onClientDetailsChanged',
+    value: function onClientDetailsChanged(textInputKey, newText) {
+      var isDropdownItemPressed = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+
+      console.log("In onClientDetailsChanged method");
+
+      focussedTextinput = this.state.currentFocussedTextInput;
+
+      switch (textInputKey) {
+        case travelConstants.CLIENT_ACCOUNT_KEY:
+
+          if (isDropdownItemPressed) {
+
+            clientAccount = newText.ACCT_NAME;
+            clientAccountId = newText.ACCT_ID;
+
+            this.setState({
+
+              clientAccount: clientAccount,
+              clientAccountId: clientAccountId
+
+            });
+          } else {
+
+            clientAccount = newText;
+            clientAccountId = "";
+            accountProjectsData = [];
+            clientProject = "";
+
+            this.setState({
+
+              clientAccount: newText,
+              clientAccountId: clientAccountId,
+              accountProjectsData: accountProjectsData,
+              clientProject: clientProject
+
+            });
+          }
+
+          this.handleDropDownPress(isDropdownItemPressed, newText);
+
+          break;
+
+        case travelConstants.CLIENT_PROJECT_KEY:
+
+          this.setState({
+
+            clientProject: newText
+          });
+
+          break;
+
+        default:
+
+      }
+    }
+  }, {
+    key: 'handleDropDownPress',
+    value: function handleDropDownPress(isDropdownItemPressed, newText) {
+
+      console.log(FILE_NAME, "In handleDropDownPress Method");
+
+      if (isDropdownItemPressed) {
+
+        this.setState({
+          accountsData: []
+        });
+
+        this.clearAccountReduxData();
+
+        this.getAccountsProjectInformation(newText.ACCT_ID);
+      } else {
+
+        this.getAccountsData(newText);
+      }
+    }
+  }, {
+    key: 'clearAccountReduxData',
+    value: function clearAccountReduxData() {
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_CLIENT_ACCOUNT_INFORMATION'
+      };
+
+      this.props.clearTravelStateData(params);
+    }
+  }, {
+    key: 'clearAccountProjectReduxData',
+    value: function clearAccountProjectReduxData() {
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_CLIENT_ACCOUNT_PROJECT_INFORMATION'
+      };
+
+      this.props.clearTravelStateData(params);
+    }
+  }, {
+    key: 'getAccountsProjectInformation',
+    value: function getAccountsProjectInformation(clientAccountId) {
+
+      console.log(FILE_NAME, "In getAccountsProjectInformation Method");
+
+      var claim_type = this.props.otherDetails.claim_type;
+
+
+      var params = {
+
+        accountId: clientAccountId
+      };
+
+      if (claim_type != null) params["claim_type"] = claim_type;
+
+      this.props.getTravelClientAccountProjects(params);
+    }
+  }, {
+    key: 'getAccountsData',
+    value: function getAccountsData(newText) {
+
+      console.log(FILE_NAME, "In getAccountsData Method");
+
+      if (newText.length > travelConstants.MINIMUM_AUTOCOMPLETE_TEXT_REQUIRED) {
+
+        var params = {
+
+          QueryString: newText
+        };
+
+        this.props.getTravelClientAccounts(params);
+      }
+    }
+  }, {
+    key: 'getCacheProjectList',
+    value: function getCacheProjectList(clientDetails, clientDetailIndex) {
+
+      console.log(FILE_NAME, "In getCacheProjectList Method");
+
+      projectList = null;
+
+      for (var clientIndex in clientDetails) {
+
+        if (clientDetailIndex != clientIndex && clientDetails[clientIndex].clientAccountId == clientDetails[clientDetailIndex].clientAccountId) {
+
+          projectList = clientDetails[clientIndex].accountProjectsData;
+
+          break;
+        }
+      }
+
+      return projectList;
+    }
+  }, {
+    key: 'isStateChanged',
+    value: function isStateChanged(initialState) {
+
+      if (JSON.stringify(initialState) != JSON.stringify(this.getClientStateObject())) return true;
+
+      return false;
+    }
+  }, {
+    key: 'getClientStateObject',
+    value: function getClientStateObject() {
+
+      var clientObject = {
+
+        clientAccount: this.state.clientAccount,
+        clientAccountId: this.state.clientAccountId,
+        clientProject: this.state.clientProject,
+        accountProjectsData: this.state.accountProjectsData
+
+      };
+
+      return clientObject;
+    }
+  }, {
+    key: 'getClientProjectName',
+    value: function getClientProjectName(projectData, projectId) {
+
+      projectName = "";
+
+      console.log("projectData", projectData);
+
+      if (projectData != null && projectData.length != 0 && projectId != -1) {
+
+        for (var _iterator = projectData, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+          var _ref;
+
+          if (_isArray) {
+            if (_i >= _iterator.length) break;
+            _ref = _iterator[_i++];
+          } else {
+            _i = _iterator.next();
+            if (_i.done) break;
+            _ref = _i.value;
+          }
+
+          var project = _ref;
+
+
+          if (project.value == projectId) {
+
+            projectName = project.label;
+
+            break;
+          }
+        }
+      }
+
+      return projectName;
+    }
+  }]);
+  return TravelClientAccount;
+}(_react.Component);
+
+function bindActions(dispatch) {
+
+  console.log(FILE_NAME, "In bindActions Method");
+
+  return {
+
+    getTravelClientAccounts: function getTravelClientAccounts(params) {
+      return dispatch((0, _travelactions.getTravelClientAccounts)(params));
+    },
+    getTravelClientAccountProjects: function getTravelClientAccountProjects(params) {
+      return dispatch((0, _travelactions.getTravelClientAccountProjects)(params));
+    },
+
+    clearTravelStateData: function clearTravelStateData(params) {
+      return dispatch((0, _travelactions.clearTravelStateData)(params));
+    }
+  };
+}
+
+function mapStateToProps(state) {
+
+  console.log("State Updated state is -");
+
+  console.log(state);
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    travelClientAccountInformationData: state.travel.travelClientAccountInformationData,
+    travelClientAccountInformationError: state.travel.travelClientAccountInformationError,
+
+    travelClientAccountProjectsInformationData: state.travel.travelClientAccountProjectsInformationData,
+    travelClientAccountProjectsInformationError: state.travel.travelClientAccountProjectsInformationError
+
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(TravelClientAccount);

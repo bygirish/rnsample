@@ -1,0 +1,430 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EwTestingScreen = undefined;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _ewloadingindicator = require('../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewscreentitle = require('../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _ewh1text = require('../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewtravelcomponent = require('../travel/createTravel/Component/ewtravelcomponent');
+
+var _ewtravelcomponent2 = babelHelpers.interopRequireDefault(_ewtravelcomponent);
+
+var _ewreportissue = require('../../components/ewreportissue/ewreportissue');
+
+var _ewreportissue2 = babelHelpers.interopRequireDefault(_ewreportissue);
+
+var _ewh2text = require('../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _ewmultiplecomponentvalue = require('../../components/ewmultiplecomponentvalue/ewmultiplecomponentvalue');
+
+var _ewmultiplecomponentvalue2 = babelHelpers.interopRequireDefault(_ewmultiplecomponentvalue);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _screennameidentifiers = require('../../utils/screennameidentifiers');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _animationutils = require('../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _utils = require('../../utils');
+
+var FILE_NAME = "ewcreatetimesheet.js : ";
+
+var SCREEN_NAME = "Create Timesheet Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_TIMESHEET;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwTestingScreen = exports.EwTestingScreen = function (_Component) {
+  babelHelpers.inherits(EwTestingScreen, _Component);
+
+  function EwTestingScreen(props, context) {
+    babelHelpers.classCallCheck(this, EwTestingScreen);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwTestingScreen.__proto__ || Object.getPrototypeOf(EwTestingScreen)).call(this, props, context));
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+    };
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      componentStateArray: [],
+
+      componentInitializeTime: new Date().getTime()
+    };
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwTestingScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage();
+              }
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_ALL'
+      };
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In renderScreen");
+
+      console.log("Parent state -", this.state);
+
+      console.log("TRavel Component", _ewtravelcomponent2.default);
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            null,
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: 'Testing Screen'
+            })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Right,
+            null,
+            _react2.default.createElement(_ewreportissue2.default, {
+              screenId: _screennameidentifiers.CREATE_TIMESHEET_ID
+            })
+          )
+        ),
+        _react2.default.createElement(_ewmultiplecomponentvalue2.default, {
+          component: _react2.default.createElement(_ewtravelcomponent2.default, null),
+          componentStateArray: this.state.componentStateArray,
+          updateParentState: function updateParentState(componentState, componentKey) {
+            return _this2.updateParentState(componentState, componentKey);
+          },
+          deleteLabel: 'Add label'
+
+        })
+      );
+    }
+  }, {
+    key: 'updateParentState',
+    value: function updateParentState(componentState, componentKey) {
+
+      console.log("updated component state in parent", componentState, componentKey);
+
+      updatedComponentState = this.changeComponentState(componentState, componentKey);
+
+      this.setState({
+
+        componentStateArray: [].concat(babelHelpers.toConsumableArray(updatedComponentState))
+      });
+    }
+  }, {
+    key: 'changeComponentState',
+    value: function changeComponentState(componentState, componentKey) {
+
+      updatedComponentState = componentState;
+
+      if (componentKey == 0) {
+
+        if (updatedComponentState.length > 1) {
+
+          updatedComponentState[1].sourceCity = componentState[0].destinationCity;
+        }
+      }
+
+      return updatedComponentState;
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError(errorMessage) {
+
+      console.log(FILE_NAME + "In handleError");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      console.log("this.state.currentError", this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+
+          break;
+
+        case timesheetError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (errorMessage) {
+
+          case timesheetError.SERVER_EXCEPTION:
+            this.showAlertMessage(timesheetError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          default:
+            this.showAlertMessage();
+            return this.renderScreen();}
+      }
+    }
+  }]);
+  return EwTestingScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction");
+
+  return {
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    }
+
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.auth.isLoggedIn
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwTestingScreen);

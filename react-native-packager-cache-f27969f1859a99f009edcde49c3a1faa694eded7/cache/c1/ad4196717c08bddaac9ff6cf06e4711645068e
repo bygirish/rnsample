@@ -1,0 +1,61 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _ActionSheet = require('./ActionSheet');
+
+var _ActionSheet2 = babelHelpers.interopRequireDefault(_ActionSheet);
+
+var ActionSheetProvider = function (_React$Component) {
+  babelHelpers.inherits(ActionSheetProvider, _React$Component);
+
+  function ActionSheetProvider() {
+    babelHelpers.classCallCheck(this, ActionSheetProvider);
+    return babelHelpers.possibleConstructorReturn(this, (ActionSheetProvider.__proto__ || Object.getPrototypeOf(ActionSheetProvider)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(ActionSheetProvider, [{
+    key: 'getChildContext',
+    value: function getChildContext() {
+      var _this2 = this;
+
+      return {
+        showActionSheetWithOptions: function showActionSheetWithOptions() {
+          var _actionSheetRef;
+
+          return (_actionSheetRef = _this2._actionSheetRef).showActionSheetWithOptions.apply(_actionSheetRef, arguments);
+        }
+      };
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
+
+      return _react2.default.createElement(
+        _ActionSheet2.default,
+        { ref: function ref(component) {
+            return _this3._actionSheetRef = component;
+          } },
+        _react2.default.Children.only(this.props.children)
+      );
+    }
+  }]);
+  return ActionSheetProvider;
+}(_react2.default.Component);
+
+ActionSheetProvider.propTypes = {
+  children: _propTypes2.default.any
+};
+ActionSheetProvider.childContextTypes = {
+  showActionSheetWithOptions: _propTypes2.default.func
+};
+exports.default = ActionSheetProvider;

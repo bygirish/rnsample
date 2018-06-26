@@ -1,0 +1,15 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _utils = require('../../utils');
+
+exports.default = {
+
+  content: {
+    marginLeft: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 5 : 5,
+    marginRight: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 5 : 5,
+    alignSelf: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 'stretch' : 'stretch'
+  }
+
+};

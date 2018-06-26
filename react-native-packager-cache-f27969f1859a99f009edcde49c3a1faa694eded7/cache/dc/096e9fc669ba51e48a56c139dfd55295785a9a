@@ -1,0 +1,154 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../../utils');
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewh4text = require('../../../../components/ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewh3text = require('../../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewh3lighttext = require('../../../../components/ewh3lighttext/ewh3lighttext');
+
+var _ewh3lighttext2 = babelHelpers.interopRequireDefault(_ewh3lighttext);
+
+var _ewcard = require('../../../../components/ewcard/ewcard');
+
+var _ewcard2 = babelHelpers.interopRequireDefault(_ewcard);
+
+var _expenseutils = require('../../expenseutils');
+
+var expenseConstants = babelHelpers.interopRequireWildcard(_expenseutils);
+
+var LineItem = function (_Component) {
+  babelHelpers.inherits(LineItem, _Component);
+
+  function LineItem(props, context) {
+    babelHelpers.classCallCheck(this, LineItem);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (LineItem.__proto__ || Object.getPrototypeOf(LineItem)).call(this, props, context));
+
+    _this.initialState = {};
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(LineItem, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          initialState = _props.initialState,
+          otherProps = _props.otherProps;
+
+
+      console.log("initialState", initialState, otherProps);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { flexDirection: "row" } },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.6 } },
+          _react2.default.createElement(_ewh3text2.default, {
+            text: (0, _utils.showDeviceDateFormat)(initialState.expenseDateInMilliseconds)
+          }),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row" } },
+            _react2.default.createElement(_ewh3text2.default, {
+              text: this.getTravelMode(initialState)
+            }),
+            _react2.default.createElement(_ewh3lighttext2.default, {
+              text: initialState.expensePurpose,
+              customStyle: { marginLeft: 5 }
+            })
+          )
+        ),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.4 } },
+          _react2.default.createElement(_ewh3text2.default, {
+            text: initialState.expenseAmount + " " + initialState.expenseCurrency
+          })
+        )
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'getTravelMode',
+    value: function getTravelMode(initialState) {
+      var travelModeData = initialState.travelModeData,
+          travelMode = initialState.travelMode;
+
+
+      return travelModeData[travelMode].ExpenseType_Name;
+    }
+  }]);
+  return LineItem;
+}(_react.Component);
+
+exports.default = LineItem;

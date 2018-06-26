@@ -1,0 +1,240 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _reactNative = require('react-native');
+
+var ViewPropTypes = _reactNative.ViewPropTypes || _reactNative.View.propTypes;
+
+var Autocomplete = function (_Component) {
+  babelHelpers.inherits(Autocomplete, _Component);
+
+  function Autocomplete(props) {
+    babelHelpers.classCallCheck(this, Autocomplete);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (Autocomplete.__proto__ || Object.getPrototypeOf(Autocomplete)).call(this, props));
+
+    var ds = new _reactNative.ListView.DataSource({ rowHasChanged: function rowHasChanged(r1, r2) {
+        return r1 !== r2;
+      } });
+    _this.state = { dataSource: ds.cloneWithRows(props.data) };
+    _this.resultList = null;
+    return _this;
+  }
+
+  babelHelpers.createClass(Autocomplete, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(_ref) {
+      var data = _ref.data;
+
+      var dataSource = this.state.dataSource.cloneWithRows(data);
+      this.setState({ dataSource: dataSource });
+    }
+  }, {
+    key: 'blur',
+    value: function blur() {
+      var textInput = this.textInput;
+
+      textInput && textInput.blur();
+    }
+  }, {
+    key: 'focus',
+    value: function focus() {
+      var textInput = this.textInput;
+
+      textInput && textInput.focus();
+    }
+  }, {
+    key: 'renderResultList',
+    value: function renderResultList() {
+      var _this2 = this;
+
+      var dataSource = this.state.dataSource;
+      var _props = this.props,
+          listStyle = _props.listStyle,
+          renderItem = _props.renderItem,
+          renderSeparator = _props.renderSeparator,
+          keyboardShouldPersistTaps = _props.keyboardShouldPersistTaps,
+          onEndReached = _props.onEndReached,
+          onEndReachedThreshold = _props.onEndReachedThreshold;
+
+
+      return _react2.default.createElement(_reactNative.ListView, {
+        ref: function ref(resultList) {
+          _this2.resultList = resultList;
+        },
+        dataSource: dataSource,
+        keyboardShouldPersistTaps: keyboardShouldPersistTaps,
+        renderRow: renderItem,
+        renderSeparator: renderSeparator,
+        onEndReached: onEndReached,
+        onEndReachedThreshold: onEndReachedThreshold,
+        style: [styles.list, listStyle]
+      });
+    }
+  }, {
+    key: 'renderTextInput',
+    value: function renderTextInput() {
+      var _this3 = this;
+
+      var _props2 = this.props,
+          _onEndEditing = _props2.onEndEditing,
+          renderTextInput = _props2.renderTextInput,
+          style = _props2.style;
+
+      var props = babelHelpers.extends({
+        style: [styles.input, style],
+        ref: function ref(_ref2) {
+          return _this3.textInput = _ref2;
+        },
+        onEndEditing: function onEndEditing(e) {
+          return _onEndEditing && _onEndEditing(e);
+        }
+      }, this.props);
+
+      return renderTextInput(props);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var dataSource = this.state.dataSource;
+      var _props3 = this.props,
+          containerStyle = _props3.containerStyle,
+          hideResults = _props3.hideResults,
+          inputContainerStyle = _props3.inputContainerStyle,
+          listContainerStyle = _props3.listContainerStyle,
+          onShowResults = _props3.onShowResults,
+          onStartShouldSetResponderCapture = _props3.onStartShouldSetResponderCapture;
+
+      var showResults = dataSource.getRowCount() > 0;
+
+      onShowResults && onShowResults(showResults);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: [styles.container, containerStyle] },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: [styles.inputContainer, inputContainerStyle] },
+          this.renderTextInput()
+        ),
+        !hideResults && _react2.default.createElement(
+          _reactNative.View,
+          {
+            style: listContainerStyle,
+            onStartShouldSetResponderCapture: onStartShouldSetResponderCapture
+          },
+          showResults && this.renderResultList()
+        )
+      );
+    }
+  }]);
+  return Autocomplete;
+}(_react.Component);
+
+Autocomplete.propTypes = babelHelpers.extends({}, _reactNative.TextInput.propTypes, {
+  containerStyle: ViewPropTypes.style,
+
+  data: _propTypes2.default.array,
+
+  hideResults: _propTypes2.default.bool,
+
+  inputContainerStyle: ViewPropTypes.style,
+
+  keyboardShouldPersistTaps: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.bool]),
+
+  listContainerStyle: ViewPropTypes.style,
+
+  listStyle: _reactNative.ListView.propTypes.style,
+
+  onShowResults: _propTypes2.default.func,
+
+  onStartShouldSetResponderCapture: _propTypes2.default.func,
+
+  renderItem: _propTypes2.default.func,
+
+  renderSeparator: _propTypes2.default.func,
+
+  renderTextInput: _propTypes2.default.func
+});
+Autocomplete.defaultProps = {
+  data: [],
+  defaultValue: '',
+  keyboardShouldPersistTaps: 'always',
+  onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+    return false;
+  },
+  renderItem: function renderItem(rowData) {
+    return _react2.default.createElement(
+      _reactNative.Text,
+      null,
+      rowData
+    );
+  },
+  renderSeparator: null,
+  renderTextInput: function renderTextInput(props) {
+    return _react2.default.createElement(_reactNative.TextInput, props);
+  }
+};
+
+
+var border = {
+  borderColor: '#b9b9b9',
+  borderRadius: 1,
+  borderWidth: 1
+};
+
+var androidStyles = {
+  container: {
+    flex: 1
+  },
+  inputContainer: babelHelpers.extends({}, border, {
+    marginBottom: 0
+  }),
+  list: babelHelpers.extends({}, border, {
+    backgroundColor: 'white',
+    borderTopWidth: 0,
+    margin: 10,
+    marginTop: 0
+  })
+};
+
+var iosStyles = {
+  container: {
+    zIndex: 1
+  },
+  inputContainer: babelHelpers.extends({}, border),
+  input: {
+    backgroundColor: 'white',
+    height: 40,
+    paddingLeft: 3
+  },
+  list: babelHelpers.extends({}, border, {
+    backgroundColor: 'white',
+    borderTopWidth: 0,
+    left: 0,
+    position: 'absolute',
+    right: 0
+  })
+};
+
+var styles = _reactNative.StyleSheet.create(babelHelpers.extends({
+  input: {
+    backgroundColor: 'white',
+    height: 40,
+    paddingLeft: 3
+  }
+}, _reactNative.Platform.select({
+  android: babelHelpers.extends({}, androidStyles),
+  ios: babelHelpers.extends({}, iosStyles)
+})));
+
+exports.default = Autocomplete;

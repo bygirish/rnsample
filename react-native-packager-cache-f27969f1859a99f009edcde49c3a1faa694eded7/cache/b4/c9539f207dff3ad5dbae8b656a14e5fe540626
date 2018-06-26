@@ -1,0 +1,213 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = expenseClaimReducer;
+
+var _travelclaimactiontypes = require('./travelclaimactiontypes');
+
+var expenseClaimActionTypes = babelHelpers.interopRequireWildcard(_travelclaimactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var FILE_NAME = "expenseclaimreducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+  appliedExpenseClaimData: null,
+  appliedExpenseClaimError: null,
+
+  travelClaimInformationData: null,
+  travelClaimInformationError: null,
+
+  companyInformationData: null,
+  companyInformationError: null,
+
+  businessUnitInformationData: null,
+  businessUnitInformationError: null,
+
+  locationInformationData: null,
+  locationInformationError: null,
+
+  functionInformationData: null,
+  functionInformationError: null,
+
+  gradeInformationData: null,
+  gradeInformationError: null,
+
+  costCenterInformationData: null,
+  costCenterInformationError: null,
+
+  travelMasterItemData: null,
+  travelMasterItemError: null,
+
+  travelLineItemData: null,
+  travelLineItemError: null,
+
+  deleteTravelLineItemData: null,
+  deleteTravelLineItemError: null,
+
+  allocationProjectInformationData: null,
+  allocationProjectInformationError: null,
+
+  submitTravelClaimInformationData: null,
+  submitTravelClaimInformationError: null
+
+};
+
+function expenseClaimReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method expenseClaimReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case expenseClaimActionTypes.SUCCESS_GET_TRAVEL_CLAIM_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_GET_TRAVEL_CLAIM_INFORMATION");
+
+      return {
+        travelClaimInformationData: action.response.data,
+        travelClaimInformationError: action.response.error
+      };
+
+      break;
+
+    case expenseClaimActionTypes.FAILURE_GET_TRAVEL_CLAIM_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_GET_TRAVEL_CLAIM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        travelClaimInformationData: action.response.data,
+        travelClaimInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case expenseClaimActionTypes.SUCCESS_SAVE_TRAVEL_MASTER_ITEM_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_SAVE_TRAVEL_MASTER_ITEM_INFORMATION");
+
+      return {
+        travelMasterItemData: action.response.data,
+        travelMasterItemError: action.response.error
+      };
+
+      break;
+
+    case expenseClaimActionTypes.FAILURE_SAVE_TRAVEL_MASTER_ITEM_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_SAVE_TRAVEL_MASTER_ITEM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        travelMasterItemData: action.response.data,
+        travelMasterItemError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case expenseClaimActionTypes.SUCCESS_SAVE_TRAVEL_LINE_ITEM_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_SAVE_TRAVEL_LINE_ITEM_INFORMATION");
+
+      return {
+        travelLineItemData: action.response.data,
+        travelLineItemError: action.response.error
+      };
+
+      break;
+
+    case expenseClaimActionTypes.FAILURE_SAVE_TRAVEL_LINE_ITEM_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_SAVE_TRAVEL_LINE_ITEM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        travelLineItemData: action.response.data,
+        travelLineItemError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case expenseClaimActionTypes.SUCCESS_SUBMIT_TRAVEL_EXPENSE_CLAIM_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_SUBMIT_TRAVEL_EXPENSE_CLAIM_INFORMATION");
+
+      return {
+        submitTravelClaimInformationData: action.response.data,
+        submitTravelClaimInformationError: action.response.error
+      };
+
+      break;
+
+    case expenseClaimActionTypes.FAILURE_SUBMIT_TRAVEL_EXPENSE_CLAIM_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_SUBMIT_TRAVEL_EXPENSE_CLAIM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        submitTravelClaimInformationData: action.response.data,
+        submitTravelClaimInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case expenseClaimActionTypes.SUCCESS_DELETE_TRAVEL_LINE_ITEM_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_DELETE_TRAVEL_LINE_ITEM_INFORMATION");
+
+      return {
+        deleteTravelLineItemData: action.response.data,
+        deleteTravelLineItemError: action.response.error
+      };
+
+      break;
+
+    case expenseClaimActionTypes.FAILURE_DELETE_TRAVEL_LINE_ITEM_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_DELETE_TRAVEL_LINE_ITEM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        deleteTravelLineItemData: action.response.data,
+        deleteTravelLineItemError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case expenseClaimActionTypes.CLEAR_EXPENSE_CLAIM_ERROR:
+
+      console.log("In method expenseClaimReducer CLEAR_EXPENSE_CLAIM_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        appliedExpenseClaimError: null,
+        travelMasterItemError: null,
+        travelClaimInformationError: null,
+        submitTravelClaimInformationError: null
+      });
+
+      break;
+
+    case expenseClaimActionTypes.CLEAR_EXPENSE_CLAIM_STATE_DATA:
+
+      console.log("In method expenseClaimReducer CLEAR_EXPENSE_CLAIM_STATE_DATA");
+
+      return {
+        errorCounter: action.response.errorCounter
+      };
+
+      break;
+
+    default:
+
+      console.log("In method expenseClaimReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

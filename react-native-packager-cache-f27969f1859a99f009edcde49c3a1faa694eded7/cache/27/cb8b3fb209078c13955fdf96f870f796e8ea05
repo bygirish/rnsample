@@ -1,0 +1,226 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../../utils');
+
+var React = require('react-native');
+
+var StyleSheet = React.StyleSheet,
+    Dimensions = React.Dimensions,
+    Platform = React.Platform;
+exports.default = {
+
+  content: {
+    marginLeft: 5,
+    marginRight: 5,
+    alignSelf: 'stretch'
+  },
+
+  labelElement: {
+    marginTop: 5,
+    marginBottom: 5,
+    color: appstyleguide.APP_GRAY
+  },
+
+  spinnerElement: {
+    alignSelf: 'stretch',
+    alignItems: 'center'
+  },
+
+  spinnerContainer: {
+    marginTop: 5,
+    marginBottom: 5,
+    borderColor: appstyleguide.APP_LIGHT_GRAY,
+    borderWidth: 0.5
+  },
+
+  inputElement: {
+    marginTop: 5,
+    marginLeft: 0,
+    marginRight: 0,
+    borderWidth: 0.5
+  },
+
+  declarationElementContainer: {
+    marginTop: 5,
+    marginBottom: 5,
+    borderColor: appstyleguide.APP_WHITE
+  },
+
+  leaveDaysContainer: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    width: _utils.DEVICE_WIDTH * 0.95,
+    marginTop: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginBottom: 10,
+    backgroundColor: appstyleguide.APP_LIGHT_GRAY
+  },
+
+  dateButtonElementStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+  },
+
+  dateButtonContainerStyle: {
+    marginTop: 5,
+    marginBottom: 5,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    alignItems: 'center'
+  },
+
+  showTimingsStyle: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+
+  timePickerStyle: {
+    marginBottom: 10,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  labelContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+  },
+
+  labelAndTimeContainer: {
+    marginTop: 10,
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+
+  contentContainerStyle: {
+    marginLeft: 5,
+    marginRight: 5,
+    alignSelf: 'stretch'
+  },
+
+  contentStyle: {
+    marginBottom: 20,
+    marginTop: 10,
+    marginLeft: 5,
+    backgroundColor: 'transparent'
+  },
+
+  totalInfoContainer: {
+    marginBottom: 20,
+    marginTop: 10,
+    marginLeft: 5,
+    backgroundColor: 'transparent'
+  },
+
+  itemStyle: {
+    marginTop: 10
+  },
+
+  inputStyle: {
+    marginTop: 10,
+    height: 40
+  },
+
+  timePickerContainerStyle: {
+    marginTop: 5,
+    marginBottom: 5,
+    flexDirection: "row"
+  },
+
+  timePickerStyle: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+
+  dayDurationPrimaryContainer: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+
+  dayDurationSecondaryContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'stretch'
+  },
+
+  headingTextStyle: {
+    flex: 2,
+    color: '#bbbbbb'
+  },
+
+  ewbarContainerStyle: {
+    marginBottom: 10,
+    marginTop: 5,
+    backgroundColor: 'transparent',
+    alignSelf: 'stretch'
+  },
+
+  ewbarTextStyle: {
+    marginLeft: 10,
+    marginTop: 5,
+    marginBottom: 5,
+    alignSelf: 'auto',
+    color: 'black'
+  },
+
+  headingContainerStyle: {
+    flexDirection: 'row',
+    marginLeft: 10,
+    marginTop: 5,
+    marginBottom: 10
+  },
+
+  stackedLabelStyle: {
+    marginTop: 10,
+    alignItems: 'center'
+  },
+
+  reasonLabelInputStyle: {
+    marginTop: 5,
+    borderColor: '#000'
+  },
+
+  pendingLeaveContainerStyle: {
+    marginBottom: 10,
+    marginTop: 5,
+    backgroundColor: 'transparent',
+    alignSelf: 'stretch'
+  },
+
+  pendingLeaveTextStyle: {
+    marginTop: 5,
+    marginLeft: 5,
+    marginBottom: 5,
+    alignSelf: 'auto',
+    color: 'black'
+  },
+
+  dateHeadingStyle: {
+    flexDirection: 'row',
+    marginTop: 5,
+    marginLeft: 10
+  },
+
+  footerContainerStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 10
+  }
+
+};

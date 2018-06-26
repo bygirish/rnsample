@@ -1,0 +1,27 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+
+var React = require('react-native');
+
+var StyleSheet = React.StyleSheet,
+    Dimensions = React.Dimensions,
+    Platform = React.Platform;
+exports.default = {
+
+  deviationCommentStyle: {
+    marginTop: 5,
+    marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN
+  },
+
+  checkboxStyles: {
+
+    marginLeft: -5
+  }
+
+};

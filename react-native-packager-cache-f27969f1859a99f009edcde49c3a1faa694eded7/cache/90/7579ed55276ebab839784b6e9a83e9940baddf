@@ -1,0 +1,118 @@
+var _reactNative = require('react-native');
+
+var RNDeviceInfo = _reactNative.NativeModules.RNDeviceInfo;
+
+if (!RNDeviceInfo && _reactNative.Platform.OS === 'web') {
+  RNDeviceInfo = require('./web');
+}
+
+module.exports = {
+  getUniqueID: function getUniqueID() {
+    return RNDeviceInfo.uniqueId;
+  },
+  getInstanceID: function getInstanceID() {
+    return RNDeviceInfo.instanceId;
+  },
+  getSerialNumber: function getSerialNumber() {
+    return RNDeviceInfo.serialNumber;
+  },
+  getIPAddress: function getIPAddress() {
+    return RNDeviceInfo.getIpAddress();
+  },
+  getMACAddress: function getMACAddress() {
+    return RNDeviceInfo.getMacAddress();
+  },
+  getDeviceId: function getDeviceId() {
+    return RNDeviceInfo.deviceId;
+  },
+  getManufacturer: function getManufacturer() {
+    return RNDeviceInfo.systemManufacturer;
+  },
+  getModel: function getModel() {
+    return RNDeviceInfo.model;
+  },
+  getBrand: function getBrand() {
+    return RNDeviceInfo.brand;
+  },
+  getSystemName: function getSystemName() {
+    return RNDeviceInfo.systemName;
+  },
+  getSystemVersion: function getSystemVersion() {
+    return RNDeviceInfo.systemVersion;
+  },
+  getAPILevel: function getAPILevel() {
+    return RNDeviceInfo.apiLevel;
+  },
+  getBundleId: function getBundleId() {
+    return RNDeviceInfo.bundleId;
+  },
+  getApplicationName: function getApplicationName() {
+    return RNDeviceInfo.appName;
+  },
+  getBuildNumber: function getBuildNumber() {
+    return RNDeviceInfo.buildNumber;
+  },
+  getVersion: function getVersion() {
+    return RNDeviceInfo.appVersion;
+  },
+  getReadableVersion: function getReadableVersion() {
+    return RNDeviceInfo.appVersion + '.' + RNDeviceInfo.buildNumber;
+  },
+  getDeviceName: function getDeviceName() {
+    return RNDeviceInfo.deviceName;
+  },
+  getUserAgent: function getUserAgent() {
+    return RNDeviceInfo.userAgent;
+  },
+  getDeviceLocale: function getDeviceLocale() {
+    return RNDeviceInfo.deviceLocale;
+  },
+  getDeviceCountry: function getDeviceCountry() {
+    return RNDeviceInfo.deviceCountry;
+  },
+  getTimezone: function getTimezone() {
+    return RNDeviceInfo.timezone;
+  },
+  getFontScale: function getFontScale() {
+    return RNDeviceInfo.fontScale;
+  },
+  isEmulator: function isEmulator() {
+    return RNDeviceInfo.isEmulator;
+  },
+  isTablet: function isTablet() {
+    return RNDeviceInfo.isTablet;
+  },
+  is24Hour: function is24Hour() {
+    return RNDeviceInfo.is24Hour;
+  },
+  isPinOrFingerprintSet: function isPinOrFingerprintSet() {
+    return RNDeviceInfo.isPinOrFingerprintSet;
+  },
+  getFirstInstallTime: function getFirstInstallTime() {
+    return RNDeviceInfo.firstInstallTime;
+  },
+  getLastUpdateTime: function getLastUpdateTime() {
+    return RNDeviceInfo.lastUpdateTime;
+  },
+  getPhoneNumber: function getPhoneNumber() {
+    return RNDeviceInfo.phoneNumber;
+  },
+  getCarrier: function getCarrier() {
+    return RNDeviceInfo.carrier;
+  },
+  getTotalMemory: function getTotalMemory() {
+    return RNDeviceInfo.totalMemory;
+  },
+  getMaxMemory: function getMaxMemory() {
+    return RNDeviceInfo.maxMemory;
+  },
+  getTotalDiskCapacity: function getTotalDiskCapacity() {
+    return RNDeviceInfo.totalDiskCapacity;
+  },
+  getFreeDiskStorage: function getFreeDiskStorage() {
+    return RNDeviceInfo.freeDiskStorage;
+  },
+  getBatteryLevel: function getBatteryLevel() {
+    return RNDeviceInfo.getBatteryLevel();
+  }
+};

@@ -1,0 +1,89 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getCalendarInformation = getCalendarInformation;
+exports.clearCalendarError = clearCalendarError;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _calendarprocessing = require('./calendarprocessing');
+
+var calendarProcessing = babelHelpers.interopRequireWildcard(_calendarprocessing);
+
+var _calendaractiontypes = require('./calendaractiontypes');
+
+var calendarActionTypes = babelHelpers.interopRequireWildcard(_calendaractiontypes);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var FILE_NAME = "calendaractions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+function getCalendarInformation(params) {
+
+  console.log(FILE_NAME = "In getCalendarInformation method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getCalendarInformationRequest = calendarProcessing.buildGetCalendarInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getCalendarInformationRequest.url, getCalendarInformationRequest.data, getCalendarInformationRequest.config).then(function (result) {
+
+      console.log("getCalendarInformationRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getCalendarInformation', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: calendarActionTypes.SUCCESS_CALENDAR_INFORMATION,
+          response: calendarProcessing.buildSuccessGetCalendarInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getCalendarInformation', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: calendarActionTypes.FAILURE_CALENDAR_INFORMATION,
+          response: calendarProcessing.buildFailedGetCalendarInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      console.log("getCalendarInformation Error - ", err);
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getCalendarInformation', _utils.REQUEST_SERVER_ERROR);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: calendarActionTypes.FAILURE_CALENDAR_INFORMATION,
+        response: calendarProcessing.buildServerErrorGetCalendarInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearCalendarError(params) {
+
+  return {
+    type: calendarActionTypes.CLEAR_CALENDAR_ERROR,
+    response: null
+  };
+}

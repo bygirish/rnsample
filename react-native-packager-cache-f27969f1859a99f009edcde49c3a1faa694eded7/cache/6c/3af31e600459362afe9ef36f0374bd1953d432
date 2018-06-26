@@ -1,0 +1,42 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var DASHBOARD = exports.DASHBOARD = "dashboard";
+var SERVER_HOMEPAGE_DEEP_LINK = exports.SERVER_HOMEPAGE_DEEP_LINK = "ggs.erm.servlet.setup6.ViewNavigation";
+
+var APPLY_LEAVE = exports.APPLY_LEAVE = "applyleave";
+var REAPPLY_LEAVE = exports.REAPPLY_LEAVE = "reapplyleave";
+var SERVER_LEAVE_DEEP_LINK = exports.SERVER_LEAVE_DEEP_LINK = "ggs.erm.servlet.setup6.LeaveProcessS";
+
+var LEAVE_APPROVAL = exports.LEAVE_APPROVAL = "leaveapproval";
+var MY_APPLIED_LEAVES = exports.MY_APPLIED_LEAVES = "myappliedleaves";
+var MY_APPLIED_LEAVE = exports.MY_APPLIED_LEAVE = "myappliedleave";
+
+var APPLY_OD = exports.APPLY_OD = "applyod";
+var OD_APPROVAL = exports.OD_APPROVAL = "odapproval";
+
+var SERVER_OD_PAST_ATTENDANCE_DEEP_LINK = exports.SERVER_OD_PAST_ATTENDANCE_DEEP_LINK = "ggs.erm.beans.web.ODRequest";
+
+var APPLY_PAST_ATTENDANCE = exports.APPLY_PAST_ATTENDANCE = "applypa";
+var PAST_ATTENDANCE_APPROVAL = exports.PAST_ATTENDANCE_APPROVAL = "paapproval";
+
+var COMPANY_DIRECTORY = exports.COMPANY_DIRECTORY = "companydirectory";
+var TEAM_DIRECTORY = exports.TEAM_DIRECTORY = "teamdirectory";
+
+var MY_CALENDAR = exports.MY_CALENDAR = "mycalendar";
+
+var MY_PAY_SLIP = exports.MY_PAY_SLIP = "mypayslip";
+var SERVER_PAYSLIP_DEEP_LINK = exports.SERVER_PAYSLIP_DEEP_LINK = "ggs.erm.servlet.report.EmployeeCompReportS";
+
+var MY_HOLIDAYS = exports.MY_HOLIDAYS = "myholidays";
+
+var SERVER_TRAVEL_DEEP_LINK = exports.SERVER_TRAVEL_DEEP_LINK = "ggs.erm.servlet.travel.TravelRequestS";
+var APPLY_TRAVEL = exports.APPLY_TRAVEL = "applytravel";
+var TRAVEL_APPROVAL = exports.TRAVEL_APPROVAL = "travelapproval";
+var MY_APPLIED_TRAVEL_REQUESTS = exports.MY_APPLIED_TRAVEL_REQUESTS = "myappliedtravelrequests";
+
+var SERVER_EXPENSE_DEEP_LINK = exports.SERVER_EXPENSE_DEEP_LINK = "ggs.erm.servlet.setup8.ExpenseS";
+var EXPENSE_CLAIM_APPROVAL = exports.EXPENSE_CLAIM_APPROVAL = "expenseclaimapproval";
+var APPLY_MILEAGE_EXPENSE = exports.APPLY_MILEAGE_EXPENSE = "applymileageexpense";
+var MILEAGE_EXPENSE_APPROVAL = exports.MILEAGE_EXPENSE_APPROVAL = "mileageexpenseapproval";
+var MY_APPLIED_EXPENSE_REQUESTS = exports.MY_APPLIED_EXPENSE_REQUESTS = "myappliedexpenserequests";

@@ -1,0 +1,297 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EwLogout = undefined;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _ewloginstyles = require('./styles/ewloginstyles');
+
+var _ewloginstyles2 = babelHelpers.interopRequireDefault(_ewloginstyles);
+
+var _ewlogin = require('./ewlogin');
+
+var _ewlogin2 = babelHelpers.interopRequireDefault(_ewlogin);
+
+var _ewloadingindicator = require('../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewdashboard = require('../dashboard/ewdashboard');
+
+var _ewdashboard2 = babelHelpers.interopRequireDefault(_ewdashboard);
+
+var _ewdashboarddrawer = require('../dashboard/ewdashboarddrawer');
+
+var _ewdashboarddrawer2 = babelHelpers.interopRequireDefault(_ewdashboarddrawer);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _authactions = require('../../services/auth/authactions');
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _dashboardutils = require('../dashboard/dashboardutils');
+
+var dashboardConstants = babelHelpers.interopRequireWildcard(_dashboardutils);
+
+var FILE_NAME = "ewlogout.js : ";
+
+var SCREEN_NAME = "Logout Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwLogout = exports.EwLogout = function (_Component) {
+  babelHelpers.inherits(EwLogout, _Component);
+
+  function EwLogout(props, context) {
+    babelHelpers.classCallCheck(this, EwLogout);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwLogout.__proto__ || Object.getPrototypeOf(EwLogout)).call(this, props, context));
+
+    _this.showAlertMessage = function () {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+      console.log("AlertMessage is - ", _this.state.currentError);
+
+      if (_this.state.currentError != '') {
+
+        _reactNative.Alert.alert('Oops', _this.state.currentError, [{ text: 'Ok', onPress: function onPress() {
+            return _this.setState({ currentError: '' });
+          } }], { onDismiss: function onDismiss() {
+            return _this.setState({ currentError: '' });
+          } });
+      }
+    };
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    console.log(FILE_NAME + "In constructor");
+
+    _this.initialState = {
+
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwLogout, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      if (this.props.isLoggedIn) {
+
+        this.updateAppTransaction();
+
+        var params = {
+          sessionToken: this.props.sessionToken
+        };
+
+        this.props.performLogout(params);
+
+        this.setState({
+          isDataPreLoaded: false,
+          isLoading: true,
+          isDone: false
+        });
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (!nextProps.isLoggedIn && nextProps.sessionToken == null && nextProps.loginError == null) {
+
+        this.setState({
+          isDataPreLoaded: true,
+          isLoading: false
+        });
+      }
+
+      if (nextProps.isLoggedIn && nextProps.sessionToken != null && nextProps.loginError != null) {
+
+        this.setState({
+          isDataPreLoaded: false,
+          isLoading: false,
+          currentError: nextProps.loginError
+        });
+      }
+
+      if (!nextProps.isLoggedIn && nextProps.sessionToken == null && nextProps.loginError == null) {
+
+        console.log(FILE_NAME + "Logout Successfull");
+
+        this.setState({
+
+          isDone: true,
+          isLoading: false,
+          currentError: ''
+
+        });
+      }
+
+      if (nextProps.isLoggedIn && nextProps.sessionToken != null && nextProps.loginError != null) {
+
+        console.log(FILE_NAME + "Logout Failed");
+
+        this.setState({
+
+          isDone: false,
+          isLoading: false,
+          currentError: nextProps.loginError
+
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("logout failed");
+          _reactNativeRouterFlux.Actions.pop();
+
+          this.showAlertMessage();
+          return null;
+        }
+      } else {
+
+        console.log("Not Logged in");
+        this.showAlertMessage();
+
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }, {
+    key: 'updateAppTransaction',
+    value: function updateAppTransaction() {
+
+      console.log("Inside updateAppTransaction");
+
+      var params = {
+
+        action: dashboardConstants.RATING_LOGOUT_ACTION
+
+      };
+
+      this.props.updateUserRating(params);
+    }
+  }]);
+  return EwLogout;
+}(_react.Component);
+
+EwLogout.propTypes = {
+
+  isLoggedIn: _react2.default.PropTypes.bool,
+  errorWebService: _react2.default.PropTypes.string
+
+};
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction method");
+
+  return {
+    performLogout: function performLogout(params) {
+      return dispatch((0, _authactions.performLogout)(params));
+    },
+    updateUserRating: function updateUserRating(params) {
+      return dispatch((0, _commonactions.updateUserRating)(params));
+    }
+
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    isLoggedIn: state.auth.isLoggedIn,
+    loginError: state.auth.loginError,
+    emailId: state.auth.emailId,
+    userId: state.auth.userId,
+    sessionToken: state.auth.sessionToken,
+    authErrorCounter: state.auth.errorCounter
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwLogout);

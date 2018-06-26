@@ -1,0 +1,48 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var EwLoadingIndicator = function (_Component) {
+  babelHelpers.inherits(EwLoadingIndicator, _Component);
+
+  function EwLoadingIndicator() {
+    babelHelpers.classCallCheck(this, EwLoadingIndicator);
+    return babelHelpers.possibleConstructorReturn(this, (EwLoadingIndicator.__proto__ || Object.getPrototypeOf(EwLoadingIndicator)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(EwLoadingIndicator, [{
+    key: 'render',
+    value: function render() {
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        { style: { alignItems: 'center', justifyContent: 'center' } },
+        _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_nativeBase.Spinner, null),
+          _react2.default.createElement(
+            _nativeBase.H3,
+            { style: { paddingTop: 5, paddingBottom: 5, marginTop: 10, marginBottom: 10 } },
+            this.props.loadingText == undefined ? "Loading..." : this.props.loadingText
+          )
+        )
+      );
+    }
+  }]);
+  return EwLoadingIndicator;
+}(_react.Component);
+
+exports.default = EwLoadingIndicator;

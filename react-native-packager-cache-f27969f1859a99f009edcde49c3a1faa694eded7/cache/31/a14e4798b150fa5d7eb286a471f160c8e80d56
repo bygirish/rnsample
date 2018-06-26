@@ -1,0 +1,70 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _ewcomponents = require('../../utils/ewcomponents');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var EwHeader = function (_Component) {
+  babelHelpers.inherits(EwHeader, _Component);
+
+  function EwHeader() {
+    babelHelpers.classCallCheck(this, EwHeader);
+    return babelHelpers.possibleConstructorReturn(this, (EwHeader.__proto__ || Object.getPrototypeOf(EwHeader)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(EwHeader, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          screenTitle = _props.screenTitle,
+          onBackButtonPress = _props.onBackButtonPress,
+          screenReportId = _props.screenReportId;
+
+
+      return _react2.default.createElement(
+        _nativeBase.Header,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Left,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { transparent: true, onPress: function onPress() {
+                return onBackButtonPress();
+              } },
+            _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+          )
+        ),
+        _react2.default.createElement(
+          _nativeBase.Body,
+          { style: { flex: 3 } },
+          _react2.default.createElement(_ewcomponents.EwScreenTitle, {
+            text: screenTitle
+          })
+        ),
+        _react2.default.createElement(
+          _nativeBase.Right,
+          null,
+          _react2.default.createElement(_ewcomponents.EwReportIssue, {
+            screenId: screenReportId
+          })
+        )
+      );
+    }
+  }]);
+  return EwHeader;
+}(_react.Component);
+
+exports.default = EwHeader;

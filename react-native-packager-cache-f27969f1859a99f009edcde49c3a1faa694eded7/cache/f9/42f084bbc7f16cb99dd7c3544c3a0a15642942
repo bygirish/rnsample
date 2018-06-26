@@ -1,0 +1,80 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _reactRedux = require('react-redux');
+
+var _ewimages = require('../../utils/ewimages');
+
+var _utils = require('../../utils');
+
+var _ewicon = require('../ewicon/ewicon');
+
+var _ewicon2 = babelHelpers.interopRequireDefault(_ewicon);
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var FILE_NAME = "ewreportissue.js";
+
+var EwReportIssue = function (_Component) {
+  babelHelpers.inherits(EwReportIssue, _Component);
+
+  function EwReportIssue() {
+    babelHelpers.classCallCheck(this, EwReportIssue);
+    return babelHelpers.possibleConstructorReturn(this, (EwReportIssue.__proto__ || Object.getPrototypeOf(EwReportIssue)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(EwReportIssue, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var customStyle = this.props.customStyle;
+
+
+      console.log("IS_REPORT_ERROR_FLAG_VISIBLE", _utils.IS_REPORT_ERROR_FLAG_VISIBLE);
+
+      if (this.props.isReportErrorFlagVisible) {
+
+        return _react2.default.createElement(_ewicon2.default, {
+          iconSource: _ewimages.REPORT_ISSUE_ICON,
+          customIconStyle: [_styles2.default.iconStyle, customStyle],
+          onIconPressed: function onIconPressed() {
+            return _reactNativeRouterFlux.Actions.ewfeedbackscreen({ screenId: _this2.props.screenId });
+          }
+        });
+      } else return null;
+    }
+  }]);
+  return EwReportIssue;
+}(_react.Component);
+
+function bindActions(dispatch) {
+
+  console.log(FILE_NAME + "In bindActions method");
+
+  return {};
+}
+
+function mapStateToProps(state) {
+  console.log(FILE_NAME + "In mapStateToProps method");
+
+  console.log("State Updated state is -", state);
+
+  return {
+
+    isReportErrorFlagVisible: state.needtoact.isReportErrorFlagVisible
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(EwReportIssue);

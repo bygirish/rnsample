@@ -1,0 +1,92 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _reactNative = require('react-native');
+
+exports.default = {
+
+  h1Text: {
+
+    fontSize: 16
+  },
+
+  h2Text: {
+
+    fontSize: 14,
+    color: appstyleguide.APP_GRAY
+  },
+
+  h3Text: {
+
+    fontSize: 12,
+    color: appstyleguide.APP_GRAY
+  },
+
+  outerContainer: {
+
+    marginLeft: 10,
+    marginTop: 10,
+    padding: 12
+  },
+
+  innerContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: 'center',
+
+    flexWrap: "wrap"
+  },
+
+  image: {
+
+    height: 40,
+    width: 40,
+    borderRadius: 20
+  },
+
+  spinnerElement: {
+    marginLeft: 5,
+    marginRight: 5
+  },
+
+  spinnerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  loadAgainButtonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 50
+  },
+
+  accordionStyle: {
+    margin: 5,
+    padding: _reactNative.Platform.OS === 'ios' ? 8 : 5,
+    backgroundColor: appstyleguide.APP_LIGHT_GRAY
+  },
+
+  accordionHeadingTextStyle: {
+    color: appstyleguide.APP_BLACK,
+    fontSize: 14
+  },
+
+  hiddenAccordionStyle: {
+    marginLeft: 10,
+    marginRight: 10,
+    padding: 10,
+    backgroundColor: appstyleguide.APP_WHITE,
+    borderWidth: 0.5,
+    borderColor: appstyleguide.APP_LIGHT_GRAY,
+    marginTop: -10,
+    paddingBottom: 0
+  }
+
+};

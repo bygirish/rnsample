@@ -1,0 +1,51 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.googleAnalyticController = exports.GoogleAnalyticController = undefined;
+
+var _reactNativeGoogleAnalyticsBridge = require('react-native-google-analytics-bridge');
+
+var _ = require('../');
+
+var FILE_NAME = "GoogleAnalyticController.js : ";
+
+var GoogleAnalyticController = exports.GoogleAnalyticController = function () {
+  function GoogleAnalyticController() {
+    babelHelpers.classCallCheck(this, GoogleAnalyticController);
+    this.ewUserId = '';
+    this.appName = 'EmployWise';
+    this.gaTrackerId = 'UA-102243418-1';
+    this.tracker = new _reactNativeGoogleAnalyticsBridge.GoogleAnalyticsTracker(this.gaTrackerId);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    _reactNativeGoogleAnalyticsBridge.GoogleAnalyticsSettings.setDispatchInterval(2);
+  }
+
+  babelHelpers.createClass(GoogleAnalyticController, [{
+    key: 'setUserId',
+    value: function setUserId(userId) {
+
+      console.log(FILE_NAME + "In setUserId method");
+
+      this.ewUserId = userId;
+      this.tracker.setUser(this.ewUserId);
+    }
+  }, {
+    key: 'getGoogleAnlyticTracker',
+    value: function getGoogleAnlyticTracker() {
+
+      console.log(FILE_NAME + "In getGoogleAnlyticTracker method");
+
+      this.tracker.setTrackUncaughtExceptions(true);
+      this.tracker.setUser(this.ewUserId);
+      this.tracker.setAppName(this.appName + _.VERSION_NAME);
+
+      return this.tracker;
+    }
+  }]);
+  return GoogleAnalyticController;
+}();
+
+var googleAnalyticController = exports.googleAnalyticController = new GoogleAnalyticController();

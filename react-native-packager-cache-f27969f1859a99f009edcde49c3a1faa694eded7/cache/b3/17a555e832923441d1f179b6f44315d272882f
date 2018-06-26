@@ -1,0 +1,97 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var TextExtraction = function () {
+  function TextExtraction(text, patterns) {
+    babelHelpers.classCallCheck(this, TextExtraction);
+
+    this.text = text;
+    this.patterns = patterns || [];
+  }
+
+  babelHelpers.createClass(TextExtraction, [{
+    key: 'parse',
+    value: function parse() {
+      var _this = this;
+
+      var parsedTexts = [{ children: this.text }];
+      this.patterns.forEach(function (pattern) {
+        var newParts = [];
+
+        parsedTexts.forEach(function (parsedText) {
+          if (parsedText._matched) {
+            newParts.push(parsedText);
+
+            return;
+          }
+
+          var parts = [];
+          var textLeft = parsedText.children;
+
+          while (textLeft) {
+            var matches = pattern.pattern.exec(textLeft);
+
+            if (!matches) {
+              break;
+            }
+
+            var previousText = textLeft.substr(0, matches.index);
+
+            parts.push({ children: previousText });
+
+            parts.push(_this.getMatchedPart(pattern, matches[0], matches));
+
+            textLeft = textLeft.substr(matches.index + matches[0].length);
+          }
+
+          parts.push({ children: textLeft });
+
+          newParts.push.apply(newParts, parts);
+        });
+
+        parsedTexts = newParts;
+      });
+
+      parsedTexts.forEach(function (parsedText) {
+        return delete parsedText._matched;
+      });
+
+      return parsedTexts.filter(function (t) {
+        return !!t.children;
+      });
+    }
+  }, {
+    key: 'getMatchedPart',
+    value: function getMatchedPart(matchedPattern, text, matches) {
+      var props = {};
+
+      Object.keys(matchedPattern).forEach(function (key) {
+        if (key === 'pattern' || key === 'renderText') {
+          return;
+        }
+
+        if (typeof matchedPattern[key] === 'function') {
+          props[key] = function () {
+            return matchedPattern[key](text);
+          };
+        } else {
+          props[key] = matchedPattern[key];
+        }
+      });
+
+      var children = text;
+      if (matchedPattern.renderText && typeof matchedPattern.renderText === 'function') {
+        children = matchedPattern.renderText(text, matches);
+      }
+
+      return babelHelpers.extends({}, props, {
+        children: children,
+        _matched: true
+      });
+    }
+  }]);
+  return TextExtraction;
+}();
+
+exports.default = TextExtraction;

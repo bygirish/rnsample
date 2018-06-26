@@ -1,0 +1,121 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var Composer = function (_React$Component) {
+  babelHelpers.inherits(Composer, _React$Component);
+
+  function Composer() {
+    babelHelpers.classCallCheck(this, Composer);
+    return babelHelpers.possibleConstructorReturn(this, (Composer.__proto__ || Object.getPrototypeOf(Composer)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(Composer, [{
+    key: 'onContentSizeChange',
+    value: function onContentSizeChange(e) {
+      var contentSize = e.nativeEvent.contentSize;
+
+      if (!contentSize) return;
+
+      if (!this.contentSize || this.contentSize.width !== contentSize.width || this.contentSize.height !== contentSize.height) {
+        this.contentSize = contentSize;
+        this.props.onInputSizeChanged(this.contentSize);
+      }
+    }
+  }, {
+    key: 'onChangeText',
+    value: function onChangeText(text) {
+      this.props.onTextChanged(text);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      return _react2.default.createElement(_reactNative.TextInput, babelHelpers.extends({
+        placeholder: this.props.placeholder,
+        placeholderTextColor: this.props.placeholderTextColor,
+        multiline: this.props.multiline,
+
+        onChange: function onChange(e) {
+          return _this2.onContentSizeChange(e);
+        },
+        onContentSizeChange: function onContentSizeChange(e) {
+          return _this2.onContentSizeChange(e);
+        },
+
+        onChangeText: function onChangeText(text) {
+          return _this2.onChangeText(text);
+        },
+
+        style: [styles.textInput, this.props.textInputStyle, { height: this.props.composerHeight }],
+
+        autoFocus: this.props.textInputAutoFocus,
+
+        value: this.props.text,
+        accessibilityLabel: this.props.text || this.props.placeholder,
+        enablesReturnKeyAutomatically: true,
+        underlineColorAndroid: 'transparent'
+      }, this.props.textInputProps));
+    }
+  }]);
+  return Composer;
+}(_react2.default.Component);
+
+exports.default = Composer;
+
+
+var styles = _reactNative.StyleSheet.create({
+  textInput: {
+    flex: 1,
+    marginLeft: 10,
+    fontSize: 16,
+    lineHeight: 16,
+    marginTop: _reactNative.Platform.select({
+      ios: 6,
+      android: 0
+    }),
+    marginBottom: _reactNative.Platform.select({
+      ios: 5,
+      android: 3
+    })
+  }
+});
+
+Composer.defaultProps = {
+  composerHeight: _reactNative.Platform.select({
+    ios: 33,
+    android: 41
+  }),
+  text: '',
+  placeholderTextColor: '#b2b2b2',
+  textInputProps: null,
+  multiline: true,
+  textInputStyle: {},
+  textInputAutoFocus: false,
+  onTextChanged: function onTextChanged() {},
+  onInputSizeChanged: function onInputSizeChanged() {}
+};
+
+Composer.propTypes = {
+  composerHeight: _propTypes2.default.number,
+  text: _propTypes2.default.string,
+  placeholder: _propTypes2.default.string,
+  placeholderTextColor: _propTypes2.default.string,
+  textInputProps: _propTypes2.default.object,
+  onTextChanged: _propTypes2.default.func,
+  onInputSizeChanged: _propTypes2.default.func,
+  multiline: _propTypes2.default.bool,
+  textInputStyle: _reactNative.TextInput.propTypes.style,
+  textInputAutoFocus: _propTypes2.default.bool
+};

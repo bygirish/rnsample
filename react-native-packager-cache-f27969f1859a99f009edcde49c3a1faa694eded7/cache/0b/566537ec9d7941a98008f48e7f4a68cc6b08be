@@ -1,0 +1,47 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _appstyleguide = require('./../../../../appstyleguide/appstyleguide');
+
+exports.default = {
+
+  header: {
+    backgroundColor: "transparent",
+    height: _reactNative.Dimensions.get('window').height * 0.06,
+
+    lineColor: 'orange',
+    lineWidth: 30,
+    lineHeight: 5,
+
+    stepActiveTextColor: 'white',
+    stepDisabledTextColor: 'black',
+
+    stepActiveBackgroundColor: _appstyleguide.APP_BLUE,
+    stepDisabledBackgroundColor: '#D2D7D3',
+
+    stepHeight: 30,
+    stepWidth: 30,
+    stepBorderWidth: 0,
+    stepBorderColor: 'white',
+    stepRadius: 10
+  },
+
+  body: {
+    backgroundColor: "#fff",
+    height: _reactNative.Dimensions.get('window').height * 0.75
+  },
+
+  footer: {
+    height: _reactNative.Dimensions.get('window').height * 0.1,
+    backgroundColor: "#fff",
+    textColor: '#fff',
+    buttonColor: _appstyleguide.APP_BLUE,
+    buttonWidth: 120,
+    buttonHeight: 40
+
+  }
+
+};

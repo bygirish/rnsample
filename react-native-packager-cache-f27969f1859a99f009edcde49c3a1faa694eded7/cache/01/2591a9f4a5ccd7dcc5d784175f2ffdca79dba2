@@ -1,0 +1,501 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../../utils');
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewcomponents = require('../../../../utils/ewcomponents');
+
+var _commonexpenseclaimactions = require('../../../../services/expenseclaim/common/commonexpenseclaimactions');
+
+var _expenseutils = require('../../expenseutils');
+
+var expenseConstants = babelHelpers.interopRequireWildcard(_expenseutils);
+
+
+var FILE_NAME = "projectamountview.js";
+
+var ProjectAmountView = function (_Component) {
+  babelHelpers.inherits(ProjectAmountView, _Component);
+
+  function ProjectAmountView(props, context) {
+    babelHelpers.classCallCheck(this, ProjectAmountView);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (ProjectAmountView.__proto__ || Object.getPrototypeOf(ProjectAmountView)).call(this, props, context));
+
+    elementValues = _this.handleElementValues(_this.props.initialState);
+
+    _this.initialState = {
+
+      currentFocussedTextInput: "",
+
+      projectName: elementValues.projectName,
+      selectedProjectData: elementValues.selectedProjectData,
+      projectAmount: elementValues.projectAmount,
+      isProjectSelected: false,
+
+      allocationProjectData: []
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(ProjectAmountView, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+
+      if (this.props.initialState == null) {
+
+        this.props.updateParentState(this.getProjectAmountObject());
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (this.isStateChanged(nextProps.initialState)) {
+
+        this.setState({
+
+          projectName: nextProps.initialState.projectName,
+          projectAmount: nextProps.initialState.projectAmount,
+          selectedProjectData: nextProps.initialState.selectedProjectData,
+          isProjectSelected: nextProps.initialState.isProjectSelected
+        });
+      }
+
+      if (this.props.currentFocussedComponent == this.props.index) {
+
+        if (nextProps.allocationProjectInformationData != null && nextProps.allocationProjectInformationError == null && this.state.allocationProjectData != nextProps.allocationProjectInformationData) {
+
+          console.log("Inside is State changed allocation project ");
+
+          this.setState({
+
+            allocationProjectData: nextProps.allocationProjectInformationData
+
+          });
+        }
+
+        if (nextProps.allocationProjectInformationData == null && nextProps.allocationProjectInformationError != null) {
+
+          console.log("Inside is State changed allocation project ");
+
+          this.setState({
+
+            allocationProjectData: []
+
+          });
+        }
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var isReveiwMode = this.props.otherDetails.isReveiwMode;
+
+      console.log("props received in project amount view are", this.props);
+
+      console.log("currentprojectamountstate is ", this.state);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        {
+          style: { flex: 1 },
+          onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+
+            console.log("Inside onStartShouldSetResponderCapture");
+
+            _this2.setState({
+              currentFocussedTextInput: ""
+            });
+          }
+        },
+        _react2.default.createElement(
+          _ewcomponents.EwCard,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { margin: appstyleguide.DEFAULT_MARGIN } },
+            this.renderProjectNameView(isReveiwMode),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+              this.renderProjectAmountView(isReveiwMode)
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+
+      if (this.isStateChanged(this.props.initialState)) this.props.updateParentState(this.getProjectAmountObject());
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'renderProjectAmountView',
+    value: function renderProjectAmountView(isReveiwMode) {
+      var _this3 = this;
+
+      var projectAmount = this.state.projectAmount;
+
+
+      if (isReveiwMode) {
+
+        if (projectAmount.toString().trim() != "") {
+
+          return _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstants.ALLOCATION_PROJECT_AMOUNT_LABEL,
+            value: projectAmount
+          });
+        }
+      } else {
+
+        return _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+          label: expenseConstants.ALLOCATION_PROJECT_AMOUNT_LABEL,
+          placeholderlabel: expenseConstants.ALLOCATION_PROJECT_AMOUNT_PLACEHOLDER_LABEL,
+          autoCorrect: false,
+          autoCapitalize: 'none',
+          keyboardType: 'numeric',
+          onChangeText: function onChangeText(projectAmount) {
+            return _this3.onAllocationProjectChanged(expenseConstants.ALLOCATION_PROJECT_AMOUNT_KEY, projectAmount);
+          },
+          value: projectAmount
+        });
+      }
+    }
+  }, {
+    key: 'renderProjectNameView',
+    value: function renderProjectNameView(isReveiwMode) {
+      var _this4 = this;
+
+      var _state = this.state,
+          projectName = _state.projectName,
+          allocationProjectData = _state.allocationProjectData;
+      var projectLabel = this.props.otherDetails.projectLabel;
+
+
+      if (projectLabel == null || projectLabel == "") projectLabel = expenseConstants.ALLOCATION_PROJECT_LABEL;
+
+      if (isReveiwMode) {
+
+        if (projectName.trim() != "") {
+
+          return _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: projectLabel,
+            value: projectName
+          });
+        }
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          {
+
+            onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+              console.log("Inside onStartShouldSetResponderCapture internal");
+              _this4.setState({
+
+                currentFocussedTextInput: expenseConstants.ALLOCATION_PROJECT_KEY
+              });
+            }
+
+          },
+          _react2.default.createElement(_ewcomponents.EwAutocompleteInput, {
+            dropdownData: allocationProjectData,
+            hideResults: !this.isAutoCompleteDropdownVisible(expenseConstants.ALLOCATION_PROJECT_KEY, projectName),
+            updateScrollState: function updateScrollState(scrollViewState) {
+              return _this4.setState({ enableScrollViewScroll: scrollViewState });
+            },
+            scrollViewVisibility: this.state.enableScrollViewScroll,
+            renderListItem: function renderListItem(data) {
+              return _this4.renderAllocationProjectListItem(expenseConstants.ALLOCATION_PROJECT_KEY, data);
+            },
+
+            customTextInput: function customTextInput() {
+              return _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+                label: projectLabel,
+                placeholderlabel: expenseConstants.ALLOCATION_PROJECT_PLACEHOLDER_LABEL,
+                autoCorrect: false,
+                autoCapitalize: 'none',
+                onChangeText: function onChangeText(projectName) {
+                  return _this4.onAllocationProjectChanged(expenseConstants.ALLOCATION_PROJECT_KEY, projectName);
+                },
+                value: projectName
+              });
+            }
+
+          })
+        );
+      }
+    }
+  }, {
+    key: 'renderAllocationProjectListItem',
+    value: function renderAllocationProjectListItem(textinputKey, data) {
+      var _this5 = this;
+
+      console.log(FILE_NAME, "In renderAllocationProjectListItem Method", data);
+
+      if (data != null) {
+
+        return _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          { style: { margin: 5 }, onPress: function onPress() {
+              return _this5.onAllocationProjectChanged(textinputKey, data, true);
+            } },
+          _react2.default.createElement(_ewcomponents.EwH3Text, {
+            text: data.projectName
+          })
+        );
+      }
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(propsData) {
+
+      projectName = "";
+      selectedProjectData = null;
+      projectAmount = "";
+
+      if (propsData != null) {
+
+        projectName = propsData.projectName;
+        selectedProjectData = propsData.selectedProjectData;
+        projectAmount = propsData.projectAmount;
+      }
+
+      elementValues = {
+
+        projectName: projectName,
+        selectedProjectData: selectedProjectData,
+        projectAmount: projectAmount
+
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: 'onAllocationProjectChanged',
+    value: function onAllocationProjectChanged(textInputKey, newText) {
+      var isDropdownItemPressed = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+
+      switch (textInputKey) {
+        case expenseConstants.ALLOCATION_PROJECT_KEY:
+
+          if (isDropdownItemPressed) {
+
+            projectName = newText.projectName;
+            selectedProjectData = newText;
+
+            this.setState({
+
+              projectName: projectName,
+              selectedProjectData: selectedProjectData,
+              isProjectSelected: true
+            });
+          } else {
+
+            projectName = newText;
+            projectAmount = "";
+            selectedProjectData = null;
+
+            this.setState({
+
+              projectName: projectName,
+              projectAmount: projectAmount,
+              selectedProjectData: selectedProjectData,
+              isProjectSelected: false
+
+            });
+          }
+
+          this.handleDropDownPress(isDropdownItemPressed, newText);
+
+          break;
+
+        case expenseConstants.ALLOCATION_PROJECT_AMOUNT_KEY:
+
+          this.setState({
+
+            projectAmount: newText
+          });
+
+          break;
+
+        default:
+
+      }
+    }
+  }, {
+    key: 'handleDropDownPress',
+    value: function handleDropDownPress(isDropdownItemPressed, newText) {
+
+      console.log(FILE_NAME, "In handleDropDownPress Method");
+
+      if (isDropdownItemPressed) {
+
+        this.setState({
+          allocationProjectData: []
+        });
+
+        this.clearAllocationProjectReduxData();
+      } else {
+
+        this.getAllocationProjectData(newText);
+      }
+    }
+  }, {
+    key: 'getAllocationProjectData',
+    value: function getAllocationProjectData(newText) {
+
+      console.log(FILE_NAME, "In getAllocationProjectData Method");
+
+      if (newText.length > expenseConstants.MINIMUM_AUTOCOMPLETE_TEXT_REQUIRED) {
+
+        var params = {
+
+          searchString: newText
+        };
+
+        this.props.getAllocationProjectList(params);
+      }
+    }
+  }, {
+    key: 'isAutoCompleteDropdownVisible',
+    value: function isAutoCompleteDropdownVisible(textInputkey, textInputValue) {
+
+      console.log(FILE_NAME, "In isAutoCompleteDropdownVisible Method");
+
+      if (this.state.currentFocussedTextInput == textInputkey && textInputValue.length > 2) {
+
+        return true;
+      }
+
+      return false;
+    }
+  }, {
+    key: 'isStateChanged',
+    value: function isStateChanged(initialState) {
+
+      if (JSON.stringify(initialState) != JSON.stringify(this.getProjectAmountObject())) return true;
+
+      return false;
+    }
+  }, {
+    key: 'getProjectAmountObject',
+    value: function getProjectAmountObject() {
+
+      var projectAmountObject = {
+
+        projectName: this.state.projectName,
+        projectAmount: this.state.projectAmount,
+        selectedProjectData: this.state.selectedProjectData,
+        isProjectSelected: this.state.isProjectSelected
+
+      };
+
+      return projectAmountObject;
+    }
+  }, {
+    key: 'clearAllocationProjectReduxData',
+    value: function clearAllocationProjectReduxData() {
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_ALLOCATION_PROJECT_INFORMATION'
+      };
+
+      this.props.clearCommonExpenseClaimStateData(params);
+    }
+  }]);
+  return ProjectAmountView;
+}(_react.Component);
+
+function bindActions(dispatch) {
+
+  console.log(FILE_NAME, "In bindActions Method");
+
+  return {
+
+    getAllocationProjectList: function getAllocationProjectList(params) {
+      return dispatch((0, _commonexpenseclaimactions.getAllocationProjectList)(params));
+    },
+
+    clearCommonExpenseClaimStateData: function clearCommonExpenseClaimStateData(params) {
+      return dispatch((0, _commonexpenseclaimactions.clearCommonExpenseClaimStateData)(params));
+    }
+  };
+}
+
+function mapStateToProps(state) {
+
+  console.log("State Updated state is -");
+
+  console.log(state);
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    allocationProjectInformationData: state.commonExpenseClaim.allocationProjectInformationData,
+    allocationProjectInformationError: state.commonExpenseClaim.allocationProjectInformationError
+
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(ProjectAmountView);

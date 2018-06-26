@@ -1,0 +1,137 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getChatbotResponse = getChatbotResponse;
+exports.createChatbotIssue = createChatbotIssue;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _chatbotprocessing = require('./chatbotprocessing');
+
+var chatbotProcessing = babelHelpers.interopRequireWildcard(_chatbotprocessing);
+
+var _chatbotactiontypes = require('./chatbotactiontypes');
+
+var chatbotActionTypes = babelHelpers.interopRequireWildcard(_chatbotactiontypes);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _chatbotobjectmapping = require('./chatbotobjectmapping');
+
+var FILE_NAME = "chatbotactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_CHATBOT;
+
+function getChatbotResponse(params) {
+
+  console.log(FILE_NAME + "In getChatbotResponse method - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getChatbotResponseRequest = chatbotProcessing.buildGetChatbotResponseRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(getChatbotResponseRequest.url, getChatbotResponseRequest.data, getChatbotResponseRequest.config).then(function (result) {
+
+      console.log("getChatbotResponseRequest Result - ", result);
+
+      if (result.data != "" && result.data != null) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getChatbotResponse', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: chatbotActionTypes.SUCCESS_GET_CHATBOT_RESPONSE,
+          response: chatbotProcessing.buildSuccessGetChatbotResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getChatbotResponse', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: chatbotActionTypes.FAILURE_GET_CHATBOT_RESPONSE,
+          response: chatbotProcessing.buildFailedGetChatbotResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      console.log("getChatbotResponseRequest Error - ", err);
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getChatbotResponse', _utils.REQUEST_SERVER_ERROR);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: chatbotActionTypes.FAILURE_GET_CHATBOT_RESPONSE,
+        response: chatbotProcessing.buildServerErrorGetChatbotResponse(err, params)
+      });
+    });
+  };
+}
+
+function createChatbotIssue(params) {
+
+  var functionName = "createChatbotIssue";
+
+  console.log(FILE_NAME + "In createChatbotIssue method - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    serverModel = (0, _chatbotobjectmapping.getChatbotIssueModel)(params, getState());
+
+    var createChatbotIssueResponseRequest = chatbotProcessing.buildGetCreateChatbotIssueResponseRequest(serverModel, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(createChatbotIssueResponseRequest.url, createChatbotIssueResponseRequest.data, createChatbotIssueResponseRequest.config).then(function (result) {
+
+      console.log("createChatbotIssueResponseRequest Result - ", result);
+
+      if (result.data.status) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: chatbotActionTypes.SUCCESS_CREATE_CHATBOT_ISSUE_RESPONSE,
+          response: chatbotProcessing.buildSuccessCreateChatbotIssueResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: chatbotActionTypes.FAILURE_CREATE_CHATBOT_ISSUE_RESPONSE,
+          response: chatbotProcessing.buildFailedCreateChatbotIssueResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      console.log("createChatbotIssueResponseRequest Error - ", err);
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: chatbotActionTypes.FAILURE_CREATE_CHATBOT_ISSUE_RESPONSE,
+        response: chatbotProcessing.buildServerErrorCreateChatbotIssueResponse(err, params)
+      });
+    });
+  };
+}

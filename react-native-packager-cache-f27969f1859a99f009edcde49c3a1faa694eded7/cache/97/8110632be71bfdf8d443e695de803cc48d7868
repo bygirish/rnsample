@@ -1,0 +1,10 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var GET_NEED_TO_ACT_LIST = exports.GET_NEED_TO_ACT_LIST = '/HomePageM?scope=I';
+
+var GET_NEED_TO_ACT_LIST_LEAVE = exports.GET_NEED_TO_ACT_LIST_LEAVE = '';
+
+var GET_NEED_TO_ACT_LIST_OD = exports.GET_NEED_TO_ACT_LIST_OD = '';
+
+var GET_NEED_TO_ACT_LIST_PA = exports.GET_NEED_TO_ACT_LIST_PA = '';

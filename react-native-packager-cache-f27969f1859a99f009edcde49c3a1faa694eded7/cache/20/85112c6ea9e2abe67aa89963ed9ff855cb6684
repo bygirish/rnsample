@@ -1,0 +1,47 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isSameDay = isSameDay;
+exports.isSameUser = isSameUser;
+exports.warnDeprecated = warnDeprecated;
+
+var _moment = require('moment');
+
+var _moment2 = babelHelpers.interopRequireDefault(_moment);
+
+var DEPRECATION_MESSAGE = 'isSameUser and isSameDay should be imported from the utils module instead of using the props functions';
+
+function isSameDay() {
+  var currentMessage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var diffMessage = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+
+  if (!diffMessage.createdAt) {
+    return false;
+  }
+
+  var currentCreatedAt = (0, _moment2.default)(currentMessage.createdAt);
+  var diffCreatedAt = (0, _moment2.default)(diffMessage.createdAt);
+
+  if (!currentCreatedAt.isValid() || !diffCreatedAt.isValid()) {
+    return false;
+  }
+
+  return currentCreatedAt.isSame(diffCreatedAt, 'day');
+}
+
+function isSameUser() {
+  var currentMessage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var diffMessage = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+
+  return !!(diffMessage.user && currentMessage.user && diffMessage.user._id === currentMessage.user._id);
+}
+
+function warnDeprecated(fn) {
+
+  return function () {
+    console.warn(DEPRECATION_MESSAGE);
+    return fn.apply(undefined, arguments);
+  };
+}

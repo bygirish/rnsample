@@ -1,0 +1,637 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _GoogleAnalyticController = require('../../../GoogleAnalyticController');
+
+var _ewsupervisorinfo = require('../../../components/ewsupervisor/ewsupervisorinfo');
+
+var _ewsupervisorinfo2 = babelHelpers.interopRequireDefault(_ewsupervisorinfo);
+
+var _ewloadingindicator = require('../../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewbar = require('../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewscreentitle = require('../../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _utils = require('../../../utils');
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _odrequesterrorhandling = require('../../../services/odrequest/odrequesterrorhandling');
+
+var odError = babelHelpers.interopRequireWildcard(_odrequesterrorhandling);
+
+var _odutils = require('./odutils');
+
+var odConstants = babelHelpers.interopRequireWildcard(_odutils);
+
+var _modulelist = require('../../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _commonactions = require('../../../services/common/commonactions');
+
+var _animationutils = require('../../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _ewmyodactionscreenstyle = require('./styles/ewmyodactionscreenstyle');
+
+var _ewmyodactionscreenstyle2 = babelHelpers.interopRequireDefault(_ewmyodactionscreenstyle);
+
+var _odrequestactions = require('../../../services/odrequest/odrequestactions');
+
+var FILE_NAME = "ewmyodactionscreen.js : ";
+
+var SCREEN_NAME = "My Applied Od Action Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwMyAppliedOdActionScreen = function (_Component) {
+  babelHelpers.inherits(EwMyAppliedOdActionScreen, _Component);
+
+  function EwMyAppliedOdActionScreen(props) {
+    babelHelpers.classCallCheck(this, EwMyAppliedOdActionScreen);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwMyAppliedOdActionScreen.__proto__ || Object.getPrototypeOf(EwMyAppliedOdActionScreen)).call(this, props));
+
+    _this._keyboardDidShow = function (event) {
+
+      console.log(FILE_NAME + "In _keyboardDidShow method");
+
+      scrollView.scrollToEnd({ animated: true });
+    };
+
+    _this.showCancelOdDialog = function () {
+
+      console.log(FILE_NAME + "In showCancelOdDialog method");
+
+      _reactNative.Alert.alert('Out On work', 'Do you really want to cancel your out on work request?', [{ text: 'No', onPress: function onPress() {
+          return console.log('Cancel Pressed');
+        }, style: 'cancel' }, { text: 'Yes', onPress: function onPress() {
+          return _this.onPressAction(odConstants.OD_ACTION_CANCEL);
+        } }]);
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      console.log(FILE_NAME + "In clearCurrentMessage method");
+
+      _this.setState({
+        currentError: ''
+      });
+
+      _this.props.clearOdError(null);
+    };
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      myAppliedOdInformation: [],
+
+      componentInitializeTime: new Date().getTime() };
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwMyAppliedOdActionScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      if (this.props.myOdData) {
+
+        this.setState({
+          isDataPreLoaded: true,
+          isLoading: false,
+          myAppliedOdInformation: this.props.myOdData
+        });
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ");
+      console.log(nextProps);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage('Successfully', 'Out on Work Cancelled', 'success');
+              }
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      this.keyboardDidShowListener = _reactNative.Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      this.keyboardDidShowListener.remove();
+
+      if (this.state.isDone && this.state.currentError == '') {
+
+        console.log(FILE_NAME + "Action Successfull");
+
+        var params = {
+          "0": 'CLEAR_STATE_DATA_ALL'
+        };
+
+        this.props.clearOdRequestStateData(params);
+      }
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+
+      console.log(FILE_NAME + "In renderScreen method");
+
+      var outerViewStyle = _ewmyodactionscreenstyle2.default.outerViewStyle,
+          innerViewStyle = _ewmyodactionscreenstyle2.default.innerViewStyle,
+          headingTextStyle = _ewmyodactionscreenstyle2.default.headingTextStyle;
+      var myAppliedOdInformation = this.state.myAppliedOdInformation;
+      var approver_Name = myAppliedOdInformation.approver_Name,
+          approver_Designation = myAppliedOdInformation.approver_Designation,
+          approver_EmpCode = myAppliedOdInformation.approver_EmpCode,
+          status = myAppliedOdInformation.status,
+          od_Type = myAppliedOdInformation.od_Type,
+          reason = myAppliedOdInformation.reason,
+          applied_On_Timestamp = myAppliedOdInformation.applied_On_Timestamp,
+          remarks = myAppliedOdInformation.remarks;
+
+
+      console.log("myAppliedOdInformation", myAppliedOdInformation);
+
+      var info = {
+        name: approver_Name,
+        designation: approver_Designation,
+        imageUrl: (0, _utils.getImageUrl)(this.props.sessionToken, approver_EmpCode, 'My Od action', this.props.currentImageTimestamp),
+        datetime: applied_On_Timestamp
+      };
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: 'Od Request'
+            })
+          ),
+          _react2.default.createElement(_nativeBase.Right, null)
+        ),
+        _react2.default.createElement(
+          _reactNative.ScrollView,
+          {
+            ref: function ref(_ref) {
+              return scrollView = _ref;
+            },
+            contentContainerStyle: _ewmyodactionscreenstyle2.default.contentContainerStyle,
+            keyboardShouldPersistTaps: 'always'
+          },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewmyodactionscreenstyle2.default.myOdInfoContainer },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              status
+            )
+          ),
+          _react2.default.createElement(_ewsupervisorinfo2.default, { info: info }),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewmyodactionscreenstyle2.default.headingContainerStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewmyodactionscreenstyle2.default.headingTextStyle },
+              'Od Type '
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              od_Type
+            )
+          ),
+          this.getMyOdDate(myAppliedOdInformation),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewmyodactionscreenstyle2.default.headingContainerStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewmyodactionscreenstyle2.default.headingTextStyle },
+              'Reason'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              reason
+            )
+          ),
+          remarks != null ? _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewmyodactionscreenstyle2.default.headingContainerStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewmyodactionscreenstyle2.default.headingTextStyle },
+              'Remarks'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              remarks
+            )
+          ) : null,
+          this.showFooter(status)
+        )
+      );
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME + "In handleError method");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case odError.AUTHENTICATION_FAILURE:
+          _reactNativeRouterFlux.Actions.ewlogin();
+          break;
+
+        case odError.SERVER_EXCEPTION:
+          this.showAlertMessage(odError.SERVER_ERROR);
+          return this.renderScreen();
+          break;
+
+        case odError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          break;
+
+        default:
+          return this.renderScreen();
+
+      }
+    }
+  }, {
+    key: 'showFooter',
+    value: function showFooter(myOdStatusId) {
+
+      console.log(FILE_NAME + "In showFooterTab method");
+
+      console.log("In showFooterTab method", myOdStatusId);
+
+      var myAppliedOdInformation = this.state.myAppliedOdInformation;
+      var create_id = myAppliedOdInformation.create_id;
+
+
+      if (this.props.pendingNeedToActData != undefined && this.props.pendingNeedToActData != null) {
+        var user_id = this.props.pendingNeedToActData.employeeInfo.user_id;
+
+        if (user_id == create_id) {
+
+          return this.renderActionButtons(myAppliedOdInformation, myOdStatusId);
+        }
+      }
+    }
+  }, {
+    key: 'renderActionButtons',
+    value: function renderActionButtons(myAppliedOdInformation, myOdStatusId) {
+
+      console.log(FILE_NAME + "In renderActionButtons method");
+
+      return null;
+    }
+  }, {
+    key: 'onPressAction',
+    value: function onPressAction(action) {
+
+      console.log(FILE_NAME + "In onPressAction method");
+
+      switch (action) {
+        case odConstants.OD_ACTION_CANCEL:
+
+          tracker.trackEvent(SCREEN_CATEGORY, 'od cancelled');
+
+          this.sendActionToServer(odConstants.OD_ACTION_CANCEL);
+          break;
+
+        case odConstants.OD_ACTION_REAPPLY:
+
+          tracker.trackEvent(SCREEN_CATEGORY, 'od reapply event');
+
+          this.redirectToOdScreen();
+          break;
+        default:
+
+      }
+    }
+  }, {
+    key: 'redirectToOdScreen',
+    value: function redirectToOdScreen() {
+
+      console.log(FILE_NAME + "In redirectToOdScreen method");
+
+      _reactNativeRouterFlux.Actions.ewapplyodscreen({ reapplyOdData: this.state.myAppliedOdInformation });
+    }
+  }, {
+    key: 'sendActionToServer',
+    value: function sendActionToServer(action) {
+
+      console.log(FILE_NAME + "In onPressAction method");
+
+      var myAppliedOdInformation = this.state.myAppliedOdInformation;
+    }
+  }, {
+    key: 'showOutDate',
+    value: function showOutDate(applyInDate, applyOutDate) {
+
+      console.log(FILE_NAME + "In showOutDate method");
+
+      var dateHeadingStyle = _ewmyodactionscreenstyle2.default.dateHeadingStyle,
+          headingTextStyle = _ewmyodactionscreenstyle2.default.headingTextStyle;
+
+
+      if (applyOutDate != null && applyInDate != applyOutDate) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: dateHeadingStyle },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: headingTextStyle },
+            'To'
+          ),
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: { flex: 5 } },
+            applyOutDate
+          )
+        );
+      }
+    }
+  }, {
+    key: 'getMyOdDate',
+    value: function getMyOdDate(info) {
+
+      console.log(FILE_NAME + "In getMyOdDate method");
+
+      var apply_InDate = info.apply_InDate,
+          apply_OutDate = info.apply_OutDate;
+      var dateHeadingStyle = _ewmyodactionscreenstyle2.default.dateHeadingStyle,
+          headingTextStyle = _ewmyodactionscreenstyle2.default.headingTextStyle;
+
+
+      if (apply_InDate === apply_OutDate) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: dateHeadingStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: headingTextStyle },
+              'For'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              apply_InDate
+            )
+          )
+        );
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: dateHeadingStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: headingTextStyle },
+              'From'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              apply_InDate
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: dateHeadingStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: headingTextStyle },
+              'To'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              apply_OutDate
+            )
+          )
+        );
+      }
+    }
+  }]);
+  return EwMyAppliedOdActionScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction method");
+
+  return {
+
+    clearOdRequestStateData: function clearOdRequestStateData(params) {
+      return dispatch((0, _odrequestactions.clearOdRequestStateData)(params));
+    },
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    }
+
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    currentImageTimestamp: state.common.currentImageTimestamp,
+
+    pendingNeedToActData: state.needtoact.needToActData
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwMyAppliedOdActionScreen);

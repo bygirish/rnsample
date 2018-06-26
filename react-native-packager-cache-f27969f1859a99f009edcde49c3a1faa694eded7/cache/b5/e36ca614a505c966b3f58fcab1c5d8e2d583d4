@@ -1,0 +1,114 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _reactNativeCollapsible = require('react-native-collapsible');
+
+var _reactNativeCollapsible2 = babelHelpers.interopRequireDefault(_reactNativeCollapsible);
+
+var EwAccordion = function (_Component) {
+  babelHelpers.inherits(EwAccordion, _Component);
+
+  function EwAccordion(props, context) {
+    babelHelpers.classCallCheck(this, EwAccordion);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwAccordion.__proto__ || Object.getPrototypeOf(EwAccordion)).call(this, props, context));
+
+    _this.initialState = {};
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwAccordion, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      console.log("Inside componentDidUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log("Inside render");
+
+      var _props = this.props,
+          onAccordionPress = _props.onAccordionPress,
+          isActive = _props.isActive,
+          customStyle = _props.customStyle,
+          customAccordionStyle = _props.customAccordionStyle;
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: [customStyle] },
+        _react2.default.createElement(
+          _reactNative.TouchableHighlight,
+          { underlayColor: appstyleguide.APP_WHITE, onPress: onAccordionPress },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _styles2.default.accordionStyle },
+            this.renderAccordionText(),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: _styles2.default.iconViewStyle },
+              isActive ? _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-dropdown', style: { color: appstyleguide.APP_BLACK } }) : _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-dropup', style: { color: appstyleguide.APP_BLACK } })
+            )
+          )
+        ),
+        _react2.default.createElement(
+          _reactNativeCollapsible2.default,
+          { collapsed: isActive },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: [_styles2.default.hiddenAccordionStyle, customAccordionStyle] },
+            this.props.children
+          )
+        )
+      );
+    }
+  }, {
+    key: 'renderAccordionText',
+    value: function renderAccordionText() {
+      var _props2 = this.props,
+          accordionLabel = _props2.accordionLabel,
+          renderAccordionLabel = _props2.renderAccordionLabel;
+
+
+      console.log("accordionLabel", accordionLabel);
+
+      if (accordionLabel == null) return renderAccordionLabel();else {
+
+        return _react2.default.createElement(
+          _nativeBase.Text,
+          { style: _styles2.default.accordionHeadingTextStyle },
+          accordionLabel
+        );
+      }
+    }
+  }]);
+  return EwAccordion;
+}(_react.Component);
+
+exports.default = EwAccordion;

@@ -1,0 +1,140 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getHolidaysList = getHolidaysList;
+exports.clearHolidayError = clearHolidayError;
+exports.clearHolidayStateData = clearHolidayStateData;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _holidayprocessing = require('./holidayprocessing');
+
+var holidayProcessing = babelHelpers.interopRequireWildcard(_holidayprocessing);
+
+var _holidayactiontypes = require('./holidayactiontypes');
+
+var holidayActionTypes = babelHelpers.interopRequireWildcard(_holidayactiontypes);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var FILE_NAME = "holidayactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+function getHolidaysList(params) {
+
+  console.log(FILE_NAME + "In getHolidaysList method - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getHolidayRequest = holidayProcessing.buildGetHolidaysListRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getHolidayRequest.url, getHolidayRequest.data, getHolidayRequest.config).then(function (result) {
+
+      console.log("getHolidayRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getHolidaysList', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: holidayActionTypes.SUCCESS_GET_HOLIDAY_LIST,
+          response: holidayProcessing.buildSuccessGetHolidaysListResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getHolidaysList', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: holidayActionTypes.FAILURE_GET_HOLIDAY_LIST,
+          response: holidayProcessing.buildFailedGetHolidaysListResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getHolidaysList', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getHolidaysList Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: holidayActionTypes.FAILURE_GET_HOLIDAY_LIST,
+        response: holidayProcessing.buildServerErrorGetHolidaysListResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearHolidayError(params) {
+
+  return {
+    type: holidayActionTypes.CLEAR_HOLIDAY_ERROR,
+    response: null
+  };
+}
+
+function clearHolidayStateData(params) {
+
+  console.log(FILE_NAME + "In clearHolidayStateData - ");
+  console.log("Type of Data to be cleared - ", params);
+
+  CLEAR_STATE_DATA_ALL = 'CLEAR_STATE_DATA_ALL';
+  CLEAR_STATE_ERROR_COUNTER = 'CLEAR_STATE_ERROR_COUNTER';
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var errorCounter = getState().holidays.errorCounter;
+    var holidayData = getState().holidays.holidayData;
+    var holidayError = getState().holidays.holidayError;
+
+    Object.keys(params).map(function (key) {
+      console.log("params attribute " + key + " value is - " + params[key]);
+
+      switch (params[key]) {
+        case CLEAR_STATE_DATA_ALL:
+
+          errorCounter = null;
+          holidayData = null;
+          holidayError = null;
+          break;
+
+        case CLEAR_STATE_ERROR_COUNTER:
+
+          errorCounter = null;
+          break;
+
+        default:
+
+      }
+    });
+
+    var response = {
+      errorCounter: errorCounter,
+      holidayData: holidayData,
+      holidayError: holidayError
+    };
+
+    dispatch({
+      type: holidayActionTypes.CLEAR_HOLIDAY_STATE_DATA,
+      response: response
+    });
+  };
+}

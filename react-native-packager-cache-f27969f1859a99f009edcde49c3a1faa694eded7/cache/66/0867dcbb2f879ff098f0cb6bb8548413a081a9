@@ -1,0 +1,471 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EwPublicTransportExpenseScreen = undefined;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _ewloadingindicator = require('../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _ewdatetimepicker = require('../../components/ewdatetimepicker/ewdatetimepicker');
+
+var _ewdatetimepicker2 = babelHelpers.interopRequireDefault(_ewdatetimepicker);
+
+var _ewbar = require('../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewdropdownpicker = require('../../components/ewdropdownpicker/ewdropdownpicker');
+
+var _ewdropdownpicker2 = babelHelpers.interopRequireDefault(_ewdropdownpicker);
+
+var _ewfloatinglabel = require('../../components/ewfloatinglabel/ewfloatinglabel');
+
+var _ewfloatinglabel2 = babelHelpers.interopRequireDefault(_ewfloatinglabel);
+
+var _ewbutton = require('../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _ewimageslider = require('../../components/ewimageslider/ewimageslider');
+
+var _ewimageslider2 = babelHelpers.interopRequireDefault(_ewimageslider);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _animationutils = require('../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _utils = require('../../utils');
+
+var _expenseutils = require('./expenseutils');
+
+var expenseConstant = babelHelpers.interopRequireWildcard(_expenseutils);
+
+
+var FILE_NAME = "ewpublictransportexpensescreen.js : ";
+
+var SCREEN_NAME = "Public transport Expense Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_TRAVEL_AND_EXPENSE;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+currencyPicker1 = [{
+  "label": "INR",
+  "value": "0"
+}, {
+  "label": "$",
+  "value": "1"
+}];
+
+paymentPicker = [{
+  "label": "Cash",
+  "value": "0"
+}, {
+  "label": "Card",
+  "value": "1"
+}];
+
+stayPicker = [{
+  "label": "5 Star",
+  "value": "0"
+}, {
+  "label": "3 Star",
+  "value": "1"
+}];
+
+modePicker = [{
+  "label": "Cab",
+  "value": "0"
+}, {
+  "label": "Uber",
+  "value": "1"
+}];
+
+var styles = {
+
+  textStyle: {
+    marginBottom: 10,
+    color: appstyleguide.APP_GRAY
+
+  }
+};
+
+var defaultMargin = 10;
+
+var EwPublicTransportExpenseScreen = exports.EwPublicTransportExpenseScreen = function (_Component) {
+  babelHelpers.inherits(EwPublicTransportExpenseScreen, _Component);
+
+  function EwPublicTransportExpenseScreen(props, context) {
+    babelHelpers.classCallCheck(this, EwPublicTransportExpenseScreen);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwPublicTransportExpenseScreen.__proto__ || Object.getPrototypeOf(EwPublicTransportExpenseScreen)).call(this, props, context));
+
+    _this._showEwDateTimePicker = function (elementKey, mode) {
+      var date = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new Date();
+
+
+      console.log(FILE_NAME, "In _showEwDateTimePicker method");
+
+      _this.setState({
+        isEwDateTimePickerVisible: true,
+        activeEwDateTimePickerElementKey: elementKey,
+        modeEwDateTimePicker: mode,
+        setDateTimePicker: date
+      });
+    };
+
+    _this._hideEwDateTimePicker = function (elementKey) {
+
+      console.log(FILE_NAME, "In _hideEwDateTimePicker method");
+
+      _this.setState({
+        isEwDateTimePickerVisible: false,
+        activeEwDateTimePickerElementKey: '',
+        modeEwDateTimePicker: ''
+      });
+    };
+
+    _this._handleEwDateTimePicked = function (date, mode, elementKey) {
+
+      console.log(FILE_NAME, "In _handleEwDateTimePicked method");
+
+      console.log("Returned Date value is - ", date);
+      console.log("Mod is - ", mode);
+      console.log("For Element is - ", elementKey);
+
+      var valueDateTimePicker;
+
+      var dateSelected = new Date(date).getTime();
+
+      switch (elementKey) {
+
+        case expenseConstant.EXPENSE_CHECK_IN_DATE_KEY:
+
+          _this.setState({
+            checkInDate: {
+              mode: _this.state.checkInDate.mode,
+              key: _this.state.checkInDate.key,
+              value: dateSelected
+            }
+          });
+
+          break;
+
+        case expenseConstant.EXPENSE_CHECK_OUT_DATE_KEY:
+
+          _this.setState({
+            checkOutDate: {
+              mode: _this.state.checkOutDate.mode,
+              key: _this.state.checkOutDate.key,
+              value: dateSelected
+            }
+          });
+          break;
+
+        default:
+
+      }
+    };
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      isEwDateTimePickerVisible: false,
+      modeEwDateTimePicker: 'date',
+      activeEwDateTimePickerElementKey: '',
+      minDateTimePicker: undefined,
+      maxDateTimePicker: undefined,
+      setDateTimePicker: new Date(),
+
+      travelMode: "0",
+
+      source: "",
+      destination: "",
+      travelPurpose: "",
+
+      componentInitializeTime: new Date().getTime()
+    };
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwPublicTransportExpenseScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage();
+              }
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this2 = this;
+
+      return _react2.default.createElement(
+        _nativeBase.Content,
+        null,
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginLeft: 10 } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", marginTop: defaultMargin } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.5 } },
+              _react2.default.createElement(_ewdropdownpicker2.default, {
+                pickerLabel: 'Mode',
+                pickerPlaceholderLabel: modePicker[0].value,
+                isDefaultPickerValueSelected: this.state.travelMode == "-1",
+                dataArray: modePicker,
+                selectedValue: this.state.travelMode,
+                onPickerValueChange: function onPickerValueChange(newPickerValue) {
+                  _this2.setState({ travelMode: newPickerValue });
+                }
+              })
+            )
+          ),
+          this.renderLocationFromToView(),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginTop: defaultMargin } },
+            _react2.default.createElement(_ewfloatinglabel2.default, {
+              label: 'Purpose',
+              placeholderlabel: 'Enter Purpose',
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              onChangeText: function onChangeText(updatedText) {
+                return _this2.setState({ travelPurpose: updatedText });
+              },
+              value: this.state.travelPurpose
+            })
+          )
+        ),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { margin: defaultMargin + 10, alignSelf: "center" } },
+          _react2.default.createElement(_ewbutton2.default, {
+            label: 'Save',
+            onButonClicked: function onButonClicked() {
+              return _this2.saveExpense();
+            }
+          })
+        )
+      );
+    }
+  }, {
+    key: 'saveExpense',
+    value: function saveExpense() {
+
+      console.log(FILE_NAME, "In saveExpense method");
+
+      this.props.updateParentState(this.state);
+    }
+  }, {
+    key: 'renderLocationFromToView',
+    value: function renderLocationFromToView() {
+      var _this3 = this;
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { flexDirection: 'row', marginTop: defaultMargin } },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.5 } },
+          _react2.default.createElement(_ewfloatinglabel2.default, {
+            label: 'From',
+            placeholderlabel: 'Enter Place',
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            onChangeText: function onChangeText(updatedText) {
+              return _this3.setState({ source: updatedText });
+            },
+            value: this.state.source
+          })
+        ),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginLeft: 2 * defaultMargin, flex: 0.5 } },
+          _react2.default.createElement(_ewfloatinglabel2.default, {
+            label: 'To',
+            placeholderlabel: 'Enter Place',
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            onChangeText: function onChangeText(updatedText) {
+              return _this3.setState({ destination: updatedText });
+            },
+            value: this.state.destination
+          })
+        )
+      );
+    }
+  }]);
+  return EwPublicTransportExpenseScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction");
+
+  return {};
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.auth.isLoggedIn,
+    errorWebService: state.auth.errorWebService,
+    sessionToken: state.auth.sessionToken
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwPublicTransportExpenseScreen);

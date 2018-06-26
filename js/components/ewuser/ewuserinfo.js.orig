@@ -1,0 +1,104 @@
+import { Image, View, StatusBar } from 'react-native';
+import React, { Component } from 'react';
+import { Container, ListItem, Button, Picker, Body, Left, Right,Thumbnail, Header,Title, H1, H2, H3, Text, Spinner, InputGroup, Icon, Form, Label, Input, Item, Content} from 'native-base';
+
+import EwBar from '../ewbar/ewbar';
+import EwNetworkImage from '../ewnetworkimage/ewnetworkimage';
+
+import { formatDate, convertServerDateTimeToMilliseconds } from '../../utils';
+
+export default EwUserInfo = ({info}) => {
+
+  console.log("EwSupervisorInfo.js : Supervisor Information is - ", info);
+
+  var imageUrl = info.imageUrl;
+
+  const { textStyle } = styles;
+
+  var appliedDate = convertServerDateTimeToMilliseconds(info.datetime);
+
+  var formattedDate = customFormatForDate(appliedDate);
+
+  return (
+
+    <View style = {{ marginBottom: 10, backgroundColor: 'transparent', alignSelf:'stretch' }} >
+
+      <View style = {{ flexDirection: 'row', marginBottom: 10,alignSelf: 'stretch', justifyContent: "center" }}>
+
+        <View style = {{ flex: 2, flexDirection: 'column', marginLeft: 5, alignItems: 'center', justifyContent: 'flex-start' }}>
+
+          <Text style = {{ fontSize: 24,alignSelf: 'flex-start', }}>{ info.name }</Text>
+          <Text style = { textStyle }>{ info.designation }</Text>
+          <Text style = { textStyle }>{ formattedDate }</Text>
+        </View>
+
+        <View style = {{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
+          <EwNetworkImage networkUrl = { info.imageUrl } />
+        </View>
+
+      </View>
+       <EwBar />
+    </View>
+<<<<<<< HEAD
+  );
+}
+
+function customFormatForDate(date) {
+
+   currentDate = new Date(date);
+
+   var days = [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ];
+
+   var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+
+=======
+     <EwBar />
+  </View>
+);
+}
+
+
+function formatDateReceivedFromServer(date) {
+    return date.replace(/-/g, "/").substr(0, date.length-5);
+}
+
+function customFormatForDate(date) {
+   currentDate = new Date(date);
+   var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+   var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+>>>>>>> 30df22ad2d63e36f4086fe2aebf34cac8536973f
+   var date = currentDate.getDate();
+
+   var dayName = days[ currentDate.getDay() ];
+
+   var monthName = monthNames[currentDate.getMonth()];
+
+   var year = currentDate.getFullYear();
+
+   formattedDate = dayName + ', ' + date + " " + monthName + " " + year + " - " + fomartTime12Hour(currentDate);
+
+   return formattedDate ;
+}
+
+function fomartTime12Hour(time_24) {
+
+    var hours = time_24.getHours() % 12;
+    var minutes = time_24.getMinutes();
+
+    if (hours === 0)
+      hours = 12;
+
+    formattedTime =  (hours < 10 ? '0' : '') + hours + ":" + (minutes < 10 ? '0' : '') + minutes + (time_24.getHours() < 12 ? ' am' : ' pm');
+
+    return formattedTime;
+
+}
+
+const styles = {
+  textStyle: {
+     marginTop: 5,
+     flex: 1,
+     alignSelf: 'flex-start',
+     justifyContent: 'center',
+  },
+}

@@ -1,0 +1,4 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var GET_CALENDAR_INFORMATION = exports.GET_CALENDAR_INFORMATION = '/CalendarM?scope=I';

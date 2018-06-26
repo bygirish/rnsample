@@ -1,0 +1,37 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _utils = require('../../utils');
+
+var React = require('react-native');
+
+var StyleSheet = React.StyleSheet,
+    Platform = React.Platform;
+
+
+var deviceHeight = _utils.DEVICE_HEIGHT;
+
+exports.default = {
+  imageContainer: {
+    flex: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 1 : 1,
+    width: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? null : null,
+    height: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? null : null
+  },
+  logoContainer: {
+    flex: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 1 : 1,
+    marginTop: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? deviceHeight / 8 : deviceHeight / 8,
+    marginBottom: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 30 : 30
+  },
+  logo: {
+    position: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 'absolute' : 'absolute',
+    left: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 50 : 40,
+    top: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 60 : 35,
+    width: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 280 : 280,
+    height: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 100 : 100
+  },
+  text: {
+    color: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? '#D8D8D8' : '#D8D8D8',
+    bottom: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 6 : '#D8D8D8'
+  }
+};

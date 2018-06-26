@@ -1,0 +1,43 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var EwH2Text = function (_Component) {
+  babelHelpers.inherits(EwH2Text, _Component);
+
+  function EwH2Text() {
+    babelHelpers.classCallCheck(this, EwH2Text);
+    return babelHelpers.possibleConstructorReturn(this, (EwH2Text.__proto__ || Object.getPrototypeOf(EwH2Text)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(EwH2Text, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          text = _props.text,
+          customStyle = _props.customStyle;
+
+
+      return _react2.default.createElement(
+        _nativeBase.Text,
+        { style: [_styles2.default.textStyle, customStyle] },
+        text
+      );
+    }
+  }]);
+  return EwH2Text;
+}(_react.Component);
+
+exports.default = EwH2Text;

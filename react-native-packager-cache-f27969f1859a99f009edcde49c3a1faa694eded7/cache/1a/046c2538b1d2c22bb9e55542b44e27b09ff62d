@@ -1,0 +1,24 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../utils');
+
+exports.default = {
+  outerViewStyle: {
+    paddingTop: (0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID ? 18 : 18,
+
+    borderBottomWidth: (0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID ? 1 : 1
+
+  },
+
+  textinputStyle: {
+
+    fontSize: (0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID ? 16 : 16,
+    marginBottom: (0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID ? -5 : -5
+  }
+};

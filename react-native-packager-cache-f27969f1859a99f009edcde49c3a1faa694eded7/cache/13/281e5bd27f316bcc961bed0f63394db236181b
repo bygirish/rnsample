@@ -1,0 +1,233 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../../../utils');
+
+var _appstyleguide = require('../../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewcomponents = require('../../../../../utils/ewcomponents');
+
+var _travelclientaccount = require('./travelclientaccount.js');
+
+var _travelclientaccount2 = babelHelpers.interopRequireDefault(_travelclientaccount);
+
+var _travelutils = require('../../../travelutils');
+
+var travelConstants = babelHelpers.interopRequireWildcard(_travelutils);
+
+
+defaultMargin = appstyleguide.DEFAULT_MARGIN;
+
+var WorkType = function (_Component) {
+  babelHelpers.inherits(WorkType, _Component);
+
+  function WorkType(props, context) {
+    babelHelpers.classCallCheck(this, WorkType);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (WorkType.__proto__ || Object.getPrototypeOf(WorkType)).call(this, props, context));
+
+    elementValues = _this.handleElementValues(_this.props.initialState);
+
+    _this.initialState = {
+
+      isClientWork: elementValues.isClientWork,
+      clientDetails: elementValues.clientDetails
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(WorkType, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+
+      if (this.props.initialState == null) {
+
+        this.props.updateParentState(this.getWorkTypeObject());
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (this.isStateChanged(nextProps.initialState)) {
+
+        this.setState({
+
+          isClientWork: nextProps.initialState.isClientWork,
+          clientDetails: nextProps.initialState.clientDetails
+
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _state = this.state,
+          isClientWork = _state.isClientWork,
+          clientDetails = _state.clientDetails;
+      var reveiwMode = this.props.otherDetails.reveiwMode;
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { marginTop: 20 } },
+        reveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+          heading: travelConstants.TRAVEL_FOR_CLIENT_WORK_LABEL,
+          value: isClientWork ? travelConstants.CHECKBOX_CHECKED_LABEL : travelConstants.CHECKBOX_UNCHECKED_LABEL
+        }) : _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginLeft: -10 } },
+          _react2.default.createElement(_ewcomponents.EwCheckbox, {
+            isChecked: isClientWork,
+            onCheckboxClick: function onCheckboxClick() {
+              return _this2.setState({ isClientWork: !isClientWork });
+            },
+            label: travelConstants.TRAVEL_FOR_CLIENT_WORK_LABEL
+          })
+        ),
+        isClientWork ? _react2.default.createElement(_ewcomponents.EwMultipleComponentValue, {
+          component: _react2.default.createElement(_travelclientaccount2.default, null),
+          componentStateArray: clientDetails,
+          showDeleteAlertbox: true,
+          isAddButtonVisible: !isReveiwMode,
+          isDeleteButtonVisible: !isReveiwMode,
+          alertboxData: travelConstants.clientAccountAlertboxData,
+          updateParentState: function updateParentState(componentState, componentKey) {
+            return _this2.updateWorktypeState(travelConstants.CLIENT_ACCOUNT_COMPONENT_ID, componentState, componentKey);
+          },
+          addLabel: 'Add Account',
+          otherDetails: this.props.otherDetails
+        }) : null
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+
+      if (this.isStateChanged(this.props.initialState)) {
+
+        console.log("updating master screen", this.getWorkTypeObject());
+
+        this.props.updateParentState(this.getWorkTypeObject());
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'updateWorktypeState',
+    value: function updateWorktypeState(componentKey, data) {
+
+      console.log("Inside updateWorktypeState", componentKey, data);
+
+      switch (componentKey) {
+
+        case travelConstants.CLIENT_ACCOUNT_COMPONENT_ID:
+
+          this.setState({
+            clientDetails: [].concat(babelHelpers.toConsumableArray(data))
+          });
+
+          break;
+
+        default:
+
+      }
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(propsData) {
+
+      clientDetails = [];
+      isClientWork = false;
+
+      if (propsData != null) {
+
+        clientDetails = propsData.clientDetails;
+        isClientWork = propsData.isClientWork;
+      }
+
+      elementValues = {
+
+        clientDetails: clientDetails,
+        isClientWork: isClientWork
+
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: 'isStateChanged',
+    value: function isStateChanged(initialState) {
+
+      if (JSON.stringify(initialState) != JSON.stringify(this.getWorkTypeObject())) return true;
+
+      return false;
+    }
+  }, {
+    key: 'getWorkTypeObject',
+    value: function getWorkTypeObject() {
+
+      var workTypeObject = {
+
+        isClientWork: this.state.isClientWork,
+        clientDetails: this.state.clientDetails
+
+      };
+
+      return workTypeObject;
+    }
+  }]);
+  return WorkType;
+}(_react.Component);
+
+exports.default = WorkType;

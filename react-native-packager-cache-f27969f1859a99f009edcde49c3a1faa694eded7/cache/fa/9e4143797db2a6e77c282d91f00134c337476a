@@ -1,0 +1,5 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var GET_CHATBOT_RESPONSE = exports.GET_CHATBOT_RESPONSE = '/chatbot/api/message?scope=I';
+var CREATE_CHATBOT_ISSUE = exports.CREATE_CHATBOT_ISSUE = '/chatbot/reportissue?scope=I';

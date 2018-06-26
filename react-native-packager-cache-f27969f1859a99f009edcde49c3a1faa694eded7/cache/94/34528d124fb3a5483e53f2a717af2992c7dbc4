@@ -1,0 +1,726 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EwChatbotScreen = undefined;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _ewloadingindicator = require('../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewcomponents = require('../../utils/ewcomponents');
+
+var _ewimages = require('../../utils/ewimages');
+
+var _reactNativeGiftedChat = require('react-native-gifted-chat');
+
+var _chatbotactions = require('../../services/chatbot/chatbotactions');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _chatbotutils = require('./chatbotutils');
+
+var chatbotConstants = babelHelpers.interopRequireWildcard(_chatbotutils);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _chatboterrorhandling = require('../../services/chatbot/chatboterrorhandling');
+
+var chatbotError = babelHelpers.interopRequireWildcard(_chatboterrorhandling);
+
+
+var FILE_NAME = "ewchatbotscreen.js : ";
+
+var userIcon = require('../../../img/profile_icon.png');
+
+var EwChatbotScreen = exports.EwChatbotScreen = function (_Component) {
+  babelHelpers.inherits(EwChatbotScreen, _Component);
+
+  function EwChatbotScreen(props, context) {
+    babelHelpers.classCallCheck(this, EwChatbotScreen);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwChatbotScreen.__proto__ || Object.getPrototypeOf(EwChatbotScreen)).call(this, props, context));
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+    };
+
+    console.log(FILE_NAME + "In constructor");
+
+    _this.initialState = {
+
+      isDataPreLoaded: true,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      isChatbotReportIssueModalVisible: false,
+
+      messages: [],
+
+      messageContext: "",
+
+      serverMessageCount: 0,
+
+      incorrectResponseCounter: 0,
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwChatbotScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.chatbotResponseStatusData != null && nextProps.chatbotResponseStatusError == null) {
+
+        console.log("response", nextProps.chatbotResponseStatusData);
+
+        this.addNewMessage(nextProps.chatbotResponseStatusData);
+      }
+
+      if (nextProps.chatbotResponseStatusData == null && nextProps.chatbotResponseStatusError != null) {
+
+        console.log("response", nextProps.chatbotResponseStatusError);
+      }
+
+      if (nextProps.chatbotIssueResponseStatusData != null && nextProps.chatbotIssueResponseStatusError == null) {
+
+        if (nextProps.chatbotIssueResponseStatusData.messageId != null) {
+
+          updatedMessageList = [].concat(babelHelpers.toConsumableArray(this.state.messages));
+
+          for (var _iterator = updatedMessageList, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+            var _ref;
+
+            if (_isArray) {
+              if (_i >= _iterator.length) break;
+              _ref = _iterator[_i++];
+            } else {
+              _i = _iterator.next();
+              if (_i.done) break;
+              _ref = _i.value;
+            }
+
+            var message = _ref;
+
+
+            if (message._id == nextProps.chatbotIssueResponseStatusData.messageId) message.isCustomViewVisible = false;
+          }
+
+          this.setState({
+
+            messages: updatedMessageList
+          });
+        }
+
+        if (nextProps.chatbotIssueResponseStatusData.issueReportingKey == chatbotConstants.LOW_CONFIDENCE_INCORRECT_ID) this.showAlertMessage('Successfully', chatbotConstants.CHATBOT_REPORT_SUCCESS_MESSAGE, 'success');
+
+        this.setState({
+
+          isLoading: false
+        });
+      }
+
+      if (nextProps.chatbotIssueResponseStatusData == null && nextProps.chatbotIssueResponseStatusError != null) {
+
+        if (nextProps.chatbotIssueResponseStatusData.issueReportingKey == chatbotConstants.LOW_CONFIDENCE_INCORRECT_ID) this.showAlertMessage(chatbotConstants.CHATBOT_REPORT_FAILURE_MESSAGE, chatbotConstants.CHATBOT_REPORT_FAILURE_HEADING_MESSAGE, 'error');
+
+        this.setState({
+
+          isLoading: false
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+
+            return null;
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In renderScreen method");
+
+      console.log("Chatbot state is ", this.state);
+
+      console.log("messagesare", this.state.messages);
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewcomponents.EwScreenTitle, {
+              text: 'Chatbot'
+            })
+          )
+        ),
+        _react2.default.createElement(_reactNativeGiftedChat.GiftedChat, {
+          messages: this.state.messages,
+          onSend: function onSend(messages) {
+            return _this2.onSend(messages);
+          },
+          isAnimated: true,
+          showUserAvatar: true,
+          ref: 'scrollview',
+          customAvatarStyle: _styles2.default.customAvatarStyle,
+          bubbleStyle: _styles2.default.bubbleStyle,
+          renderCustomView: function renderCustomView(propsReceived) {
+            return _this2.renderCustomMessageView(propsReceived);
+          },
+          submitButtonStyle: _styles2.default.submitButtonStyle,
+          user: {
+            _id: 1
+          }
+        })
+      );
+    }
+  }, {
+    key: 'addNewMessage',
+    value: function addNewMessage(message) {
+
+      updatedMessageList = this.state.messages;
+
+      newMessage = this.getNewServerMessage(this.getMessageText(message.output.text), this.state.serverMessageCount);
+
+      updatedServerMessageCount = this.state.serverMessageCount + 1;
+
+      console.log("new message is", message, newMessage);
+
+      if (newMessage != "") {
+
+        updatedMessageList = [newMessage].concat(babelHelpers.toConsumableArray(updatedMessageList));
+
+        updatedIncorrectResponseCounter = this.state.incorrectResponseCounter;
+
+        if (this.isNoResponseFind(message)) {
+
+          updatedIncorrectResponseCounter += 1;
+
+          if (updatedIncorrectResponseCounter % 2 == 0) {
+
+            updatedMessageList.splice(0, 1);
+
+            newServerMessage = this.getNewServerMessage(chatbotConstants.CONSECUTIVE_WRONG_RESPONSE_MESSAGE, updatedServerMessageCount);
+
+            updatedMessageList = [newMessage].concat(babelHelpers.toConsumableArray(updatedMessageList));
+
+            updatedServerMessageCount = updatedServerMessageCount + 1;
+
+            this.sendChatbotIssueToServer(chatbotConstants.CONSECUTIVE_NO_RESPONSE_ID, updatedMessageList);
+
+            updatedIncorrectResponseCounter = 0;
+          }
+        } else {
+
+          updatedIncorrectResponseCounter = 0;
+
+          if (this.isConfidenceLow(message)) {
+
+            newServerMessage = this.getNewServerMessage(chatbotConstants.LOW_CONFIDENCE_MESSAGE, updatedServerMessageCount);
+            newServerMessage.isCustomViewVisible = true;
+
+            updatedMessageList = [newServerMessage].concat(babelHelpers.toConsumableArray(updatedMessageList));
+
+            updatedServerMessageCount = updatedServerMessageCount + 1;
+          }
+        }
+
+        this.setState({
+
+          messages: updatedMessageList,
+          serverMessageCount: updatedServerMessageCount,
+          messageContext: message.context,
+          incorrectResponseCounter: updatedIncorrectResponseCounter
+        });
+      }
+    }
+  }, {
+    key: 'isConfidenceLow',
+    value: function isConfidenceLow(message) {
+
+      if (message.intents != null && message.intents.length > 0 && message.intents[0].confidence < parseFloat(message.context.confidence_factor_threshold)) return true;
+
+      return false;
+    }
+  }, {
+    key: 'isNoResponseFind',
+    value: function isNoResponseFind(chatbotResponse) {
+
+      if (chatbotResponse.context.noresponsefound || chatbotResponse.output.text == "") return true;
+
+      return false;
+    }
+  }, {
+    key: 'sendChatbotIssueToServer',
+    value: function sendChatbotIssueToServer(key, messageList) {
+      var messageId = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+
+      messageArray = [];
+
+      issueType = '';
+
+      switch (key) {
+        case chatbotConstants.CONSECUTIVE_NO_RESPONSE_ID:
+
+          for (messageIndex = 0; messageIndex < messageList.length; messageIndex++) {
+
+            if (messageIndex > chatbotConstants.DEFAULT_MESSAGE_COUNT) break;
+
+            var messageModel = {
+
+              sender: messageList[messageIndex].user._id == chatbotConstants.SERVER_CHATBOT_ID ? chatbotConstants.CHATBOT_NAME : this.props.pendingNeedToActData.employeeInfo.name,
+              message: messageList[messageIndex].text
+            };
+
+            messageArray.push(messageModel);
+          }
+
+          issueType = chatbotConstants.ISSUE_TYPE_RESPONSE_EMPTY;
+
+          break;
+
+        case chatbotConstants.LOW_CONFIDENCE_INCORRECT_ID:
+        case chatbotConstants.LOW_CONFIDENCE_CORRECT_ID:
+
+          for (messageIndex = 0; messageIndex < 3; messageIndex++) {
+
+            var messageModel = {
+
+              sender: messageList[messageIndex].user._id == chatbotConstants.SERVER_CHATBOT_ID ? chatbotConstants.CHATBOT_NAME : this.props.pendingNeedToActData.employeeInfo.name,
+              message: messageList[messageIndex].text
+            };
+
+            messageArray.push(messageModel);
+          }
+
+          issueType = key == chatbotConstants.LOW_CONFIDENCE_INCORRECT_ID ? chatbotConstants.ISSUE_TYPE_LOW_CONFIDENCE_INCORRECT : chatbotConstants.ISSUE_TYPE_LOW_CONFIDENCE_CORRECT;
+
+          this.setState({
+
+            isLoading: true
+          });
+
+          break;
+
+        default:
+
+      }
+
+      var params = {
+
+        messageList: messageArray.reverse(),
+        issueReportingKey: key,
+        issueType: issueType,
+        messageId: messageId
+
+      };
+
+      this.props.createChatbotIssue(params);
+    }
+  }, {
+    key: 'getMessageText',
+    value: function getMessageText(messages) {
+
+      serverMessage = "";
+
+      for (var _iterator2 = messages, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref2;
+
+        if (_isArray2) {
+          if (_i2 >= _iterator2.length) break;
+          _ref2 = _iterator2[_i2++];
+        } else {
+          _i2 = _iterator2.next();
+          if (_i2.done) break;
+          _ref2 = _i2.value;
+        }
+
+        var message = _ref2;
+
+
+        serverMessage = serverMessage + message + "\n";
+
+        console.log("serverMessage", serverMessage);
+      }
+
+      console.log("serverMessage", serverMessage);
+
+      return serverMessage;
+    }
+  }, {
+    key: 'getNewServerMessage',
+    value: function getNewServerMessage(message, messageCount) {
+
+      newMessage = {
+        text: message,
+        createdAt: new Date(),
+        _id: messageCount,
+        user: {
+          _id: [chatbotConstants.SERVER_CHATBOT_ID],
+          name: 'Chat bot',
+          avatar: _ewimages.EMPLOYWISE_ICON
+        }
+      };
+
+      return newMessage;
+    }
+  }, {
+    key: 'renderCustomMessageView',
+    value: function renderCustomMessageView(messagesReceived) {
+      var _this3 = this;
+
+      console.log("renderCustomMessage", messagesReceived);
+
+      messageId = messagesReceived.currentMessage._id;
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { margin: 10, flexDirection: "row", flexWrap: "wrap", justifyContent: "space-around" } },
+        _react2.default.createElement(_ewcomponents.EwButton, {
+          label: chatbotConstants.NEGATIVE_BUTTON_LABEL,
+          customStyle: { backgroundColor: appstyleguide.APP_GRAY },
+          onButonClicked: function onButonClicked() {
+            return _this3.sendChatbotIssueToServer(chatbotConstants.LOW_CONFIDENCE_INCORRECT_ID, _this3.state.messages, messageId);
+          }
+        }),
+        _react2.default.createElement(_ewcomponents.EwButton, {
+          label: chatbotConstants.POSITIVE_BUTTON_LABEL,
+          onButonClicked: function onButonClicked() {
+            return _this3.sendPositiveRequestToServer(messageId);
+          }
+        })
+      );
+    }
+  }, {
+    key: 'sendPositiveRequestToServer',
+    value: function sendPositiveRequestToServer(messageId) {
+
+      console.log("sendPositiveRequestToServer", messageId);
+
+      updatedMessageList = this.state.messages;
+
+      newMessage = this.getNewServerMessage(chatbotConstants.CONFIDENCE_POSITIVE_MESSAGE, this.state.serverMessageCount);
+      updatedMessageList = [newMessage].concat(babelHelpers.toConsumableArray(updatedMessageList));
+
+      updatedServerMessageCount = this.state.serverMessageCount + 1;
+
+      this.setState({
+
+        messages: updatedMessageList,
+        serverMessageCount: updatedServerMessageCount
+      });
+
+      this.sendChatbotIssueToServer(chatbotConstants.LOW_CONFIDENCE_CORRECT_ID, this.state.messages, messageId);
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError(errorMessage) {
+
+      console.log(FILE_NAME + "In handleError");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      console.log("this.state.currentError", this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+        case chatbotError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (errorMessage) {
+
+          case chatbotError.SERVER_EXCEPTION:
+            this.showAlertMessage(chatbotError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          default:
+            this.showAlertMessage();
+            return this.renderScreen();}
+      }
+    }
+  }, {
+    key: 'addUserMessage',
+    value: function addUserMessage(newMessage) {
+
+      updatedMessageList = this.state.messages;
+
+      newMessage.user.avatar = (0, _utils.getImageUrl)(this.props.sessionToken, null, 'chatbot screen', this.props.currentImageTimestamp, true);
+      newMessage._id = this.state.serverMessageCount;
+
+      updatedServerMessageCount = this.state.serverMessageCount + 1;
+
+      updatedMessageList = [newMessage].concat(babelHelpers.toConsumableArray(updatedMessageList));
+
+      this.setState({
+        messages: updatedMessageList,
+        serverMessageCount: updatedServerMessageCount
+      });
+    }
+  }, {
+    key: 'onSend',
+    value: function onSend() {
+      var newMessage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+
+      console.log("messages", newMessage, this.refs.scrollview);
+
+      this.addUserMessage(newMessage[0]);
+
+      this.sendRequestToServer(newMessage);
+    }
+  }, {
+    key: 'sendRequestToServer',
+    value: function sendRequestToServer(message) {
+
+      console.log("messageis", message);
+
+      var params = {
+        context: this.state.messageContext,
+        text: message[0].text
+      };
+
+      this.props.getChatbotResponse(params);
+    }
+  }]);
+  return EwChatbotScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction method");
+
+  return {
+    getChatbotResponse: function getChatbotResponse(params) {
+      return dispatch((0, _chatbotactions.getChatbotResponse)(params));
+    },
+    createChatbotIssue: function createChatbotIssue(params) {
+      return dispatch((0, _chatbotactions.createChatbotIssue)(params));
+    },
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    }
+
+  };
+}
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    isLoggedIn: state.auth.isLoggedIn,
+
+    sessionToken: state.auth.sessionToken,
+    pendingNeedToActData: state.needtoact.needToActData,
+
+    currentImageTimestamp: state.common.currentImageTimestamp,
+
+    chatbotResponseStatusData: state.chatbot.chatbotResponseStatusData,
+    chatbotResponseStatusError: state.chatbot.chatbotResponseStatusError,
+
+    chatbotIssueResponseStatusData: state.chatbot.chatbotIssueResponseStatusData,
+    chatbotIssueResponseStatusError: state.chatbot.chatbotIssueResponseStatusError
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwChatbotScreen);

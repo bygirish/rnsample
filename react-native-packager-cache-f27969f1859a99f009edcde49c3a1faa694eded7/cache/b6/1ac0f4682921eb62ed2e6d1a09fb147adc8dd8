@@ -1,0 +1,192 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = mileageClaimReducer;
+
+var _mileageclaimactiontypes = require('./mileageclaimactiontypes');
+
+var mileageClaimActionTypes = babelHelpers.interopRequireWildcard(_mileageclaimactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var FILE_NAME = "mileageclaimreducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+
+  mileageClaimInformationData: null,
+  mileageClaimInformationError: null,
+
+  mileageMasterItemData: null,
+  mileageMasterItemError: null,
+
+  mileageLineItemData: null,
+  mileageLineItemError: null,
+
+  deleteMileageLineItemData: null,
+  deleteMileageLineItemError: null,
+
+  submitMileageClaimInformationData: null,
+  submitMileageClaimInformationError: null
+
+};
+
+function mileageClaimReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method expenseClaimReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case mileageClaimActionTypes.SUCCESS_GET_MILEAGE_CLAIM_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_GET_MILEAGE_CLAIM_INFORMATION");
+
+      return {
+        mileageClaimInformationData: action.response.data,
+        mileageClaimInformationError: action.response.error
+      };
+
+      break;
+
+    case mileageClaimActionTypes.FAILURE_GET_MILEAGE_CLAIM_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_GET_MILEAGE_CLAIM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        mileageClaimInformationData: action.response.data,
+        mileageClaimInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case mileageClaimActionTypes.SUCCESS_SAVE_MILEAGE_MASTER_ITEM_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_SAVE_MILEAGE_MASTER_ITEM_INFORMATION");
+
+      return {
+        mileageMasterItemData: action.response.data,
+        mileageMasterItemError: action.response.error
+      };
+
+      break;
+
+    case mileageClaimActionTypes.FAILURE_SAVE_MILEAGE_MASTER_ITEM_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_SAVE_MILEAGE_MASTER_ITEM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        mileageMasterItemData: action.response.data,
+        mileageMasterItemError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case mileageClaimActionTypes.SUCCESS_SAVE_MILEAGE_LINE_ITEM_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_SAVE_MILEAGE_LINE_ITEM_INFORMATION");
+
+      return {
+        mileageLineItemData: action.response.data,
+        mileageLineItemError: action.response.error
+      };
+
+      break;
+
+    case mileageClaimActionTypes.FAILURE_SAVE_MILEAGE_LINE_ITEM_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_SAVE_MILEAGE_LINE_ITEM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        mileageLineItemData: action.response.data,
+        mileageLineItemError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case mileageClaimActionTypes.SUCCESS_SUBMIT_MILEAGE_EXPENSE_CLAIM_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_SUBMIT_MILEAGE_EXPENSE_CLAIM_INFORMATION");
+
+      return {
+        submitMileageClaimInformationData: action.response.data,
+        submitMileageClaimInformationError: action.response.error
+      };
+
+      break;
+
+    case mileageClaimActionTypes.FAILURE_SUBMIT_MILEAGE_EXPENSE_CLAIM_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_SUBMIT_MILEAGE_EXPENSE_CLAIM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        submitMileageClaimInformationData: action.response.data,
+        submitMileageClaimInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case mileageClaimActionTypes.SUCCESS_DELETE_MILEAGE_LINE_ITEM_INFORMATION:
+
+      console.log("In method expenseClaimReducer SUCCESS_DELETE_MILEAGE_LINE_ITEM_INFORMATION");
+
+      return {
+        deleteMileageLineItemData: action.response.data,
+        deleteMileageLineItemError: action.response.error
+      };
+
+      break;
+
+    case mileageClaimActionTypes.FAILURE_DELETE_MILEAGE_LINE_ITEM_INFORMATION:
+
+      console.log("In method expenseClaimReducer FAILURE_DELETE_MILEAGE_LINE_ITEM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        deleteMileageLineItemData: action.response.data,
+        deleteMileageLineItemError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case mileageClaimActionTypes.CLEAR_EXPENSE_MILEAGE_CLAIM_ERROR:
+
+      console.log("In method expenseClaimReducer CLEAR_EXPENSE_MILEAGE_CLAIM_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        mileageMasterItemError: null,
+        mileageClaimInformationError: null,
+        mileageLineItemError: null,
+        deleteMileageLineItemError: null,
+        submitMileageClaimInformationError: null
+      });
+
+      break;
+
+    case mileageClaimActionTypes.CLEAR_EXPENSE_MILEAGE_CLAIM_STATE_DATA:
+
+      console.log("In method expenseClaimReducer CLEAR_EXPENSE_MILEAGE_CLAIM_STATE_DATA");
+
+      return {
+        errorCounter: action.response.errorCounter
+
+      };
+
+      break;
+
+    default:
+
+      console.log("In method expenseClaimReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

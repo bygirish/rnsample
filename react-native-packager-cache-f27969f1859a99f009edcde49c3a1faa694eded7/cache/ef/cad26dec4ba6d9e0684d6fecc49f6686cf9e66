@@ -1,0 +1,2066 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _nativeBase = require('native-base');
+
+var _reactNative = require('react-native');
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _ewloadingindicator = require('../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewscreentitle = require('../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _ewbutton = require('../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _ewreportissue = require('../../components/ewreportissue/ewreportissue');
+
+var _ewreportissue2 = babelHelpers.interopRequireDefault(_ewreportissue);
+
+var _ewdatebutton = require('../../components/ewdatebutton/ewdatebutton');
+
+var _ewdatebutton2 = babelHelpers.interopRequireDefault(_ewdatebutton);
+
+var _ewfloatinglabel = require('../../components/ewfloatinglabel/ewfloatinglabel');
+
+var _ewfloatinglabel2 = babelHelpers.interopRequireDefault(_ewfloatinglabel);
+
+var _ewdropdownpicker = require('../../components/ewdropdownpicker/ewdropdownpicker');
+
+var _ewdropdownpicker2 = babelHelpers.interopRequireDefault(_ewdropdownpicker);
+
+var _ewaccordion = require('../../components/ewaccordion/ewaccordion');
+
+var _ewaccordion2 = babelHelpers.interopRequireDefault(_ewaccordion);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _utils = require('../../utils');
+
+var _ewtravelpurpose = require('./createTravel/Component/ewtravelpurpose');
+
+var _ewtravelpurpose2 = babelHelpers.interopRequireDefault(_ewtravelpurpose);
+
+var _ewtravelplan = require('./createTravel/Component/ewtravelplan');
+
+var _ewtravelplan2 = babelHelpers.interopRequireDefault(_ewtravelplan);
+
+var _ewtravelcost = require('./createTravel/Component/ewtravelcost');
+
+var _ewtravelcost2 = babelHelpers.interopRequireDefault(_ewtravelcost);
+
+var _customStyles = require('./styles/customStyles');
+
+var _customStyles2 = babelHelpers.interopRequireDefault(_customStyles);
+
+var _ewcreatetravelstyles = require('./styles/ewcreatetravelstyles');
+
+var _ewcreatetravelstyles2 = babelHelpers.interopRequireDefault(_ewcreatetravelstyles);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _travelactions = require('../../services/travel/travelactions');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _travelerrorhandling = require('../../services/travel/travelerrorhandling');
+
+var travelError = babelHelpers.interopRequireWildcard(_travelerrorhandling);
+
+var _travelutils = require('./travelutils');
+
+var travelConstants = babelHelpers.interopRequireWildcard(_travelutils);
+
+var _screennameidentifiers = require('../../utils/screennameidentifiers');
+
+var FILE_NAME = "EwApplyTravelScreen.js : ";
+
+var SCREEN_NAME = "Create Travel Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_TRAVEL_AND_EXPENSE;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwApplyTravelScreen = function (_Component) {
+  babelHelpers.inherits(EwApplyTravelScreen, _Component);
+
+  function EwApplyTravelScreen(props) {
+    babelHelpers.classCallCheck(this, EwApplyTravelScreen);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwApplyTravelScreen.__proto__ || Object.getPrototypeOf(EwApplyTravelScreen)).call(this, props));
+
+    _this.setActiveAccordian = function (titleText) {
+
+      console.log(FILE_NAME + "In setActiveAccordian");
+
+      newHeading = titleText;
+
+      updateAccordionState = true;
+
+      console.log("validationparams", _this.travelPurposeValidation());
+
+      switch (_this.state.activeAccordian) {
+        case travelConstants.PURPOSE_BAR:
+
+          updateAccordionState = _this.travelPurposeValidation();
+
+          if (updateAccordionState) {
+
+            _this.setState({
+
+              travelPurposeDetails: _this.travelPurposeState()
+
+            });
+          }
+          break;
+
+        case travelConstants.ITINERY_BAR:
+
+          updateAccordionState = _this.travelPlanValidation();
+
+          if (updateAccordionState) {
+
+            _this.setState({
+
+              travelPlan: _this.travelPlanState()
+
+            });
+          }
+          break;
+
+        case travelConstants.COST_BAR:
+
+          updateAccordionState = _this.travelCostValidation();
+
+          if (updateAccordionState) {
+
+            _this.setState({
+
+              travelCostDetails: _this.travelCostState()
+
+            });
+          }
+
+          break;
+        default:
+
+      }
+
+      if (updateAccordionState) {
+
+        if (_this.state.activeAccordian == titleText) newHeading = null;
+
+        _this.setState({
+          activeAccordian: newHeading
+        });
+      }
+    };
+
+    _this.isActiveAccordian = function (titleText) {
+
+      console.log(FILE_NAME + "In isActiveAccordian", titleText);
+
+      if (titleText == _this.state.activeAccordian) return false;
+
+      return true;
+    };
+
+    _this.handleBackButtonPress = function () {
+
+      console.log(FILE_NAME + "In handleBackButtonPress");
+
+      _reactNative.Alert.alert('Travel', 'Do you want to discard this travel', [{ text: 'Ok', onPress: function onPress() {
+          return _reactNativeRouterFlux.Actions.pop();
+        } }, { text: 'Cancel' }]);
+
+      return true;
+    };
+
+    _this.updateTravelPurposeState = function (data) {
+
+      console.log(FILE_NAME + "In updateTravelPurposeState");
+
+      console.log("data is ", data);
+
+      _this.setState({
+        travelPurposeDetails: data,
+        istravelPlanVisible: true,
+        activeAccordian: travelConstants.ITINERY_BAR
+      });
+    };
+
+    _this.updateTravelPlanState = function (data) {
+
+      console.log(FILE_NAME + "In updateTravelPlanState");
+
+      console.log("data is ", data);
+
+      _this.setState({
+        travelPlan: data,
+        istravelCostVisible: true,
+        activeAccordian: travelConstants.COST_BAR
+      });
+    };
+
+    _this.updateTravelCostState = function (data) {
+
+      console.log(FILE_NAME + "In updateTravelCostState");
+
+      console.log("data is ", data);
+
+      travelApprovers = _this.getApprovers();
+
+      var travelPurposeDetails = _this.state.travelPurposeDetails;
+      var _this$state$travelInf = _this.state.travelInformation,
+          secondDomesticexpenseapprovalinfo = _this$state$travelInf.secondDomesticexpenseapprovalinfo,
+          secondOverseasxpenseapprovalinfo = _this$state$travelInf.secondOverseasxpenseapprovalinfo;
+
+
+      isSecondApproverConditionSatisfied = false;
+
+      if (travelPurposeDetails.isTravelTypeDomestic) {
+
+        if (!_this.isNullOrEmpty(secondDomesticexpenseapprovalinfo.approvalinfo)) isSecondApproverConditionSatisfied = _this.isSecondApproverConditionSatisfied(secondDomesticexpenseapprovalinfo, data);
+      } else {
+
+        if (!_this.isNullOrEmpty(secondOverseasxpenseapprovalinfo.approvalinfo)) isSecondApproverConditionSatisfied = _this.isSecondApproverConditionSatisfied(secondOverseasxpenseapprovalinfo, data);
+      }
+
+      _this.setState({
+        travelCostDetails: data,
+        isAllTravelScreensVisited: true,
+        isReveiwMode: true,
+        isSecondApproverRequired: isSecondApproverConditionSatisfied,
+        firstApprovalId: travelApprovers.firstApprovalId,
+        secondApprovalId: travelApprovers.secondApprovalId
+
+      });
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentError();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentError = function () {
+
+      console.log(FILE_NAME + "In clearCurrentError");
+
+      _this.setState({ currentError: '' });
+
+      _this.props.clearTravelError(null);
+    };
+
+    console.log(FILE_NAME + "In Constructor");
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    var elementvalues = _this.handleElementValues(_this.props.travelData);
+
+    console.log("elementvalues", elementvalues);
+
+    var initialState = {
+
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      travelPurposeDetails: null,
+      travelPlan: null,
+      travelCostDetails: null,
+
+      modifyComment: elementvalues.modifyComment,
+
+      travelInformation: null,
+
+      istravelPurposeVisible: true,
+      istravelPlanVisible: elementvalues.istravelPlanVisible,
+      istravelCostVisible: elementvalues.istravelCostVisible,
+
+      isReveiwMode: elementvalues.isReveiwMode,
+
+      isAllTravelScreensVisited: elementvalues.isAllTravelScreensVisited,
+
+      activeAccordian: travelConstants.PURPOSE_BAR,
+
+      isSecondApproverRequired: elementvalues.isSecondApproverRequired,
+
+      firstApprovalId: elementvalues.firstApprovalId,
+      secondApprovalId: elementvalues.secondApprovalId,
+
+      isApplyTravelHeaderVisible: elementvalues.isApplyTravelHeaderVisible,
+
+      componentInitializeTime: (0, _utils.getCurrentTime)()
+
+    };
+
+    _this.state = initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwApplyTravelScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      this.createTravelInformationRequest();
+
+      this.setState({
+        isDataPreLoaded: false,
+        isLoading: true
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.travelInformationData != null && nextProps.travelInformationError == null) {
+        var _nextProps$travelInfo = nextProps.travelInformationData,
+            firstDomesticexpenseapprovalinfo = _nextProps$travelInfo.firstDomesticexpenseapprovalinfo,
+            firstOverseasxpenseapprovalinfo = _nextProps$travelInfo.firstOverseasxpenseapprovalinfo;
+
+
+        if (firstDomesticexpenseapprovalinfo.approvalinfo == null || firstDomesticexpenseapprovalinfo.approvalinfo != null && firstDomesticexpenseapprovalinfo.approvalinfo.length == 0) {
+
+          this.setState({
+
+            travelInformation: nextProps.travelInformationData,
+            isLoading: false,
+            isDataPreLoaded: false,
+            currentError: travelError.APPROVER_NOT_FOUND
+          });
+        } else {
+
+          this.setState({
+
+            travelInformation: nextProps.travelInformationData,
+            isLoading: false,
+            isDataPreLoaded: true
+          });
+        }
+
+        if (this.props.travelData != null && !this.props.actionsButtonVisible) {
+
+          this.props.updateActionButtonState(true);
+        }
+      }
+
+      if (nextProps.travelInformationData == null && nextProps.travelInformationError != null) {
+
+        this.setState({
+
+          travelInformation: null,
+          isLoading: false,
+          isDataPreLoaded: false,
+          currentError: nextProps.travelInformationError
+
+        });
+      }
+
+      if (nextProps.travelAppliedData != null && nextProps.travelAppliedError == null) {
+
+        console.log(FILE_NAME + "Apply travel request Successfull");
+
+        this.setState({
+
+          isDone: true,
+          isLoading: false,
+          currentError: ''
+        });
+
+        this.props.updateTotalActivityCount(null);
+      }
+
+      if (nextProps.travelAppliedData == null && nextProps.travelAppliedError != null) {
+
+        console.log(FILE_NAME + "Apply travel request failed");
+
+        var _nextProps$travelAppl = nextProps.travelAppliedError,
+            warning_Flag = _nextProps$travelAppl.warning_Flag,
+            error_flag = _nextProps$travelAppl.error_flag;
+
+
+        isTravelContinued = 0;
+
+        if (error_flag == null) error_flag = travelError.SERVER_EXCEPTION;
+
+        if (warning_Flag == 1) {
+
+          isTravelContinued = 1;
+
+          _reactNative.Alert.alert('Travel', error_flag, [{ text: 'Ok', onPress: function onPress() {
+              return _this2.submitTravelRequest(isTravelContinued);
+            } }, { text: 'Cancel' }]);
+
+          this.clearCurrentError();
+
+          this.setState({
+            isDone: false,
+            isLoading: false,
+            isTravelContinued: isTravelContinued
+          });
+        } else {
+
+          this.setState({
+
+            isDone: false,
+            isLoading: false,
+            currentError: error_flag,
+            isTravelContinued: isTravelContinued
+
+          });
+        }
+      }
+
+      if (this.props.travelData != null) {
+
+        this.setState({
+
+          isReveiwMode: this.props.travelData.currentMode == travelConstants.VIEW_MODE ? true : false
+
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+
+      console.log("New Props are - ", nextProps);
+
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log(FILE_NAME + "In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage('Successfully', 'Travel Applied', 'success');
+              }
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+
+              return null;
+            } else {
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      _reactNative.BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonPress);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      _reactNative.BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonPress);
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this3 = this;
+
+      console.log(FILE_NAME + "In renderScreen");
+
+      console.log("State is - ", this.state);
+
+      var _state = this.state,
+          istravelPurposeVisible = _state.istravelPurposeVisible,
+          istravelPlanVisible = _state.istravelPlanVisible,
+          istravelCostVisible = _state.istravelCostVisible,
+          isAllTravelScreensVisited = _state.isAllTravelScreensVisited,
+          isReveiwMode = _state.isReveiwMode;
+
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        this.state.isApplyTravelHeaderVisible ? _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _this3.handleBackButtonPress();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: 'Apply Travel Request'
+            })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Right,
+            null,
+            _react2.default.createElement(_ewreportissue2.default, {
+              screenId: _screennameidentifiers.APPLY_TRAVEL_ID
+            })
+          )
+        ) : null,
+        _react2.default.createElement(
+          _nativeBase.Content,
+          {
+            keyboardShouldPersistTaps: 'always'
+          },
+          this.renderTravelPurposeScreen(istravelPlanVisible, isReveiwMode),
+          this.renderTravelPlanScreen(istravelPlanVisible, istravelCostVisible, isReveiwMode),
+          this.renderTravelCostScreen(istravelCostVisible, isAllTravelScreensVisited, isReveiwMode),
+          isReveiwMode ? this.renderApproverInformation() : null,
+          isReveiwMode ? this.renderModificationComment() : null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN, alignSelf: "center" } },
+            this.renderSaveButton(isReveiwMode)
+          )
+        )
+      );
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(travelData) {
+
+      istravelPlanVisible = false;
+      istravelCostVisible = false;
+      isAllTravelScreensVisited = false;
+      isReveiwMode = false;
+      firstApprovalId = "";
+      isSecondApproverRequired = false;
+      secondApprovalId = "";
+      isApplyTravelHeaderVisible = true;
+      modifyComment = "";
+
+      if (travelData != null) {
+        var _travelData$otherDeta = travelData.otherDetails,
+            firstApproverEmployeeCode = _travelData$otherDeta.firstApproverEmployeeCode,
+            SecondApproverEmployeeCode = _travelData$otherDeta.SecondApproverEmployeeCode,
+            modify_comment = _travelData$otherDeta.modify_comment;
+
+        istravelPlanVisible = true;
+        istravelCostVisible = true;
+        isAllTravelScreensVisited = true;
+
+        if (travelData.currentMode == travelConstants.VIEW_MODE) isReveiwMode = true;
+
+        firstApprovalId = firstApproverEmployeeCode;
+        isApplyTravelHeaderVisible = false;
+
+        if (SecondApproverEmployeeCode != null && SecondApproverEmployeeCode != "") {
+
+          isSecondApproverRequired = true;
+          secondApprovalId = SecondApproverEmployeeCode;
+        }
+
+        if (modify_comment != undefined && modify_comment != null) modifyComment = modify_comment;
+      }
+
+      elementValues = {
+
+        istravelPlanVisible: istravelPlanVisible,
+        istravelCostVisible: istravelCostVisible,
+        isAllTravelScreensVisited: isAllTravelScreensVisited,
+        isReveiwMode: isReveiwMode,
+        firstApprovalId: firstApprovalId,
+        isSecondApproverRequired: isSecondApproverRequired,
+        secondApprovalId: secondApprovalId,
+        isApplyTravelHeaderVisible: isApplyTravelHeaderVisible,
+        modifyComment: modifyComment
+
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: 'renderModificationComment',
+    value: function renderModificationComment() {
+      var _this4 = this;
+
+      console.log("In renderModificationComment");
+
+      if (this.props.travelData != null || this.props.travelData != undefined) {
+
+        if (this.props.travelData.currentMode == travelConstants.EDIT_MODE) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { margin: appstyleguide.DEFAULT_MARGIN } },
+            _react2.default.createElement(_ewfloatinglabel2.default, {
+              label: travelConstants.MODIFICATION_COMMENT_LABEL,
+              placeholderlabel: travelConstants.MODIFICATION_COMMENT_LABEL,
+              autoCorrect: false,
+              autofocus: true,
+              autoCapitalize: 'none',
+              onChangeText: function onChangeText(newText) {
+                return _this4.setState({ modifyComment: newText });
+              },
+              value: this.state.modifyComment
+            })
+          );
+        }
+      }
+    }
+  }, {
+    key: 'getTravelPurposeValidation',
+    value: function getTravelPurposeValidation(validationMethod) {
+
+      this.travelPurposeValidation = validationMethod;
+    }
+  }, {
+    key: 'getTravelPurposeState',
+    value: function getTravelPurposeState(componentState) {
+
+      this.travelPurposeState = componentState;
+    }
+  }, {
+    key: 'getTravelPlanValidation',
+    value: function getTravelPlanValidation(validationMethod) {
+
+      this.travelPlanValidation = validationMethod;
+    }
+  }, {
+    key: 'getTravelPlanState',
+    value: function getTravelPlanState(componentState) {
+
+      this.travelPlanState = componentState;
+    }
+  }, {
+    key: 'getTravelCostValidation',
+    value: function getTravelCostValidation(validationMethod) {
+
+      this.travelCostValidation = validationMethod;
+    }
+  }, {
+    key: 'getTravelCostState',
+    value: function getTravelCostState(componentState) {
+
+      this.travelCostState = componentState;
+    }
+  }, {
+    key: 'renderTravelPurposeScreen',
+    value: function renderTravelPurposeScreen(istravelPlanVisible, isReveiwMode) {
+      var _this5 = this;
+
+      console.log("istravelPurposeVisible", istravelPlanVisible);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        this.renderAccordionButton(travelConstants.TRAVEL_PURPOSE_SCREEN_TITLE, travelConstants.PURPOSE_BAR),
+        !this.isActiveAccordian(travelConstants.PURPOSE_BAR) ? _react2.default.createElement(_ewtravelpurpose2.default, {
+          showAlertMessage: function showAlertMessage(messageText, messageHeading, messageType) {
+            return _this5.showAlertMessage(messageText, messageHeading, messageType);
+          },
+          reveiwMode: this.state.isReveiwMode,
+          getComponentState: this.getTravelPurposeState.bind(this),
+          getValidationMethod: this.getTravelPurposeValidation.bind(this),
+          initialState: this.state.travelPurposeDetails,
+          currentTravelState: this.state,
+          customTravelData: this.props.travelData,
+          updateParentState: this.updateTravelPurposeState.bind(this) }) : null
+      );
+    }
+  }, {
+    key: 'renderTravelPlanScreen',
+    value: function renderTravelPlanScreen(istravelPlanVisible, istravelCostVisible, isReveiwMode) {
+      var _this6 = this;
+
+      if (istravelPlanVisible) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          this.renderAccordionButton(travelConstants.TRAVEL_PLAN_SCREEN_TITLE, travelConstants.ITINERY_BAR),
+          !this.isActiveAccordian(travelConstants.ITINERY_BAR) ? _react2.default.createElement(_ewtravelplan2.default, {
+            showAlertMessage: function showAlertMessage(messageText, messageHeading, messageType) {
+              return _this6.showAlertMessage(messageText, messageHeading, messageType);
+            },
+            reveiwMode: this.state.isReveiwMode,
+            initialState: this.state.travelPlan,
+            currentTravelState: this.state,
+            getComponentState: this.getTravelPlanState.bind(this),
+            getValidationMethod: this.getTravelPlanValidation.bind(this),
+            customTravelData: this.props.travelData,
+            updateParentState: this.updateTravelPlanState.bind(this) }) : null
+        );
+      }
+    }
+  }, {
+    key: 'renderTravelCostScreen',
+    value: function renderTravelCostScreen(istravelCostVisible, isAllTravelScreensVisited, isReveiwMode) {
+      var _this7 = this;
+
+      if (istravelCostVisible) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          this.renderAccordionButton(travelConstants.TRAVEL_COST_SCREEN_TITLE, travelConstants.COST_BAR),
+          !this.isActiveAccordian(travelConstants.COST_BAR) ? _react2.default.createElement(_ewtravelcost2.default, {
+            showAlertMessage: function showAlertMessage(messageText, messageHeading, messageType) {
+              return _this7.showAlertMessage(messageText, messageHeading, messageType);
+            },
+            reveiwMode: this.state.isReveiwMode,
+            initialState: this.state.travelCostDetails,
+            currentTravelState: this.state,
+            getComponentState: this.getTravelCostState.bind(this),
+            customTravelData: this.props.travelData,
+            getValidationMethod: this.getTravelCostValidation.bind(this),
+            updateParentState: this.updateTravelCostState.bind(this) }) : null
+        );
+      }
+    }
+  }, {
+    key: 'renderAccordionButton',
+    value: function renderAccordionButton(textHeading, accordionKey) {
+      var _this8 = this;
+
+      return _react2.default.createElement(
+        _reactNative.TouchableOpacity,
+        { activeOpacity: 1, onPress: function onPress() {
+            return _this8.setActiveAccordian(accordionKey);
+          } },
+        _react2.default.createElement(_ewbutton2.default, {
+          label: textHeading,
+          customStyle: _ewcreatetravelstyles2.default.accordionButtonStyle,
+          textStyle: _ewcreatetravelstyles2.default.textStyle,
+          onButonClicked: function onButonClicked() {
+            return _this8.setActiveAccordian(accordionKey);
+          }
+        }),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewcreatetravelstyles2.default.iconViewStyle },
+          this.isActiveAccordian(accordionKey) ? _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-dropdown', style: { color: appstyleguide.APP_BLACK } }) : _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-dropup', style: { color: appstyleguide.APP_BLACK } })
+        )
+      );
+    }
+  }, {
+    key: 'createTravelInformationRequest',
+    value: function createTravelInformationRequest() {
+
+      console.log(FILE_NAME + "In createTravelInformationRequest");
+
+      var params = {};
+
+      this.props.getTravelInformation(params);
+    }
+  }, {
+    key: 'isNullOrEmpty',
+    value: function isNullOrEmpty(data) {
+
+      console.log(FILE_NAME + "In isNullOrEmpty");
+
+      if (data == null || data != null && data.length == 0) return true;
+
+      return false;
+    }
+  }, {
+    key: 'renderFirstApprover',
+    value: function renderFirstApprover(firstapprovalinfo) {
+
+      if (firstapprovalinfo.approvalinfo.length > 1) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+          this.renderApproverView(firstapprovalinfo, true)
+        );
+      }
+    }
+  }, {
+    key: 'renderSecondApprover',
+    value: function renderSecondApprover(isSecondApproverRequired, secondApprovalInfo) {
+
+      if (isSecondApproverRequired && secondApprovalInfo.approvalinfo.length > 1) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+          this.renderApproverView(secondApprovalInfo, false)
+        );
+      }
+    }
+  }, {
+    key: 'renderApproverInformation',
+    value: function renderApproverInformation(currentTravelState) {
+
+      console.log(FILE_NAME + "In renderApproverInformation");
+
+      var _state$travelInformat = this.state.travelInformation,
+          firstDomesticexpenseapprovalinfo = _state$travelInformat.firstDomesticexpenseapprovalinfo,
+          firstOverseasxpenseapprovalinfo = _state$travelInformat.firstOverseasxpenseapprovalinfo,
+          secondDomesticexpenseapprovalinfo = _state$travelInformat.secondDomesticexpenseapprovalinfo,
+          secondOverseasxpenseapprovalinfo = _state$travelInformat.secondOverseasxpenseapprovalinfo;
+      var _state2 = this.state,
+          travelPurposeDetails = _state2.travelPurposeDetails,
+          isSecondApproverRequired = _state2.isSecondApproverRequired;
+
+
+      if (this.isExternalPropConditionSatisfied()) {
+
+        if (travelPurposeDetails.isTravelTypeDomestic) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            this.renderFirstApprover(firstDomesticexpenseapprovalinfo),
+            this.renderSecondApprover(isSecondApproverRequired, secondDomesticexpenseapprovalinfo)
+          );
+        } else {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+            this.renderFirstApprover(firstOverseasxpenseapprovalinfo),
+            this.renderSecondApprover(isSecondApproverRequired, secondOverseasxpenseapprovalinfo)
+          );
+        }
+      }
+    }
+  }, {
+    key: 'isSecondApproverConditionSatisfied',
+    value: function isSecondApproverConditionSatisfied(approversList, travelCostData) {
+
+      console.log(FILE_NAME + "In isSecondApproverConditionSatisfied");
+
+      switch (approversList.forAllRequest) {
+        case travelConstants.APPROVER_FOR_ALL_REQUEST:
+
+          return true;
+          break;
+
+        case travelConstants.APPROVER_FOR_DEVIATION_REQUEST:
+
+          return this.isDeviationExist();
+          break;
+
+        case travelConstants.APPROVER_FOR_ADVANCE_REQUEST:
+
+          return this.isAdvanceExist(travelCostData);
+          break;
+
+        case travelConstants.APPROVER_FOR_DEVIATION_OR_ADVANCE_REQUEST:
+
+          return this.isDeviationExist() || this.isAdvanceExist(travelCostData);
+          break;
+        default:
+
+      }
+    }
+  }, {
+    key: 'isDeviationExist',
+    value: function isDeviationExist() {
+
+      console.log(FILE_NAME + "In isDeviationExist");
+
+      var travelPlan = this.state.travelPlan;
+
+      for (var _iterator = travelPlan.travelModel, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref;
+
+        if (_isArray) {
+          if (_i >= _iterator.length) break;
+          _ref = _iterator[_i++];
+        } else {
+          _i = _iterator.next();
+          if (_i.done) break;
+          _ref = _i.value;
+        }
+
+        var travelDetail = _ref;
+
+
+        if (travelDetail.deviationReason != "") return true;
+      }
+
+      for (var _iterator2 = Object.keys(travelPlan.stayAndLocalTravelModel), _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref2;
+
+        if (_isArray2) {
+          if (_i2 >= _iterator2.length) break;
+          _ref2 = _iterator2[_i2++];
+        } else {
+          _i2 = _iterator2.next();
+          if (_i2.done) break;
+          _ref2 = _i2.value;
+        }
+
+        var locationkey = _ref2;
+
+
+        if (travelPlan.stayAndLocalTravelModel[locationkey].stayModel != null) {
+
+          for (var _iterator3 = travelPlan.stayAndLocalTravelModel[locationkey].stayModel, _isArray3 = Array.isArray(_iterator3), _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+            var _ref3;
+
+            if (_isArray3) {
+              if (_i3 >= _iterator3.length) break;
+              _ref3 = _iterator3[_i3++];
+            } else {
+              _i3 = _iterator3.next();
+              if (_i3.done) break;
+              _ref3 = _i3.value;
+            }
+
+            var stayModel = _ref3;
+
+
+            if (stayModel.deviationReason != "") return true;
+          }
+        }
+
+        if (travelPlan.stayAndLocalTravelModel[locationkey].localTravelModel != null) {
+
+          for (var _iterator4 = travelPlan.stayAndLocalTravelModel[locationkey].localTravelModel, _isArray4 = Array.isArray(_iterator4), _i4 = 0, _iterator4 = _isArray4 ? _iterator4 : _iterator4[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+            var _ref4;
+
+            if (_isArray4) {
+              if (_i4 >= _iterator4.length) break;
+              _ref4 = _iterator4[_i4++];
+            } else {
+              _i4 = _iterator4.next();
+              if (_i4.done) break;
+              _ref4 = _i4.value;
+            }
+
+            var localTravelModel = _ref4;
+
+
+            if (localTravelModel.deviationReason != "") return true;
+          }
+        }
+      }
+
+      return false;
+    }
+  }, {
+    key: 'isAdvanceExist',
+    value: function isAdvanceExist(travelCostData) {
+
+      console.log(FILE_NAME + "In isAdvanceExist");
+
+      var isAdvanceRequired = travelCostData.isAdvanceRequired;
+
+
+      if (isAdvanceRequired) return true;
+
+      return false;
+    }
+  }, {
+    key: 'renderApproverView',
+    value: function renderApproverView(approverInformation, isFirstLevelApprover) {
+      var _this9 = this;
+
+      console.log(FILE_NAME + "In renderApproverView");
+
+      if (isFirstLevelApprover) {
+
+        pickerLabel = "First Approver";
+        pickerPlaceholderLabel = "Select First Approver";
+        selectedValue = this.state.firstApprovalId;
+      } else {
+
+        pickerLabel = "Second Approver";
+        pickerPlaceholderLabel = "Select Second Approver";
+        selectedValue = this.state.secondApprovalId;
+      }
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN, marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+        _react2.default.createElement(_ewdropdownpicker2.default, {
+          pickerLabel: pickerLabel,
+          pickerPlaceholderLabel: pickerPlaceholderLabel,
+          isDefaultPickerValueSelected: selectedValue == "-1",
+          dataArray: approverInformation.approvalinfo,
+          selectedValue: selectedValue,
+          onPickerValueChange: function onPickerValueChange(pickerValue) {
+            return _this9.onApproverPickerValueChange(isFirstLevelApprover, pickerValue);
+          }
+        })
+      );
+    }
+  }, {
+    key: 'onApproverPickerValueChange',
+    value: function onApproverPickerValueChange(isFirstLevelApprover, pickerValue) {
+
+      console.log(FILE_NAME + "In onApproverPickerValueChange");
+
+      if (isFirstLevelApprover) {
+
+        this.setState({
+          firstApprovalId: pickerValue
+        });
+      } else {
+
+        this.setState({
+          secondApprovalId: pickerValue
+        });
+      }
+    }
+  }, {
+    key: 'getApprovers',
+    value: function getApprovers() {
+
+      console.log(FILE_NAME + "In getApprovers");
+
+      var _state3 = this.state,
+          travelPurposeDetails = _state3.travelPurposeDetails,
+          travelInformation = _state3.travelInformation;
+      var firstDomesticexpenseapprovalinfo = travelInformation.firstDomesticexpenseapprovalinfo,
+          firstOverseasxpenseapprovalinfo = travelInformation.firstOverseasxpenseapprovalinfo,
+          secondDomesticexpenseapprovalinfo = travelInformation.secondDomesticexpenseapprovalinfo,
+          secondOverseasxpenseapprovalinfo = travelInformation.secondOverseasxpenseapprovalinfo;
+
+
+      firstApprovalId = "";
+      secondApprovalId = "";
+
+      if (travelPurposeDetails.isTravelTypeDomestic) {
+
+        if (firstDomesticexpenseapprovalinfo.approvalinfo.length > 0) firstApprovalId = firstDomesticexpenseapprovalinfo.approvalinfo[0].employeeCode;
+
+        if (secondDomesticexpenseapprovalinfo.approvalinfo != null && secondDomesticexpenseapprovalinfo.approvalinfo.length > 0) secondApprovalId = secondDomesticexpenseapprovalinfo.approvalinfo[0].employeeCode;
+      } else {
+
+        if (firstOverseasxpenseapprovalinfo.approvalinfo.length > 0) firstApprovalId = firstOverseasxpenseapprovalinfo.approvalinfo[0].employeeCode;
+
+        if (secondOverseasxpenseapprovalinfo.approvalinfo != null && secondOverseasxpenseapprovalinfo.approvalinfo.length > 0) secondApprovalId = secondOverseasxpenseapprovalinfo.approvalinfo[0].employeeCode;
+      }
+
+      approvers = {
+
+        firstApprovalId: firstApprovalId,
+        secondApprovalId: secondApprovalId
+      };
+
+      return approvers;
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME, "In handleError Method");
+
+      console.log("this.state.currentError", this.state.currentError);
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+        case travelError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+        case travelError.APPROVER_NOT_FOUND:
+          this.showAlertMessage(travelError.APPROVER_NOT_FOUND);
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        console.log("Handling Post Rendering Error");
+
+        switch (this.state.currentError) {
+
+          case travelError.SERVER_EXCEPTION:
+
+            this.showAlertMessage(travelError.SERVER_ERROR);
+
+            return this.renderScreen();
+
+            break;
+
+          default:
+
+            this.showAlertMessage(this.state.currentError);
+
+            return this.renderScreen();
+
+            break;
+
+        }
+      }
+    }
+  }, {
+    key: 'isExternalPropConditionSatisfied',
+    value: function isExternalPropConditionSatisfied() {
+
+      if (this.props.travelData === null || this.props.travelData === undefined || this.props.travelData.currentMode == travelConstants.EDIT_MODE) return true;
+
+      return false;
+    }
+  }, {
+    key: 'renderSaveButton',
+    value: function renderSaveButton(isReveiwMode) {
+      var _this10 = this;
+
+      console.log(FILE_NAME, "In renderSaveButton Method");
+
+      if (this.isExternalPropConditionSatisfied()) {
+
+        if (isReveiwMode) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 10 } },
+            _react2.default.createElement(_ewbutton2.default, {
+              label: 'Edit',
+              customStyle: { marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+              onButonClicked: function onButonClicked() {
+                _this10.setState({ isReveiwMode: !_this10.state.isReveiwMode });
+              }
+            }),
+            _react2.default.createElement(_ewbutton2.default, {
+              label: 'Submit',
+              customStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN },
+              onButonClicked: function onButonClicked() {
+                return _this10.submitTravelRequest();
+              }
+            }),
+            this.renderSaveAsDraftbutton()
+          );
+        } else {
+
+          if (this.state.isAllTravelScreensVisited) {
+
+            return _react2.default.createElement(
+              _reactNative.View,
+              { style: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 10 } },
+              _react2.default.createElement(_ewbutton2.default, {
+                label: 'Reveiw Request',
+                onButonClicked: function onButonClicked() {
+                  return _this10.onReveiwButtonPressed();
+                }
+              })
+            );
+          }
+        }
+      }
+    }
+  }, {
+    key: 'renderSaveAsDraftbutton',
+    value: function renderSaveAsDraftbutton() {
+      var _this11 = this;
+
+      if (this.props.travelData === null || this.props.travelData === undefined) {
+
+        return _react2.default.createElement(_ewbutton2.default, {
+          label: 'Save as Draft',
+          customStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN },
+          onButonClicked: function onButonClicked() {
+            return _this11.submitTravelRequest(0, travelConstants.STATUS_DRAFT);
+          }
+        });
+      }
+    }
+  }, {
+    key: 'onReveiwButtonPressed',
+    value: function onReveiwButtonPressed() {
+
+      this.setActiveAccordian(null);
+
+      this.setState({
+        isReveiwMode: !this.state.isReveiwMode
+      });
+    }
+  }, {
+    key: 'submitTravelRequest',
+    value: function submitTravelRequest() {
+      var isTravelContinue = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      var travelStatus = arguments[1];
+
+
+      console.log(FILE_NAME, "In submitTravelRequest Method");
+
+      tracker.trackEvent(SCREEN_CATEGORY, 'travel applied');
+
+      var _state4 = this.state,
+          travelPurposeDetails = _state4.travelPurposeDetails,
+          travelPlan = _state4.travelPlan,
+          travelCostDetails = _state4.travelCostDetails,
+          travelInformation = _state4.travelInformation,
+          firstApprovalId = _state4.firstApprovalId,
+          isSecondApproverRequired = _state4.isSecondApproverRequired,
+          secondApprovalId = _state4.secondApprovalId;
+
+
+      console.log("values received are", travelPurposeDetails, travelPlan, travelCostDetails);
+
+      var params = {
+
+        "Travel": {
+          "Travel_Data": {
+
+            "device_id": _utils.DEVICE_ID,
+            "Token": this.props.sessionToken,
+            "Approver_Employee_Code": firstApprovalId
+          }
+        }
+      };
+
+      if (isSecondApproverRequired) {
+
+        var secondApprover = {
+          "Additional_Approver_Employee_Code": secondApprovalId
+        };
+
+        babelHelpers.extends(params.Travel.Travel_Data, secondApprover);
+      }
+
+      if (travelStatus == travelConstants.STATUS_DRAFT) {
+
+        var status = {
+          "Status": travelConstants.STATUS_DRAFT
+        };
+
+        babelHelpers.extends(params.Travel.Travel_Data, status);
+      }
+
+      if (isTravelContinue) {
+
+        var isContinue = {
+          "isContinue": isTravelContinue
+        };
+
+        babelHelpers.extends(params.Travel.Travel_Data, isContinue);
+      }
+
+      purposeDetails = this.getTravelPurposeDetails();
+
+      babelHelpers.extends(params.Travel.Travel_Data, purposeDetails);
+
+      if (this.state.istravelPlanVisible) {
+
+        travelPlanDetails = this.getTravelPlanDetails();
+
+        babelHelpers.extends(params.Travel.Travel_Data, travelPlanDetails);
+      }
+
+      if (this.state.istravelCostVisible) {
+
+        costDetails = this.getTravelCostDetails();
+
+        babelHelpers.extends(params.Travel.Travel_Data, costDetails);
+      }
+
+      console.log("paramsforsubmittravel", JSON.stringify(params));
+
+      if (this.props.travelData != null) {
+
+        var additionalInfo = {
+
+          "action": travelConstants.MODIFY_TRAVEL_ACTION,
+          "Request_Id": this.props.travelData.otherDetails.Request_Id,
+          "Status": this.props.travelData.otherDetails.Status,
+          "modify_comment": this.state.modifyComment
+
+        };
+
+        babelHelpers.extends(params.Travel.Travel_Data, additionalInfo);
+
+        console.log("Updated params are - ", params);
+
+        this.props.travelAction(params);
+      } else {
+
+        this.props.applyTravel(params);
+      }
+
+      this.setState({
+        isLoading: true,
+        isDone: false
+
+      });
+    }
+  }, {
+    key: 'getTravelClass',
+    value: function getTravelClass(travelMode, selectedTravelClass) {
+
+      console.log(FILE_NAME, "In getTravelClass Method");
+
+      var _state$travelInformat2 = this.state.travelInformation,
+          travelModes = _state$travelInformat2.travelModes,
+          travelClasses = _state$travelInformat2.travelClasses;
+
+
+      console.log("travelModesgetTravelClass", travelModes, travelClasses, travelMode, travelClass);
+
+      for (var _iterator5 = travelClasses[travelModes[travelMode].label], _isArray5 = Array.isArray(_iterator5), _i5 = 0, _iterator5 = _isArray5 ? _iterator5 : _iterator5[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref5;
+
+        if (_isArray5) {
+          if (_i5 >= _iterator5.length) break;
+          _ref5 = _iterator5[_i5++];
+        } else {
+          _i5 = _iterator5.next();
+          if (_i5.done) break;
+          _ref5 = _i5.value;
+        }
+
+        var travelClass = _ref5;
+
+
+        if (travelClass.value === selectedTravelClass) return travelClass;
+      }
+    }
+  }, {
+    key: 'getTravelItenary',
+    value: function getTravelItenary() {
+
+      console.log(FILE_NAME, "In getTravelDetails Method");
+
+      var _state5 = this.state,
+          travelPurposeDetails = _state5.travelPurposeDetails,
+          travelPlan = _state5.travelPlan,
+          travelCostDetails = _state5.travelCostDetails,
+          travelInformation = _state5.travelInformation;
+
+
+      var travelDetails = [];
+
+      var stayDetails = [];
+
+      var localTravelDetails = [];
+
+      travelModelCount = 0;
+
+      destinationCityArray = [];
+
+      for (var _iterator6 = travelPlan.travelModel, _isArray6 = Array.isArray(_iterator6), _i6 = 0, _iterator6 = _isArray6 ? _iterator6 : _iterator6[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref6;
+
+        if (_isArray6) {
+          if (_i6 >= _iterator6.length) break;
+          _ref6 = _iterator6[_i6++];
+        } else {
+          _i6 = _iterator6.next();
+          if (_i6.done) break;
+          _ref6 = _i6.value;
+        }
+
+        var travelDetail = _ref6;
+
+
+        if (travelPlan.isSingleCity && travelModelCount < travelConstants.DEFAULT_SINGLE_CITY_MODEL || travelPlan.isMultiCity) {
+
+          travelModel = this.getServerTravelModel(travelDetail);
+
+          destinationCity = travelDetail.destinationCity;
+
+          if (travelPlan.stayAndLocalTravelModel[destinationCity] != null && !destinationCityArray.includes(destinationCity)) {
+
+            stayModel = this.getServerStayModel(destinationCity);
+
+            localTravelModel = this.getServerLocalTravelModel(destinationCity);
+
+            stayDetails.push.apply(stayDetails, babelHelpers.toConsumableArray(stayModel));
+
+            localTravelDetails.push.apply(localTravelDetails, babelHelpers.toConsumableArray(localTravelModel));
+
+            destinationCityArray.push(destinationCity);
+          }
+
+          travelDetails.push(travelModel);
+        }
+
+        travelModelCount += 1;
+      }
+
+      for (var _iterator7 = Object.keys(travelPlan.stayAndLocalTravelModel), _isArray7 = Array.isArray(_iterator7), _i7 = 0, _iterator7 = _isArray7 ? _iterator7 : _iterator7[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref7;
+
+        if (_isArray7) {
+          if (_i7 >= _iterator7.length) break;
+          _ref7 = _iterator7[_i7++];
+        } else {
+          _i7 = _iterator7.next();
+          if (_i7.done) break;
+          _ref7 = _i7.value;
+        }
+
+        var key = _ref7;
+
+
+        console.log("inside this", key);
+
+        if (travelPlan.stayAndLocalTravelModel[key].isServerData && !destinationCityArray.includes(key)) {
+
+          stayModel = this.getServerStayModel(key);
+
+          localTravelModel = this.getServerLocalTravelModel(key);
+
+          stayDetails.push.apply(stayDetails, babelHelpers.toConsumableArray(stayModel));
+
+          localTravelDetails.push.apply(localTravelDetails, babelHelpers.toConsumableArray(localTravelModel));
+
+          destinationCityArray.push(key);
+        }
+      }
+
+      var travelItenary = {
+
+        "travelDetails": travelDetails,
+        "stayDetails": stayDetails,
+        "localTravelDetails": localTravelDetails
+      };
+
+      console.log("travelItenary - ", travelItenary);
+
+      return travelItenary;
+    }
+  }, {
+    key: 'getServerStayModel',
+    value: function getServerStayModel(destinationCity) {
+
+      console.log(FILE_NAME, "In getServerStayModel Method");
+
+      var _state6 = this.state,
+          travelPurposeDetails = _state6.travelPurposeDetails,
+          travelPlan = _state6.travelPlan,
+          travelCostDetails = _state6.travelCostDetails,
+          travelInformation = _state6.travelInformation;
+
+
+      stayDetails = [];
+
+      if (travelPlan.stayAndLocalTravelModel[destinationCity].stayModel != null) {
+
+        for (var _iterator8 = travelPlan.stayAndLocalTravelModel[destinationCity].stayModel, _isArray8 = Array.isArray(_iterator8), _i8 = 0, _iterator8 = _isArray8 ? _iterator8 : _iterator8[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+          var _ref8;
+
+          if (_isArray8) {
+            if (_i8 >= _iterator8.length) break;
+            _ref8 = _iterator8[_i8++];
+          } else {
+            _i8 = _iterator8.next();
+            if (_i8.done) break;
+            _ref8 = _i8.value;
+          }
+
+          var stayModel = _ref8;
+
+
+          var stayDetail = {
+
+            "City": stayModel.stayLocation,
+            "City_Category": stayModel.cityCategoryData[0].cityCategory_Name,
+            "City_Category_Id": stayModel.cityCategoryData[0].cityCategory_Id,
+            "From_Date": (0, _utils.convertMillisecondsToServerDate)(stayModel.fromDate.value),
+            "To_Date": (0, _utils.convertMillisecondsToServerDate)(stayModel.toDate.value),
+            "Reason": stayModel.deviationReason,
+            "Booking_required": stayModel.isStayBookingRequired ? travelConstants.SERVER_BOOKING_REQUIRED_LABEL : travelConstants.SERVER_BOOKING_NOT_REQUIRED_LABEL,
+            "Preferences": stayModel.stayPreferences,
+            "Type_Id": stayModel.stayClass,
+            "Detail_Id": stayModel.stayId
+          };
+
+          stayDetails.push(stayDetail);
+        }
+      }
+
+      return stayDetails;
+    }
+  }, {
+    key: 'getServerLocalTravelModel',
+    value: function getServerLocalTravelModel(destinationCity) {
+
+      console.log(FILE_NAME, "In getServerLocalTravelModel Method");
+
+      localTravelDetails = [];
+
+      var _state7 = this.state,
+          travelPurposeDetails = _state7.travelPurposeDetails,
+          travelPlan = _state7.travelPlan,
+          travelCostDetails = _state7.travelCostDetails,
+          travelInformation = _state7.travelInformation;
+
+      '             ';
+      if (travelPlan.stayAndLocalTravelModel[destinationCity].localTravelModel != null) {
+
+        for (var _iterator9 = travelPlan.stayAndLocalTravelModel[destinationCity].localTravelModel, _isArray9 = Array.isArray(_iterator9), _i9 = 0, _iterator9 = _isArray9 ? _iterator9 : _iterator9[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+          var _ref9;
+
+          if (_isArray9) {
+            if (_i9 >= _iterator9.length) break;
+            _ref9 = _iterator9[_i9++];
+          } else {
+            _i9 = _iterator9.next();
+            if (_i9.done) break;
+            _ref9 = _i9.value;
+          }
+
+          var localTravelModel = _ref9;
+
+
+          var conveyanceDetail = {
+
+            "Convey_Place": localTravelModel.localTravelLocation,
+            "From_Date": (0, _utils.convertMillisecondsToServerDate)(localTravelModel.fromDate.value),
+            "To_Date": (0, _utils.convertMillisecondsToServerDate)(localTravelModel.toDate.value),
+            "Reason": localTravelModel.deviationReason,
+            "Booking_required": localTravelModel.isLocalBookingRequired ? travelConstants.SERVER_BOOKING_REQUIRED_LABEL : travelConstants.SERVER_BOOKING_NOT_REQUIRED_LABEL,
+            "Instructions": localTravelModel.localPreferences,
+            "Convey_Mode_Id": localTravelModel.transportType,
+            "Detail_Id": localTravelModel.localTravelId
+          };
+
+          localTravelDetails.push(conveyanceDetail);
+        }
+      }
+
+      return localTravelDetails;
+    }
+  }, {
+    key: 'getServerTravelModel',
+    value: function getServerTravelModel(travelDetail) {
+
+      console.log(FILE_NAME, "In getServerTravelModel Method");
+
+      arriveDate = null;
+      departDate = null;
+
+      if (travelDetail.departureDuration != travelConstants.travelDuration[0].value) {
+
+        travelStartTime = travelConstants.travelDuration[travelDetail.departureDuration].startTime;
+        travelEndTime = travelConstants.travelDuration[travelDetail.departureDuration].endTime;
+
+        travelStartDate = new Date("10-02-1997 " + travelStartTime);
+        travelEndDate = new Date("10-02-1997 " + travelEndTime);
+
+        arriveDate = new Date(travelDetail.departureDate.value);
+        arriveDate.setHours(travelStartDate.getHours());
+
+        departDate = new Date(travelDetail.departureDate.value);
+        departDate.setHours(travelEndDate.getHours());
+      }
+
+      console.log("travelStartTime", arriveDate, departDate);
+
+      var travelModel = {
+
+        "From_City": travelDetail.sourceCity,
+        "To_City": travelDetail.destinationCity,
+        "Preferences": travelDetail.travelPreferences,
+        "booking_required": travelDetail.isBookingRequired ? travelConstants.SERVER_BOOKING_REQUIRED_LABEL : travelConstants.SERVER_BOOKING_NOT_REQUIRED_LABEL,
+        "Mode_Id": travelDetail.travelClass,
+        "Travel_Class_Id": travelDetail.travelClass,
+        "From_Date": (0, _utils.convertMillisecondsToServerDate)(travelDetail.departureDate.value),
+        "arrive_date": this.getFormattedDate(arriveDate),
+        "depart_date": this.getFormattedDate(departDate),
+        "To_Date": (0, _utils.convertMillisecondsToServerDate)(travelDetail.departureDate.value),
+        "Reason": travelDetail.deviationReason,
+        "Detail_Id": travelDetail.travelId
+      };
+
+      travelClass = this.getTravelClass(travelDetail.travelMode, travelDetail.travelClass);
+
+      if (travelClass.type == travelConstants.TRAVEL_CLASS_AIR) {
+
+        var flightDetails = {
+
+          "Travel_Air": {
+            "flight_no": travelDetail.airPreferences.flightNumber,
+            "arrive_date": this.getFormattedDate(arriveDate),
+            "depart_date": this.getFormattedDate(departDate),
+            "meal_pref": this.getMealSelectedText(travelDetail.airPreferences.mealSelected),
+            "terminal": travelDetail.airPreferences.Terminal,
+            "airline": travelDetail.airPreferences.Airline
+
+          }
+        };
+
+        babelHelpers.extends(travelModel, flightDetails);
+      }
+
+      return travelModel;
+    }
+  }, {
+    key: 'getFormattedDate',
+    value: function getFormattedDate(dateObject) {
+
+      if (dateObject == null) return dateObject;else {
+
+        return (0, _utils.convertMillisecondsToServerDateTime)(dateObject.getTime());
+      }
+    }
+  }, {
+    key: 'getMealSelectedText',
+    value: function getMealSelectedText(mealSelected) {
+
+      console.log(FILE_NAME, "In getMealSelectedText Method");
+
+      text = "";
+
+      switch (mealSelected) {
+        case travelConstants.NO_MEAL_REQUIRED:
+
+          text = "No";
+
+          break;
+
+        case travelConstants.MEAL_REQUIRED_VEG:
+
+          text = "Veg";
+
+          break;
+
+        case travelConstants.MEAL_REQUIRED_NON_VEG:
+
+          text = "Nonveg";
+
+          break;
+
+        default:
+
+      }
+
+      return text;
+    }
+  }, {
+    key: 'getTravelPlanDetails',
+    value: function getTravelPlanDetails() {
+
+      console.log(FILE_NAME, "In getTravelPlanDetails Method");
+
+      var _state8 = this.state,
+          travelPurposeDetails = _state8.travelPurposeDetails,
+          travelPlan = _state8.travelPlan,
+          travelCostDetails = _state8.travelCostDetails,
+          travelInformation = _state8.travelInformation;
+
+
+      console.log("travelPlandetails", travelPlan);
+
+      travelItenary = this.getTravelItenary();
+
+      travelPlanDetails = {
+
+        "Travel_Details": {
+
+          "Travel_Details_Line_Item": travelItenary.travelDetails
+        },
+
+        "Accommodation_Details": {
+
+          "Accommodation_Details_Line_Item": travelItenary.stayDetails
+        },
+
+        "Convey_Details": {
+
+          "Convey_Details_Line_Item": travelItenary.localTravelDetails
+        }
+
+      };
+
+      console.log("travelPlandetails", travelPlanDetails);
+
+      return travelPlanDetails;
+    }
+  }, {
+    key: 'getTravelPurposeDetails',
+    value: function getTravelPurposeDetails() {
+
+      console.log(FILE_NAME, "In getTravelPurposeDetails Method");
+
+      var _state9 = this.state,
+          travelPurposeDetails = _state9.travelPurposeDetails,
+          travelPlan = _state9.travelPlan,
+          travelCostDetails = _state9.travelCostDetails,
+          travelInformation = _state9.travelInformation;
+
+
+      var purposeDetails = {
+
+        "Purpose_Id": travelPurposeDetails.travelPurpose,
+        "Travel_Type": travelPurposeDetails.isTravelTypeDomestic ? travelConstants.TRAVEL_TYPE_DOMESTIC_SERVER_LABEL : travelConstants.TRAVEL_TYPE_OVERSEAS_SERVER_LABEL,
+        "Work_Type": travelPurposeDetails.isClientWork ? travelConstants.SERVER_CLIENT_LABEL : travelConstants.SERVER_NON_CLIENT_LABEL
+
+      };
+
+      if (travelPurposeDetails.isClientWork) {
+
+        var clientparams = {
+
+          "Billable": travelPurposeDetails.isClientBillable ? travelConstants.SERVER_BILLABLE_LABEL : travelConstants.SERVER_NOT_BILLABLE_LABEL
+
+        };
+
+        if (travelInformation.askClientNameOrAccount == travelConstants.SERVER_ACCOUNT_LABEL) {
+
+          accountDetails = [];
+
+          for (var _iterator10 = travelPurposeDetails.clientDetails, _isArray10 = Array.isArray(_iterator10), _i10 = 0, _iterator10 = _isArray10 ? _iterator10 : _iterator10[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+            var _ref10;
+
+            if (_isArray10) {
+              if (_i10 >= _iterator10.length) break;
+              _ref10 = _iterator10[_i10++];
+            } else {
+              _i10 = _iterator10.next();
+              if (_i10.done) break;
+              _ref10 = _i10.value;
+            }
+
+            var clientDetail = _ref10;
+
+
+            var accountDetail = {
+
+              "proj_acct_id": clientDetail.clientAccountId,
+              "project_id": clientDetail.clientProject
+            };
+
+            accountDetails.push(accountDetail);
+          }
+
+          clientAccountDetails = {
+
+            "Account_details": {
+
+              "Account_details_line_item": accountDetails
+
+            }
+
+          };
+
+          babelHelpers.extends(clientparams, clientAccountDetails);
+        } else {
+
+          var clientName = {
+
+            "Client_Name": travelPurposeDetails.clientDetails[0].clientAccount
+
+          };
+
+          babelHelpers.extends(clientparams, clientName);
+        }
+
+        babelHelpers.extends(purposeDetails, clientparams);
+      }
+
+      if (travelInformation.personal_travel_request == travelConstants.SERVER_PERSONAL_TRAVEL_REQUIRED_LABEL) {
+
+        var personalTravel = {
+
+          "personal_travel": travelPurposeDetails.isPersonalTravel ? travelConstants.SERVER_PERSONAL_TRAVEL_REQUEST_LABEL : travelConstants.SERVER_NOT_PERSONAL_TRAVEL_REQUEST_LABEL
+        };
+
+        babelHelpers.extends(purposeDetails, personalTravel);
+      }
+
+      console.log("purposeDetails", purposeDetails);
+
+      return purposeDetails;
+    }
+  }, {
+    key: 'getTravelCostDetails',
+    value: function getTravelCostDetails() {
+
+      console.log(FILE_NAME, "In getTravelCostDetails Method");
+
+      var _state10 = this.state,
+          travelPurposeDetails = _state10.travelPurposeDetails,
+          travelPlan = _state10.travelPlan,
+          travelCostDetails = _state10.travelCostDetails,
+          travelInformation = _state10.travelInformation;
+
+
+      var costDetails = {
+
+        "email": travelCostDetails.userEmail,
+        "mobile": travelCostDetails.userMobileNumber,
+        "Description": travelCostDetails.description
+
+      };
+
+      if (travelInformation.travelCostEstimateRequired == travelConstants.SERVER_TOUR_COST_ESTIMATE_REQUIRED_LABEL) {
+
+        var totalCost = {
+
+          "Expected_Travel_Cost": travelCostDetails.totalTravelCostModel.totaltravelcost
+        };
+
+        if (travelInformation.tourCostEstimateBreakupRequired == travelConstants.SERVER_TOUR_COST_ESTIMATE_BREAKUP_REQUIRED_LABEL) {
+
+          var breakupDetails = {
+
+            "travel_expected_travel_cost": travelCostDetails.totalTravelCostModel.travelcost,
+            "stay_expected_travel_cost": travelCostDetails.totalTravelCostModel.staycost,
+            "conveyance_expected_travel_cost": travelCostDetails.totalTravelCostModel.localtravelcost
+          };
+
+          babelHelpers.extends(totalCost, breakupDetails);
+        }
+
+        babelHelpers.extends(costDetails, totalCost);
+      }
+
+      if (travelInformation.advanceRequired == travelConstants.SERVER_ADVANCE_REQUIRED_LABEL) {
+
+        var advanceDetails = {
+
+          "Advance_Needed": travelCostDetails.isAdvanceRequired ? travelConstants.SERVER_ADVANCE_NEEDED_LABEL : travelConstants.SERVER_ADVANCE_NOT_NEEDED_LABEL
+        };
+
+        if (travelCostDetails.isAdvanceRequired) {
+
+          if (travelCostDetails.isAdvanceInSingleCurrency) {
+
+            var serverAdvanceModel = {
+              "Req_Ammount": travelCostDetails.advanceAmountModel[0].advanceAmount,
+              "Currency_Id": travelCostDetails.advanceAmountModel[0].advanceCurrency
+            };
+          } else {
+
+            var advanceModel = [];
+
+            for (var _iterator11 = travelCostDetails.advanceAmountModel, _isArray11 = Array.isArray(_iterator11), _i11 = 0, _iterator11 = _isArray11 ? _iterator11 : _iterator11[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+              var _ref11;
+
+              if (_isArray11) {
+                if (_i11 >= _iterator11.length) break;
+                _ref11 = _iterator11[_i11++];
+              } else {
+                _i11 = _iterator11.next();
+                if (_i11.done) break;
+                _ref11 = _i11.value;
+              }
+
+              var advanceDetail = _ref11;
+
+
+              var advance = {
+
+                "Requested_Amount": advanceDetail.advanceAmount,
+                "currency_id": advanceDetail.advanceCurrency
+              };
+
+              advanceModel.push(advance);
+            }
+
+            var serverAdvanceModel = {
+
+              "Advance_details": {
+
+                "Advance_details_line_item": advanceModel
+              }
+            };
+          }
+
+          babelHelpers.extends(advanceDetails, serverAdvanceModel);
+        }
+
+        babelHelpers.extends(costDetails, advanceDetails);
+      }
+
+      return costDetails;
+    }
+  }]);
+  return EwApplyTravelScreen;
+}(_react.Component);
+
+function bindActions(dispatch) {
+
+  console.log(FILE_NAME, "In bindActions Method");
+
+  return {
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    },
+    updateTotalActivityCount: function updateTotalActivityCount(params) {
+      return dispatch((0, _commonactions.updateTotalActivityCount)(params));
+    },
+
+    getTravelInformation: function getTravelInformation(params) {
+      return dispatch((0, _travelactions.getTravelInformation)(params));
+    },
+
+    travelAction: function travelAction(params) {
+      return dispatch((0, _travelactions.travelAction)(params));
+    },
+
+    applyTravel: function applyTravel(params) {
+      return dispatch((0, _travelactions.applyTravel)(params));
+    },
+
+    clearTravelError: function clearTravelError(params) {
+      return dispatch((0, _travelactions.clearTravelError)(params));
+    }
+  };
+}
+
+function mapStateToProps(state) {
+
+  console.log(FILE_NAME, "In mapStateToProps Method");
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    travelInformationData: state.travel.travelInformationData,
+    travelInformationError: state.travel.travelInformationError,
+
+    travelActionData: state.travel.travelActionData,
+    travelActionError: state.travel.travelActionError,
+
+    travelAppliedData: state.travel.travelAppliedData,
+    travelAppliedError: state.travel.travelAppliedError
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(EwApplyTravelScreen);

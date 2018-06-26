@@ -1,0 +1,701 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _GoogleAnalyticController = require('../../../GoogleAnalyticController');
+
+var _ewnetworkimage = require('../../../components/ewnetworkimage/ewnetworkimage');
+
+var _ewnetworkimage2 = babelHelpers.interopRequireDefault(_ewnetworkimage);
+
+var _ewlistview = require('../../../components/ewlistview/ewlistview');
+
+var _ewlistview2 = babelHelpers.interopRequireDefault(_ewlistview);
+
+var _ewh1text = require('../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewscreentitle = require('../../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _utils = require('../../../utils');
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _ewloadingindicator = require('../../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _pastattendanceutils = require('./pastattendanceutils');
+
+var pastAttendanceConstants = babelHelpers.interopRequireWildcard(_pastattendanceutils);
+
+var _modulelist = require('../../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appStyle = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _commonactions = require('../../../services/common/commonactions');
+
+var _pastattendanceactions = require('../../../services/pastattendance/pastattendanceactions');
+
+var _pastattendanceerrorhandling = require('../../../services/pastattendance/pastattendanceerrorhandling');
+
+var pastAttendanceError = babelHelpers.interopRequireWildcard(_pastattendanceerrorhandling);
+
+var _ewmyappliedpastattendancescreenstyles = require('./styles/ewmyappliedpastattendancescreenstyles');
+
+var _ewmyappliedpastattendancescreenstyles2 = babelHelpers.interopRequireDefault(_ewmyappliedpastattendancescreenstyles);
+
+var FILE_NAME = "ewmyappliedpastattendancescreen.js : ";
+
+var SCREEN_NAME = "My Applied Past Attendance Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var NUMBER_OF_RECORDS = 10;
+
+var EwMyAppliedPastAttendanceScreen = function (_Component) {
+  babelHelpers.inherits(EwMyAppliedPastAttendanceScreen, _Component);
+
+  function EwMyAppliedPastAttendanceScreen(props) {
+    babelHelpers.classCallCheck(this, EwMyAppliedPastAttendanceScreen);
+
+
+    console.log(FILE_NAME + " In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwMyAppliedPastAttendanceScreen.__proto__ || Object.getPrototypeOf(EwMyAppliedPastAttendanceScreen)).call(this, props));
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+    };
+
+    _this._loadMorePastAttendanceAsync = function () {
+
+      console.log(FILE_NAME + "In _loadMorePastAttendanceAsync");
+
+      var areAllPastAttendanceLoaded = _this.state.areAllPastAttendanceLoaded;
+
+
+      if (_this.props.appliedPastAttendanceError == null && !areAllPastAttendanceLoaded) _this.getAppliedPastAttendanceInformation();
+    };
+
+    _this.onPressListItem = function (data) {
+
+      console.log(FILE_NAME + " In onPressListItem method", data);
+
+      tracker.trackEvent(SCREEN_CATEGORY, 'my applied past attendance list item clicked');
+
+      _reactNativeRouterFlux.Actions.ewmypastattendanceactionscreen({ myPastAttendanceData: data });
+    };
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      appliedPastAttendanceData: null,
+      areAllPastAttendanceLoaded: false,
+      refreshing: false,
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwMyAppliedPastAttendanceScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + " In componentWillMount method");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + " In componentWillReceiveProps method");
+
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.appliedPastAttendanceData != null && nextProps.appliedPastAttendanceError == null) {
+
+        elementValues = this.handleElementValues(nextProps.appliedPastAttendanceData.pendingItemInfo, this.state.appliedPastAttendanceData);
+
+        this.setState({
+          appliedPastAttendanceData: elementValues.appliedPastAttendanceData,
+          areAllPastAttendanceLoaded: elementValues.areAllPastAttendanceLoaded,
+          isLoading: false,
+          refreshing: false
+        });
+      }
+
+      if (nextProps.appliedPastAttendanceData == null && nextProps.appliedPastAttendanceError != null) {
+
+        this.setState({
+          isLoading: false,
+          refreshing: false,
+          currentError: nextProps.appliedPastAttendanceError
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + " In shouldComponentUpdate method");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + " In componentWillUpdate method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + " In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage();
+              }
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError === '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + " In componentDidMount method");
+
+      this.getAppliedPastAttendanceInformation();
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + " In componentDidUpdate method");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + " In componentWillUnmount method");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_ALL'
+      };
+
+      this.props.clearPastAttendanceStateData(params);
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+
+      console.log(FILE_NAME + " In renderScreen method");
+
+      var appliedPastAttendanceData = this.state.appliedPastAttendanceData;
+
+
+      console.log(appliedPastAttendanceData);
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        this.props.isMyRequest ? null : _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: 'My Past Attendance Requests'
+            })
+          )
+        ),
+        this.showMyAppliedPastAttendanceList(appliedPastAttendanceData)
+      );
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME + " In handleError method");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      console.log("this.state.currentError", this.state.currentError);
+
+      if (this.state.currentError == '') {
+        return null;
+      }
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+
+          this.showAlertMessage("Session expired, Please login again");
+
+          _reactNativeRouterFlux.Actions.ewlogin();
+
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+        case pastAttendanceError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (this.state.currentError) {
+
+          case pastAttendanceError.SERVER_EXCEPTION:
+
+            this.showAlertMessage(pastAttendanceError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          default:
+
+            this.showAlertMessage();
+
+            return this.renderScreen();
+        }
+      }
+    }
+  }, {
+    key: 'getAppliedPastAttendanceInformation',
+    value: function getAppliedPastAttendanceInformation() {
+      var appliedPastAttendanceData = this.state.appliedPastAttendanceData;
+
+
+      currentId = 0;
+
+      if (appliedPastAttendanceData != null && appliedPastAttendanceData.length != 0) currentId = appliedPastAttendanceData[appliedPastAttendanceData.length - 1].pi_Txn_Id;
+
+      var params = {
+        requestType: 'MyPA',
+        currentId: currentId,
+        numberOfRecords: NUMBER_OF_RECORDS
+      };
+
+      this.props.getAppliedPastAttendanceList(params);
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(appliedPastAttendanceList, currentListVisible) {
+
+      areAllPastAttendanceLoaded = this.state.areAllPastAttendanceLoaded;
+      console.log("handleElementValues", appliedPastAttendanceList, currentListVisible);
+      if (currentListVisible != null) {
+
+        if (appliedPastAttendanceList != null) {
+
+          if (appliedPastAttendanceList.length == 0) {
+
+            areAllPastAttendanceLoaded = true;
+
+            appliedPastAttendanceList = this.state.appliedPastAttendanceData;
+          } else {
+
+            updatedPastAttendanceListVisible = [].concat(babelHelpers.toConsumableArray(currentListVisible), babelHelpers.toConsumableArray(appliedPastAttendanceList));
+
+            console.log("updatedPastAttendanceListVisible", updatedPastAttendanceListVisible);
+            appliedPastAttendanceList = updatedPastAttendanceListVisible;
+          }
+        }
+      }
+
+      elementValues = {
+
+        appliedPastAttendanceData: appliedPastAttendanceList,
+        areAllPastAttendanceLoaded: areAllPastAttendanceLoaded
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: '_onRefresh',
+    value: function _onRefresh() {
+
+      console.log(FILE_NAME + "In _onRefresh method");
+
+      this.setState({ refreshing: true });
+
+      this.getAppliedPastAttendanceInformation();
+    }
+  }, {
+    key: 'renderListItem',
+    value: function renderListItem(_ref) {
+      var _this2 = this;
+
+      var item = _ref.item;
+
+
+      console.log(FILE_NAME + " In renderListView method", item);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(
+          _nativeBase.ListItem,
+          { avatar: true, onPress: function onPress() {
+              return _this2.onPressListItem(item.odinfo);
+            } },
+          _react2.default.createElement(
+            _nativeBase.Left,
+            null,
+            _react2.default.createElement(_ewnetworkimage2.default, { networkUrl: (0, _utils.getImageUrl)(this.props.sessionToken, item.gen_id, 'My Past attendance', this.props.currentImageTimestamp) })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            null,
+            _react2.default.createElement(_ewh1text2.default, {
+              text: item.pi_dt
+            }),
+            this.getStatusOfPastAttendance(item.odinfo.status)
+          )
+        )
+      );
+    }
+  }, {
+    key: 'getNumberOfDays',
+    value: function getNumberOfDays(startDate, endDate) {
+
+      console.log(FILE_NAME + " In getNumberOfDays method");
+
+      numberOfDays = 1;
+
+      if (endDate != null && endDate != startDate) {
+
+        serverStartDate = new Date((0, _utils.convertServerDateToMilliseconds)(startDate));
+
+        serverEndDate = new Date((0, _utils.convertServerDateToMilliseconds)(endDate));
+
+        numberOfDays = (0, _utils.getDayDifference)(serverStartDate, serverEndDate);
+      }
+
+      return numberOfDays;
+    }
+  }, {
+    key: 'showMyAppliedPastAttendanceList',
+    value: function showMyAppliedPastAttendanceList(appliedPastAttendanceData) {
+      var _this3 = this;
+
+      console.log(FILE_NAME + " In showMyAppliedPastAttendanceList method");
+
+      if (appliedPastAttendanceData != null && this.props.appliedPastAttendanceError == null) {
+
+        return _react2.default.createElement(_ewlistview2.default, {
+          listData: appliedPastAttendanceData,
+          extraData: this.state,
+          listKey: function listKey(data, index) {
+            return index;
+          },
+          renderListItem: function renderListItem(data) {
+            return _this3.renderListItem(data);
+          },
+          onEndReached: function onEndReached() {
+            return _this3._loadMorePastAttendanceAsync();
+          },
+          onEndReachedThreshold: 0.5,
+          isAllDataLoaded: this.state.areAllPastAttendanceLoaded,
+          refreshing: this.state.refreshing,
+          onRefresh: this._onRefresh.bind(this)
+        });
+      } else if (appliedPastAttendanceData == null && this.props.appliedPastAttendanceError == null) {
+
+        console.log("2nd Case", _ewmyappliedpastattendancescreenstyles2.default);
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewmyappliedpastattendancescreenstyles2.default.spinnerContainer },
+          _react2.default.createElement(_nativeBase.Spinner, { size: 'small' }),
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: _ewmyappliedpastattendancescreenstyles2.default.spinnerTextStyle },
+            'Loading Your Past Attendance Requests...'
+          )
+        );
+      } else if (appliedPastAttendanceData == null && this.props.appliedPastAttendanceError != null) {
+
+        console.log("3rd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewmyappliedpastattendancescreenstyles2.default.loadAgainButtonContainer },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { onPress: function onPress() {
+                return _this3.getAppliedPastAttendanceInformation();
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Load Again'
+            )
+          )
+        );
+      } else {
+
+        console.log("4th Case");
+        console.log("appliedPastAttendanceData, ", appliedPastAttendanceData);
+        console.log("this.props.appliedPastAttendanceError, ", this.props.appliedPastAttendanceError);
+      }
+    }
+  }, {
+    key: 'getStatusOfPastAttendance',
+    value: function getStatusOfPastAttendance(pastAttendanceStatus) {
+
+      console.log(FILE_NAME + " In getStatusOfPastAttendance method");
+
+      pastAttendanceStatusText = pastAttendanceStatus;
+      pastAttendanceStatusColor = appStyle.APP_BLACK;
+
+      switch (pastAttendanceStatus) {
+        case pastAttendanceConstants.PENDING_APPROVAL_LABEL:
+
+          pastAttendanceStatusColor = appStyle.APP_ORANGE;
+          break;
+
+        case pastAttendanceConstants.APPROVED_LABEL:
+
+          pastAttendanceStatusColor = appStyle.APP_GREEN;
+          break;
+
+        case pastAttendanceConstants.REJECTED_LABEL:
+
+          pastAttendanceStatusColor = appStyle.APP_RED;
+          break;
+
+        case pastAttendanceConstants.RECONSIDER_LABEL:
+
+          pastAttendanceStatusColor = appStyle.APP_LIGHT_BLUE;
+          break;
+
+        case pastAttendanceConstants.CANCELLED_LABEL:
+
+          pastAttendanceStatusColor = appStyle.APP_BLACK;
+          break;
+
+        case pastAttendanceConstants.CANCELLATION_REQUESTED_LABEL:
+
+          pastAttendanceStatusColor = appStyle.APP_GRAY;
+          break;
+
+        case pastAttendanceConstants.CANCELLATION_APPROVED_LABEL:
+
+          pastAttendanceStatusColor = appStyle.APP_GREEN;
+          break;
+
+        default:
+
+      }
+
+      console.log("pastAttendanceStatusColor", pastAttendanceStatusColor, pastAttendanceStatusText);
+
+      return _react2.default.createElement(_ewh3text2.default, {
+        text: pastAttendanceStatusText,
+        customStyle: { color: pastAttendanceStatusColor }
+      });
+    }
+  }]);
+  return EwMyAppliedPastAttendanceScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + " In bindAction method");
+
+  return {
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    },
+    getAppliedPastAttendanceList: function getAppliedPastAttendanceList(params) {
+      return dispatch((0, _pastattendanceactions.getAppliedPastAttendanceList)(params));
+    },
+    clearPastAttendanceStateData: function clearPastAttendanceStateData(params) {
+      return dispatch((0, _pastattendanceactions.clearPastAttendanceStateData)(params));
+    },
+    clearPastAttendanceError: function clearPastAttendanceError(params) {
+      return dispatch((0, _pastattendanceactions.clearPastAttendanceError)(params));
+    }
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+    errorWebService: state.auth.errorWebService,
+
+    appliedPastAttendanceData: state.pastattendance.appliedPastAttendanceData,
+    appliedPastAttendanceError: state.pastattendance.appliedPastAttendanceError,
+
+    currentImageTimestamp: state.common.currentImageTimestamp,
+
+    pastAttendanceErrorCounter: state.pastattendance.errorCounter
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwMyAppliedPastAttendanceScreen);

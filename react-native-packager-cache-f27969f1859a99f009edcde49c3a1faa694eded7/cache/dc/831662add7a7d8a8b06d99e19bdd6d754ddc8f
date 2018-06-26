@@ -1,0 +1,27 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+exports.default = {
+
+  buttonStyle: {
+
+    borderWidth: 1.5,
+    borderRadius: 1,
+    borderColor: appstyleguide.APP_BLACK
+  },
+
+  buttonTextStyle: {
+
+    color: appstyleguide.APP_BLACK
+  },
+
+  textStyle: {
+    marginBottom: 10,
+    color: appstyleguide.APP_GRAY
+
+  }
+};

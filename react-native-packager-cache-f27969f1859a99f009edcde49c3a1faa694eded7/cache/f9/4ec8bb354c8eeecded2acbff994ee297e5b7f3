@@ -1,0 +1,8 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var GET_AVAILABLE_PAYSLIPS = exports.GET_AVAILABLE_PAYSLIPS = '/fetchpayslipdata?scope=I';
+
+var GET_PAY_SLIP_INFORMATION = exports.GET_PAY_SLIP_INFORMATION = '/payrolldata?scope=I';
+
+var DOWNLOAD_PAY_SLIP = exports.DOWNLOAD_PAY_SLIP = '/payslipdownload?scope=I';

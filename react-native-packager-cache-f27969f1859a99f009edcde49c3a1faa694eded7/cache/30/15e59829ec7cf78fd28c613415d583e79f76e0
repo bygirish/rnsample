@@ -1,0 +1,258 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _ewbar = require('../../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewdatebutton = require('../../../../components/ewdatebutton/ewdatebutton');
+
+var _ewdatebutton2 = babelHelpers.interopRequireDefault(_ewdatebutton);
+
+var _ewtext = require('../../../../components/ewtext/ewtext');
+
+var _ewtext2 = babelHelpers.interopRequireDefault(_ewtext);
+
+var _ewcard = require('../../../../components/ewcard/ewcard');
+
+var _ewcard2 = babelHelpers.interopRequireDefault(_ewcard);
+
+var _ewh1text = require('../../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewh4text = require('../../../../components/ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewicon = require('../../../../components/ewicon/ewicon');
+
+var _ewicon2 = babelHelpers.interopRequireDefault(_ewicon);
+
+var _ewcheckbox = require('../../../../components/ewcheckbox/ewcheckbox');
+
+var _ewcheckbox2 = babelHelpers.interopRequireDefault(_ewcheckbox);
+
+var _ewfloatinglabel = require('../../../../components/ewfloatinglabel/ewfloatinglabel');
+
+var _ewfloatinglabel2 = babelHelpers.interopRequireDefault(_ewfloatinglabel);
+
+var _ewautocompleteinput = require('../../../../components/ewautocompleteinput/ewautocompleteinput');
+
+var _ewautocompleteinput2 = babelHelpers.interopRequireDefault(_ewautocompleteinput);
+
+var _ewbutton = require('../../../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _ewmodal = require('../../../../components/ewmodal/ewmodal');
+
+var _ewmodal2 = babelHelpers.interopRequireDefault(_ewmodal);
+
+var _ewradiobutton = require('../../../../components/ewradiobutton/ewradiobutton');
+
+var _ewradiobutton2 = babelHelpers.interopRequireDefault(_ewradiobutton);
+
+var _ewdropdownpicker = require('../../../../components/ewdropdownpicker/ewdropdownpicker');
+
+var _ewdropdownpicker2 = babelHelpers.interopRequireDefault(_ewdropdownpicker);
+
+var _utils = require('../../../../utils');
+
+var _onboardingutils = require('../../onboardingutils');
+
+var onboardingutils = babelHelpers.interopRequireWildcard(_onboardingutils);
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+
+var context;
+
+var FILE_NAME = "phoneemail.js";
+
+var PhoneEmail = function (_Component) {
+  babelHelpers.inherits(PhoneEmail, _Component);
+
+  function PhoneEmail(props, context) {
+    babelHelpers.classCallCheck(this, PhoneEmail);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (PhoneEmail.__proto__ || Object.getPrototypeOf(PhoneEmail)).call(this, props, context));
+
+    console.log("initial state testing ", props);
+
+    if (_this.props.initialState == null) {
+
+      _this.initialState = {
+
+        workEmailId: "",
+        personalEmailId: "",
+
+        mobilePhone: "",
+
+        workPhone: "",
+        workPhoneExtn: ""
+      };
+
+      _this.state = _this.initialState;
+    } else {
+
+      _this.state = _this.props.initialState;
+    }
+
+    return _this;
+  }
+
+  babelHelpers.createClass(PhoneEmail, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log("In componentWillMount");
+
+      context = this;
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log(FILE_NAME + "In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props = this.props,
+          addressType = _props.addressType,
+          props = babelHelpers.objectWithoutProperties(_props, ['addressType']);
+      var _state = this.state,
+          workEmailId = _state.workEmailId,
+          personalEmailId = _state.personalEmailId,
+          mobilePhone = _state.mobilePhone,
+          workPhone = _state.workPhone,
+          workPhoneExtn = _state.workPhoneExtn;
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(_ewfloatinglabel2.default, {
+          label: onboardingutils.WORK_EMAIL_ID_LABEL,
+          placeholderlabel: onboardingutils.WORK_EMAIL_ID_PLACEHOLDER_LABEL,
+          autoCorrect: false,
+          autoCapitalize: 'none',
+          onChangeText: function onChangeText(workEmailId) {
+            return _this2.setState({ workEmailId: workEmailId });
+          },
+          value: workEmailId
+        }),
+        _react2.default.createElement(_ewfloatinglabel2.default, {
+          label: onboardingutils.PERSONAL_EMAIL_ID_LABEL,
+          placeholderlabel: onboardingutils.PERSONAL_EMAIL_ID_PLACEHOLDER_LABEL,
+          autoCorrect: false,
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+          autoCapitalize: 'none',
+          onChangeText: function onChangeText(personalEmailId) {
+            return _this2.setState({ personalEmailId: personalEmailId });
+          },
+          value: personalEmailId
+        }),
+        _react2.default.createElement(_ewfloatinglabel2.default, {
+          label: onboardingutils.MOBILE_PHONE_LABEL,
+          placeholderlabel: onboardingutils.MOBILE_PHONE_PLACEHOLDER_LABEL,
+          autoCorrect: false,
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+          autoCapitalize: 'none',
+          onChangeText: function onChangeText(mobilePhone) {
+            return _this2.setState({ mobilePhone: mobilePhone });
+          },
+          value: mobilePhone
+        }),
+        _react2.default.createElement(_ewfloatinglabel2.default, {
+          label: onboardingutils.WORK_PHONE_LABEL,
+          placeholderlabel: onboardingutils.WORK_PHONE_PLACEHOLDER_LABEL,
+          autoCorrect: false,
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+          autoCapitalize: 'none',
+          onChangeText: function onChangeText(workPhone) {
+            return _this2.setState({ workPhone: workPhone });
+          },
+          value: workPhone
+        }),
+        _react2.default.createElement(_ewfloatinglabel2.default, {
+          label: onboardingutils.WORK_PHONE_EXT_LABEL,
+          placeholderlabel: onboardingutils.WORK_PHONE_EXT_PLACEHOLDER_LABEL,
+          autoCorrect: false,
+          autoCapitalize: 'none',
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+          onChangeText: function onChangeText(workPhoneExtn) {
+            return _this2.setState({ workPhoneExtn: workPhoneExtn });
+          },
+          value: workPhoneExtn
+        })
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log("In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }, {
+    key: 'getCurrentState',
+    value: function getCurrentState() {
+
+      return this.state;
+    }
+  }]);
+  return PhoneEmail;
+}(_react.Component);
+
+exports.default = PhoneEmail;

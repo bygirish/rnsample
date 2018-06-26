@@ -1,0 +1,1151 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _nativeBase = require('native-base');
+
+var _draweractions = require('../../services/drawer/draweractions');
+
+var _ewuserinfo = require('../../components/ewuser/ewuserinfo');
+
+var _ewuserinfo2 = babelHelpers.interopRequireDefault(_ewuserinfo);
+
+var _ewloadingindicator = require('../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewfloatinglabel = require('../../components/ewfloatinglabel/ewfloatinglabel');
+
+var _ewfloatinglabel2 = babelHelpers.interopRequireDefault(_ewfloatinglabel);
+
+var _ewscreentitle = require('../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _ewreportissue = require('../../components/ewreportissue/ewreportissue');
+
+var _ewreportissue2 = babelHelpers.interopRequireDefault(_ewreportissue);
+
+var _ewbar = require('../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _utils = require('../../utils');
+
+var _animationutils = require('../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _leaveerrorhandling = require('../../services/leave/leaveerrorhandling');
+
+var leaveError = babelHelpers.interopRequireWildcard(_leaveerrorhandling);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _leaveUtils = require('./leaveUtils');
+
+var leaveConstants = babelHelpers.interopRequireWildcard(_leaveUtils);
+
+var _needtoactactions = require('../../services/needtoact/needtoactactions');
+
+var _leaveactions = require('../../services/leave/leaveactions');
+
+var _ewleaveactionscreenstyle = require('./styles/ewleaveactionscreenstyle');
+
+var _ewleaveactionscreenstyle2 = babelHelpers.interopRequireDefault(_ewleaveactionscreenstyle);
+
+var _screennameidentifiers = require('../../utils/screennameidentifiers');
+
+var FILE_NAME = "ewleaveactionscreen.js : ";
+
+var SCREEN_NAME = "Leave Action Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwLeaveActionScreen = function (_Component) {
+  babelHelpers.inherits(EwLeaveActionScreen, _Component);
+
+  function EwLeaveActionScreen(props, context) {
+    babelHelpers.classCallCheck(this, EwLeaveActionScreen);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwLeaveActionScreen.__proto__ || Object.getPrototypeOf(EwLeaveActionScreen)).call(this, props, context));
+
+    _this._keyboardDidShow = function (event) {
+
+      console.log(FILE_NAME + "In _keyboardDidShow method");
+
+      scrollView._root.scrollToEnd({ animated: true });
+    };
+
+    _this.getHeaderTitle = function (pendingLeaveInformation) {
+
+      console.log(FILE_NAME + "In getHeaderTitle method");
+
+      if (leaveConstants.STATUS_PENDING_APPROVAL == pendingLeaveInformation.status) return "Approve Leave";
+      if (leaveConstants.STATUS_CANCELLATION_REQUESTED == pendingLeaveInformation.status) return "Approve Leave Cancellation";
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+
+      _this.props.clearLeaveError(null);
+    };
+
+    _this.getLeaveActionText = function (leaveAction) {
+
+      actionText = '';
+
+      if (leaveAction == leaveConstants.APPROVE_LEAVE_ACTION) actionText = leaveConstants.APPROVE_LEAVE_ACTION_LABEL;
+
+      if (leaveAction == leaveConstants.REJECT_LEAVE_ACTION) actionText = leaveConstants.REJECT_LEAVE_ACTION_LABEL;
+
+      if (leaveAction == leaveConstants.RECONSIDER_LEAVE_ACTION) actionText = leaveConstants.RECONSIDER_LEAVE_ACTION_LABEL;
+
+      if (leaveAction == leaveConstants.APPROVE_CANCELLATION_LEAVE_ACTION) actionText = 'Approve Cancellation';
+
+      if (leaveAction == leaveConstants.REJECT_CANCELLATION_LEAVE_ACTION) actionText = 'Reject Cancellation';
+
+      return actionText;
+    };
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      loadAbsenceDetail: false,
+      pendingLeaveInformation: [],
+
+      isLeaveRejected: false,
+      isLeaveReconsidered: false,
+
+      rejectOrReconsiderReason: null,
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwLeaveActionScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      if (this.props.isPendingLeaveDataAvailable) {
+
+        this.setState({
+          isDataPreLoaded: true,
+          isLoading: false,
+          pendingLeaveInformation: this.props.isPendingLeaveDataAvailable
+        });
+      } else {
+
+        var params = {
+          leaveId: this.props.leaveData.pi_Txn_Id
+        };
+
+        this.setState({
+          isDataPreLoaded: false,
+          isLoading: true
+        });
+
+        this.props.getPendingLeaveInformation(params);
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ");
+      console.log(nextProps);
+
+      if (nextProps.leaveActionData != null && nextProps.leaveActionError == null) {
+
+        console.log(FILE_NAME + "Action Successfull");
+
+        this.setState({
+          isDone: true,
+          isLoading: false,
+          currentError: ''
+        });
+
+        this.props.updateTotalActivityCount(null);
+      }
+
+      if (nextProps.leaveActionData == null && nextProps.leaveActionError != null) {
+
+        console.log(FILE_NAME + "Action Not Successfull");
+
+        this.setState({
+          isDone: false,
+          isLoading: false,
+          currentError: nextProps.leaveActionError
+        });
+      }
+
+      if (nextProps.pendingLeaveInformation != null && nextProps.pendingLeaveInformationError == null) {
+
+        (0, _utils.showAnimation)(animationUtils.DEFAULT_SCREEN_ANIMATION);
+
+        this.setState({
+          isLoading: false,
+          isDataPreLoaded: true,
+          pendingLeaveInformation: nextProps.pendingLeaveInformation
+        });
+      }
+
+      if (nextProps.pendingLeaveInformation == null && nextProps.pendingLeaveInformationError != null) {
+
+        this.setState({
+          isLoading: false,
+          isDataPreLoaded: false
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+
+              {
+                this.showLeaveApprovalMessage();
+              }
+
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      this.keyboardDidShowListener = _reactNative.Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      this.keyboardDidShowListener.remove();
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_ALL'
+      };
+
+      this.props.clearLeaveStateData(params);
+
+      if (this.state.isDone && this.state.currentError == '') {
+
+        console.log(FILE_NAME + "Action Successfull");
+
+        var params = {
+          "0": 'CLEAR_STATE_DATA_ALL'
+        };
+
+        this.props.clearNeedToActStateData(params);
+      }
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+
+      console.log(FILE_NAME + "In renderScreen method");
+
+      var pendingLeaveInformation = this.state.pendingLeaveInformation;
+
+
+      var info = {
+        name: pendingLeaveInformation.user_Name,
+        designation: pendingLeaveInformation.designation,
+        imageUrl: (0, _utils.getImageUrl)(this.props.sessionToken, pendingLeaveInformation.empCode, 'Leave Action', this.props.currentImageTimestamp),
+        datetime: pendingLeaveInformation.applied_on_timestamp
+      };
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: this.getHeaderTitle(pendingLeaveInformation)
+            })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Right,
+            null,
+            _react2.default.createElement(_ewreportissue2.default, {
+              screenId: _screennameidentifiers.PENDING_LEAVE_ACTION_ID
+            })
+          )
+        ),
+        _react2.default.createElement(
+          _nativeBase.Content,
+          {
+            ref: function ref(_ref) {
+              return scrollView = _ref;
+            },
+            contentContainerStyle: _ewleaveactionscreenstyle2.default.contentContainerStyle,
+            keyboardShouldPersistTaps: 'always'
+          },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewleaveactionscreenstyle2.default.ewbarContainerStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewleaveactionscreenstyle2.default.ewbarTextStyle },
+              'Request From'
+            ),
+            _react2.default.createElement(_ewbar2.default, null)
+          ),
+          _react2.default.createElement(_ewuserinfo2.default, { info: info }),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewleaveactionscreenstyle2.default.headingContainerStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewleaveactionscreenstyle2.default.headingTextStyle },
+              'Leave Type '
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              pendingLeaveInformation.leaveType
+            )
+          ),
+          pendingLeaveInformation.leavecategory_id == leaveConstants.DIVERSITY_LEAVE ? _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewleaveactionscreenstyle2.default.headingContainerStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewleaveactionscreenstyle2.default.headingTextStyle },
+              'Diversity Holidays '
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              pendingLeaveInformation.diversity_holiday
+            )
+          ) : null,
+          this.getLeaveDate(pendingLeaveInformation),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewleaveactionscreenstyle2.default.headingContainerStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewleaveactionscreenstyle2.default.headingTextStyle },
+              'No. of days '
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              pendingLeaveInformation.no_Days
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewleaveactionscreenstyle2.default.headingContainerStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewleaveactionscreenstyle2.default.headingTextStyle },
+              'Reason'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              pendingLeaveInformation.reason
+            )
+          ),
+          this.showReason(),
+          this.showMoreView(),
+          this.showFooterTab(pendingLeaveInformation)
+        )
+      );
+    }
+  }, {
+    key: 'showLeaveApprovalMessage',
+    value: function showLeaveApprovalMessage() {
+
+      console.log(FILE_NAME + "In showLeaveApprovalMessage method");
+
+      var pendingLeaveInformation = this.state.pendingLeaveInformation;
+
+
+      if (leaveConstants.STATUS_PENDING_APPROVAL == pendingLeaveInformation.status) this.showAlertMessage('Successfully Done', 'Leave Approval', 'success');
+
+      if (leaveConstants.STATUS_CANCELLATION_REQUESTED == pendingLeaveInformation.status) this.showAlertMessage('Successfully Done', 'Leave Cancellation Approval', 'success');
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME + "In handleError method");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      console.log("this.state.currentError", this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+        case leaveError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (this.state.currentError) {
+
+          case leaveError.SERVER_EXCEPTION:
+            this.showAlertMessage(leaveError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          default:
+            this.showAlertMessage();
+            return this.renderScreen();
+
+        }
+      }
+    }
+  }, {
+    key: 'showFooterTab',
+    value: function showFooterTab(pendingLeaveInformation) {
+
+      console.log(FILE_NAME + "In showFooterTab method");
+
+      var approver_Id = pendingLeaveInformation.approver_Id,
+          approver_id2 = pendingLeaveInformation.approver_id2,
+          current_approval = pendingLeaveInformation.current_approval;
+      var user_id = this.props.pendingNeedToActData.employeeInfo.user_id;
+
+      switch (current_approval) {
+
+        case 0:
+        case 1:
+
+          if (user_id == approver_Id) return this.renderActionButtons(pendingLeaveInformation);
+
+          break;
+
+        case 2:
+          if (user_id == approver_id2) return this.renderActionButtons(pendingLeaveInformation);
+
+          break;
+
+        default:
+
+      }
+
+      return null;
+    }
+  }, {
+    key: 'renderActionButtons',
+    value: function renderActionButtons(pendingLeaveInformation) {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In renderActionButtons method");
+
+      var status = pendingLeaveInformation.status;
+      var _state = this.state,
+          isLeaveRejected = _state.isLeaveRejected,
+          isLeaveReconsidered = _state.isLeaveReconsidered;
+
+
+      if (status == leaveConstants.STATUS_PENDING_APPROVAL) {
+        if (!isLeaveRejected && !isLeaveReconsidered) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewleaveactionscreenstyle2.default.footerContainerStyle },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { style: { marginRight: 10 }, onPress: function onPress() {
+                  return _this2.onPressAction(leaveConstants.APPROVE_LEAVE_ACTION);
+                } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                leaveConstants.APPROVE_LEAVE_ACTION_LABEL
+              )
+            ),
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { onPress: function onPress() {
+                  return _this2.changeActionButtonState(leaveConstants.REJECT_LEAVE_ACTION);
+                } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                leaveConstants.REJECT_LEAVE_ACTION_LABEL
+              )
+            ),
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { style: { marginLeft: 10 }, onPress: function onPress() {
+                  return _this2.changeActionButtonState(leaveConstants.RECONSIDER_LEAVE_ACTION);
+                } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                leaveConstants.RECONSIDER_LEAVE_ACTION_LABEL
+              )
+            )
+          );
+        }
+
+        if (isLeaveRejected) {
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 10 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { style: { marginLeft: 10 }, onPress: function onPress() {
+                  return _this2.changeActionButtonState(leaveConstants.REJECT_LEAVE_ACTION);
+                } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                leaveConstants.CANCEL_LEAVE_LABEL
+              )
+            ),
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { style: { marginLeft: 10 }, onPress: function onPress() {
+                  return _this2.onPressAction(leaveConstants.REJECT_LEAVE_ACTION);
+                } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                leaveConstants.REJECT_LEAVE_ACTION_LABEL
+              )
+            )
+          );
+        }
+
+        if (isLeaveReconsidered) {
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 10 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { style: { marginLeft: 10 }, onPress: function onPress() {
+                  return _this2.changeActionButtonState(leaveConstants.RECONSIDER_LEAVE_ACTION);
+                } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                leaveConstants.CANCEL_LEAVE_LABEL
+              )
+            ),
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { style: { marginLeft: 10 }, onPress: function onPress() {
+                  return _this2.onPressAction(leaveConstants.RECONSIDER_LEAVE_ACTION);
+                } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                leaveConstants.RECONSIDER_LEAVE_ACTION_LABEL
+              )
+            )
+          );
+        }
+      }
+
+      if (status == leaveConstants.STATUS_CANCELLATION_REQUESTED) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 10 } },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { style: { marginRight: 10 }, onPress: function onPress() {
+                return _this2.onPressAction(leaveConstants.APPROVE_CANCELLATION_LEAVE_ACTION);
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              leaveConstants.APPROVE_LEAVE_ACTION_LABEL
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { onPress: function onPress() {
+                return _this2.onPressAction(leaveConstants.REJECT_CANCELLATION_LEAVE_ACTION);
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              leaveConstants.REJECT_LEAVE_ACTION_LABEL
+            )
+          )
+        );
+      }
+    }
+  }, {
+    key: 'changeActionButtonState',
+    value: function changeActionButtonState(leaveAction) {
+
+      console.log(FILE_NAME + "In changeActionButtonState method");
+
+      switch (leaveAction) {
+
+        case leaveConstants.REJECT_LEAVE_ACTION:
+
+          this.setState({
+            isLeaveRejected: !this.state.isLeaveRejected
+          });
+          break;
+
+        case leaveConstants.RECONSIDER_LEAVE_ACTION:
+
+          this.setState({
+            isLeaveReconsidered: !this.state.isLeaveReconsidered
+          });
+
+          break;
+
+        default:
+
+      }
+    }
+  }, {
+    key: 'focusReasonInput',
+    value: function focusReasonInput() {
+
+      console.log(FILE_NAME + "In focusReasonInput method");
+
+      if (this._reasonInput != undefined) this._reasonInput._textInput.focus();
+    }
+  }, {
+    key: 'showReason',
+    value: function showReason() {
+      var _this3 = this;
+
+      console.log(FILE_NAME + "In showReason method");
+
+      var _state2 = this.state,
+          isLeaveRejected = _state2.isLeaveRejected,
+          isLeaveReconsidered = _state2.isLeaveReconsidered;
+
+
+      if (isLeaveRejected || isLeaveReconsidered) {
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewfloatinglabel2.default, {
+            autoFocus: true,
+            label: 'Reason',
+            autoCorrect: false,
+            onChangeText: function onChangeText(rejectOrReconsiderReason) {
+              return _this3.setState({ rejectOrReconsiderReason: rejectOrReconsiderReason });
+            },
+            value: this.state.rejectOrReconsiderReason
+          })
+        );
+      }
+    }
+  }, {
+    key: 'localValidation',
+    value: function localValidation() {
+
+      console.log(FILE_NAME + "In localValidation method");
+
+      var _state3 = this.state,
+          isLeaveRejected = _state3.isLeaveRejected,
+          isLeaveReconsidered = _state3.isLeaveReconsidered,
+          rejectOrReconsiderReason = _state3.rejectOrReconsiderReason;
+
+
+      if (isLeaveRejected || isLeaveReconsidered) {
+
+        if (rejectOrReconsiderReason == null || rejectOrReconsiderReason === '') {
+
+          this.showAlertMessage("Please enter reason");
+
+          return false;
+        }
+      }
+
+      return true;
+    }
+  }, {
+    key: 'onPressAction',
+    value: function onPressAction(action) {
+
+      console.log(FILE_NAME + "In onPressAction method");
+
+      if (this.localValidation()) {
+
+        tracker.trackEvent(SCREEN_CATEGORY, 'leave action taken - ' + this.getLeaveActionText(action));
+
+        console.log('leave action taken - ' + this.getLeaveActionText(action));
+
+        var pendingLeaveInformation = this.state.pendingLeaveInformation;
+
+
+        if (pendingLeaveInformation.status == leaveConstants.STATUS_PENDING_APPROVAL) pi_Txn_Subtype = 1;else pi_Txn_Subtype = 2;
+
+        var params = {
+          "Approver2": 0,
+          "Approver_Id": 0,
+          "MaxHourLeave": 0,
+          "absence": pendingLeaveInformation.absence,
+          "action": action,
+          "allow_attachment": pendingLeaveInformation.allow_attachment,
+          "applied_on": pendingLeaveInformation.applied_on,
+          "approver_Designation": pendingLeaveInformation.approver_Designation,
+          "attach_Mandatory": pendingLeaveInformation.attach_Mandatory,
+          "balance": pendingLeaveInformation.balance,
+          "declaration_Required": pendingLeaveInformation.declaration_Required,
+          "designation": pendingLeaveInformation.designation,
+          "diversity_Id": pendingLeaveInformation.diversity_Id,
+          "empCode": pendingLeaveInformation.empCode,
+          "end_Date": pendingLeaveInformation.end_Date,
+          "end_Date_Timestamp": pendingLeaveInformation.end_Date_Timestamp,
+          "half_Day": pendingLeaveInformation.half_Day,
+          "half_Day2": pendingLeaveInformation.half_Day2,
+          "httpStatus": 200,
+          "isAdditionalNotificationRequired": pendingLeaveInformation.isAdditionalNotificationRequired,
+          "isContinue": pendingLeaveInformation.isContinue,
+          "isRequester": pendingLeaveInformation.isRequester,
+          "is_Planned": pendingLeaveInformation.is_Planned,
+          "leaveDetail": pendingLeaveInformation.leaveDetail,
+          "leaveType": pendingLeaveInformation.leaveType,
+          "leave_id": pendingLeaveInformation.leave_id,
+          "leavetype_category_id": pendingLeaveInformation.leavetype_category_id,
+          "leavetype_id": pendingLeaveInformation.leavetype_id,
+          "no_Days": pendingLeaveInformation.no_Days,
+          "pi_Module_Id": modules.MODULE_LEAVE_AND_ATTENDANCE,
+          "pi_Txn_Subtype": pi_Txn_Subtype,
+          "pi_Txn_Type": leaveConstants.PENDING_LEAVE_TYPE,
+          "previous_No_Days": pendingLeaveInformation.previous_No_Days,
+          "reapply_Flag": pendingLeaveInformation.reapply_Flag,
+          "reason": this.state.rejectOrReconsiderReason,
+          "start_Date": pendingLeaveInformation.start_Date,
+          "start_Date_Timestamp": pendingLeaveInformation.start_Date_Timestamp,
+          "track_planned": pendingLeaveInformation.track_planned,
+          "user_Name": pendingLeaveInformation.user_Name
+        };
+
+        this.props.leaveAction(params);
+
+        this.setState({
+          isLoading: true,
+          isDone: false
+        });
+      }
+    }
+  }, {
+    key: 'showMoreView',
+    value: function showMoreView() {
+
+      console.log(FILE_NAME + "In showMoreView method");
+
+      var pendingLeaveInformation = this.state.pendingLeaveInformation;
+
+
+      if (this.state.loadAbsenceDetail) {
+
+        absenceDetail = {
+          userDetail: {
+            Address: pendingLeaveInformation.address,
+            Phone: pendingLeaveInformation.phone,
+            Email: pendingLeaveInformation.email
+          }
+        };
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginTop: 5, marginLeft: 5 } },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: { marginLeft: 5, color: "#bbbbbb" } },
+            'In my absence ,my contact details will be '
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flex: 1, marginTop: 5, flexDirection: 'column' } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Address:',
+              absenceDetail.userDetail.Address
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Phone:',
+              absenceDetail.userDetail.Phone
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Email:',
+              absenceDetail.userDetail.Email
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginTop: 5 } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { marginLeft: 5, marginBottom: 5, color: "#bbbbbb", marginTop: 10 } },
+              'In my absence ,various approval should be handled as below '
+            ),
+            Object.keys(pendingLeaveInformation.absence).map(function (key) {
+              return _react2.default.createElement(
+                _reactNative.View,
+                null,
+                _react2.default.createElement(
+                  _nativeBase.Text,
+                  { style: { color: "#bbbbbb" } },
+                  key
+                ),
+                _react2.default.createElement(
+                  _nativeBase.Text,
+                  null,
+                  pendingLeaveInformation.absence[key]
+                )
+              );
+            })
+          )
+        );
+      }
+    }
+  }, {
+    key: 'loadAbsenceDetails',
+    value: function loadAbsenceDetails() {
+
+      console.log(FILE_NAME + "In loadAbsenceDetails method");
+
+      this.setState({
+        loadAbsenceDetail: !this.state.loadAbsenceDetail
+      });
+    }
+  }, {
+    key: 'getLeaveDate',
+    value: function getLeaveDate(info) {
+
+      console.log(FILE_NAME + "In getLeaveDate method");
+
+      if (info.start_Date === info.end_Date) {
+
+        console.log("In getLeaveDate method", "dates are equal");
+
+        if (info.short_leave_time === null || info.short_leave_time === "") {
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewleaveactionscreenstyle2.default.dateHeadingStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewleaveactionscreenstyle2.default.headingTextStyle },
+              'For'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              info.start_Date
+            )
+          );
+        } else {
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: _ewleaveactionscreenstyle2.default.dateHeadingStyle },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: _ewleaveactionscreenstyle2.default.headingTextStyle },
+                'For'
+              ),
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: { flex: 5 } },
+                info.start_Date
+              )
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: _ewleaveactionscreenstyle2.default.dateHeadingStyle },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: _ewleaveactionscreenstyle2.default.headingTextStyle },
+                'Timing'
+              ),
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: { flex: 5 } },
+                info.short_leave_time
+              )
+            )
+          );
+        }
+      } else {
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewleaveactionscreenstyle2.default.dateHeadingStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewleaveactionscreenstyle2.default.headingTextStyle },
+              'From'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              info.start_Date
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewleaveactionscreenstyle2.default.dateHeadingStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewleaveactionscreenstyle2.default.headingTextStyle },
+              'To'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              info.end_Date
+            )
+          )
+        );
+      }
+    }
+  }]);
+  return EwLeaveActionScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction method");
+
+  return {
+    getPendingLeaveInformation: function getPendingLeaveInformation(params) {
+      return dispatch((0, _leaveactions.getPendingLeaveInformation)(params));
+    },
+
+    leaveAction: function leaveAction(params) {
+      return dispatch((0, _leaveactions.leaveAction)(params));
+    },
+    clearLeaveStateData: function clearLeaveStateData(params) {
+      return dispatch((0, _leaveactions.clearLeaveStateData)(params));
+    },
+    clearLeaveError: function clearLeaveError(params) {
+      return dispatch((0, _leaveactions.clearLeaveError)(params));
+    },
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    },
+    updateTotalActivityCount: function updateTotalActivityCount(params) {
+      return dispatch((0, _commonactions.updateTotalActivityCount)(params));
+    },
+
+    clearNeedToActStateData: function clearNeedToActStateData(params) {
+      return dispatch((0, _needtoactactions.clearNeedToActStateData)(params));
+    }
+
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    sessionToken: state.auth.sessionToken,
+
+    isLoggedIn: state.auth.isLoggedIn,
+
+    pendingNeedToActData: state.needtoact.needToActData,
+
+    pendingLeaveInformation: state.leave.pendingLeaveInformationData,
+    pendingLeaveInformationError: state.leave.pendingLeaveInformationError,
+
+    leaveActionData: state.leave.leaveActionData,
+    leaveActionError: state.leave.leaveActionError,
+
+    currentImageTimestamp: state.common.currentImageTimestamp,
+
+    leaveErrorCounter: state.leave.errorCounter
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwLeaveActionScreen);

@@ -1,0 +1,846 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetAppliedExpenseClaimListRequest = buildGetAppliedExpenseClaimListRequest;
+exports.buildSuccesGetAppliedExpenseClaimListResponse = buildSuccesGetAppliedExpenseClaimListResponse;
+exports.buildFailedGetAppliedExpenseClaimListResponse = buildFailedGetAppliedExpenseClaimListResponse;
+exports.buildServerErrorGetAppliedExpenseClaimListResponse = buildServerErrorGetAppliedExpenseClaimListResponse;
+exports.buildGetExpenseClaimInformationRequest = buildGetExpenseClaimInformationRequest;
+exports.buildSuccesGetExpenseClaimInformationResponse = buildSuccesGetExpenseClaimInformationResponse;
+exports.buildFailedGetExpenseClaimInformationResponse = buildFailedGetExpenseClaimInformationResponse;
+exports.buildServerErrorGetExpenseClaimInformationResponse = buildServerErrorGetExpenseClaimInformationResponse;
+exports.buildGetExpenseClaimActionRequest = buildGetExpenseClaimActionRequest;
+exports.buildSuccessExpenseClaimActionResponse = buildSuccessExpenseClaimActionResponse;
+exports.buildFailedExpenseClaimActionResponse = buildFailedExpenseClaimActionResponse;
+exports.buildServerErrorExpenseClaimActionResponse = buildServerErrorExpenseClaimActionResponse;
+exports.buildGetExpenseCommentsInformationRequest = buildGetExpenseCommentsInformationRequest;
+exports.buildSuccessGetExpenseCommentsInformationResponse = buildSuccessGetExpenseCommentsInformationResponse;
+exports.buildFailedGetExpenseCommentsInformationResponse = buildFailedGetExpenseCommentsInformationResponse;
+exports.buildServerErrorGetExpenseCommentsInformationResponse = buildServerErrorGetExpenseCommentsInformationResponse;
+exports.buildSaveExpenseCommentRequest = buildSaveExpenseCommentRequest;
+exports.buildSuccessSaveExpenseCommentResponse = buildSuccessSaveExpenseCommentResponse;
+exports.buildFailedSaveExpenseCommentResponse = buildFailedSaveExpenseCommentResponse;
+exports.buildServerErrorSaveExpenseCommentResponse = buildServerErrorSaveExpenseCommentResponse;
+exports.buildGetCompanyInformationRequest = buildGetCompanyInformationRequest;
+exports.buildSuccesGetCompanyInformationResponse = buildSuccesGetCompanyInformationResponse;
+exports.buildFailedGetCompanyInformationResponse = buildFailedGetCompanyInformationResponse;
+exports.buildServerErrorGetCompanyInformationResponse = buildServerErrorGetCompanyInformationResponse;
+exports.buildGetBusinessUnitInformationRequest = buildGetBusinessUnitInformationRequest;
+exports.buildSuccesGetBusinessUnitInformationResponse = buildSuccesGetBusinessUnitInformationResponse;
+exports.buildFailedGetBusinessUnitInformationResponse = buildFailedGetBusinessUnitInformationResponse;
+exports.buildServerErrorGetBusinessUnitInformationResponse = buildServerErrorGetBusinessUnitInformationResponse;
+exports.buildGetLocationInformationRequest = buildGetLocationInformationRequest;
+exports.buildSuccesGetLocationInformationResponse = buildSuccesGetLocationInformationResponse;
+exports.buildFailedGetLocationInformationResponse = buildFailedGetLocationInformationResponse;
+exports.buildServerErrorGetLocationInformationResponse = buildServerErrorGetLocationInformationResponse;
+exports.buildGetFunctionInformationRequest = buildGetFunctionInformationRequest;
+exports.buildSuccesGetFunctionInformationResponse = buildSuccesGetFunctionInformationResponse;
+exports.buildFailedGetFunctionInformationResponse = buildFailedGetFunctionInformationResponse;
+exports.buildServerErrorGetFunctionInformationResponse = buildServerErrorGetFunctionInformationResponse;
+exports.buildGetGradeInformationRequest = buildGetGradeInformationRequest;
+exports.buildSuccesGetGradeInformationResponse = buildSuccesGetGradeInformationResponse;
+exports.buildFailedGetGradeInformationResponse = buildFailedGetGradeInformationResponse;
+exports.buildServerErrorGetGradeInformationResponse = buildServerErrorGetGradeInformationResponse;
+exports.buildGetCostCenterInformationRequest = buildGetCostCenterInformationRequest;
+exports.buildSuccesGetCostCenterInformationResponse = buildSuccesGetCostCenterInformationResponse;
+exports.buildFailedGetCostCenterInformationResponse = buildFailedGetCostCenterInformationResponse;
+exports.buildServerErrorGetCostCenterInformationResponse = buildServerErrorGetCostCenterInformationResponse;
+exports.buildGetAllocationProjectListRequest = buildGetAllocationProjectListRequest;
+exports.buildSuccesGetAllocationProjectListResponse = buildSuccesGetAllocationProjectListResponse;
+exports.buildFailedGetAllocationProjectListResponse = buildFailedGetAllocationProjectListResponse;
+exports.buildServerErrorGetAllocationProjectListResponse = buildServerErrorGetAllocationProjectListResponse;
+
+var _commonexpenseclaimapiendpoints = require('./commonexpenseclaimapiendpoints');
+
+var commonExpenseClaimApiEndPoints = babelHelpers.interopRequireWildcard(_commonexpenseclaimapiendpoints);
+
+var _utils = require('../../../utils');
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _commonexpenseobjectmapping = require('./commonexpenseobjectmapping');
+
+var FILE_NAME = "commonexpenseclaimprocessing.js : ";
+
+function buildGetAppliedExpenseClaimListRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetAppliedExpenseClaimListRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + commonExpenseClaimApiEndPoints.GET_APPLIED_EXPENSE_CLAIM_LIST + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&request_type=" + params.requestType + "&current_id=" + params.currentId + "&no_of_record=" + params.numberOfRecords + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v3+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var appliedExpenseClaimListRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", appliedExpenseClaimListRequest);
+
+  return appliedExpenseClaimListRequest;
+}
+
+function buildSuccesGetAppliedExpenseClaimListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetAppliedExpenseClaimListResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetAppliedExpenseClaimListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetAppliedExpenseClaimListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetAppliedExpenseClaimListResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetAppliedExpenseClaimListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetExpenseClaimInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetExpenseClaimInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + commonExpenseClaimApiEndPoints.GET_EXPENSE_CLAIM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&expense_id=" + params.expenseId + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var expenseClaimInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", expenseClaimInformationRequest);
+
+  return expenseClaimInformationRequest;
+}
+
+function buildSuccesGetExpenseClaimInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetExpenseClaimInformationResponse Method - ");
+
+  var clientData = (0, _commonexpenseobjectmapping.getClientExpenseModel)(result.data);
+
+  var response = {
+    data: clientData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetExpenseClaimInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetExpenseClaimInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetExpenseClaimInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetExpenseClaimInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetExpenseClaimActionRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetExpenseClaimInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + commonExpenseClaimApiEndPoints.EXPENSE_CLAIM_ACTION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&mode=ApproveExpenseClaim" + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+
+    responseType: 'json'
+  };
+
+  var expenseClaimActionRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", expenseClaimActionRequest);
+
+  return expenseClaimActionRequest;
+}
+
+function buildSuccessExpenseClaimActionResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessExpenseClaimActionResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedExpenseClaimActionResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedExpenseClaimActionResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorExpenseClaimActionResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorExpenseClaimActionResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetExpenseCommentsInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetExpenseCommentsInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + commonExpenseClaimApiEndPoints.GET_EXPENSE_COMMENTS + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=getExpenseComment" + "&expense_id=" + params.expenseId + "&log_id=" + params.logId + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var getExpenseCommentsRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", getExpenseCommentsRequest);
+
+  return getExpenseCommentsRequest;
+}
+
+function buildSuccessGetExpenseCommentsInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetExpenseCommentsInformationResponse Method - ");
+
+  commentModel = (0, _commonexpenseobjectmapping.getCommentModel)(result.data);
+
+  var response = {
+    data: commentModel,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetExpenseCommentsInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetExpenseCommentsInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetExpenseCommentsInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetExpenseCommentsInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildSaveExpenseCommentRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildSaveExpenseCommentRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + commonExpenseClaimApiEndPoints.SAVE_EXPENSE_COMMENT + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=AddExpenseComment" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    headers: {
+      'Accept': 'application/v2+json'
+    },
+    responseType: 'json'
+  };
+
+  var saveExpenseCommentRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", saveExpenseCommentRequest);
+
+  return saveExpenseCommentRequest;
+}
+
+function buildSuccessSaveExpenseCommentResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessSaveExpenseCommentResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedSaveExpenseCommentResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedSaveExpenseCommentResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorSaveExpenseCommentResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorSaveExpenseCommentResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetCompanyInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetCompanyInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + commonExpenseClaimApiEndPoints.GET_COMPANY_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=getCompanyInfo" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var getcompanyInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", getcompanyInformationRequest);
+
+  return getcompanyInformationRequest;
+}
+
+function buildSuccesGetCompanyInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetCompanyInformationResponse Method - ");
+
+  serverData = (0, _commonexpenseobjectmapping.getCompanyModel)(result.data);
+
+  var response = {
+    data: serverData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetCompanyInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetCompanyInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetCompanyInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetCompanyInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetBusinessUnitInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetBusinessUnitInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + commonExpenseClaimApiEndPoints.GET_BUSINESS_UNIT_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=getBusinessUnitInfo" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var businessUnitInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", businessUnitInformationRequest);
+
+  return businessUnitInformationRequest;
+}
+
+function buildSuccesGetBusinessUnitInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetBusinessUnitInformationResponse Method - ");
+
+  serverData = (0, _commonexpenseobjectmapping.getBusinessUnitModel)(result.data);
+
+  var response = {
+    data: serverData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetBusinessUnitInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetBusinessUnitInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorGetBusinessUnitInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetBusinessUnitInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetLocationInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetLocationInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + commonExpenseClaimApiEndPoints.GET_LOCATION_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=getLocationInfo" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var locationInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", locationInformationRequest);
+
+  return locationInformationRequest;
+}
+
+function buildSuccesGetLocationInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetLocationInformationResponse Method - ");
+
+  serverData = (0, _commonexpenseobjectmapping.getLocationModel)(result.data);
+
+  var response = {
+    data: serverData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetLocationInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetLocationInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorGetLocationInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetLocationInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetFunctionInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetFunctionInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + commonExpenseClaimApiEndPoints.GET_FUNCTION_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=getFunctionInfo" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var functionInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", functionInformationRequest);
+
+  return functionInformationRequest;
+}
+
+function buildSuccesGetFunctionInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetFunctionInformationResponse Method - ");
+
+  serverData = (0, _commonexpenseobjectmapping.getFunctionModel)(result.data);
+
+  var response = {
+    data: serverData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetFunctionInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetFunctionInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorGetFunctionInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetFunctionInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetGradeInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetGradeInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + commonExpenseClaimApiEndPoints.GET_GRADE_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=getGradeInfo" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var gradeInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", gradeInformationRequest);
+
+  return gradeInformationRequest;
+}
+
+function buildSuccesGetGradeInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetGradeInformationResponse Method - ");
+
+  serverData = (0, _commonexpenseobjectmapping.getGradeModel)(result.data);
+
+  var response = {
+    data: serverData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetGradeInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetGradeInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorGetGradeInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetGradeInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetCostCenterInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetCostCenterInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + commonExpenseClaimApiEndPoints.GET_COST_CENTRE_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=getCostCenterInfo" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var costCenterInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", costCenterInformationRequest);
+
+  return costCenterInformationRequest;
+}
+
+function buildSuccesGetCostCenterInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetCostCenterInformationResponse Method - ");
+
+  serverData = (0, _commonexpenseobjectmapping.getCostCenterModel)(result.data);
+
+  var response = {
+    data: serverData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetCostCenterInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetCostCenterInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorGetCostCenterInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetCostCenterInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetAllocationProjectListRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetAllocationProjectListRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + commonExpenseClaimApiEndPoints.GET_ALLOCATION_PROJECTS_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=getProjectList" + "&searchString=" + params.searchString + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var allocationProjectsInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", allocationProjectsInformationRequest);
+
+  return allocationProjectsInformationRequest;
+}
+
+function buildSuccesGetAllocationProjectListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetAllocationProjectListResponse Method - ");
+
+  console.log("result.data", result.data);
+  serverData = (0, _commonexpenseobjectmapping.getAllocationProjectModel)(result.data);
+
+  var response = {
+    data: serverData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetAllocationProjectListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetAllocationProjectListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorGetAllocationProjectListResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetAllocationProjectListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

@@ -1,0 +1,51 @@
+
+
+module.exports = {
+  uniqueId: '',
+  instanceId: '',
+  serialNumber: '',
+  getIpAddress: function getIpAddress() {
+    return new Promise(function (resolve, reject) {
+      return resolve('');
+    });
+  },
+  getMacAddress: function getMacAddress() {
+    return new Promise(function (resolve, reject) {
+      return resolve('');
+    });
+  },
+  deviceId: '',
+  systemManufacturer: '',
+  model: '',
+  brand: '',
+  systemName: '',
+  systemVersion: '',
+  apiLevel: 0,
+  bundleId: '',
+  appName: '',
+  buildNumber: 0,
+  appVersion: 0,
+  deviceName: '',
+  userAgent: window.navigator.userAgent,
+  deviceLocale: '',
+  deviceCountry: '',
+  timezone: '',
+  fontScale: 0,
+  isEmulator: false,
+  isTablet: false,
+  is24Hour: false,
+  isPinOrFingerprintSet: function isPinOrFingerprintSet(callback) {
+    return callback && callback(false);
+  },
+  firstInstallTime: 0,
+  lastUpdateTime: 0,
+  phoneNumber: '',
+  carrier: '',
+  totalMemory: 0,
+  maxMemory: 0,
+  totalDiskCapacity: 0,
+  freeDiskStorage: 0,
+  getBatteryLevel: function getBatteryLevel() {
+    return Promise.resolve(0);
+  }
+};

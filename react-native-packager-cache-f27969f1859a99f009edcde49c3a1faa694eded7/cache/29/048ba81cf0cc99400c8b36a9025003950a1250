@@ -1,0 +1,694 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _ewnetworkimage = require('../../components/ewnetworkimage/ewnetworkimage');
+
+var _ewnetworkimage2 = babelHelpers.interopRequireDefault(_ewnetworkimage);
+
+var _ewlistview = require('../../components/ewlistview/ewlistview');
+
+var _ewlistview2 = babelHelpers.interopRequireDefault(_ewlistview);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _ewloadingindicator = require('../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewh1text = require('../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewscreentitle = require('../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _travelutils = require('./travelutils');
+
+var travelConstants = babelHelpers.interopRequireWildcard(_travelutils);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _ewmyappliedtravelscreenstyles = require('./styles/ewmyappliedtravelscreenstyles');
+
+var _ewmyappliedtravelscreenstyles2 = babelHelpers.interopRequireDefault(_ewmyappliedtravelscreenstyles);
+
+var _travelactions = require('../../services/travel/travelactions');
+
+var _travelerrorhandling = require('../../services/travel/travelerrorhandling');
+
+var travelError = babelHelpers.interopRequireWildcard(_travelerrorhandling);
+
+var FILE_NAME = "ewmyappliedtravelscreen.js : ";
+
+var SCREEN_NAME = "My Applied Travel Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_TRAVEL_AND_EXPENSE;
+
+var NUMBER_OF_RECORDS = 10;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwMyAppliedTravelScreen = function (_Component) {
+  babelHelpers.inherits(EwMyAppliedTravelScreen, _Component);
+
+  function EwMyAppliedTravelScreen(props) {
+    babelHelpers.classCallCheck(this, EwMyAppliedTravelScreen);
+
+
+    console.log(FILE_NAME + " In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwMyAppliedTravelScreen.__proto__ || Object.getPrototypeOf(EwMyAppliedTravelScreen)).call(this, props));
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+    };
+
+    _this._loadMoreTravelAsync = function () {
+
+      console.log(FILE_NAME + "In _loadMoreTravelAsync");
+
+      var areAllTravelLoaded = _this.state.areAllTravelLoaded;
+
+
+      if (_this.props.appliedTravelError == null && !areAllTravelLoaded) _this.getAppliedTravelInformation();
+    };
+
+    _this.onPressListItem = function (data) {
+
+      console.log(FILE_NAME + " In onPressListItem method");
+
+      tracker.trackEvent(SCREEN_CATEGORY, 'my applied travel list item clicked');
+
+      _reactNativeRouterFlux.Actions.ewmytravelactionscreen({ myTravelData: data });
+    };
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      appliedTravelData: null,
+      areAllTravelLoaded: false,
+      refreshing: false,
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwMyAppliedTravelScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + " In componentWillMount method");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + " In componentWillReceiveProps method");
+
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.appliedTravelData != null && nextProps.appliedTravelError == null) {
+
+        elementValues = this.handleElementValues(nextProps.appliedTravelData.pendingItemInfo, this.state.appliedTravelData);
+
+        this.setState({
+          appliedTravelData: elementValues.appliedTravelData,
+          areAllTravelLoaded: elementValues.areAllTravelLoaded,
+          isLoading: false,
+          refreshing: false
+        });
+      }
+
+      if (nextProps.appliedTravelData == null && nextProps.appliedTravelError != null) {
+
+        this.setState({
+          isLoading: false,
+          currentError: nextProps.appliedTravelError,
+          refreshing: false
+        });
+      }
+
+      if (nextProps.appliedTravelData == null && nextProps.appliedTravelError == null && nextProps.errorCounter == 0) {
+
+        this.getAppliedTravelInformation();
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + " In shouldComponentUpdate method");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + " In componentWillUpdate method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + " In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage();
+              }
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError === '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + " In componentDidMount method");
+
+      this.getAppliedTravelInformation();
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + " In componentDidUpdate method");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + " In componentWillUnmount method");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_ALL'
+      };
+
+      this.props.clearTravelStateData(params);
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+
+      console.log(FILE_NAME + " In renderScreen method");
+
+      var appliedTravelData = this.state.appliedTravelData;
+
+
+      console.log(appliedTravelData);
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        this.props.isMyRequest ? null : _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: 'My Travel Request'
+            })
+          )
+        ),
+        this.showMyAppliedTravelList(appliedTravelData)
+      );
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME + " In handleError method");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      console.log("this.state.currentError", this.state.currentError);
+
+      if (this.state.currentError == '') {
+        return null;
+      }
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+        case travelError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (this.state.currentError) {
+
+          case travelError.SERVER_EXCEPTION:
+
+            this.showAlertMessage(travelError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          default:
+
+            this.showAlertMessage();
+            return this.renderScreen();
+        }
+      }
+    }
+  }, {
+    key: 'getAppliedTravelInformation',
+    value: function getAppliedTravelInformation() {
+      var appliedTravelData = this.state.appliedTravelData;
+
+
+      currentId = 0;
+
+      if (appliedTravelData != null && appliedTravelData.length != 0) currentId = appliedTravelData[appliedTravelData.length - 1].pi_Txn_Id;
+
+      var params = {
+        requestType: 'MyTravel',
+        currentId: currentId,
+        numberOfRecords: NUMBER_OF_RECORDS
+      };
+
+      this.props.getAppliedTravelList(params);
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(appliedTravelList, currentListVisible) {
+
+      areAllTravelLoaded = this.state.areAllTravelLoaded;
+      console.log("handleElementValues", appliedTravelList, currentListVisible);
+      if (currentListVisible != null) {
+
+        if (appliedTravelList != null) {
+
+          if (appliedTravelList.length == 0) {
+
+            areAllTravelLoaded = true;
+
+            appliedTravelList = this.state.appliedTravelData;
+          } else {
+
+            updatedTravelListVisible = [].concat(babelHelpers.toConsumableArray(currentListVisible), babelHelpers.toConsumableArray(appliedTravelList));
+
+            console.log("updatedTravelListVisible", updatedTravelListVisible);
+            appliedTravelList = updatedTravelListVisible;
+          }
+        }
+      }
+
+      elementValues = {
+
+        appliedTravelData: appliedTravelList,
+        areAllTravelLoaded: areAllTravelLoaded
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: '_onRefresh',
+    value: function _onRefresh() {
+
+      console.log(FILE_NAME + "In _onRefresh method");
+
+      this.setState({
+        refreshing: true
+      });
+
+      this.getAppliedTravelInformation();
+    }
+  }, {
+    key: 'renderListItem',
+    value: function renderListItem(_ref) {
+      var _this2 = this;
+
+      var item = _ref.item;
+
+
+      console.log(FILE_NAME + " In renderListView method", item);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(
+          _nativeBase.ListItem,
+          { avatar: true, onPress: function onPress() {
+              return _this2.onPressListItem(item);
+            } },
+          _react2.default.createElement(
+            _nativeBase.Left,
+            null,
+            _react2.default.createElement(_ewnetworkimage2.default, { networkUrl: (0, _utils.getImageUrl)(this.props.sessionToken, item.gen_id, 'My Applied Travel', this.props.currentImageTimestamp) })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            null,
+            _react2.default.createElement(_ewh1text2.default, {
+              text: item.requestType
+            }),
+            _react2.default.createElement(_ewh2text2.default, {
+              text: item.pi_dt
+            }),
+            this.getStatusOfTravel(item.pi_Txn_Subtype)
+          )
+        )
+      );
+    }
+  }, {
+    key: 'showMyAppliedTravelList',
+    value: function showMyAppliedTravelList(appliedTravelData) {
+      var _this3 = this;
+
+      console.log(FILE_NAME + " In showMyAppliedTravelList method");
+
+      if (appliedTravelData != null && this.props.appliedTravelError == null) {
+
+        return _react2.default.createElement(_ewlistview2.default, {
+          listData: appliedTravelData,
+          extraData: this.state,
+          listKey: function listKey(data, index) {
+            return index;
+          },
+          renderListItem: function renderListItem(data) {
+            return _this3.renderListItem(data);
+          },
+          onEndReached: function onEndReached() {
+            return _this3._loadMoreTravelAsync();
+          },
+          onEndReachedThreshold: 0.5,
+          isAllDataLoaded: this.state.areAllTravelLoaded,
+          refreshing: this.state.refreshing,
+          onRefresh: this._onRefresh.bind(this)
+        });
+      } else if (appliedTravelData == null && this.props.appliedTravelError == null) {
+
+        console.log("2nd Case", _ewmyappliedtravelscreenstyles2.default);
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewmyappliedtravelscreenstyles2.default.spinnerContainer },
+          _react2.default.createElement(_nativeBase.Spinner, { size: 'small' }),
+          _react2.default.createElement(_ewh1text2.default, {
+            text: 'Loading Your Travel Requests...'
+          })
+        );
+      } else if (appliedTravelData == null && this.props.appliedTravelError != null) {
+
+        console.log("3rd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewmyappliedtravelscreenstyles2.default.loadAgainButtonContainer },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { onPress: function onPress() {
+                return _this3.getAppliedTravelInformation();
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Load Again'
+            )
+          )
+        );
+      } else {
+
+        console.log("4th Case");
+        console.log("appliedTravelData, ", appliedTravelData);
+        console.log("this.props.appliedTravelError, ", this.props.appliedTravelError);
+      }
+    }
+  }, {
+    key: 'getStatusOfTravel',
+    value: function getStatusOfTravel(travelStatus) {
+
+      console.log(FILE_NAME + " In getStatusOfTravel method");
+
+      travelStatusText = travelStatus;
+      travelStatusColor = appstyleguide.APP_BLACK;
+
+      switch (travelStatus) {
+        case travelConstants.PENDING_APPROVAL:
+
+          travelStatusText = travelConstants.PENDING_APPROVAL_LABEL;
+          travelStatusColor = appstyleguide.APP_ORANGE;
+          break;
+
+        case travelConstants.APPROVED:
+
+          travelStatusText = travelConstants.APPROVED_LABEL;
+          travelStatusColor = appstyleguide.APP_GREEN;
+          break;
+
+        case travelConstants.REJECTED:
+
+          travelStatusText = travelConstants.REJECTED_LABEL;
+          travelStatusColor = appstyleguide.APP_RED;
+          break;
+
+        case travelConstants.RECONSIDER:
+
+          travelStatusText = travelConstants.RECONSIDER_LABEL;
+          travelStatusColor = appstyleguide.APP_LIGHT_BLUE;
+          break;
+
+        case travelConstants.CANCELLED:
+
+          travelStatusText = travelConstants.CANCELLED_LABEL;
+          travelStatusColor = appstyleguide.APP_BLACK;
+          break;
+
+        case travelConstants.CANCELLATION_REQUESTED:
+
+          travelStatusText = travelConstants.CANCELLATION_REQUESTED_LABEL;
+          travelStatusColor = appstyleguide.APP_GRAY;
+          break;
+
+        case travelConstants.CANCELLATION_APPROVED:
+
+          travelStatusText = travelConstants.CANCELLATION_APPROVED_LABEL;
+          travelStatusColor = appstyleguide.APP_GREEN;
+          break;
+
+        case travelConstants.PAID:
+
+          travelStatusText = travelConstants.PAID_LABEL;
+          travelStatusColor = appstyleguide.APP_GREEN;
+          break;
+
+        default:
+
+      }
+
+      console.log("travelStatusColor", travelStatusColor, travelStatusText);
+
+      return _react2.default.createElement(_ewh3text2.default, {
+        text: travelStatusText,
+        customStyle: { color: travelStatusColor }
+      });
+    }
+  }]);
+  return EwMyAppliedTravelScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + " In bindAction method");
+
+  return {
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    },
+    getAppliedTravelList: function getAppliedTravelList(params) {
+      return dispatch((0, _travelactions.getAppliedTravelList)(params));
+    },
+    clearTravelStateData: function clearTravelStateData(params) {
+      return dispatch((0, _travelactions.clearTravelStateData)(params));
+    }
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+    errorWebService: state.auth.errorWebService,
+
+    appliedTravelData: state.travel.appliedTravelData,
+    appliedTravelError: state.travel.appliedTravelError,
+
+    errorCounter: state.travel.errorCounter,
+
+    currentImageTimestamp: state.common.currentImageTimestamp
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwMyAppliedTravelScreen);

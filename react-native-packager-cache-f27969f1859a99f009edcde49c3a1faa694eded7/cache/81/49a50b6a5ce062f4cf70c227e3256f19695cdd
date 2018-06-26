@@ -1,0 +1,223 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../../utils');
+
+var _datetimeutils = require('../../../../utils/datetimeutils');
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewcomponents = require('../../../../utils/ewcomponents');
+
+var _expenseutils = require('../../expenseutils');
+
+var expenseConstants = babelHelpers.interopRequireWildcard(_expenseutils);
+
+var EwOtherCustomFields = function (_Component) {
+  babelHelpers.inherits(EwOtherCustomFields, _Component);
+
+  function EwOtherCustomFields(props, context) {
+    babelHelpers.classCallCheck(this, EwOtherCustomFields);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwOtherCustomFields.__proto__ || Object.getPrototypeOf(EwOtherCustomFields)).call(this, props, context));
+
+    elementValues = _this.handleElementValues(_this.props.initialState);
+
+    _this.initialState = {
+
+      customFieldValues: elementValues.customFieldValues
+
+    };
+
+    console.log("customFieldValues", _this.props.initialState, _this.initialState.customFieldValues);
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwOtherCustomFields, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (this.isStateChanged(nextProps.initialState)) {
+        console.log("nextpropsreceiveotherexpnest", nextProps, this.state);
+        elementValues = this.handleElementValues(nextProps.initialState);
+        elementValues.customFieldValues[0].value = "45";
+
+        console.log("customFieldValues", elementValues.customFieldValues, nextProps.initialState);
+
+        this.setState({
+
+          customFieldValues: elementValues.customFieldValues
+
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var customFieldValues = this.state.customFieldValues;
+
+
+      console.log("initialState", customFieldValues);
+
+      if (customFieldValues.length != 0) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: this.props.customStyle },
+          Object.keys(customFieldValues).map(function (key) {
+            return _this2.renderOtherFieldView(customFieldValues[key], key);
+          })
+        );
+      }
+
+      return null;
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate", this.props.initialState, this.state);
+
+      if (this.isStateChanged(this.props.initialState)) {
+
+        console.log("Inside ewotherexpensetypeupdate");
+
+        this.props.updateParentState(this.getOtherCustomFieldObject());
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(propsData) {
+
+      updatedArray = [];
+
+      for (var _iterator = propsData, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref;
+
+        if (_isArray) {
+          if (_i >= _iterator.length) break;
+          _ref = _iterator[_i++];
+        } else {
+          _i = _iterator.next();
+          if (_i.done) break;
+          _ref = _i.value;
+        }
+
+        var arrayObject = _ref;
+
+        updatedArray.push(babelHelpers.extends({}, arrayObject));
+      }
+
+      elementValues = {
+
+        customFieldValues: updatedArray
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: 'renderOtherFieldView',
+    value: function renderOtherFieldView(data, dataIndex) {
+      var _this3 = this;
+
+      console.log("datareceived", data, dataIndex);
+
+      return _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+        label: data.label,
+        placeholderlabel: data.placeholderLabel,
+        autoCorrect: false,
+        autoCapitalize: 'none',
+        onChangeText: function onChangeText(newValue) {
+          return _this3.updateOtherFieldArray(dataIndex, newValue);
+        },
+        customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+        value: data.value
+
+      });
+    }
+  }, {
+    key: 'updateOtherFieldArray',
+    value: function updateOtherFieldArray(dataIndex, newValue) {
+
+      updatedCustomFieldValues = [].concat(babelHelpers.toConsumableArray(this.state.customFieldValues));
+
+      updatedCustomFieldValues[dataIndex].value = newValue;
+
+      this.setState({
+
+        customFieldValues: updatedCustomFieldValues
+      });
+    }
+  }, {
+    key: 'isStateChanged',
+    value: function isStateChanged(initialState) {
+
+      console.log("stringifiedobject", JSON.stringify(initialState), JSON.stringify(this.getOtherCustomFieldObject()));
+
+      if (JSON.stringify(initialState) != JSON.stringify(this.getOtherCustomFieldObject())) return true;
+
+      return false;
+    }
+  }, {
+    key: 'getOtherCustomFieldObject',
+    value: function getOtherCustomFieldObject() {
+
+      return this.state.customFieldValues;
+    }
+  }]);
+  return EwOtherCustomFields;
+}(_react.Component);
+
+exports.default = EwOtherCustomFields;

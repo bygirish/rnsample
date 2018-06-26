@@ -1,0 +1,47 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var WHOLE_DAY = exports.WHOLE_DAY = '1';
+var IN_LATE = exports.IN_LATE = '2';
+var OUT_EARLY = exports.OUT_EARLY = '3';
+var IN_LATE_OUT_EARLY = exports.IN_LATE_OUT_EARLY = '4';
+
+var MULTIPLE_DAYS_LABEL = exports.MULTIPLE_DAYS_LABEL = 'Multiple Days';
+var EXCLUDE_WEEKLY_OFF_AND_HOLIDAYS_LABEL = exports.EXCLUDE_WEEKLY_OFF_AND_HOLIDAYS_LABEL = "Exclude Weekly offs and Holiday";
+var EXCLUDE_LEAVE_DAYS_LABEL = exports.EXCLUDE_LEAVE_DAYS_LABEL = "Exclude Leave Days";
+
+var WHOLE_DAY_LABEL = exports.WHOLE_DAY_LABEL = 'Whole Day';
+var IN_LATE_LABEL = exports.IN_LATE_LABEL = 'In Late';
+var OUT_EARLY_LABEL = exports.OUT_EARLY_LABEL = 'Out Early';
+var IN_LATE_OUT_EARLY_LABEL = exports.IN_LATE_OUT_EARLY_LABEL = 'In Late/Out Early';
+
+var WHOLE_DAY_SERVER_LABEL = exports.WHOLE_DAY_SERVER_LABEL = 'O';
+var IN_LATE_SERVER_LABEL = exports.IN_LATE_SERVER_LABEL = 'L';
+var OUT_EARLY_SERVER_LABEL = exports.OUT_EARLY_SERVER_LABEL = 'E';
+var IN_LATE_OUT_EARLY_SERVER_LABEL = exports.IN_LATE_OUT_EARLY_SERVER_LABEL = 'LE';
+
+var APPROVE_OD_ACTION = exports.APPROVE_OD_ACTION = 1;
+var REJECT_OD_ACTION = exports.REJECT_OD_ACTION = 2;
+
+var APPROVE_OD_ACTION_LABEL = exports.APPROVE_OD_ACTION_LABEL = "Approve";
+var REJECT_OD_ACTION_LABEL = exports.REJECT_OD_ACTION_LABEL = "Reject";
+var CANCEL_OD_LABEL = exports.CANCEL_OD_LABEL = "Cancel";
+
+var PENDING_OD_TYPE = exports.PENDING_OD_TYPE = 2;
+
+var OD_ACTION_CANCEL = exports.OD_ACTION_CANCEL = 4;
+var OD_ACTION_REAPPLY = exports.OD_ACTION_REAPPLY = 5;var PENDING_APPROVAL = exports.PENDING_APPROVAL = 1;
+var APPROVED = exports.APPROVED = 2;
+var REJECTED = exports.REJECTED = 3;
+var RECONSIDER = exports.RECONSIDER = 4;
+var CANCELLED = exports.CANCELLED = 5;
+var CANCELLATION_REQUESTED = exports.CANCELLATION_REQUESTED = 6;
+var CANCELLATION_APPROVED = exports.CANCELLATION_APPROVED = 7;
+
+var PENDING_APPROVAL_LABEL = exports.PENDING_APPROVAL_LABEL = "Pending Approval";
+var APPROVED_LABEL = exports.APPROVED_LABEL = "Approved";
+var REJECTED_LABEL = exports.REJECTED_LABEL = "Rejected";
+var RECONSIDER_LABEL = exports.RECONSIDER_LABEL = "Reconsider";
+var CANCELLED_LABEL = exports.CANCELLED_LABEL = "Cancelled";
+var CANCELLATION_REQUESTED_LABEL = exports.CANCELLATION_REQUESTED_LABEL = "Cancellation Requested";
+var CANCELLATION_APPROVED_LABEL = exports.CANCELLATION_APPROVED_LABEL = "Cancellation Approved";

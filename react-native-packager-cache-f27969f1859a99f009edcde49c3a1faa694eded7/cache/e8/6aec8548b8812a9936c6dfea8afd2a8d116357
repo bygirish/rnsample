@@ -1,0 +1,14 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var REPORT_ISSUE_ICON = exports.REPORT_ISSUE_ICON = require('../../img/elementicons/reportIssueIconHeader.png');
+var COMPENSATION_ICON = exports.COMPENSATION_ICON = require('../../img/elementicons/compensation.png');
+
+var DELETE_ICON = exports.DELETE_ICON = require('../../img/travelicons/cancel.png');
+var EDIT_ICON = exports.EDIT_ICON = require('../../img/travelicons/editIcon.png');
+var SAD_SMILEY_ICON = exports.SAD_SMILEY_ICON = require('../../img/commonicons/sadIcon.png');
+var THUMBS_UP_ICON = exports.THUMBS_UP_ICON = require('../../img/commonicons/thumbsupIcon.png');
+var RIGHT_ARROW_ICON = exports.RIGHT_ARROW_ICON = require('../../img/expenseicons/rightArrowIcon.png');
+
+var CHATBOT_REPORT_ISSUE_ICON = exports.CHATBOT_REPORT_ISSUE_ICON = require('../../img/elementicons/reportIssueIconHeader.png');
+var EMPLOYWISE_ICON = exports.EMPLOYWISE_ICON = require('../../img/employwiseIcon.png');

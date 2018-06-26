@@ -1,0 +1,323 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _MessageText = require('./MessageText');
+
+var _MessageText2 = babelHelpers.interopRequireDefault(_MessageText);
+
+var _MessageImage = require('./MessageImage');
+
+var _MessageImage2 = babelHelpers.interopRequireDefault(_MessageImage);
+
+var _Time = require('./Time');
+
+var _Time2 = babelHelpers.interopRequireDefault(_Time);
+
+var _utils = require('./utils');
+
+var Bubble = function (_React$Component) {
+  babelHelpers.inherits(Bubble, _React$Component);
+
+  function Bubble(props) {
+    babelHelpers.classCallCheck(this, Bubble);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (Bubble.__proto__ || Object.getPrototypeOf(Bubble)).call(this, props));
+
+    _this.onLongPress = _this.onLongPress.bind(_this);
+    return _this;
+  }
+
+  babelHelpers.createClass(Bubble, [{
+    key: 'handleBubbleToNext',
+    value: function handleBubbleToNext() {
+      if ((0, _utils.isSameUser)(this.props.currentMessage, this.props.nextMessage) && (0, _utils.isSameDay)(this.props.currentMessage, this.props.nextMessage)) {
+        return _reactNative.StyleSheet.flatten([styles[this.props.position].containerToNext, this.props.containerToNextStyle[this.props.position]]);
+      }
+      return null;
+    }
+  }, {
+    key: 'handleBubbleToPrevious',
+    value: function handleBubbleToPrevious() {
+      if ((0, _utils.isSameUser)(this.props.currentMessage, this.props.previousMessage) && (0, _utils.isSameDay)(this.props.currentMessage, this.props.previousMessage)) {
+        return _reactNative.StyleSheet.flatten([styles[this.props.position].containerToPrevious, this.props.containerToPreviousStyle[this.props.position]]);
+      }
+      return null;
+    }
+  }, {
+    key: 'renderMessageText',
+    value: function renderMessageText() {
+      if (this.props.currentMessage.text) {
+        var _props = this.props,
+            containerStyle = _props.containerStyle,
+            wrapperStyle = _props.wrapperStyle,
+            messageTextProps = babelHelpers.objectWithoutProperties(_props, ['containerStyle', 'wrapperStyle']);
+
+        if (this.props.renderMessageText) {
+          return this.props.renderMessageText(messageTextProps);
+        }
+        return _react2.default.createElement(_MessageText2.default, messageTextProps);
+      }
+      return null;
+    }
+  }, {
+    key: 'renderMessageImage',
+    value: function renderMessageImage() {
+      if (this.props.currentMessage.image) {
+        var _props2 = this.props,
+            containerStyle = _props2.containerStyle,
+            wrapperStyle = _props2.wrapperStyle,
+            messageImageProps = babelHelpers.objectWithoutProperties(_props2, ['containerStyle', 'wrapperStyle']);
+
+        if (this.props.renderMessageImage) {
+          return this.props.renderMessageImage(messageImageProps);
+        }
+        return _react2.default.createElement(_MessageImage2.default, messageImageProps);
+      }
+      return null;
+    }
+  }, {
+    key: 'renderTicks',
+    value: function renderTicks() {
+      var currentMessage = this.props.currentMessage;
+
+      if (this.props.renderTicks) {
+        return this.props.renderTicks(currentMessage);
+      }
+      if (currentMessage.user._id !== this.props.user._id) {
+        return;
+      }
+      if (currentMessage.sent || currentMessage.received) {
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: styles.tickView },
+          currentMessage.sent && _react2.default.createElement(
+            _reactNative.Text,
+            { style: [styles.tick, this.props.tickStyle] },
+            '\u2713'
+          ),
+          currentMessage.received && _react2.default.createElement(
+            _reactNative.Text,
+            { style: [styles.tick, this.props.tickStyle] },
+            '\u2713'
+          )
+        );
+      }
+    }
+  }, {
+    key: 'renderTime',
+    value: function renderTime() {
+      if (this.props.currentMessage.createdAt) {
+        var _props3 = this.props,
+            containerStyle = _props3.containerStyle,
+            wrapperStyle = _props3.wrapperStyle,
+            timeProps = babelHelpers.objectWithoutProperties(_props3, ['containerStyle', 'wrapperStyle']);
+
+        if (this.props.renderTime) {
+          return this.props.renderTime(timeProps);
+        }
+        return _react2.default.createElement(_Time2.default, timeProps);
+      }
+      return null;
+    }
+  }, {
+    key: 'renderCustomView',
+    value: function renderCustomView() {
+      if (this.props.renderCustomView) {
+        return this.props.renderCustomView(this.props);
+      }
+      return null;
+    }
+  }, {
+    key: 'onLongPress',
+    value: function onLongPress() {
+      var _this2 = this;
+
+      if (this.props.onLongPress) {
+        this.props.onLongPress(this.context, this.props.currentMessage);
+      } else {
+        if (this.props.currentMessage.text) {
+          var options = ['Copy Text', 'Cancel'];
+          var cancelButtonIndex = options.length - 1;
+          this.context.actionSheet().showActionSheetWithOptions({
+            options: options,
+            cancelButtonIndex: cancelButtonIndex
+          }, function (buttonIndex) {
+            switch (buttonIndex) {
+              case 0:
+                _reactNative.Clipboard.setString(_this2.props.currentMessage.text);
+                break;
+            }
+          });
+        }
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: [styles[this.props.position].container, this.props.containerStyle[this.props.position]] },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: [styles[this.props.position].wrapper, this.props.wrapperStyle[this.props.position], this.handleBubbleToNext(), this.handleBubbleToPrevious()] },
+          _react2.default.createElement(
+            _reactNative.TouchableWithoutFeedback,
+            babelHelpers.extends({
+              onLongPress: this.onLongPress,
+              accessibilityTraits: 'text'
+            }, this.props.touchableProps),
+            _react2.default.createElement(
+              _reactNative.View,
+              null,
+              this.renderCustomView(),
+              this.renderMessageImage(),
+              this.renderMessageText(),
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: [styles.bottom, this.props.bottomContainerStyle[this.props.position]] },
+                this.renderTime(),
+                this.renderTicks()
+              )
+            )
+          )
+        )
+      );
+    }
+  }]);
+  return Bubble;
+}(_react2.default.Component);
+
+exports.default = Bubble;
+
+
+var styles = {
+  left: _reactNative.StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: 'flex-start'
+    },
+    wrapper: {
+      borderRadius: 15,
+      backgroundColor: '#f0f0f0',
+      marginRight: 60,
+      minHeight: 20,
+      justifyContent: 'flex-end'
+    },
+    containerToNext: {
+      borderBottomLeftRadius: 3
+    },
+    containerToPrevious: {
+      borderTopLeftRadius: 3
+    }
+  }),
+  right: _reactNative.StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: 'flex-end'
+    },
+    wrapper: {
+      borderRadius: 15,
+      backgroundColor: '#0084ff',
+      marginLeft: 60,
+      minHeight: 20,
+      justifyContent: 'flex-end'
+    },
+    containerToNext: {
+      borderBottomRightRadius: 3
+    },
+    containerToPrevious: {
+      borderTopRightRadius: 3
+    }
+  }),
+  bottom: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
+  },
+  tick: {
+    fontSize: 10,
+    backgroundColor: 'transparent',
+    color: 'white'
+  },
+  tickView: {
+    flexDirection: 'row',
+    marginRight: 10
+  }
+};
+
+Bubble.contextTypes = {
+  actionSheet: _propTypes2.default.func
+};
+
+Bubble.defaultProps = {
+  touchableProps: {},
+  onLongPress: null,
+  renderMessageImage: null,
+  renderMessageText: null,
+  renderCustomView: null,
+  renderTime: null,
+  position: 'left',
+  currentMessage: {
+    text: null,
+    createdAt: null,
+    image: null
+  },
+  nextMessage: {},
+  previousMessage: {},
+  containerStyle: {},
+  wrapperStyle: {},
+  bottomContainerStyle: {},
+  tickStyle: {},
+  containerToNextStyle: {},
+  containerToPreviousStyle: {},
+
+  isSameDay: (0, _utils.warnDeprecated)(_utils.isSameDay),
+  isSameUser: (0, _utils.warnDeprecated)(_utils.isSameUser)
+};
+
+Bubble.propTypes = {
+  touchableProps: _propTypes2.default.object,
+  onLongPress: _propTypes2.default.func,
+  renderMessageImage: _propTypes2.default.func,
+  renderMessageText: _propTypes2.default.func,
+  renderCustomView: _propTypes2.default.func,
+  renderTime: _propTypes2.default.func,
+  position: _propTypes2.default.oneOf(['left', 'right']),
+  currentMessage: _propTypes2.default.object,
+  nextMessage: _propTypes2.default.object,
+  previousMessage: _propTypes2.default.object,
+  containerStyle: _propTypes2.default.shape({
+    left: _reactNative.ViewPropTypes.style,
+    right: _reactNative.ViewPropTypes.style
+  }),
+  wrapperStyle: _propTypes2.default.shape({
+    left: _reactNative.ViewPropTypes.style,
+    right: _reactNative.ViewPropTypes.style
+  }),
+  bottomContainerStyle: _propTypes2.default.shape({
+    left: _reactNative.ViewPropTypes.style,
+    right: _reactNative.ViewPropTypes.style
+  }),
+  tickStyle: _reactNative.Text.propTypes.style,
+  containerToNextStyle: _propTypes2.default.shape({
+    left: _reactNative.ViewPropTypes.style,
+    right: _reactNative.ViewPropTypes.style
+  }),
+  containerToPreviousStyle: _propTypes2.default.shape({
+    left: _reactNative.ViewPropTypes.style,
+    right: _reactNative.ViewPropTypes.style
+  }),
+
+  isSameDay: _propTypes2.default.func,
+  isSameUser: _propTypes2.default.func
+};

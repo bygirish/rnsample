@@ -1,0 +1,83 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactNativeLightbox = require('react-native-lightbox');
+
+var _reactNativeLightbox2 = babelHelpers.interopRequireDefault(_reactNativeLightbox);
+
+var MessageImage = function (_React$Component) {
+  babelHelpers.inherits(MessageImage, _React$Component);
+
+  function MessageImage() {
+    babelHelpers.classCallCheck(this, MessageImage);
+    return babelHelpers.possibleConstructorReturn(this, (MessageImage.__proto__ || Object.getPrototypeOf(MessageImage)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(MessageImage, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: [styles.container, this.props.containerStyle] },
+        _react2.default.createElement(
+          _reactNativeLightbox2.default,
+          babelHelpers.extends({
+            activeProps: {
+              style: styles.imageActive
+            }
+          }, this.props.lightboxProps),
+          _react2.default.createElement(_reactNative.Image, babelHelpers.extends({}, this.props.imageProps, {
+            style: [styles.image, this.props.imageStyle],
+            source: { uri: this.props.currentMessage.image }
+          }))
+        )
+      );
+    }
+  }]);
+  return MessageImage;
+}(_react2.default.Component);
+
+exports.default = MessageImage;
+
+
+var styles = _reactNative.StyleSheet.create({
+  container: {},
+  image: {
+    width: 150,
+    height: 100,
+    borderRadius: 13,
+    margin: 3,
+    resizeMode: 'cover'
+  },
+  imageActive: {
+    flex: 1,
+    resizeMode: 'contain'
+  }
+});
+
+MessageImage.defaultProps = {
+  currentMessage: {
+    image: null
+  },
+  containerStyle: {},
+  imageStyle: {}
+};
+
+MessageImage.propTypes = {
+  currentMessage: _propTypes2.default.object,
+  containerStyle: _reactNative.ViewPropTypes.style,
+  imageStyle: _reactNative.Image.propTypes.style,
+  imageProps: _propTypes2.default.object,
+  lightboxProps: _propTypes2.default.object
+};

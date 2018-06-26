@@ -1,0 +1,350 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetTravelClaimInformationRequest = buildGetTravelClaimInformationRequest;
+exports.buildSuccesGetTravelClaimInformationResponse = buildSuccesGetTravelClaimInformationResponse;
+exports.buildFailedGetTravelClaimInformationResponse = buildFailedGetTravelClaimInformationResponse;
+exports.buildServerErrorGetTravelClaimInformationResponse = buildServerErrorGetTravelClaimInformationResponse;
+exports.buildSaveTravelMasterItemRequest = buildSaveTravelMasterItemRequest;
+exports.buildSuccesSaveTravelMasterItemResponse = buildSuccesSaveTravelMasterItemResponse;
+exports.buildFailedSaveTravelMasterItemResponse = buildFailedSaveTravelMasterItemResponse;
+exports.buildServerErrorSaveTravelMasterItemResponse = buildServerErrorSaveTravelMasterItemResponse;
+exports.buildSaveTravelLineItemRequest = buildSaveTravelLineItemRequest;
+exports.buildSuccesSaveTravelLineItemResponse = buildSuccesSaveTravelLineItemResponse;
+exports.buildFailedSaveTravelLineItemResponse = buildFailedSaveTravelLineItemResponse;
+exports.buildServerErrorSaveTravelLineItemResponse = buildServerErrorSaveTravelLineItemResponse;
+exports.buildSubmitTravelExpenseClaimRequest = buildSubmitTravelExpenseClaimRequest;
+exports.buildSuccessSubmitTravelExpenseClaimResponse = buildSuccessSubmitTravelExpenseClaimResponse;
+exports.buildFailedSubmitTravelExpenseClaimResponse = buildFailedSubmitTravelExpenseClaimResponse;
+exports.buildServerErrorSubmitTravelExpenseClaimResponse = buildServerErrorSubmitTravelExpenseClaimResponse;
+exports.buildDeleteTravelLineItemRequest = buildDeleteTravelLineItemRequest;
+exports.buildSuccesDeleteTravelLineItemResponse = buildSuccesDeleteTravelLineItemResponse;
+exports.buildFailedDeleteTravelLineItemResponse = buildFailedDeleteTravelLineItemResponse;
+exports.buildServerErrorDeleteTravelLineItemResponse = buildServerErrorDeleteTravelLineItemResponse;
+
+var _travelclaimapiendpoints = require('./travelclaimapiendpoints');
+
+var expenseClaimApiEndPoints = babelHelpers.interopRequireWildcard(_travelclaimapiendpoints);
+
+var _utils = require('../../../utils');
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _travelobjectmapping = require('./travelobjectmapping');
+
+var FILE_NAME = "travelclaimprocessing.js : ";
+
+function buildGetTravelClaimInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetTravelClaimInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + expenseClaimApiEndPoints.GET_TRAVEL_CLAIM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=createTravelExpenseForm" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var travelClaimInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", travelClaimInformationRequest);
+
+  return travelClaimInformationRequest;
+}
+
+function buildSuccesGetTravelClaimInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetTravelClaimInformationResponse Method - ");
+
+  serverData = (0, _travelobjectmapping.getTravelClaimModel)(result.data);
+
+  var response = {
+    data: serverData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetTravelClaimInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetTravelClaimInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorGetTravelClaimInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetTravelClaimInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildSaveTravelMasterItemRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildSaveTravelMasterItemRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + expenseClaimApiEndPoints.SAVE_TRAVEL_MASTER_ITEM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=createConveyanceMasterItem" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    },
+    responseType: 'json'
+  };
+
+  var saveTravelMasterItemRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", saveTravelMasterItemRequest);
+
+  return saveTravelMasterItemRequest;
+}
+
+function buildSuccesSaveTravelMasterItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesSaveTravelMasterItemResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedSaveTravelMasterItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedSaveTravelMasterItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_message
+  };
+
+  return response;
+}
+
+function buildServerErrorSaveTravelMasterItemResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorSaveTravelMasterItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildSaveTravelLineItemRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildSaveTravelLineItemRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + expenseClaimApiEndPoints.SAVE_TRAVEL_LINE_ITEM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=" + params.expenseApiMode + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    },
+    responseType: 'json'
+  };
+
+  var saveTravelLineItemRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", saveTravelLineItemRequest);
+
+  return saveTravelLineItemRequest;
+}
+
+function buildSuccesSaveTravelLineItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesSaveTravelLineItemResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedSaveTravelLineItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedSaveTravelLineItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_message
+  };
+
+  return response;
+}
+
+function buildServerErrorSaveTravelLineItemResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorSaveTravelLineItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildSubmitTravelExpenseClaimRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildSubmitTravelExpenseClaimRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + expenseClaimApiEndPoints.SUBMIT_TRAVEL_EXPENSE_CLAIM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=submitConveyanceClaim" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json',
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var submitTravelClaimInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", submitTravelClaimInformationRequest);
+
+  return submitTravelClaimInformationRequest;
+}
+
+function buildSuccessSubmitTravelExpenseClaimResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessSubmitTravelExpenseClaimResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedSubmitTravelExpenseClaimResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedSubmitTravelExpenseClaimResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorSubmitTravelExpenseClaimResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorSubmitTravelExpenseClaimResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildDeleteTravelLineItemRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildDeleteTravelLineItemRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + expenseClaimApiEndPoints.DELETE_TRAVEL_LINE_ITEM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=deleteConveyanceLineItem" + "&currentTimeStamp=" + new Date().getTime();
+
+  var config = {
+    'Content-Type': 'application/json',
+    data: (0, _travelobjectmapping.getServerTravelLineItemDeleteModel)(params),
+    responseType: 'json'
+  };
+
+  var deleteTravelClaimInformationRequest = {
+    url: url,
+
+    config: config
+  };
+
+  console.log("loginRequest is -", deleteTravelClaimInformationRequest);
+
+  return deleteTravelClaimInformationRequest;
+}
+
+function buildSuccesDeleteTravelLineItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesDeleteTravelLineItemResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedDeleteTravelLineItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedDeleteTravelLineItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorDeleteTravelLineItemResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorDeleteTravelLineItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

@@ -1,0 +1,60 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.incrementDate = incrementDate;
+exports.decrementDate = decrementDate;
+exports.getMonthName = getMonthName;
+exports.getMonthIndex = getMonthIndex;
+exports.getDaysInMonth = getDaysInMonth;
+function incrementDate(currentMilliseconds, incrementCount, Timezone) {
+
+  selectedDate = new Date(currentMilliseconds);
+
+  selectedDate.setDate(selectedDate.getDate() + incrementCount);
+
+  console.log("updatedDate", selectedDate);
+
+  return selectedDate;
+}
+
+function decrementDate(currentDate, incrementCount, Timezone) {
+
+  return milliseconds;
+}
+
+var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+function getMonthName(monthIndex) {
+
+  return monthNames[monthIndex];
+}
+
+function getMonthIndex(monthName) {
+
+  monthIndex = 1;
+
+  for (var _iterator = monthNames, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === "function" ? Symbol.iterator : "@@iterator"]();;) {
+    var _ref;
+
+    if (_isArray) {
+      if (_i >= _iterator.length) break;
+      _ref = _iterator[_i++];
+    } else {
+      _i = _iterator.next();
+      if (_i.done) break;
+      _ref = _i.value;
+    }
+
+    var month = _ref;
+
+
+    if (month == monthName) return monthIndex;
+
+    monthIndex++;
+  }
+}
+
+function getDaysInMonth(month, year) {
+
+  return new Date(year, month, 0).getDate();
+}

@@ -1,0 +1,24 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../utils');
+
+exports.default = {
+
+  listStyle: {
+    height: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 100 : 100,
+    position: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 'relative' : 'relative',
+    zIndex: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 5 : 5,
+    flex: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 1 : 1,
+    left: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 0 : 0,
+    right: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 0 : 0,
+    elevation: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 10 : 10,
+    overflow: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 'hidden' : 'visible'
+  }
+
+};

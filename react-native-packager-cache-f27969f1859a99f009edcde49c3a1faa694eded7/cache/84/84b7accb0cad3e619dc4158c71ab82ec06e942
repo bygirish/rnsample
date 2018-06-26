@@ -1,0 +1,8 @@
+'use strict';
+
+var _reactNative = require('react-native');
+
+module.exports = {
+  state: _reactNative.AppState,
+  component: _reactNative.PushNotificationIOS
+};

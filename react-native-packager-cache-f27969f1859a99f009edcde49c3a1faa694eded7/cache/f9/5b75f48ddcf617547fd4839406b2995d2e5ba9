@@ -1,0 +1,20 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var GET_PENDING_TRAVEL_INFORMATION = exports.GET_PENDING_TRAVEL_INFORMATION = '/travelM?scope=I';
+var TRAVEL_ACTION = exports.TRAVEL_ACTION = '/travelM?scope=I';
+var APPLY_TRAVEL = exports.APPLY_TRAVEL = '/travelM?scope=I';
+
+var GET_TRAVEL_INFORMATION = exports.GET_TRAVEL_INFORMATION = '/travelM?scope=I';
+
+var GET_CITY_INFORMATION = exports.GET_CITY_INFORMATION = '/CityResource?scope=I';
+var GET_CITY_CATEGORY_INFORMATION = exports.GET_CITY_CATEGORY_INFORMATION = '/CityCategoryResource?scope=I';
+
+var GET_CURRENCY_INFORMATION = exports.GET_CURRENCY_INFORMATION = '/Currency?scope=I';
+var GET_TRAVEL_CLIENT_ACCOUNT_INFORMATION = exports.GET_TRAVEL_CLIENT_ACCOUNT_INFORMATION = '/Account?scope=I';
+var GET_TRAVEL_CLIENT_ACCOUNT_PROJECTS_INFORMATION = exports.GET_TRAVEL_CLIENT_ACCOUNT_PROJECTS_INFORMATION = '/ProjectData?scope=I';
+
+var GET_TRAVEL_APPROVER_INFORMATION = exports.GET_TRAVEL_APPROVER_INFORMATION = '/TravelExpenseApprover?scope=I';
+var GET_TRAVEL_PURPOSE_INFORMATION = exports.GET_TRAVEL_PURPOSE_INFORMATION = '/purpose?scope=I';
+
+var GET_APPLIED_TRAVEL_LIST = exports.GET_APPLIED_TRAVEL_LIST = '/HomePageM?scope=I';

@@ -1,0 +1,155 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = authReducer;
+
+var _authactiontypes = require('./authactiontypes');
+
+var authActionTypes = babelHelpers.interopRequireWildcard(_authactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _utils = require('../../utils');
+
+var FILE_NAME = "authreducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+
+  sessionToken: '8cf489d4-6e0c-43ea-adfb-c602b8731338',
+
+  isLoggedIn: false,
+  emailId: '',
+  userId: '',
+  loginData: null,
+  loginError: null,
+  loginRedirectState: null,
+  isNetworkConnected: false
+
+};
+
+function authReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method AuthReducer");
+  console.log(action.type);
+  console.log(state);
+
+  switch (action.type) {
+    case 'SUCCESS_LOGIN':
+
+      console.log("In method AuthReducer SUCCESS_LOGIN");
+
+      return babelHelpers.extends({}, state, {
+        sessionToken: action.response.sessionToken,
+        isLoggedIn: action.response.isLoggedIn,
+        emailId: action.response.emailId,
+        userId: action.response.userId,
+        loginError: action.response.loginError,
+        loginData: action.response.loginData
+      });
+      break;
+
+    case authActionTypes.FAILURE_LOGIN:
+
+      console.log("In method AuthReducer FAILURE_LOGIN");
+
+      return babelHelpers.extends({}, state, {
+        sessionToken: action.response.sessionToken,
+        isLoggedIn: action.response.isLoggedIn,
+        emailId: action.response.emailId,
+        userId: action.response.userId,
+        loginError: action.response.loginError,
+        errorCounter: state.errorCounter + 1,
+        loginData: action.response.loginData
+      });
+      break;
+
+    case authActionTypes.SUCCESS_LOGOUT:
+
+      console.log("In method AuthReducer SUCCESS_LOGOUT");
+
+      return babelHelpers.extends({}, state, {
+        sessionToken: action.response.sessionToken,
+        isLoggedIn: action.response.isLoggedIn,
+
+        userId: action.response.userId,
+        loginError: action.response.loginError,
+        loginData: action.response.loginData
+      });
+      break;
+
+    case authActionTypes.FAILURE_LOGOUT:
+
+      console.log("In method AuthReducer FAILURE_LOGOUT");
+
+      return babelHelpers.extends({}, state, {
+        isLoggedIn: action.response.isLoggedIn,
+        loginError: action.response.loginError,
+        loginData: action.response.loginData,
+        errorCounter: state.errorCounter + 1
+      });
+      break;
+
+    case authActionTypes.CLEAR_AUTH_ERROR:
+
+      console.log("In method AuthReducer CLEAR_AUTH_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        loginError: null
+
+      });
+
+      break;
+
+    case authActionTypes.CLEAR_LOGIN_REDIRECT_STATE:
+
+      console.log("In method AuthReducer CLEAR_LOGIN_REDIRECT_STATE");
+
+      return babelHelpers.extends({}, state, {
+        loginRedirectState: null
+
+      });
+
+      break;
+
+    case authActionTypes.SET_LOGIN_REDIRECT_STATE:
+
+      console.log("In method AuthReducer SET_LOGIN_REDIRECT_STATE");
+
+      return babelHelpers.extends({}, state, {
+        loginRedirectState: action.response
+
+      });
+
+      break;
+
+    case authActionTypes.UPDATE_NETWORK_STATUS:
+
+      console.log("In method authreducer UPDATE_NETWORK_STATUS");
+
+      return babelHelpers.extends({}, state, {
+        isNetworkConnected: action.response
+      });
+
+      break;
+
+    case _utils.REHYDRATE:
+
+      console.log("In method AuthReducer REHYDRATE");
+
+      return babelHelpers.extends({}, state, action.payload.auth);
+      break;
+
+    default:
+
+      console.log(FILE_NAME + ": In method AuthReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+}

@@ -1,0 +1,93 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../utils');
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewh4text = require('../ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewh3text = require('../ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewh3lighttext = require('../ewh3lighttext/ewh3lighttext');
+
+var _ewh3lighttext2 = babelHelpers.interopRequireDefault(_ewh3lighttext);
+
+var _reveiwstyles = require('./reveiwstyles');
+
+var _reveiwstyles2 = babelHelpers.interopRequireDefault(_reveiwstyles);
+
+var Reveiw = function (_Component) {
+  babelHelpers.inherits(Reveiw, _Component);
+
+  function Reveiw(props, context) {
+    babelHelpers.classCallCheck(this, Reveiw);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (Reveiw.__proto__ || Object.getPrototypeOf(Reveiw)).call(this, props, context));
+
+    _this.initialState = {};
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(Reveiw, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          heading = _props.heading,
+          value = _props.value,
+          customViewStyle = _props.customViewStyle,
+          customValueStyle = _props.customValueStyle;
+
+
+      console.log("Key received is ", heading);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: [customViewStyle, { flexDirection: "row" }] },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.3 } },
+          _react2.default.createElement(_ewh3lighttext2.default, {
+            text: heading
+          })
+        ),
+        _react2.default.createElement(_ewh3text2.default, {
+          text: value,
+          customStyle: [customValueStyle, { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN, flex: 0.7 }]
+        })
+      );
+    }
+  }]);
+  return Reveiw;
+}(_react.Component);
+
+exports.default = Reveiw;

@@ -1,0 +1,483 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getOthersClaimInformation = getOthersClaimInformation;
+exports.clearOtherExpenseClaimError = clearOtherExpenseClaimError;
+exports.saveOthersMasterItem = saveOthersMasterItem;
+exports.saveOthersLineItem = saveOthersLineItem;
+exports.deleteOthersLineItem = deleteOthersLineItem;
+exports.submitOthersExpenseClaim = submitOthersExpenseClaim;
+exports.getOthersExpenseComponentInformation = getOthersExpenseComponentInformation;
+exports.clearOthersExpenseClaimStateData = clearOthersExpenseClaimStateData;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _othersclaimprocessing = require('./othersclaimprocessing');
+
+var othersClaimProcessing = babelHelpers.interopRequireWildcard(_othersclaimprocessing);
+
+var _othersclaimactiontypes = require('./othersclaimactiontypes');
+
+var othersClaimActionTypes = babelHelpers.interopRequireWildcard(_othersclaimactiontypes);
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../../utils');
+
+var _modulelist = require('../../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _othersobjectmapping = require('./othersobjectmapping');
+
+var FILE_NAME = "othersclaimactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_TRAVEL_AND_EXPENSE;
+
+function getOthersClaimInformation(params) {
+
+  var functionName = "getOthersClaimInformation";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getOthersClaimInformationRequest = othersClaimProcessing.buildGetOthersClaimInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getOthersClaimInformationRequest.url, getOthersClaimInformationRequest.data, getOthersClaimInformationRequest.config).then(function (result) {
+
+      console.log("getOthersClaimInformationRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: othersClaimActionTypes.SUCCESS_GET_OTHERS_CLAIM_INFORMATION,
+          response: othersClaimProcessing.buildSuccesGetOthersClaimInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: othersClaimActionTypes.FAILURE_GET_OTHERS_CLAIM_INFORMATION,
+          response: othersClaimProcessing.buildFailedGetOthersClaimInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getOthersClaimInformationRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: othersClaimActionTypes.FAILURE_GET_OTHERS_CLAIM_INFORMATION,
+        response: othersClaimProcessing.buildServerErrorGetOthersClaimInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearOtherExpenseClaimError(params) {
+
+  return {
+    type: othersClaimActionTypes.CLEAR_EXPENSE_OTHERS_CLAIM_ERROR,
+    response: null
+  };
+}
+
+function saveOthersMasterItem(params) {
+
+  var functionName = "saveOthersMasterItem";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var saveOthersMasterItemRequest = othersClaimProcessing.buildSaveOthersMasterItemRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(saveOthersMasterItemRequest.url, saveOthersMasterItemRequest.data, saveOthersMasterItemRequest.config).then(function (result) {
+
+      console.log("saveOthersMasterItemRequest Result - ", result);
+
+      if (result.data.success != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: othersClaimActionTypes.SUCCESS_SAVE_OTHERS_MASTER_ITEM_INFORMATION,
+          response: othersClaimProcessing.buildSuccesSaveOthersMasterItemResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: othersClaimActionTypes.FAILURE_SAVE_OTHERS_MASTER_ITEM_INFORMATION,
+          response: othersClaimProcessing.buildFailedSaveOthersMasterItemResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("saveOthersMasterItemRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: othersClaimActionTypes.FAILURE_SAVE_OTHERS_MASTER_ITEM_INFORMATION,
+        response: othersClaimProcessing.buildServerErrorSaveOthersMasterItemResponse(err, params)
+      });
+    });
+  };
+}
+
+function saveOthersLineItem(params) {
+
+  var functionName = "saveOthersLineItem";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var serverParams = (0, _othersobjectmapping.getServerOthersLineItemModel)(params, getState());
+
+    var saveOthersLineItemRequest = othersClaimProcessing.buildSaveOthersLineItemRequest(serverParams, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.put(saveOthersLineItemRequest.url, saveOthersLineItemRequest.data, saveOthersLineItemRequest.config).then(function (result) {
+
+      console.log("saveOthersLineItemRequest Result - ", result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: othersClaimActionTypes.SUCCESS_SAVE_OTHERS_LINE_ITEM_INFORMATION,
+          response: othersClaimProcessing.buildSuccesSaveOthersLineItemResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: othersClaimActionTypes.FAILURE_SAVE_OTHERS_LINE_ITEM_INFORMATION,
+          response: othersClaimProcessing.buildFailedSaveOthersLineItemResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("saveOthersLineItemRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: othersClaimActionTypes.FAILURE_SAVE_OTHERS_LINE_ITEM_INFORMATION,
+        response: othersClaimProcessing.buildServerErrorSaveOthersLineItemResponse(err, params)
+      });
+    });
+  };
+}
+
+function deleteOthersLineItem(params) {
+  var _this = this;
+
+  var functionName = "deleteOthersLineItem";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function _callee(dispatch, getState) {
+    var deleteOthersLineItemRequest, onSuccess, onFailure, onError, result;
+    return regeneratorRuntime.async(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            onError = function onError(error) {
+              dispatch({
+                type: othersClaimActionTypes.FAILURE_DELETE_OTHERS_LINE_ITEM_INFORMATION,
+                response: othersClaimProcessing.buildServerErrorDeleteOthersLineItemResponse(error, params)
+              });
+              return error;
+            };
+
+            onFailure = function onFailure(result) {
+              dispatch({
+                type: othersClaimActionTypes.FAILURE_DELETE_OTHERS_LINE_ITEM_INFORMATION,
+                response: othersClaimProcessing.buildFailedDeleteOthersLineItemResponse(result, params)
+              });
+              return result.data;
+            };
+
+            onSuccess = function onSuccess(result) {
+              dispatch({
+                type: othersClaimActionTypes.SUCCESS_DELETE_OTHERS_LINE_ITEM_INFORMATION,
+                response: othersClaimProcessing.buildSuccesDeleteOthersLineItemResponse(result, params)
+              });
+              return result.data;
+            };
+
+            deleteOthersLineItemRequest = othersClaimProcessing.buildDeleteOthersLineItemRequest(params, getState());
+
+
+            console.log("Current GetState Value is - ", getState);
+
+            requestStartTime = (0, _utils.getCurrentTime)();
+
+            _context.prev = 6;
+            _context.next = 9;
+            return regeneratorRuntime.awrap(_axios2.default.delete(deleteOthersLineItemRequest.url, deleteOthersLineItemRequest.config));
+
+          case 9:
+            result = _context.sent;
+
+            if (!(result.data.update_Flag == 1)) {
+              _context.next = 14;
+              break;
+            }
+
+            return _context.abrupt('return', onSuccess(result));
+
+          case 14:
+            return _context.abrupt('return', onFailure(result));
+
+          case 15:
+            _context.next = 20;
+            break;
+
+          case 17:
+            _context.prev = 17;
+            _context.t0 = _context['catch'](6);
+            return _context.abrupt('return', onError(_context.t0));
+
+          case 20:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, null, _this, [[6, 17]]);
+  };
+}
+
+function submitOthersExpenseClaim(params) {
+
+  var functionName = "submitOthersExpenseClaim";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  var serverParams = (0, _othersobjectmapping.getSubmitOthersExpenseClaimModel)(params);
+
+  return function (dispatch, getState) {
+
+    var submitOthersExpenseClaimRequest = othersClaimProcessing.buildSubmitOthersExpenseClaimRequest(serverParams, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+    console.log("submitOthersExpenseClaimRequest Result - ", submitOthersExpenseClaimRequest);
+
+    _axios2.default.put(submitOthersExpenseClaimRequest.url, submitOthersExpenseClaimRequest.data, submitOthersExpenseClaimRequest.config).then(function (result) {
+
+      console.log("submitOthersExpenseClaimRequest Result - ", result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: othersClaimActionTypes.SUCCESS_SUBMIT_OTHERS_EXPENSE_CLAIM_INFORMATION,
+          response: othersClaimProcessing.buildSuccessSubmitOthersExpenseClaimResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: othersClaimActionTypes.FAILURE_SUBMIT_OTHERS_EXPENSE_CLAIM_INFORMATION,
+          response: othersClaimProcessing.buildFailedSubmitOthersExpenseClaimResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("submitOthersExpenseClaimRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: othersClaimActionTypes.FAILURE_SUBMIT_OTHERS_EXPENSE_CLAIM_INFORMATION,
+        response: othersClaimProcessing.buildServerErrorSubmitOthersExpenseClaimResponse(err, params)
+      });
+    });
+  };
+}
+
+function getOthersExpenseComponentInformation(params) {
+
+  var functionName = "getOthersExpenseComponentInformation";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getOthersExpenseComponentInformationRequest = othersClaimProcessing.buildGetOthersExpenseComponentInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getOthersExpenseComponentInformationRequest.url, getOthersExpenseComponentInformationRequest.data, getOthersExpenseComponentInformationRequest.config).then(function (result) {
+
+      console.log("getOthersExpenseComponentInformationRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: othersClaimActionTypes.SUCCESS_GET_OTHERS_EXPENSE_COMPONENT_INFORMATION,
+          response: othersClaimProcessing.buildSuccesGetOthersExpenseComponentInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: othersClaimActionTypes.FAILURE_GET_OTHERS_EXPENSE_COMPONENT_INFORMATION,
+          response: othersClaimProcessing.buildFailedGetOthersExpenseComponentInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getOthersExpenseComponentInformationRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: othersClaimActionTypes.FAILURE_GET_OTHERS_EXPENSE_COMPONENT_INFORMATION,
+        response: othersClaimProcessing.buildServerErrorGetOthersExpenseComponentInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearOthersExpenseClaimStateData(params) {
+
+  console.log(FILE_NAME + "In clearOthersExpenseClaimStateData - ");
+  console.log("Type of Data to be cleared - ", params);
+
+  CLEAR_STATE_DATA_ALL = 'CLEAR_STATE_DATA_ALL';
+  CLEAR_STATE_OTHER_EXPENSE_COMPONENT = 'CLEAR_STATE_OTHER_EXPENSE_COMPONENT';
+
+  CLEAR_STATE_ERROR_COUNTER = 'CLEAR_STATE_ERROR_COUNTER';
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var errorCounter = getState().othersClaim.errorCounter;
+
+    var othersExpenseComponentInformationData = getState().othersClaim.othersExpenseComponentInformationData;
+    var othersExpenseComponentInformationError = getState().othersClaim.othersExpenseComponentInformationError;
+
+    var othersClaimInformationData = getState().othersClaim.othersClaimInformationData;
+    var othersClaimInformationError = getState().othersClaim.othersClaimInformationError;
+
+    var othersMasterItemData = getState().othersClaim.othersMasterItemData;
+    var othersMasterItemError = getState().othersClaim.othersMasterItemError;
+
+    var othersLineItemData = getState().othersClaim.othersLineItemData;
+    var othersLineItemError = getState().othersClaim.othersLineItemError;
+
+    var deleteOthersLineItemData = getState().othersClaim.deleteOthersLineItemData;
+    var deleteOthersLineItemError = getState().othersClaim.deleteOthersLineItemError;
+
+    var submitOthersClaimInformationData = getState().othersClaim.submitOthersClaimInformationData;
+    var submitOthersClaimInformationError = getState().othersClaim.submitOthersClaimInformationError;
+
+    console.log("newdaterecive", othersClaimInformationData);
+
+    Object.keys(params).map(function (key) {
+      console.log("params attribute " + key + " value is - " + params[key]);
+
+      switch (params[key]) {
+        case CLEAR_STATE_DATA_ALL:
+
+          errorCounter = 0;
+
+          break;
+
+        case CLEAR_STATE_ERROR_COUNTER:
+
+          errorCounter = 0;
+          break;
+
+        case CLEAR_STATE_OTHER_EXPENSE_COMPONENT:
+
+          othersExpenseComponentInformationData = null;
+          othersExpenseComponentInformationError = null;
+
+          break;
+
+        default:
+
+      }
+    });
+
+    var response = {
+      errorCounter: errorCounter,
+      othersExpenseComponentInformationData: othersExpenseComponentInformationData,
+      othersExpenseComponentInformationError: othersExpenseComponentInformationError,
+
+      othersClaimInformationData: othersClaimInformationData,
+      othersClaimInformationError: othersClaimInformationError,
+
+      othersMasterItemData: othersMasterItemData,
+      othersMasterItemError: othersMasterItemError,
+
+      othersLineItemData: othersLineItemData,
+      othersLineItemError: othersLineItemError,
+
+      deleteOthersLineItemData: deleteOthersLineItemData,
+      deleteOthersLineItemError: deleteOthersLineItemError,
+
+      submitOthersClaimInformationData: submitOthersClaimInformationData,
+      submitOthersClaimInformationError: submitOthersClaimInformationError
+    };
+
+    dispatch({
+      type: othersClaimActionTypes.CLEAR_EXPENSE_OTHERS_CLAIM_STATE_DATA,
+      response: response
+    });
+  };
+}

@@ -1,0 +1,106 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = chatbotReducer;
+
+var _chatbotactiontypes = require('./chatbotactiontypes');
+
+var chatbotActionTypes = babelHelpers.interopRequireWildcard(_chatbotactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _utils = require('../../utils');
+
+var FILE_NAME = "chatbotreducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+
+  chatbotResponseStatusData: null,
+  chatbotResponseStatusError: null,
+
+  chatbotIssueResponseStatusData: null,
+  chatbotIssueResponseStatusError: null
+
+};
+
+function chatbotReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method chatbotReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+
+    case chatbotActionTypes.SUCCESS_GET_CHATBOT_RESPONSE:
+
+      console.log("In method chatbotReducer SUCCESS_GET_CHATBOT_RESPONSE");
+
+      return {
+        chatbotResponseStatusData: action.response.data,
+        chatbotResponseStatusError: action.response.error
+      };
+
+      break;
+
+    case chatbotActionTypes.FAILURE_GET_CHATBOT_RESPONSE:
+
+      console.log("In method chatbotReducer FAILURE_GET_CHATBOT_RESPONSE");
+
+      return {
+
+        chatbotResponseStatusData: action.response.data,
+        chatbotResponseStatusError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      };
+
+      break;
+
+    case chatbotActionTypes.SUCCESS_CREATE_CHATBOT_ISSUE_RESPONSE:
+
+      console.log("In method chatbotReducer SUCCESS_CREATE_CHATBOT_ISSUE_RESPONSE");
+
+      return {
+        chatbotIssueResponseStatusData: action.response.data,
+        chatbotIssueResponseStatusError: action.response.error
+      };
+
+      break;
+
+    case chatbotActionTypes.FAILURE_CREATE_CHATBOT_ISSUE_RESPONSE:
+
+      console.log("In method chatbotReducer FAILURE_CREATE_CHATBOT_ISSUE_RESPONSE");
+
+      return {
+
+        chatbotIssueResponseStatusData: action.response.data,
+        chatbotIssueResponseStatusError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      };
+
+      break;
+
+    case chatbotActionTypes.CLEAR_COMMON_STATE_DATA:
+
+      console.log("In method chatbotReducer CLEAR_COMMON_STATE_DATA");
+
+      return {
+        errorCounter: action.response.errorCounter,
+        chatbotResponseStatusData: action.response.chatbotResponseStatusData,
+        chatbotResponseStatusError: action.response.chatbotResponseStatusError
+      };
+
+      break;
+
+    default:
+
+      console.log("In method chatbotReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

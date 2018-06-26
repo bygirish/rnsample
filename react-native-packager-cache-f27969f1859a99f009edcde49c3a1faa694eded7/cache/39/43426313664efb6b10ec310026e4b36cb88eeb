@@ -1,0 +1,8 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var UPLOAD_IMAGE = exports.UPLOAD_IMAGE = '/uploadResource?scope=I';
+var UPDATE_USER_RATING = exports.UPDATE_USER_RATING = '/appreview/update/';
+var CREATE_USER_FEEDBACK = exports.CREATE_USER_FEEDBACK = '/tickets';
+var GET_APP_UPDATE_CONFIGURATION = exports.GET_APP_UPDATE_CONFIGURATION = '/appupdate/configuration?scope=I';
+var GET_APP_RATING_CONFIGURATION = exports.GET_APP_RATING_CONFIGURATION = '/appreview/configuration?scope=I';

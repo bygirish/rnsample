@@ -1,0 +1,306 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = commonReducer;
+
+var _commonactiontypes = require('./commonactiontypes');
+
+var commonActionTypes = babelHelpers.interopRequireWildcard(_commonactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _utils = require('../../utils');
+
+var FILE_NAME = "commonreducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+
+  uploadImageStatusData: null,
+  uploadImageStatusError: null,
+
+  updateUserRatingStatusData: null,
+  updateUserRatingStatusError: null,
+
+  createUserFeedbackStatusData: null,
+  createUserFeedbackStatusError: null,
+
+  appUpdateConfigurationData: null,
+  appUpdateConfigurationError: null,
+
+  currentImageTimestamp: (0, _utils.getCurrentTime)(),
+
+  lastPromptTime: null,
+  appUpdateConfigurationApiTimestamp: null,
+
+  firstPromptTransactionRange: null,
+  promptTransactionRange: null,
+  promptTransactionDate: null,
+  promptDuration: null,
+  totalActivityCount: null,
+  rating: null,
+  appReveiwId: null,
+
+  alertMessage: null,
+
+  refreshToggle: false
+};
+
+function commonReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method commonReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case commonActionTypes.SUCCESS_UPLOAD_IMAGE:
+
+      console.log("In method commonReducer SUCCESS_UPLOAD_IMAGE");
+
+      return babelHelpers.extends({}, state, {
+        uploadImageStatusData: action.response.data,
+        uploadImageStatusError: action.response.error
+      });
+
+      break;
+
+    case commonActionTypes.FAILURE_UPLOAD_IMAGE:
+
+      console.log("In method commonReducer FAILURE_UPLOAD_IMAGE");
+
+      return babelHelpers.extends({}, state, {
+        uploadImageStatusData: action.response.data,
+        uploadImageStatusError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonActionTypes.SUCCESS_GET_APP_UPDATE_CONFIGURATION:
+
+      console.log("In method commonReducer SUCCESS_GET_APP_UPDATE_CONFIGURATION");
+
+      return babelHelpers.extends({}, state, {
+        appUpdateConfigurationData: action.response.data,
+        appUpdateConfigurationError: action.response.error
+      });
+
+      break;
+
+    case commonActionTypes.FAILURE_GET_APP_UPDATE_CONFIGURATION:
+
+      console.log("In method commonReducer FAILURE_GET_APP_UPDATE_CONFIGURATION");
+
+      return babelHelpers.extends({}, state, {
+        appUpdateConfigurationData: action.response.data,
+        appUpdateConfigurationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonActionTypes.SUCCESS_GET_APP_RATING_CONFIGURATION:
+
+      console.log("In method commonReducer SUCCESS_GET_APP_RATING_CONFIGURATION");
+
+      return babelHelpers.extends({}, state, {
+        firstPromptTransactionRange: action.response.data.first_prompt_transaction_range,
+        promptTransactionRange: action.response.data.prompt_transaction_range,
+        promptDuration: action.response.data.prompt_duration,
+        totalActivityCount: action.response.data.total_activity_count,
+        rating: action.response.data.rating,
+        appReveiwId: action.response.data._id
+      });
+
+      break;
+
+    case commonActionTypes.FAILURE_GET_APP_RATING_CONFIGURATION:
+
+      console.log("In method commonReducer FAILURE_GET_APP_RATING_CONFIGURATION");
+
+      return babelHelpers.extends({}, state, {
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonActionTypes.SUCCESS_UPDATE_USER_RATING:
+
+      console.log("In method commonReducer SUCCESS_UPDATE_USER_RATING");
+
+      return babelHelpers.extends({}, state, {
+        rating: action.response.data.rating,
+        updateUserRatingStatusData: action.response.data,
+        updateUserRatingStatusError: action.response.error
+
+      });
+
+      break;
+
+    case commonActionTypes.FAILURE_UPDATE_USER_RATING:
+
+      console.log("In method commonReducer FAILURE_UPDATE_USER_RATING");
+
+      return babelHelpers.extends({}, state, {
+        updateUserRatingStatusData: action.response.data,
+        updateUserRatingStatusError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonActionTypes.SUCCESS_CREATE_FEEDBACK:
+
+      console.log("In method commonReducer SUCCESS_CREATE_FEEDBACK");
+
+      return babelHelpers.extends({}, state, {
+        createUserFeedbackStatusData: action.response.data,
+        createUserFeedbackStatusError: action.response.error,
+        alertMessage: state.alertMessage
+      });
+
+      break;
+
+    case commonActionTypes.FAILURE_CREATE_FEEDBACK:
+
+      console.log("In method commonReducer FAILURE_CREATE_FEEDBACK");
+
+      return babelHelpers.extends({}, state, {
+        createUserFeedbackStatusData: action.response.data,
+        createUserFeedbackStatusError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case commonActionTypes.REFRESH_TOGGLE:
+
+      console.log("In method commonReducer REFRESH_TOGGLE");
+
+      return {
+        refreshToggle: action.response.refreshToggle
+      };
+
+      break;
+
+    case commonActionTypes.UPDATE_IMAGE_TIMESTAMP:
+
+      console.log("In method commonReducer UPDATE_IMAGE_TIMESTAMP");
+
+      return babelHelpers.extends({}, state, {
+        currentImageTimestamp: action.response
+      });
+
+      break;
+
+    case commonActionTypes.UPDATE_PROMPT_TRANSACTION_DATE:
+
+      console.log("In method commonReducer UPDATE_PROMPT_TRANSACTION_DATE");
+
+      return babelHelpers.extends({}, state, {
+        promptTransactionDate: action.response
+      });
+
+      break;
+
+    case commonActionTypes.UPDATE_APP_UPDATE_API_CONFIGURATION_TIMESTAMP:
+
+      console.log("In method commonReducer UPDATE_APP_UPDATE_API_CONFIGURATION_TIMESTAMP");
+
+      return babelHelpers.extends({}, state, {
+        appUpdateConfigurationApiTimestamp: action.response
+      });
+
+      break;
+
+    case commonActionTypes.UPDATE_LAST_PROMPT_TIMESTAMP:
+
+      console.log("In method commonReducer UPDATE_LAST_PROMPT_TIMESTAMP");
+
+      return babelHelpers.extends({}, state, {
+        lastPromptTime: action.response
+      });
+
+      break;
+
+    case commonActionTypes.UPDATE_TOTAL_ACTIVITY_COUNT:
+
+      console.log("In method commonReducer UPDATE_TOTAL_ACTIVITY_COUNT");
+
+      return babelHelpers.extends({}, state, {
+        totalActivityCount: action.response
+      });
+
+      break;
+
+    case commonActionTypes.SHOW_ALERT_MESSAGE:
+
+      console.log("In method commonReducer SHOW_ALERT_MESSAGE");
+
+      return babelHelpers.extends({}, state, {
+        alertMessage: action.response
+
+      });
+
+      break;
+
+    case commonActionTypes.CLEAR_ALERT_MESSAGE:
+
+      console.log("In method commonReducer CLEAR_ALERT_MESSAGE");
+
+      return babelHelpers.extends({}, state, {
+        alertMessage: ''
+      });
+
+      break;
+
+    case commonActionTypes.CLEAR_COMMON_ERROR:
+
+      console.log("In method commonReducer CLEAR_COMMON_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        uploadImageStatusError: null
+      });
+
+      break;
+
+    case _utils.REHYDRATE:
+
+      console.log("In method commonreducer REHYDRATE");
+
+      return babelHelpers.extends({}, state, action.payload.common);
+      break;
+
+    case commonActionTypes.CLEAR_COMMON_STATE_DATA:
+
+      console.log("In method commonReducer CLEAR_COMMON_STATE_DATA");
+
+      return babelHelpers.extends({}, state, {
+        errorCounter: action.response.errorCounter,
+        uploadImageStatusData: action.response.uploadImageStatusData,
+        uploadImageStatusError: action.response.uploadImageStatusError,
+
+        updateUserRatingStatusData: action.response.updateUserRatingStatusData,
+        updateUserRatingStatusError: action.response.updateUserRatingStatusError,
+
+        createUserFeedbackStatusData: action.response.createUserFeedbackStatusData,
+        createUserFeedbackStatusError: action.response.createUserFeedbackStatusError,
+
+        appUpdateConfigurationData: action.response.appUpdateConfigurationData,
+        appUpdateConfigurationError: action.response.appUpdateConfigurationError
+      });
+
+      break;
+
+    default:
+
+      console.log("In method commonReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

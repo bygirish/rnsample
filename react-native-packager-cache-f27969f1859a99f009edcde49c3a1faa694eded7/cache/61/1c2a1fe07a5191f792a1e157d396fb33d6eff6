@@ -1,0 +1,182 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.performLogin = performLogin;
+exports.performLogout = performLogout;
+exports.clearAuthError = clearAuthError;
+exports.setLoginRedirectState = setLoginRedirectState;
+exports.clearLoginRedirectState = clearLoginRedirectState;
+exports.updateNetworkStatus = updateNetworkStatus;
+
+var _authactiontypes = require('./authactiontypes');
+
+var authActionTypes = babelHelpers.interopRequireWildcard(_authactiontypes);
+
+var _authprocessing = require('./authprocessing');
+
+var authProcessing = babelHelpers.interopRequireWildcard(_authprocessing);
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var FILE_NAME = "authactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+function performLogin(param) {
+
+  console.log(FILE_NAME + "In performLogin method- ");
+  console.log("params - ", param);
+
+  return function (dispatch, getState) {
+
+    console.log("Current getState values are - ", getState());
+
+    params = {
+
+      emailId: param.emailId,
+      password: param.password,
+      device_id: "",
+      version: "null",
+      empCode: param.empCode != '' ? param.empCode : null,
+      custCode: param.custCode != '' ? param.custCode : null
+
+    };
+
+    var loginRequest = authProcessing.buildPerformLoginRequest(params, getState());
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(loginRequest.url, loginRequest.data, loginRequest.config).then(function (result) {
+
+      console.log("Login Result - ", result);
+      console.log(result.data.token);console.log(result.data.user_name);
+
+      if (result.data.valid == 'Y') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'performLogin', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: authActionTypes.SUCCESS_LOGIN,
+          response: authProcessing.buildSuccessPerformLoginResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'performLogin', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: authActionTypes.FAILURE_LOGIN,
+          response: authProcessing.buildFailedPerformLoginResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      console.log("Login Error - ", err);
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'performLogin', _utils.REQUEST_SERVER_ERROR);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: authActionTypes.FAILURE_LOGIN,
+        response: authProcessing.buildServerErrorPerformLoginResponse(err, params)
+      });
+    });
+  };
+}
+
+function performLogout(params) {
+
+  console.log(FILE_NAME + "In performLogout method - ");
+  console.log("Params - ", params);
+
+  return function (dispatch, getState) {
+
+    console.log("Current getState values are - ", getState());
+
+    var logoutRequest = authProcessing.buildPerformLogoutRequest(params, getState());
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.put(logoutRequest.url, logoutRequest.data, logoutRequest.config).then(function (result) {
+
+      console.log("Logout Result - ", result);
+
+      if (result.data.update_Flag == 1) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'performLogout', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: authActionTypes.SUCCESS_LOGOUT,
+          response: authProcessing.buildSuccessPerformLogoutResponse(result, getState())
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'performLogout', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: authActionTypes.FAILURE_LOGOUT,
+          response: authProcessing.buildFailedPerformLogoutResponse(result, getState())
+        });
+      }
+    }).catch(function (err) {
+
+      console.log("Logout Error - ", err);
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'performLogout', _utils.REQUEST_SERVER_ERROR);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: authActionTypes.FAILURE_LOGOUT,
+        response: authProcessing.buildServerErrorPerformLogoutResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearAuthError(params) {
+
+  return {
+    type: authActionTypes.CLEAR_AUTH_ERROR,
+    response: null
+  };
+}
+
+function setLoginRedirectState(params) {
+
+  return {
+    type: authActionTypes.SET_LOGIN_REDIRECT_STATE,
+    response: params
+  };
+}
+
+function clearLoginRedirectState(params) {
+
+  return {
+    type: authActionTypes.CLEAR_LOGIN_REDIRECT_STATE,
+    response: params
+  };
+}
+
+function updateNetworkStatus(status) {
+
+  console.log(FILE_NAME + "In updateNetworkStatus method");
+  console.log("Status is - ", status);
+
+  return {
+    type: authActionTypes.UPDATE_NETWORK_STATUS,
+    response: status
+  };
+}

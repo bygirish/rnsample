@@ -1,0 +1,254 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../../utils');
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewh4text = require('../../../../components/ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewbutton = require('../../../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _ewh3text = require('../../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewbar = require('../../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewh1text = require('../../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewmodal = require('../../../../components/ewmodal/ewmodal');
+
+var _ewmodal2 = babelHelpers.interopRequireDefault(_ewmodal);
+
+var _ewh3lighttext = require('../../../../components/ewh3lighttext/ewh3lighttext');
+
+var _ewh3lighttext2 = babelHelpers.interopRequireDefault(_ewh3lighttext);
+
+var _ewcard = require('../../../../components/ewcard/ewcard');
+
+var _ewcard2 = babelHelpers.interopRequireDefault(_ewcard);
+
+var _ewmultiplecomponentvalue = require('../../../../components/ewmultiplecomponentvalue/ewmultiplecomponentvalue');
+
+var _ewmultiplecomponentvalue2 = babelHelpers.interopRequireDefault(_ewmultiplecomponentvalue);
+
+var _ewreveiw = require('../../../../components/ewreveiw/ewreveiw');
+
+var _ewreveiw2 = babelHelpers.interopRequireDefault(_ewreveiw);
+
+var _commonexpenseclaimactions = require('../../../../services/expenseclaim/common/commonexpenseclaimactions');
+
+var _comment = require('./comment.js');
+
+var _comment2 = babelHelpers.interopRequireDefault(_comment);
+
+var _expenseutils = require('../../expenseutils');
+
+var expenseConstants = babelHelpers.interopRequireWildcard(_expenseutils);
+
+
+var FILE_NAME = " Commentsmodal.js ";
+
+var CommentsView = function (_Component) {
+  babelHelpers.inherits(CommentsView, _Component);
+
+  function CommentsView(props, context) {
+    babelHelpers.classCallCheck(this, CommentsView);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (CommentsView.__proto__ || Object.getPrototypeOf(CommentsView)).call(this, props, context));
+
+    _this.initialState = {
+
+      commentDetails: []
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(CommentsView, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+
+      var _props$otherProps = this.props.otherProps,
+          expenseLogId = _props$otherProps.expenseLogId,
+          expenseId = _props$otherProps.expenseId;
+
+
+      if (expenseLogId != null) {
+
+        var params = {
+
+          "expenseId": expenseId,
+          "logId": expenseLogId
+
+        };
+
+        this.props.getExpenseComments(params);
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.commentsInformationData != null && nextProps.commentsInformationError == null) {
+
+        console.log("Inside is State changed comments  ");
+
+        this.setState({
+
+          commentDetails: nextProps.commentsInformationData
+
+        });
+      }
+
+      if (nextProps.commentsInformationData == null && nextProps.commentsInformationError != null) {
+
+        console.log("Inside is State changed comments ");
+
+        this.setState({
+
+          commentDetails: []
+
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var customViewStyle = this.props.customViewStyle;
+      var commentDetails = this.state.commentDetails;
+
+
+      if (commentDetails.length != 0) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+          _react2.default.createElement(_ewh3lighttext2.default, {
+            text: 'Comments'
+          }),
+          Object.keys(commentDetails).map(function (key, stateIndex) {
+            return _this2.renderCommentView(key);
+          })
+        );
+      }
+
+      return null;
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'renderCommentView',
+    value: function renderCommentView(key) {
+      var commentDetails = this.state.commentDetails;
+
+
+      return _react2.default.createElement(_ewh3text2.default, {
+        text: commentDetails[key].comment,
+        customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+      });
+    }
+  }]);
+  return CommentsView;
+}(_react.Component);
+
+function bindActions(dispatch) {
+
+  console.log(FILE_NAME, "In bindActions Method");
+
+  return {
+
+    getExpenseComments: function getExpenseComments(params) {
+      return dispatch((0, _commonexpenseclaimactions.getExpenseComments)(params));
+    },
+
+    clearCommonExpenseClaimStateData: function clearCommonExpenseClaimStateData(params) {
+      return dispatch((0, _commonexpenseclaimactions.clearCommonExpenseClaimStateData)(params));
+    }
+  };
+}
+
+function mapStateToProps(state) {
+
+  console.log("State Updated state is -");
+
+  console.log(state);
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    commentsInformationData: state.commonExpenseClaim.commentsInformationData,
+    commentsInformationError: state.commonExpenseClaim.commentsInformationError
+
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(CommentsView);

@@ -1,0 +1,309 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../utils');
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewh4text = require('../../../components/ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewh3text = require('../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewh1text = require('../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewbar = require('../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewh3lighttext = require('../../../components/ewh3lighttext/ewh3lighttext');
+
+var _ewh3lighttext2 = babelHelpers.interopRequireDefault(_ewh3lighttext);
+
+var _ewcard = require('../../../components/ewcard/ewcard');
+
+var _ewcard2 = babelHelpers.interopRequireDefault(_ewcard);
+
+var _ewmodal = require('../../../components/ewmodal/ewmodal');
+
+var _ewmodal2 = babelHelpers.interopRequireDefault(_ewmodal);
+
+var _ewlistitem = require('./ewlistitem');
+
+var _ewlistitem2 = babelHelpers.interopRequireDefault(_ewlistitem);
+
+var _ewbutton = require('../../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _leaveactions = require('../../../services/leave/leaveactions');
+
+var _leavebalancestyles = require('./styles/leavebalancestyles');
+
+var _leavebalancestyles2 = babelHelpers.interopRequireDefault(_leavebalancestyles);
+
+var FILE_NAME = "leavebalance.js";
+
+var LeaveBalance = function (_Component) {
+  babelHelpers.inherits(LeaveBalance, _Component);
+
+  function LeaveBalance(props, context) {
+    babelHelpers.classCallCheck(this, LeaveBalance);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (LeaveBalance.__proto__ || Object.getPrototypeOf(LeaveBalance)).call(this, props, context));
+
+    _this.initialState = {
+
+      isLeaveBalanceModalVisible: false,
+      leaveBalanceData: null,
+      currentError: ""
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(LeaveBalance, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.leaveRenderingData != null && nextProps.leaveRenderingError == null) {
+
+        this.setState({
+
+          leaveBalanceData: nextProps.leaveRenderingData
+        });
+      }
+
+      if (nextProps.leaveRenderingData == null && nextProps.leaveRenderingError != null) {
+
+        this.setState({
+
+          currentError: nextProps.leaveRenderingError
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(_ewbutton2.default, {
+          label: 'Show Leave Balance',
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN, alignSelf: "center" },
+          onButonClicked: function onButonClicked() {
+            return _this2.changeLeaveBalanceModalState();
+          }
+
+        }),
+        this.showLeaveBalanceModal()
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'changeLeaveBalanceModalState',
+    value: function changeLeaveBalanceModalState() {
+
+      if (!this.state.isLeaveBalanceModalVisible) {
+
+        this.props.getLeaveTypesAndBalances();
+      }
+
+      this.setState({
+
+        isLeaveBalanceModalVisible: !this.state.isLeaveBalanceModalVisible
+      });
+    }
+  }, {
+    key: 'showLeaveBalanceModal',
+    value: function showLeaveBalanceModal() {
+      var _this3 = this;
+
+      var isLeaveBalanceModalVisible = this.state.isLeaveBalanceModalVisible;
+
+
+      if (isLeaveBalanceModalVisible) {
+
+        return _react2.default.createElement(
+          _ewmodal2.default,
+          {
+            onBackButtonPress: function onBackButtonPress() {
+              return _this3.changeLeaveBalanceModalState();
+            },
+            isModalVisible: isLeaveBalanceModalVisible,
+            onBackdropPress: function onBackdropPress() {
+              return _this3.changeLeaveBalanceModalState();
+            }
+          },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { margin: appstyleguide.DEFAULT_MARGIN } },
+            _react2.default.createElement(_ewh1text2.default, {
+              text: 'Leave Balance',
+              customStyle: { alignSelf: "center", fontWeight: "bold" }
+            }),
+            _react2.default.createElement(_ewbar2.default, {
+              customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN }
+            }),
+            this.renderLeaveBalanceView()
+          )
+        );
+      }
+    }
+  }, {
+    key: 'renderLeaveBalanceView',
+    value: function renderLeaveBalanceView() {
+      var _this4 = this;
+
+      var leaveBalanceData = this.state.leaveBalanceData;
+
+
+      if (leaveBalanceData != null && this.props.leaveRenderingError == null) {
+
+        console.log("1 Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          Object.keys(leaveBalanceData).map(function (key) {
+            return _react2.default.createElement(_ewlistitem2.default, {
+              label: leaveBalanceData[key].leaveType,
+              value: leaveBalanceData[key].balance
+            });
+          })
+        );
+      } else if (leaveBalanceData == null && this.props.leaveRenderingError == null) {
+
+        console.log("2nd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _leavebalancestyles2.default.spinnerContainer },
+          _react2.default.createElement(_nativeBase.Spinner, { size: 'small' }),
+          _react2.default.createElement(
+            _reactNative.Text,
+            { style: _leavebalancestyles2.default.spinnerElement },
+            'Loading...'
+          )
+        );
+      } else if (leaveBalanceData == null && this.props.leaveRenderingError != null) {
+
+        console.log("3rd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _leavebalancestyles2.default.loadAgainButtonContainer },
+          _react2.default.createElement(_ewbutton2.default, {
+            label: 'Load Again',
+            onButonClicked: function onButonClicked() {
+              return _this4.props.getLeaveTypesAndBalances();
+            }
+
+          })
+        );
+      } else {
+
+        console.log("4th Case");
+        console.log("leaveBalanceData, ", leaveBalanceData);
+        console.log("this.props.leaveRenderingError, ", this.props.leaveRenderingError);
+      }
+    }
+  }]);
+  return LeaveBalance;
+}(_react.Component);
+
+function bindActions(dispatch) {
+
+  console.log(FILE_NAME, "In bindActions Method");
+
+  return {
+
+    getLeaveTypesAndBalances: function getLeaveTypesAndBalances(params) {
+      return dispatch((0, _leaveactions.getLeaveTypesAndBalances)(params));
+    }
+
+  };
+}
+
+function mapStateToProps(state) {
+
+  console.log("State Updated state is -");
+
+  console.log(state);
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    leaveRenderingData: state.leave.leaveBalanceData,
+    leaveRenderingError: state.leave.leaveBalanceError
+
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(LeaveBalance);

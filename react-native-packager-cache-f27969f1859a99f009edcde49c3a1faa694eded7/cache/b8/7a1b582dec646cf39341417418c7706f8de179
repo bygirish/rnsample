@@ -1,0 +1,166 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _utils = require('../../utils');
+
+var FILE_NAME = "EwModal.js : ";
+
+var EwModal = function (_Component) {
+  babelHelpers.inherits(EwModal, _Component);
+
+  function EwModal(props, context) {
+    babelHelpers.classCallCheck(this, EwModal);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwModal.__proto__ || Object.getPrototypeOf(EwModal)).call(this, props, context));
+
+    _this._handleDimensionsUpdate = function (dimensionsUpdate) {
+
+      console.log("deviceWidth", deviceWidth);
+      var deviceWidth = _reactNative.Dimensions.get('window').width;
+      var deviceHeight = _reactNative.Dimensions.get('window').height;
+      if (deviceWidth !== _this.state.deviceWidth || deviceHeight !== _this.state.deviceHeight) {
+        _this.setState({ deviceWidth: deviceWidth, deviceHeight: deviceHeight });
+      }
+    };
+
+    _this.initialState = {
+
+      deviceWidth: _utils.DEVICE_WIDTH,
+      deviceHeight: _utils.DEVICE_HEIGHT
+
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwModal, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + "In componentWillMount");
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props = this.props,
+          onBackButtonPress = _props.onBackButtonPress,
+          onBackdropPress = _props.onBackdropPress,
+          isModalVisible = _props.isModalVisible,
+          children = _props.children,
+          customModalStyle = _props.customModalStyle,
+          otherProps = babelHelpers.objectWithoutProperties(_props, ['onBackButtonPress', 'onBackdropPress', 'isModalVisible', 'children', 'customModalStyle']);
+      var _state = this.state,
+          deviceWidth = _state.deviceWidth,
+          deviceHeight = _state.deviceHeight;
+
+
+      var computedStyle = [{ margin: deviceWidth * 0.05, transform: [{ translateY: 0 }] }, _styles2.default.content];
+
+      return _react2.default.createElement(
+        _reactNative.Modal,
+        babelHelpers.extends({
+          isVisible: isModalVisible,
+          transparent: true,
+          animationType: 'none',
+          onRequestClose: onBackButtonPress
+        }, otherProps),
+        _react2.default.createElement(
+          _reactNative.TouchableWithoutFeedback,
+          { onPress: onBackdropPress },
+          _react2.default.createElement(_reactNative.View, {
+            ref: function ref(_ref) {
+              return _this2.backdropRef = _ref;
+            },
+            style: [_styles2.default.backdrop, {
+              width: deviceWidth,
+              height: deviceHeight
+            }]
+          })
+        ),
+        _react2.default.createElement(
+          _reactNative.View,
+          babelHelpers.extends({
+            ref: function ref(_ref2) {
+              return _this2.contentRef = _ref2;
+            },
+            style: [computedStyle],
+            pointerEvents: 'box-none'
+          }, otherProps),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _styles2.default.contentStyle },
+            _react2.default.createElement(
+              _reactNative.ScrollView,
+              null,
+              children
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      _reactNative.DeviceEventEmitter.addListener('didUpdateDimensions', this._handleDimensionsUpdate);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      _reactNative.DeviceEventEmitter.removeListener('didUpdateDimensions', this._handleDimensionsUpdate);
+    }
+  }]);
+  return EwModal;
+}(_react.Component);
+
+exports.default = EwModal;

@@ -1,0 +1,205 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.NotificationType = exports.WillPresentNotificationResult = exports.RemoteNotificationResult = exports.FCMEvent = undefined;
+
+var _this = this;
+
+var _reactNative = require('react-native');
+
+var EventEmitter = new _reactNative.NativeEventEmitter(_reactNative.NativeModules.RNFIRMessaging);
+
+var FCMEvent = exports.FCMEvent = {
+  RefreshToken: 'FCMTokenRefreshed',
+  Notification: 'FCMNotificationReceived',
+  DirectChannelConnectionChanged: 'FCMDirectChannelConnectionChanged'
+};
+
+var RemoteNotificationResult = exports.RemoteNotificationResult = {
+  NewData: 'UIBackgroundFetchResultNewData',
+  NoData: 'UIBackgroundFetchResultNoData',
+  ResultFailed: 'UIBackgroundFetchResultFailed'
+};
+
+var WillPresentNotificationResult = exports.WillPresentNotificationResult = {
+  All: 'UNNotificationPresentationOptionAll',
+  None: 'UNNotificationPresentationOptionNone'
+};
+
+var NotificationType = exports.NotificationType = {
+  Remote: 'remote_notification',
+  NotificationResponse: 'notification_response',
+  WillPresent: 'will_present_notification',
+  Local: 'local_notification'
+};
+
+var RNFIRMessaging = _reactNative.NativeModules.RNFIRMessaging;
+
+var FCM = {};
+
+FCM.getInitialNotification = function () {
+  return RNFIRMessaging.getInitialNotification();
+};
+
+FCM.enableDirectChannel = function () {
+  if (_reactNative.Platform.OS === 'ios') {
+    return RNFIRMessaging.enableDirectChannel();
+  }
+};
+
+FCM.isDirectChannelEstablished = function () {
+  return _reactNative.Platform.OS === 'ios' ? RNFIRMessaging.isDirectChannelEstablished() : Promise.resolve(true);
+};
+
+FCM.getFCMToken = function () {
+  return RNFIRMessaging.getFCMToken();
+};
+
+FCM.deleteInstanceId = function () {
+  return RNFIRMessaging.deleteInstanceId();
+};
+
+FCM.getAPNSToken = function () {
+  if (_reactNative.Platform.OS === 'ios') {
+    return RNFIRMessaging.getAPNSToken();
+  }
+};
+
+FCM.requestPermissions = function () {
+  return RNFIRMessaging.requestPermissions();
+};
+
+FCM.presentLocalNotification = function (details) {
+  details.id = details.id || new Date().getTime().toString();
+  details.local_notification = true;
+  RNFIRMessaging.presentLocalNotification(details);
+};
+
+FCM.scheduleLocalNotification = function (details) {
+  if (!details.id) {
+    throw new Error('id is required for scheduled notification');
+  }
+  details.local_notification = true;
+  RNFIRMessaging.scheduleLocalNotification(details);
+};
+
+FCM.getScheduledLocalNotifications = function () {
+  return RNFIRMessaging.getScheduledLocalNotifications();
+};
+
+FCM.cancelLocalNotification = function (notificationID) {
+  if (!notificationID) {
+    return;
+  }
+  RNFIRMessaging.cancelLocalNotification(notificationID);
+};
+
+FCM.cancelAllLocalNotifications = function () {
+  RNFIRMessaging.cancelAllLocalNotifications();
+};
+
+FCM.removeDeliveredNotification = function (notificationID) {
+  if (!notificationID) {
+    return;
+  }
+  RNFIRMessaging.removeDeliveredNotification(notificationID);
+};
+
+FCM.removeAllDeliveredNotifications = function () {
+  RNFIRMessaging.removeAllDeliveredNotifications();
+};
+
+FCM.setBadgeNumber = function (number) {
+  RNFIRMessaging.setBadgeNumber(number);
+};
+
+FCM.getBadgeNumber = function () {
+  return RNFIRMessaging.getBadgeNumber();
+};
+
+function finish(result) {
+  if (_reactNative.Platform.OS !== 'ios') {
+    return;
+  }
+  if (!this._finishCalled && this._completionHandlerId) {
+    this._finishCalled = true;
+    switch (this._notificationType) {
+      case NotificationType.Remote:
+        result = result || RemoteNotificationResult.NoData;
+        if (!Object.values(RemoteNotificationResult).includes(result)) {
+          throw new Error('Invalid RemoteNotificationResult, use import {RemoteNotificationResult} from \'react-native-fcm\' to avoid typo');
+        }
+        RNFIRMessaging.finishRemoteNotification(this._completionHandlerId, result);
+        return;
+      case NotificationType.NotificationResponse:
+        RNFIRMessaging.finishNotificationResponse(this._completionHandlerId);
+        return;
+      case NotificationType.WillPresent:
+        result = result || (this.show_in_foreground ? WillPresentNotificationResult.All : WillPresentNotificationResult.None);
+        if (!Object.values(WillPresentNotificationResult).includes(result)) {
+          throw new Error('Invalid WillPresentNotificationResult, make sure you use import {WillPresentNotificationResult} from \'react-native-fcm\' to avoid typo');
+        }
+        RNFIRMessaging.finishWillPresentNotification(this._completionHandlerId, result);
+        return;
+      default:
+        return;
+    }
+  }
+}
+
+FCM.on = function (event, callback) {
+  if (!Object.values(FCMEvent).includes(event)) {
+    throw new Error('Invalid FCM event subscription, use import {FCMEvent} from \'react-native-fcm\' to avoid typo');
+  };
+
+  if (event === FCMEvent.Notification) {
+    return EventEmitter.addListener(event, function _callee(data) {
+      return regeneratorRuntime.async(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              data.finish = finish;
+              _context.prev = 1;
+              _context.next = 4;
+              return regeneratorRuntime.awrap(callback(data));
+
+            case 4:
+              _context.next = 10;
+              break;
+
+            case 6:
+              _context.prev = 6;
+              _context.t0 = _context['catch'](1);
+
+              console.error('Notification handler err', _context.t0);
+              throw _context.t0;
+
+            case 10:
+              if (!data._finishCalled) {
+                data.finish();
+              }
+
+            case 11:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, null, _this, [[1, 6]]);
+    });
+  }
+  return EventEmitter.addListener(event, callback);
+};
+
+FCM.subscribeToTopic = function (topic) {
+  RNFIRMessaging.subscribeToTopic(topic);
+};
+
+FCM.unsubscribeFromTopic = function (topic) {
+  RNFIRMessaging.unsubscribeFromTopic(topic);
+};
+
+FCM.send = function (senderId, payload) {
+  RNFIRMessaging.send(senderId, payload);
+};
+
+exports.default = FCM;

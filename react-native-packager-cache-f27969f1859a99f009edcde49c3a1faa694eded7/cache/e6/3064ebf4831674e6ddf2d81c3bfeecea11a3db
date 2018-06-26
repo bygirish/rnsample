@@ -1,0 +1,46 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var EwSpinner = function (_Component) {
+  babelHelpers.inherits(EwSpinner, _Component);
+
+  function EwSpinner() {
+    babelHelpers.classCallCheck(this, EwSpinner);
+    return babelHelpers.possibleConstructorReturn(this, (EwSpinner.__proto__ || Object.getPrototypeOf(EwSpinner)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(EwSpinner, [{
+    key: 'render',
+    value: function render() {
+
+      defaultSpinnerSize = 'small';
+
+      var _props = this.props,
+          spinnerSize = _props.spinnerSize,
+          props = babelHelpers.objectWithoutProperties(_props, ['spinnerSize']);
+
+
+      if (spinnerSize != null) defaultSpinnerSize = spinnerSize;
+
+      return _react2.default.createElement(_nativeBase.Spinner, {
+        size: defaultSpinnerSize
+      });
+    }
+  }]);
+  return EwSpinner;
+}(_react.Component);
+
+exports.default = EwSpinner;

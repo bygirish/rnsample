@@ -1,0 +1,141 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../../../utils');
+
+var React = require('react-native');
+
+var StyleSheet = React.StyleSheet,
+    Platform = React.Platform;
+exports.default = {
+  content: {
+    marginLeft: 5,
+    marginRight: 5,
+    alignSelf: 'stretch'
+  },
+
+  labelElement: {
+    marginTop: 5,
+    marginBottom: 5,
+    color: appstyleguide.APP_GRAY
+  },
+
+  spinnerElement: {
+    alignSelf: 'stretch',
+    alignItems: 'center'
+  },
+
+  spinnerContainer: {
+    marginTop: 5,
+    marginBottom: 5,
+    borderColor: appstyleguide.APP_LIGHT_GRAY,
+    borderWidth: 0.5
+  },
+
+  inputElement: {
+    marginTop: 10,
+    marginBottom: 5,
+    marginLeft: 5,
+    marginRight: 5,
+    borderWidth: 0.5
+  },
+
+  declarationElementContainer: {
+    marginTop: -7,
+    marginBottom: -7,
+    borderColor: appstyleguide.APP_WHITE
+  },
+
+  leaveDaysContainer: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    width: _utils.DEVICE_WIDTH * 0.95,
+    marginTop: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginBottom: 10,
+    backgroundColor: appstyleguide.APP_LIGHT_GRAY
+  },
+
+  inDateLabelContainer: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: 'center',
+    justifyContent: 'space-around'
+  },
+
+  outDateLabelContainer: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: 'center'
+  },
+
+  labelContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'column'
+  },
+
+  labelAndTimeContainer: {
+    flex: 2,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    marginTop: 10,
+    marginLeft: 5
+  },
+
+  contentStyle: {
+    marginBottom: 20,
+    marginTop: 10,
+    marginLeft: 5,
+    backgroundColor: 'transparent'
+  },
+
+  contentContainerStyle: {
+    marginLeft: 5,
+    marginRight: 5,
+    alignSelf: 'stretch'
+  },
+
+  labelAndDateContainer: {
+    flexDirection: 'row',
+    flex: 2,
+    marginLeft: 5,
+    marginBottom: 5,
+    alignItems: 'center',
+    justifyContent: 'space-around'
+  },
+
+  inOutDateContainerStyle: {
+    flex: 1,
+    justifyContent: "flex-start",
+    flexDirection: 'row'
+  },
+
+  dateTimePickerStyle: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 5,
+    marginRight: 5
+  },
+
+  inputReasonStyle: {
+    marginTop: 10,
+    height: 40
+  },
+
+  inputReasonItemStyle: {
+    marginTop: 10
+  },
+
+  listItemStyle: {
+    borderColor: '#fff',
+    marginTop: 5
+  }
+
+};

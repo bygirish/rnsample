@@ -1,0 +1,157 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ISSUE_NEW_FEATURE_ID = exports.ISSUE_IMPROVEMENT_ID = exports.ISSUE_ERROR_ID = exports.screenNameDropdown = exports.PENDING_EXPENSE_CLAIM_ACTION_ID = exports.PENDING_EXPENSE_CLAIM_ACTION = exports.CREATE_TRAVEL_EXPENSE_ID = exports.CREATE_TRAVEL_EXPENSE = exports.CREATE_TRAVEL_CLAIM_ID = exports.CREATE_TRAVEL_CLAIM = exports.CREATE_OTHERS_EXPENSE_ID = exports.CREATE_OTHERS_EXPENSE = exports.CREATE_OTHER_CLAIM_ID = exports.CREATE_OTHER_CLAIM = exports.CREATE_INVOICE_DETAILS_ID = exports.CREATE_INVOICE_DETAILS = exports.CREATE_ALLOCATION_DETAILS_ID = exports.CREATE_ALLOCATION_DETAILS = exports.CREATE_MILEAGE_EXPENSE_ID = exports.CREATE_MILEAGE_EXPENSE = exports.CREATE_MILEAGE_CLAIM_ID = exports.CREATE_MILEAGE_CLAIM = exports.ONBOARDING_ID = exports.ONBOARDING = exports.ENTITLEMENT_SUMMARY_ID = exports.ENTITLEMENT_SUMMARY = exports.MY_COMPENSATION_ID = exports.MY_COMPENSATION = exports.VIEW_MY_REQUESTS_ID = exports.VIEW_MY_REQUESTS = exports.PENDING_TRAVEL_ACTION_ID = exports.PENDING_TRAVEL_ACTION = exports.APPLY_TRAVEL_ID = exports.APPLY_TRAVEL = exports.PAYSLIP_DOWNLOAD_ID = exports.PAYSLIP_DOWNLOAD = exports.VIEW_HOLIDAYS_ID = exports.VIEW_HOLIDAYS = exports.VIEW_DIRECTORY_ID = exports.VIEW_DIRECTORY = exports.VIEW_DASHBOARD_ID = exports.VIEW_DASHBOARD = exports.VIEW_CALENDAR_ID = exports.VIEW_CALENDAR = exports.VIEW_MY_LEAVES_ID = exports.VIEW_MY_LEAVES = exports.PENDING_LEAVE_ACTION_ID = exports.PENDING_LEAVE_ACTION = exports.APPLY_LEAVE_ID = exports.APPLY_LEAVE = exports.PENDING_PAST_ATTENDANCE_ACTION_ID = exports.PENDING_PAST_ATTENDANCE_ACTION = exports.APPLY_PAST_ATTENDANCE_ID = exports.APPLY_PAST_ATTENDANCE = exports.PENDING_OD_ACTION_ID = exports.PENDING_OD_ACTION = exports.APPLY_OUT_ON_WORK_ID = exports.APPLY_OUT_ON_WORK = exports.DEFAULT_DROPDOWN_VALUE = undefined;
+
+var _screenNameDropdown;
+
+var _modulelist = require("./modulelist");
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+var DEFAULT_DROPDOWN_VALUE = exports.DEFAULT_DROPDOWN_VALUE = -1;
+
+var APPLY_OUT_ON_WORK = exports.APPLY_OUT_ON_WORK = "Apply Out-on-work";
+var APPLY_OUT_ON_WORK_ID = exports.APPLY_OUT_ON_WORK_ID = 1;
+
+var PENDING_OD_ACTION = exports.PENDING_OD_ACTION = "Approve Out-on-Work";
+var PENDING_OD_ACTION_ID = exports.PENDING_OD_ACTION_ID = 2;
+
+var APPLY_PAST_ATTENDANCE = exports.APPLY_PAST_ATTENDANCE = "Apply Past Attendance";
+var APPLY_PAST_ATTENDANCE_ID = exports.APPLY_PAST_ATTENDANCE_ID = 3;
+
+var PENDING_PAST_ATTENDANCE_ACTION = exports.PENDING_PAST_ATTENDANCE_ACTION = "Approve Past Attendance";
+var PENDING_PAST_ATTENDANCE_ACTION_ID = exports.PENDING_PAST_ATTENDANCE_ACTION_ID = 4;
+
+var APPLY_LEAVE = exports.APPLY_LEAVE = "Apply Leave";
+var APPLY_LEAVE_ID = exports.APPLY_LEAVE_ID = 5;
+
+var PENDING_LEAVE_ACTION = exports.PENDING_LEAVE_ACTION = "Approve Leave";
+var PENDING_LEAVE_ACTION_ID = exports.PENDING_LEAVE_ACTION_ID = 6;
+
+var VIEW_MY_LEAVES = exports.VIEW_MY_LEAVES = "My Leaves";
+var VIEW_MY_LEAVES_ID = exports.VIEW_MY_LEAVES_ID = 7;
+
+var VIEW_CALENDAR = exports.VIEW_CALENDAR = "My Calendar";
+var VIEW_CALENDAR_ID = exports.VIEW_CALENDAR_ID = 8;
+
+var VIEW_DASHBOARD = exports.VIEW_DASHBOARD = "Dashboard";
+var VIEW_DASHBOARD_ID = exports.VIEW_DASHBOARD_ID = 9;
+
+var VIEW_DIRECTORY = exports.VIEW_DIRECTORY = "Employee Directory";
+var VIEW_DIRECTORY_ID = exports.VIEW_DIRECTORY_ID = 10;
+
+var VIEW_HOLIDAYS = exports.VIEW_HOLIDAYS = "Holidays";
+var VIEW_HOLIDAYS_ID = exports.VIEW_HOLIDAYS_ID = 11;
+
+var PAYSLIP_DOWNLOAD = exports.PAYSLIP_DOWNLOAD = "PaySlip Download";
+var PAYSLIP_DOWNLOAD_ID = exports.PAYSLIP_DOWNLOAD_ID = 12;
+
+var APPLY_TRAVEL = exports.APPLY_TRAVEL = "Apply Travel";
+var APPLY_TRAVEL_ID = exports.APPLY_TRAVEL_ID = 13;
+
+var PENDING_TRAVEL_ACTION = exports.PENDING_TRAVEL_ACTION = "Approve Travel";
+var PENDING_TRAVEL_ACTION_ID = exports.PENDING_TRAVEL_ACTION_ID = 14;
+
+var VIEW_MY_REQUESTS = exports.VIEW_MY_REQUESTS = "My Requests";
+var VIEW_MY_REQUESTS_ID = exports.VIEW_MY_REQUESTS_ID = 15;
+
+var MY_COMPENSATION = exports.MY_COMPENSATION = "My Compensation";
+var MY_COMPENSATION_ID = exports.MY_COMPENSATION_ID = 16;
+
+var ENTITLEMENT_SUMMARY = exports.ENTITLEMENT_SUMMARY = "Entitlement Summary";
+var ENTITLEMENT_SUMMARY_ID = exports.ENTITLEMENT_SUMMARY_ID = 17;
+
+var ONBOARDING = exports.ONBOARDING = "Onboarding";
+var ONBOARDING_ID = exports.ONBOARDING_ID = 18;
+
+var CREATE_MILEAGE_CLAIM = exports.CREATE_MILEAGE_CLAIM = "Mileage Claim";
+var CREATE_MILEAGE_CLAIM_ID = exports.CREATE_MILEAGE_CLAIM_ID = 19;
+
+var CREATE_MILEAGE_EXPENSE = exports.CREATE_MILEAGE_EXPENSE = "Mileage Expense";
+var CREATE_MILEAGE_EXPENSE_ID = exports.CREATE_MILEAGE_EXPENSE_ID = 20;
+
+var CREATE_ALLOCATION_DETAILS = exports.CREATE_ALLOCATION_DETAILS = "Allocation Details";
+var CREATE_ALLOCATION_DETAILS_ID = exports.CREATE_ALLOCATION_DETAILS_ID = 21;
+
+var CREATE_INVOICE_DETAILS = exports.CREATE_INVOICE_DETAILS = "Invoice Details";
+var CREATE_INVOICE_DETAILS_ID = exports.CREATE_INVOICE_DETAILS_ID = 22;
+
+var CREATE_OTHER_CLAIM = exports.CREATE_OTHER_CLAIM = "Other Claim";
+var CREATE_OTHER_CLAIM_ID = exports.CREATE_OTHER_CLAIM_ID = 23;
+
+var CREATE_OTHERS_EXPENSE = exports.CREATE_OTHERS_EXPENSE = "Others Expense";
+var CREATE_OTHERS_EXPENSE_ID = exports.CREATE_OTHERS_EXPENSE_ID = 24;
+
+var CREATE_TRAVEL_CLAIM = exports.CREATE_TRAVEL_CLAIM = "Travel Claim";
+var CREATE_TRAVEL_CLAIM_ID = exports.CREATE_TRAVEL_CLAIM_ID = 25;
+
+var CREATE_TRAVEL_EXPENSE = exports.CREATE_TRAVEL_EXPENSE = "Travel Expense";
+var CREATE_TRAVEL_EXPENSE_ID = exports.CREATE_TRAVEL_EXPENSE_ID = 26;
+
+var PENDING_EXPENSE_CLAIM_ACTION = exports.PENDING_EXPENSE_CLAIM_ACTION = "Expense Claim Action";
+var PENDING_EXPENSE_CLAIM_ACTION_ID = exports.PENDING_EXPENSE_CLAIM_ACTION_ID = 27;
+
+var screenNameDropdown = exports.screenNameDropdown = (_screenNameDropdown = {}, babelHelpers.defineProperty(_screenNameDropdown, modules.LEAVE_AND_ATTENDANCE, [{
+  label: APPLY_OUT_ON_WORK,
+  value: APPLY_OUT_ON_WORK_ID
+}, {
+  label: PENDING_OD_ACTION,
+  value: PENDING_OD_ACTION_ID
+}, {
+  label: APPLY_PAST_ATTENDANCE,
+  value: APPLY_PAST_ATTENDANCE_ID
+}, {
+  label: PENDING_PAST_ATTENDANCE_ACTION,
+  value: PENDING_PAST_ATTENDANCE_ACTION_ID
+}, {
+  label: APPLY_LEAVE,
+  value: APPLY_LEAVE_ID
+}, {
+  label: PENDING_LEAVE_ACTION,
+  value: PENDING_LEAVE_ACTION_ID
+}, {
+  label: VIEW_CALENDAR,
+  value: VIEW_CALENDAR_ID
+}, {
+  label: VIEW_DASHBOARD,
+  value: VIEW_DASHBOARD_ID
+}, {
+  label: VIEW_HOLIDAYS,
+  value: VIEW_HOLIDAYS_ID
+}]), babelHelpers.defineProperty(_screenNameDropdown, modules.EMPLOYEE_INFORMATION_PORTAL, [{
+  label: VIEW_DIRECTORY,
+  value: VIEW_DIRECTORY_ID
+}]), babelHelpers.defineProperty(_screenNameDropdown, modules.PAYROLL, [{
+  label: PAYSLIP_DOWNLOAD,
+  value: PAYSLIP_DOWNLOAD_ID
+
+}]), babelHelpers.defineProperty(_screenNameDropdown, modules.COMPENSATION_AND_BENEFITS, [{
+  label: MY_COMPENSATION,
+  value: MY_COMPENSATION_ID
+
+}]), babelHelpers.defineProperty(_screenNameDropdown, modules.TRAVEL_AND_EXPENSE, [{
+  label: APPLY_TRAVEL,
+  value: APPLY_TRAVEL_ID
+}, {
+  label: PENDING_TRAVEL_ACTION,
+  value: PENDING_TRAVEL_ACTION_ID
+}, {
+  label: PENDING_EXPENSE_CLAIM_ACTION,
+  value: PENDING_EXPENSE_CLAIM_ACTION_ID
+}, {
+  label: CREATE_OTHER_CLAIM,
+  value: CREATE_OTHER_CLAIM_ID
+}, {
+  label: CREATE_OTHERS_EXPENSE,
+  value: CREATE_OTHERS_EXPENSE_ID
+}, {
+  label: CREATE_MILEAGE_CLAIM,
+  value: CREATE_MILEAGE_CLAIM_ID
+}, {
+  label: CREATE_MILEAGE_EXPENSE,
+  value: CREATE_MILEAGE_EXPENSE_ID
+}]), _screenNameDropdown);
+
+var ISSUE_ERROR_ID = exports.ISSUE_ERROR_ID = 1;
+var ISSUE_IMPROVEMENT_ID = exports.ISSUE_IMPROVEMENT_ID = 2;
+var ISSUE_NEW_FEATURE_ID = exports.ISSUE_NEW_FEATURE_ID = 3;

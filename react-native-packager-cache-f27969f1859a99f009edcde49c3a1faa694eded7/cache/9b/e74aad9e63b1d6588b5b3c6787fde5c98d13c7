@@ -1,0 +1,715 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _GoogleAnalyticController = require('../../../GoogleAnalyticController');
+
+var _ewnetworkimage = require('../../../components/ewnetworkimage/ewnetworkimage');
+
+var _ewnetworkimage2 = babelHelpers.interopRequireDefault(_ewnetworkimage);
+
+var _ewlistview = require('../../../components/ewlistview/ewlistview');
+
+var _ewlistview2 = babelHelpers.interopRequireDefault(_ewlistview);
+
+var _utils = require('../../../utils');
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _ewloadingindicator = require('../../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewh1text = require('../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewscreentitle = require('../../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _odutils = require('./odutils');
+
+var odConstants = babelHelpers.interopRequireWildcard(_odutils);
+
+var _modulelist = require('../../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appStyle = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _commonactions = require('../../../services/common/commonactions');
+
+var _odrequestactions = require('../../../services/odrequest/odrequestactions');
+
+var _odrequesterrorhandling = require('../../../services/odrequest/odrequesterrorhandling');
+
+var odError = babelHelpers.interopRequireWildcard(_odrequesterrorhandling);
+
+var _ewmyappliedodscreenstyles = require('./styles/ewmyappliedodscreenstyles');
+
+var _ewmyappliedodscreenstyles2 = babelHelpers.interopRequireDefault(_ewmyappliedodscreenstyles);
+
+var FILE_NAME = "ewmyappliedodscreen.js : ";
+
+var SCREEN_NAME = "My Applied Od Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var NUMBER_OF_RECORDS = 10;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwMyAppliedOdScreen = function (_Component) {
+  babelHelpers.inherits(EwMyAppliedOdScreen, _Component);
+
+  function EwMyAppliedOdScreen(props) {
+    babelHelpers.classCallCheck(this, EwMyAppliedOdScreen);
+
+
+    console.log(FILE_NAME + " In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwMyAppliedOdScreen.__proto__ || Object.getPrototypeOf(EwMyAppliedOdScreen)).call(this, props));
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+    };
+
+    _this._loadMoreOdAsync = function () {
+
+      console.log(FILE_NAME + "In _loadMoreOdAsync");
+
+      var areAllOdLoaded = _this.state.areAllOdLoaded;
+
+
+      if (_this.props.appliedOdError == null && !areAllOdLoaded) _this.getAppliedOdInformation();
+    };
+
+    _this.onPressListItem = function (data) {
+
+      console.log(FILE_NAME + " In onPressListItem method");
+
+      tracker.trackEvent(SCREEN_CATEGORY, 'my applied out on work list item clicked');
+
+      _reactNativeRouterFlux.Actions.ewmyodactionscreen({ myOdData: data.odinfo });
+    };
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      appliedOdData: null,
+      areAllOdLoaded: false,
+      refreshing: false,
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwMyAppliedOdScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + " In componentWillMount method");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + " In componentWillReceiveProps method");
+
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.appliedOdData != null && nextProps.appliedOdError == null) {
+
+        elementValues = this.handleElementValues(nextProps.appliedOdData.pendingItemInfo, this.state.appliedOdData);
+
+        this.setState({
+          appliedOdData: elementValues.appliedOdData,
+          areAllOdLoaded: elementValues.areAllOdLoaded,
+          isLoading: false,
+          refreshing: false
+        });
+      }
+
+      if (nextProps.appliedOdData == null && nextProps.appliedOdError != null) {
+
+        this.setState({
+          isLoading: false,
+          currentError: nextProps.appliedOdError,
+          refreshing: false
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + " In shouldComponentUpdate method");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + " In componentWillUpdate method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + " In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage();
+              }
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError === '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + " In componentDidMount method");
+
+      this.getAppliedOdInformation();
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + " In componentDidUpdate method");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + " In componentWillUnmount method");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_ALL'
+      };
+
+      this.props.clearOdRequestStateData(params);
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+
+      console.log(FILE_NAME + " In renderScreen method");
+
+      var appliedOdData = this.state.appliedOdData;
+
+
+      console.log(appliedOdData);
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        this.props.isMyRequest ? null : _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: 'My Out On Work Requests'
+            })
+          )
+        ),
+        this.showMyAppliedOdList(appliedOdData)
+      );
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME + " In handleError method");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      console.log("this.state.currentError", this.state.currentError);
+
+      if (this.state.currentError == '') {
+        return null;
+      }
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+        case odError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (this.state.currentError) {
+
+          case odError.SERVER_EXCEPTION:
+
+            this.showAlertMessage(odError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          default:
+
+            this.showAlertMessage();
+            return this.renderScreen();
+        }
+      }
+    }
+  }, {
+    key: 'getAppliedOdInformation',
+    value: function getAppliedOdInformation() {
+      var appliedOdData = this.state.appliedOdData;
+
+
+      currentId = 0;
+
+      if (appliedOdData != null && appliedOdData.length != 0) currentId = appliedOdData[appliedOdData.length - 1].pi_Txn_Id;
+
+      var params = {
+        requestType: 'MyOD',
+        currentId: currentId,
+        numberOfRecords: NUMBER_OF_RECORDS
+      };
+
+      this.props.getAppliedOdList(params);
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(appliedOdList, currentListVisible) {
+
+      areAllOdLoaded = this.state.areAllOdLoaded;
+      console.log("handleElementValues", appliedOdList, currentListVisible);
+      if (currentListVisible != null) {
+
+        if (appliedOdList != null) {
+
+          if (appliedOdList.length == 0) {
+
+            areAllOdLoaded = true;
+
+            appliedOdList = this.state.appliedOdData;
+          } else {
+
+            updatedOdListVisible = [].concat(babelHelpers.toConsumableArray(currentListVisible), babelHelpers.toConsumableArray(appliedOdList));
+
+            console.log("updatedOdListVisible", updatedOdListVisible);
+            appliedOdList = updatedOdListVisible;
+          }
+        }
+      }
+
+      elementValues = {
+
+        appliedOdData: appliedOdList,
+        areAllOdLoaded: areAllOdLoaded
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: '_onRefresh',
+    value: function _onRefresh() {
+
+      console.log(FILE_NAME + "In _onRefresh method");
+
+      this.setState({
+        refreshing: true
+      });
+
+      this.getAppliedOdInformation();
+    }
+  }, {
+    key: 'renderListItem',
+    value: function renderListItem(_ref) {
+      var _this2 = this;
+
+      var item = _ref.item;
+
+
+      console.log(FILE_NAME + " In renderListView method", item);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(
+          _nativeBase.ListItem,
+          { avatar: true, onPress: function onPress() {
+              return _this2.onPressListItem(item);
+            } },
+          _react2.default.createElement(
+            _nativeBase.Left,
+            null,
+            _react2.default.createElement(_ewnetworkimage2.default, { networkUrl: (0, _utils.getImageUrl)(this.props.sessionToken, item.gen_id, 'My Applied Od', this.props.currentImageTimestamp) })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            null,
+            _react2.default.createElement(_ewh1text2.default, {
+              text: this.getOdTypeText(item.requestType)
+            }),
+            _react2.default.createElement(_ewh2text2.default, {
+              text: item.pi_dt
+            }),
+            this.getStatusOfOd(item.odinfo.status)
+          )
+        )
+      );
+    }
+  }, {
+    key: 'getOdTypeText',
+    value: function getOdTypeText(odRequestType) {
+
+      console.log(FILE_NAME + " In getOdTypeText method", odRequestType);
+
+      odLabel = "";
+
+      switch (odRequestType) {
+        case odConstants.WHOLE_DAY_SERVER_LABEL:
+
+          odLabel = odConstants.WHOLE_DAY_LABEL;
+          break;
+
+        case odConstants.IN_LATE_SERVER_LABEL:
+
+          odLabel = odConstants.IN_LATE_LABEL;
+          break;
+
+        case odConstants.OUT_EARLY_SERVER_LABEL:
+
+          odLabel = odConstants.OUT_EARLY_LABEL;
+          break;
+
+        case odConstants.IN_LATE_OUT_EARLY_SERVER_LABEL:
+
+          odLabel = odConstants.IN_LATE_OUT_EARLY_LABEL;
+          break;
+        default:
+
+      }
+
+      return odLabel;
+    }
+  }, {
+    key: 'showMyAppliedOdList',
+    value: function showMyAppliedOdList(appliedOdData) {
+      var _this3 = this;
+
+      console.log(FILE_NAME + " In showMyAppliedOdList method");
+
+      if (appliedOdData != null && this.props.appliedOdError == null) {
+
+        return _react2.default.createElement(_ewlistview2.default, {
+          listData: appliedOdData,
+          extraData: this.state,
+          listKey: function listKey(data, index) {
+            return index;
+          },
+          renderListItem: function renderListItem(data) {
+            return _this3.renderListItem(data);
+          },
+          onEndReached: function onEndReached() {
+            return _this3._loadMoreOdAsync();
+          },
+          onEndReachedThreshold: 0.5,
+          isAllDataLoaded: this.state.areAllOdLoaded,
+          refreshing: this.state.refreshing,
+          onRefresh: this._onRefresh.bind(this)
+        });
+      } else if (appliedOdData == null && this.props.appliedOdError == null) {
+
+        console.log("2nd Case", _ewmyappliedodscreenstyles2.default);
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewmyappliedodscreenstyles2.default.spinnerContainer },
+          _react2.default.createElement(_nativeBase.Spinner, { size: 'small' }),
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: _ewmyappliedodscreenstyles2.default.spinnerTextStyle },
+            'Loading Your Out On Work Requests...'
+          )
+        );
+      } else if (appliedOdData == null && this.props.appliedOdError != null) {
+
+        console.log("3rd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewmyappliedodscreenstyles2.default.loadAgainButtonContainer },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { onPress: function onPress() {
+                return _this3.getAppliedOdInformation();
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Load Again'
+            )
+          )
+        );
+      } else {
+
+        console.log("4th Case");
+        console.log("appliedOdData, ", appliedOdData);
+        console.log("this.props.appliedOdError, ", this.props.appliedOdError);
+      }
+    }
+  }, {
+    key: 'getStatusOfOd',
+    value: function getStatusOfOd(odStatus) {
+
+      console.log(FILE_NAME + " In getStatusOfOd method");
+
+      odStatusText = odStatus;
+      odStatusColor = appStyle.APP_BLACK;
+
+      switch (odStatus) {
+        case odConstants.PENDING_APPROVAL_LABEL:
+
+          odStatusColor = appStyle.APP_ORANGE;
+          break;
+
+        case odConstants.APPROVED_LABEL:
+
+          odStatusColor = appStyle.APP_GREEN;
+          break;
+
+        case odConstants.REJECTED_LABEL:
+
+          odStatusColor = appStyle.APP_RED;
+          break;
+
+        case odConstants.RECONSIDER_LABEL:
+
+          odStatusColor = appStyle.APP_LIGHT_BLUE;
+          break;
+
+        case odConstants.CANCELLED_LABEL:
+
+          odStatusColor = appStyle.APP_BLACK;
+          break;
+
+        case odConstants.CANCELLATION_REQUESTED_LABEL:
+
+          odStatusColor = appStyle.APP_GRAY;
+          break;
+
+        case odConstants.CANCELLATION_APPROVED_LABEL:
+
+          odStatusColor = appStyle.APP_GREEN;
+          break;
+
+        default:
+
+      }
+
+      console.log("odStatusColor", odStatusColor, odStatusText);
+
+      return _react2.default.createElement(_ewh3text2.default, {
+        text: odStatusText,
+        customStyle: { color: odStatusColor }
+      });
+    }
+  }]);
+  return EwMyAppliedOdScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + " In bindAction method");
+
+  return {
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    },
+    getAppliedOdList: function getAppliedOdList(params) {
+      return dispatch((0, _odrequestactions.getAppliedOdList)(params));
+    },
+    clearOdRequestStateData: function clearOdRequestStateData(params) {
+      return dispatch((0, _odrequestactions.clearOdRequestStateData)(params));
+    },
+    clearOdError: function clearOdError(params) {
+      return dispatch((0, _odrequestactions.clearOdError)(params));
+    }
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+    errorWebService: state.auth.errorWebService,
+
+    appliedOdData: state.odrequest.appliedOdData,
+    appliedOdError: state.odrequest.appliedOdError,
+
+    currentImageTimestamp: state.common.currentImageTimestamp,
+
+    odErrorCounter: state.odrequest.errorCounter
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwMyAppliedOdScreen);

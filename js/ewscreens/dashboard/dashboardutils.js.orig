@@ -1,0 +1,58 @@
+export const MARK_IN_NOT_AVAILABLE = 0 ;
+export const MARK_IN_ATTENDANCE = 1 ;
+export const MARK_OUT_ATTENDANCE = 2 ;
+export const MARK_OUT_PAST_ATTENDANCE = 3 ;
+export const MARK_IN_NOT_ALLOWED = 5 ;
+
+export const PENDING_LEAVE = 1;
+
+export const PENDING_OD_REQUEST = 2;
+
+export const PENDING_PAST_ATTENANCE = 3;
+
+export const PENDING_TRAVEL = 1;
+
+export const APPLY_LEAVE = 1;
+
+export const CANCEL_LEAVE = 2;
+
+export const RECONSIDER_LEAVE = 3;
+
+export const GPS_NOT_AVAILABLE = "No available location provider.";
+
+export const LOCATION_NOT_CAPTURED = "Location request timed out";
+
+export const LOCATION_PERMISSION_NOT_GRANTED = "LOCATION_PERMISSION_NOT_GRANTED";
+
+
+/*Action button Keys*/
+export const CREATE_LEAVE_KEY = "CREATE_LEAVE";
+export const CREATE_OUT_ON_WORK_KEY = "CREATE_OUT_ON_WORK";
+export const CREATE_PAST_ATTENDANCE_KEY = "CREATE_PAST_ATTENDANCE";
+export const CREATE_TRAVEL_KEY = "CREATE_TRAVEL";
+
+/*Location error messages*/
+export const MESSAGE_GPS_TURNED_OFF = "Location was turned off";
+export const MESSAGE_LOCATION_PERMISSION_NOT_GRANTED = "Location permission not granted";
+export const MESSAGE_LOCATION_CANT_CAPTURE = "Location couldn’t capture";
+
+/*Action button labels*/
+
+<<<<<<< HEAD
+/*User rating constants*/
+
+export const DEFAULT_RATING = 5 ;
+
+export const MAX_RATING = 5 ;
+
+export const MIN_STAR_RATING_REQUIRED = 4 ;
+=======
+/*Mark in mark out labels*/
+export const ATTENDANCE_STATUS_MARKED_IN = "Marked in ";
+export const ATTENDANCE_STATUS_MARKED_OUT = "Marked out ";
+
+/*attendance status labels*/
+export const MARK_IN_ATTENDANCE_LABEL = "Mark In";
+export const MARK_OUT_ATTENDANCE_LABEL = "Mark Out";
+export const MARK_OUT_PAST_ATTENDANCE_LABEL = "Mark Your Past Attendance";
+>>>>>>> updatedtravelpoc

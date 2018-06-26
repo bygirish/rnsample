@@ -1,0 +1,1107 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeCalendar = require('react-native-calendar');
+
+var _reactNativeCalendar2 = babelHelpers.interopRequireDefault(_reactNativeCalendar);
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _ewtimeline = require('../../components/ewtimeline/ewtimeline');
+
+var _ewtimeline2 = babelHelpers.interopRequireDefault(_ewtimeline);
+
+var _authactions = require('../../services/auth/authactions');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _ewsupervisorinfo = require('../../components/ewsupervisor/ewsupervisorinfo');
+
+var _ewsupervisorinfo2 = babelHelpers.interopRequireDefault(_ewsupervisorinfo);
+
+var _calendaractions = require('../../services/calendar/calendaractions');
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _ewloadingindicator = require('../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewscreentitle = require('../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _ewtext = require('../../components/ewtext/ewtext');
+
+var _ewtext2 = babelHelpers.interopRequireDefault(_ewtext);
+
+var _ewh1text = require('../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewreportissue = require('../../components/ewreportissue/ewreportissue');
+
+var _ewreportissue2 = babelHelpers.interopRequireDefault(_ewreportissue);
+
+var _leavebalance = require('./components/leavebalance');
+
+var _leavebalance2 = babelHelpers.interopRequireDefault(_leavebalance);
+
+var _ewh3lighttext = require('../../components/ewh3lighttext/ewh3lighttext');
+
+var _ewh3lighttext2 = babelHelpers.interopRequireDefault(_ewh3lighttext);
+
+var _ewcalendarutils = require('./ewcalendarutils');
+
+var calendarConstants = babelHelpers.interopRequireWildcard(_ewcalendarutils);
+
+var _dashboardutils = require('../dashboard/dashboardutils');
+
+var dashboardConstants = babelHelpers.interopRequireWildcard(_dashboardutils);
+
+var _calendarerrorhandling = require('../../services/calendar/calendarerrorhandling');
+
+var calendarError = babelHelpers.interopRequireWildcard(_calendarerrorhandling);
+
+var _ewcalendarstyle = require('./styles/ewcalendarstyle');
+
+var _ewcalendarstyle2 = babelHelpers.interopRequireDefault(_ewcalendarstyle);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _animationutils = require('../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _screennameidentifiers = require('../../utils/screennameidentifiers');
+
+var FILE_NAME = "ewcalendar.js : ";
+
+var SCREEN_NAME = "Calendar Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var blackLocationIcon = require('../../../img/calendaricons/blacklocationicon.png');
+
+var redLocationIcon = require('../../../img/calendaricons/redlocationicon.png');
+
+var timeIcon = require('../../../img/timeicon.png');
+
+var CUSTOM_VIEW_HEIGHT = 10;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwCalendarScreen = function (_Component) {
+  babelHelpers.inherits(EwCalendarScreen, _Component);
+
+  function EwCalendarScreen(props, context) {
+    babelHelpers.classCallCheck(this, EwCalendarScreen);
+
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    console.log(FILE_NAME + "In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwCalendarScreen.__proto__ || Object.getPrototypeOf(EwCalendarScreen)).call(this, props, context));
+
+    _this.getCustomDay = function (data) {
+
+      console.log(FILE_NAME + "In getCustomDay");
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { height: CUSTOM_VIEW_HEIGHT } },
+        _this.renderLocationImage(data)
+      );
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+
+      _this.props.clearCalendarError(null);
+    };
+
+    _this.initialState = {
+
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      calendarDateMap: {},
+      eventList: [],
+
+      customDayViewMap: [],
+
+      currentDate: null,
+      currentAttendance: null,
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwCalendarScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      var params = {
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1
+      };
+
+      console.log("Calendar props received", this.props);
+
+      if (this.props.calendarScreenData != null && this.props.calendarScreenData.month != null) {
+
+        console.log("Calendar props received");
+
+        var _props$calendarScreen = this.props.calendarScreenData,
+            _month = _props$calendarScreen.month,
+            _year = _props$calendarScreen.year;
+
+
+        params.year = _year;
+        params.month = _month;
+      }
+
+      this.props.getCalendarInformation(params);
+
+      this.setState({
+        isDataPreLoaded: false,
+        isLoading: true
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ");
+      console.log(nextProps);
+
+      if (nextProps.calendarData != null && nextProps.calendarError == null) {
+
+        calendarDateMap = {};
+        eventList = [];
+        customDayViewMap = [];
+
+        currentDate = new Date((0, _utils.convertServerDateTimeToMilliseconds)(nextProps.calendarData.calendar_data[0].current_date));
+        rosterDate = new Date((0, _utils.convertServerDateTimeToMilliseconds)(nextProps.calendarData.calendar_data[0].ROSTER_DATE));
+
+
+        for (var id in nextProps.calendarData.calendar_data) {
+
+          calendarDateMap[nextProps.calendarData.calendar_data[id].roster_date] = nextProps.calendarData.calendar_data[id];
+
+          rosterDate = new Date((0, _utils.convertServerDateTimeToMilliseconds)(nextProps.calendarData.calendar_data[id].ROSTER_DATE));
+
+          formattedDate = this.getFormattedDate(rosterDate);
+
+          customDayViewMap.push({
+            date: formattedDate,
+            customDayView: this.getCustomDay(nextProps.calendarData.calendar_data[id])
+          });
+
+          console.log("rosterDate is - ", rosterDate);
+          console.log("rosterDate Year is - ", rosterDate.getFullYear());
+          console.log("rosterDate Month is - ", rosterDate.getMonth() + 1);
+          console.log("rosterDate Day is - ", rosterDate.getDate());
+
+          if (nextProps.calendarData.calendar_data[id].day_type == 'H') {
+
+            eventList.push({
+              date: formattedDate,
+              eventIndicator: {
+                backgroundColor: "#000000"
+              }
+            });
+          }
+
+          if (nextProps.calendarData.calendar_data[id].my_calendar_line1 == 'PRESENT') {
+
+            eventList.push({
+              date: formattedDate,
+              eventIndicator: {
+                backgroundColor: "#32CD32"
+              }
+            });
+          }
+
+          if (nextProps.calendarData.calendar_data[id].my_calendar_line1 == 'ABSENT') {
+
+            eventList.push({
+              date: formattedDate,
+              eventIndicator: {
+                backgroundColor: "#ff0000"
+              }
+            });
+          }
+
+          if (nextProps.calendarData.calendar_data[id].my_calendar_line1 == 'LEAVE') {
+
+            eventList.push({
+              date: formattedDate,
+              eventIndicator: {
+                backgroundColor: "#963C00"
+              }
+            });
+          }
+        }
+
+        if (currentDate.getMonth() != rosterDate.getMonth()) {
+
+          currentAttendance = null;
+        } else {
+          currentAttendance = calendarDateMap[new Date().getDate()];
+        }
+
+        console.log("calendarDateMap", calendarDateMap);
+        console.log(" Event List is ", eventList);
+
+        (0, _utils.showAnimation)(animationUtils.DEFAULT_SCREEN_ANIMATION);
+
+        this.setState({
+          isLoading: false,
+          isDataPreLoaded: true,
+          calendarDateMap: calendarDateMap,
+          eventList: eventList,
+          customDayViewMap: customDayViewMap,
+          currentAttendance: currentAttendance,
+          currentDate: nextProps.calendarData.calendar_data[0].ROSTER_DATE
+        });
+      }
+
+      if (nextProps.calendarData == null && nextProps.calendarError != null) {
+
+        this.setState({
+          isLoading: false,
+          currentError: nextProps.calendarError
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, { loadingText: 'Loading Calendar...' });
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              _reactNativeRouterFlux.Actions.pop();
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+                console.log("Render Screen");
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_ALL'
+      };
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this2 = this;
+
+      var _state = this.state,
+          currentDate = _state.currentDate,
+          calendarDateMap = _state.calendarDateMap,
+          customDayViewMap = _state.customDayViewMap;
+
+
+      console.log("calendarDateMap", customDayViewMap);
+
+      eventMap = this.state.eventList;
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: 'My Calendar'
+            })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Right,
+            null,
+            _react2.default.createElement(_ewreportissue2.default, {
+              screenId: _screennameidentifiers.VIEW_CALENDAR_ID
+            })
+          )
+        ),
+        _react2.default.createElement(
+          _nativeBase.Content,
+          null,
+          _react2.default.createElement(_reactNativeCalendar2.default, {
+            startDate: currentDate,
+            scrollEnabled: true,
+            customStyle: customStyle,
+            nextButtonText: 'Next',
+            onDateSelect: function onDateSelect(date) {
+              return _this2.onDateSelect(date, calendarDateMap);
+            },
+            onSwipeNext: function onSwipeNext() {
+              return _this2.onNext();
+            },
+            onSwipePrev: function onSwipePrev() {
+              return _this2.onPrev();
+            },
+            onTouchNext: function onTouchNext() {
+              return _this2.onNext();
+            },
+            onTouchPrev: function onTouchPrev() {
+              return _this2.onPrev();
+            },
+            showControls: true,
+            showEventIndicators: true,
+            events: eventMap,
+            prevButtonText: 'Prev',
+            removeClippedSubviews: false,
+            customDayViews: customDayViewMap
+
+          }),
+          this.showEventIndicatorDescription(),
+          this.showAttendanceInformation(),
+          this.showLeaveBalanceButton()
+        )
+      );
+    }
+  }, {
+    key: 'getActiveYearAndMonth',
+    value: function getActiveYearAndMonth() {
+      var currentDate = this.state.currentDate;
+
+      formatCurrentDate = currentDate.replace(/-/g, "/").substr(0, currentDate.length - 5);
+
+      var year = new Date(formatCurrentDate).getFullYear();
+      var month = new Date(formatCurrentDate).getMonth();
+
+      var dateparams = {
+
+        year: year,
+        month: month
+
+      };
+
+      return dateparams;
+    }
+  }, {
+    key: 'showLeaveBalanceButton',
+    value: function showLeaveBalanceButton() {
+
+      var currentMonth = new Date().getMonth();
+      var currentYear = new Date().getFullYear();
+
+      var activeYearAndMonth = this.getActiveYearAndMonth();
+
+      if (activeYearAndMonth.year == currentYear && activeYearAndMonth.month == currentMonth) {
+
+        return _react2.default.createElement(_leavebalance2.default, null);
+      }
+    }
+  }, {
+    key: 'getFormattedDate',
+    value: function getFormattedDate(dateToFormat) {
+
+      console.log(FILE_NAME + "In getFormattedDate");
+
+      year = dateToFormat.getFullYear();
+      month = dateToFormat.getMonth() + 1 < 10 ? '0' + (dateToFormat.getMonth() + 1) : dateToFormat.getMonth() + 1;
+      date = dateToFormat.getDate() < 10 ? '0' + dateToFormat.getDate() : dateToFormat.getDate();
+
+      formattedDate = year + '-' + month + '-' + date;
+
+      return formattedDate;
+    }
+  }, {
+    key: 'renderLocationImage',
+    value: function renderLocationImage(data) {
+
+      console.log(FILE_NAME + "In renderLocationImage");
+
+      if (!this.isNullOrNa(data.in_location) && !this.isNullOrNa(data.out_location)) {
+        return _react2.default.createElement(_reactNative.Image, { style: { flex: 1, height: CUSTOM_VIEW_HEIGHT, width: CUSTOM_VIEW_HEIGHT }, source: blackLocationIcon });
+      } else {
+
+        if (!this.isNullOrNa(data.in_location) || !this.isNullOrNa(data.out_location)) {
+          return _react2.default.createElement(_reactNative.Image, { style: { flex: 1, height: CUSTOM_VIEW_HEIGHT, width: CUSTOM_VIEW_HEIGHT }, source: redLocationIcon });
+        }
+      }
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError(errorMessage) {
+
+      console.log(FILE_NAME + "In handleError");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+          console.log("isNetworkAvailable ", (0, _utils.isNetworkAvailable)());
+
+          this.showAlertMessage();
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (errorMessage) {
+
+          case calendarError.SERVER_EXCEPTION:
+            this.showAlertMessage(calendarError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          case calendarError.INVALID_STATE:
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+            break;
+
+          default:
+            this.showAlertMessage();
+            return this.renderScreen();
+        }
+      }
+    }
+  }, {
+    key: 'showAttendanceInformation',
+    value: function showAttendanceInformation() {
+
+      console.log(FILE_NAME + "In showAttendanceInformation");
+
+      var currentAttendance = this.state.currentAttendance;
+
+
+      if (currentAttendance != null) {
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          this.showAttendanceForParticularDay(currentAttendance)
+        );
+      }
+    }
+  }, {
+    key: 'showAttendanceForParticularDay',
+    value: function showAttendanceForParticularDay(currentAttendance) {
+
+      console.log(FILE_NAME + "In showAttendanceForParticularDay method");
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: _ewcalendarstyle2.default.dataDisplayContainerStyle },
+        _react2.default.createElement(_ewh1text2.default, {
+          text: this.getDayType(currentAttendance)
+        }),
+        _react2.default.createElement(_ewh1text2.default, {
+          text: this.getShiftTime(currentAttendance),
+          customStyle: _ewcalendarstyle2.default.shiftTimeStyle
+        }),
+        _react2.default.createElement(_ewh2text2.default, {
+          text: this.getCurrentDayAttendanceStatus(currentAttendance)
+        }),
+        this.showCurrentDayTiming(currentAttendance)
+      );
+    }
+  }, {
+    key: 'getShiftTime',
+    value: function getShiftTime(currentAttendance) {
+
+      console.log(FILE_NAME + "In getShiftTime");
+
+      planInDate = "";
+      planInTime = "";
+      planOutDate = "";
+      planOutTime = "";
+
+      if (currentAttendance.PLAN_IN != null) {
+        planInDate = (0, _utils.convertServerDateTimeToMilliseconds)(currentAttendance.PLAN_IN);
+        planInTime = (0, _utils.showDeviceTimeFormat)(planInDate);
+      }
+
+      if (currentAttendance.PLAN_OUT != null) {
+        planOutDate = (0, _utils.convertServerDateTimeToMilliseconds)(currentAttendance.PLAN_OUT);
+        planOutTime = (0, _utils.showDeviceTimeFormat)(planOutDate);
+      }
+
+      if (planInTime != "" || planOutTime != "") shiftTime = "Shift (" + planInTime + "-" + planOutTime + ")";else shiftTime = "";
+
+      return shiftTime;
+    }
+  }, {
+    key: 'getCurrentDayAttendanceStatus',
+    value: function getCurrentDayAttendanceStatus(currentAttendance) {
+
+      console.log(FILE_NAME + "In getCurrentDayAttendanceStatus method");
+
+      if (currentAttendance.my_calendar_line1 != 'NA') attendanceStatus = currentAttendance.my_calendar_line1;else attendanceStatus = "";
+
+      return attendanceStatus;
+    }
+  }, {
+    key: 'showCurrentDayTiming',
+    value: function showCurrentDayTiming(currentAttendance) {
+
+      console.log(FILE_NAME + "In showCurrentDayTiming method");
+
+      actualInDate = "";
+      actualOutDate = "";
+      actualInTime = "";
+      actualOutTime = "";
+
+      if (currentAttendance.ACT_IN != null) {
+        actualInDate = (0, _utils.convertServerDateTimeToMilliseconds)(currentAttendance.ACT_IN);
+        actualInTime = (0, _utils.showDeviceTimeFormat)(actualInDate);
+      }
+
+      if (currentAttendance.ACT_OUT != null) {
+        actualOutDate = (0, _utils.convertServerDateTimeToMilliseconds)(currentAttendance.ACT_OUT);
+        actualOutTime = (0, _utils.showDeviceTimeFormat)(actualOutDate);
+      }
+
+      if (actualInTime != "" && actualOutTime != "") {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _ewtimeline2.default,
+            { timeline: 'start' },
+            this.showActualInTime(currentAttendance, actualInTime)
+          ),
+          _react2.default.createElement(
+            _ewtimeline2.default,
+            { timeline: 'end' },
+            this.showActualOutTime(currentAttendance, actualOutTime)
+          )
+        );
+      } else {
+
+        if (actualInTime != "" || actualOutTime != "") {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            this.showActualInTime(currentAttendance, actualInTime),
+            this.showActualOutTime(currentAttendance, actualOutTime)
+          );
+        }
+      }
+    }
+  }, {
+    key: 'showActualInTime',
+    value: function showActualInTime(currentAttendance, actualInTime) {
+
+      console.log(FILE_NAME + "In showActualInTime method");
+
+      if (actualInTime != "") {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row" } },
+            _react2.default.createElement(_reactNative.Image, { style: { height: CUSTOM_VIEW_HEIGHT, width: CUSTOM_VIEW_HEIGHT, alignSelf: "center" }, source: timeIcon }),
+            _react2.default.createElement(_ewh2text2.default, {
+              text: actualInTime + " (In Time)",
+              customStyle: { marginLeft: 10 }
+            })
+          ),
+          this.renderInTimeLocation(currentAttendance)
+        );
+      }
+    }
+  }, {
+    key: 'renderInTimeLocation',
+    value: function renderInTimeLocation(currentAttendance) {
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { flexDirection: "row" } },
+        _react2.default.createElement(_reactNative.Image, { style: { height: CUSTOM_VIEW_HEIGHT, width: CUSTOM_VIEW_HEIGHT, alignSelf: "center" }, source: blackLocationIcon }),
+        _react2.default.createElement(_ewh3lighttext2.default, {
+          text: this.isNullOrNa(currentAttendance.in_location) ? this.getRemarks(currentAttendance.in_remarks) : currentAttendance.in_location,
+          customStyle: { marginLeft: 10 }
+        })
+      );
+    }
+  }, {
+    key: 'renderOutTimeLocation',
+    value: function renderOutTimeLocation(currentAttendance) {
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { flexDirection: "row" } },
+        _react2.default.createElement(_reactNative.Image, { style: { height: CUSTOM_VIEW_HEIGHT, width: CUSTOM_VIEW_HEIGHT, alignSelf: "center" }, source: blackLocationIcon }),
+        _react2.default.createElement(_ewh3lighttext2.default, {
+
+          text: this.isNullOrNa(currentAttendance.out_location) ? this.getRemarks(currentAttendance.out_remarks) : currentAttendance.out_location,
+          customStyle: { marginLeft: 10 }
+        })
+      );
+    }
+  }, {
+    key: 'getRemarks',
+    value: function getRemarks(remarks) {
+
+      message = "";
+
+      switch (remarks) {
+
+        case 1:
+        case 4:
+
+          message = dashboardConstants.MESSAGE_GPS_TURNED_OFF;
+
+          break;
+
+        case 2:
+
+          message = dashboardConstants.MESSAGE_LOCATION_PERMISSION_NOT_GRANTED;
+          break;
+
+        case 3:
+
+          message = dashboardConstants.MESSAGE_LOCATION_CANT_CAPTURE;
+          break;
+
+        default:
+
+          message = _utils.LOCATION_NOT_AVAILABLE_ERROR;
+      }
+
+      return message;
+    }
+  }, {
+    key: 'showActualOutTime',
+    value: function showActualOutTime(currentAttendance, actualOutTime) {
+
+      console.log(FILE_NAME + "In showActualOutTime method");
+
+      if (actualOutTime != "") {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row" } },
+            _react2.default.createElement(_reactNative.Image, { style: { height: CUSTOM_VIEW_HEIGHT, width: CUSTOM_VIEW_HEIGHT, alignSelf: "center" }, source: timeIcon }),
+            _react2.default.createElement(_ewh2text2.default, {
+              text: actualOutTime + " (Out Time)",
+              customStyle: { marginLeft: 10 }
+            })
+          ),
+          this.renderOutTimeLocation(currentAttendance)
+        );
+      }
+    }
+  }, {
+    key: 'isNullOrNa',
+    value: function isNullOrNa(stringToCheck) {
+
+      if (stringToCheck == null || stringToCheck == "NA") return true;
+
+      return false;
+    }
+  }, {
+    key: 'getDayType',
+    value: function getDayType(currentAttendance) {
+
+      console.log(FILE_NAME + "In getDayType method");
+
+      dayType = "";
+
+      switch (currentAttendance.day_type) {
+
+        case calendarConstants.WEEKLYOFF:
+
+          dayType = 'WeeklyOff';
+          break;
+
+        case calendarConstants.HOLIDAY:
+
+          dayType = 'Holiday';
+          break;
+
+        default:
+      }
+
+      return dayType;
+    }
+  }, {
+    key: 'onDateSelect',
+    value: function onDateSelect(date, calendarDateMap) {
+
+      console.log(FILE_NAME + "In onDateSelect method");
+
+      this.setState({
+        currentAttendance: calendarDateMap[new Date(date).getDate()]
+      });
+    }
+  }, {
+    key: 'showEventIndicatorDescription',
+    value: function showEventIndicatorDescription() {
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { backgroundColor: 'white', flexDirection: "column" } },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 1, marginLeft: 5, marginLeft: 5, justifyContent: "center", flexDirection: "row" } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewcalendarstyle2.default.eventIndicatorViewStyle },
+            _react2.default.createElement(_reactNative.View, { style: eventIndicatorStyle('#32CD32') }),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Present'
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewcalendarstyle2.default.eventIndicatorViewStyle },
+            _react2.default.createElement(_reactNative.View, { style: eventIndicatorStyle('#ff0000') }),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Absent'
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewcalendarstyle2.default.eventIndicatorViewStyle },
+            _react2.default.createElement(_reactNative.View, { style: eventIndicatorStyle('#000000') }),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Holiday'
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewcalendarstyle2.default.eventIndicatorViewStyle },
+            _react2.default.createElement(_reactNative.View, { style: eventIndicatorStyle('#963C00') }),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Leave'
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: 'onNext',
+    value: function onNext() {
+
+      console.log(FILE_NAME + "In onNext method");
+
+      var currentDate = this.state.currentDate;
+
+
+      formatCurrentDate = currentDate.replace(/-/g, "/").substr(0, currentDate.length - 5);
+
+      console.log("currentdate", new Date(currentDate).getMonth() + 2);
+
+      var year = new Date(formatCurrentDate).getFullYear();
+      var month = new Date(formatCurrentDate).getMonth();
+
+      if (month == 11) {
+        year++;
+        month = 1;
+      } else {
+        month = month + 2;
+      }
+
+      var params = {
+        year: year,
+        month: month
+      };
+
+      this.props.getCalendarInformation(params);
+
+      this.setState({
+        isLoading: true
+      });
+    }
+  }, {
+    key: 'onPrev',
+    value: function onPrev() {
+
+      console.log(FILE_NAME + "In onPrev method");
+
+      var currentDate = this.state.currentDate;
+
+      formatCurrentDate = currentDate.replace(/-/g, "/").substr(0, currentDate.length - 5);
+
+      var year = new Date(formatCurrentDate).getFullYear();
+      var month = new Date(formatCurrentDate).getMonth();
+
+      if (month == 0) {
+        year--;
+        month = 12;
+      }
+
+      var params = {
+        year: year,
+        month: month
+      };
+
+      this.props.getCalendarInformation(params);
+
+      this.setState({
+        isLoading: true
+      });
+    }
+  }]);
+  return EwCalendarScreen;
+}(_react.Component);
+
+var customStyle = {
+
+  controlButtonText: {
+    color: 'blue'
+  },
+
+  currentDayCircle: {
+    backgroundColor: 'gray'
+  },
+
+  currentDayText: {
+    color: 'blue'
+  },
+
+  monthContainer: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#000000'
+  }
+
+};
+
+function eventIndicatorStyle(backgroundColor) {
+
+  eventIndicatorFiller = {
+    marginTop: 3,
+    marginRight: 10,
+    alignSelf: "center",
+    borderColor: 'transparent',
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: backgroundColor
+  };
+
+  return eventIndicatorFiller;
+}
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction method");
+
+  return {
+    getCalendarInformation: function getCalendarInformation(params) {
+      return dispatch((0, _calendaractions.getCalendarInformation)(params));
+    },
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    },
+    clearCalendarError: function clearCalendarError(params) {
+      return dispatch((0, _calendaractions.clearCalendarError)(params));
+    }
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.auth.isLoggedIn,
+    errorWebService: state.auth.errorWebService,
+    sessionToken: state.auth.sessionToken,
+    errorCounter: state.calendar.errorCounter,
+    calendarData: state.calendar.calendarData,
+    calendarError: state.calendar.calendarError
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwCalendarScreen);

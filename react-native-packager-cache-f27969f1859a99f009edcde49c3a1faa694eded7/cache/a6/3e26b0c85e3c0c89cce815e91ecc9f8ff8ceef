@@ -1,0 +1,145 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateAttendance = updateAttendance;
+exports.clearAttendanceStateData = clearAttendanceStateData;
+exports.clearAttendanceError = clearAttendanceError;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _attendanceprocessing = require('./attendanceprocessing');
+
+var attendanceProcessing = babelHelpers.interopRequireWildcard(_attendanceprocessing);
+
+var _attendanceactiontypes = require('./attendanceactiontypes');
+
+var attendanceActionTypes = babelHelpers.interopRequireWildcard(_attendanceactiontypes);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var FILE_NAME = "attendanceactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+function updateAttendance(params) {
+
+  console.log(FILE_NAME + "In updateAttendance");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getAttendanceRequest = attendanceProcessing.buildUpdateAttendanceRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.put(getAttendanceRequest.url, getAttendanceRequest.data, getAttendanceRequest.config).then(function (result) {
+
+      console.log("getAttendanceRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'updateAttendance', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: attendanceActionTypes.SUCCESS_ATTENDANCE,
+          response: attendanceProcessing.buildSuccessUpdateAttendanceResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'updateAttendance', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: attendanceActionTypes.FAILURE_ATTENDANCE,
+          response: attendanceProcessing.buildFailedUpdateAttendanceResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      console.log("getAttendanceRequest Error - ", err);
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'updateAttendance', _utils.REQUEST_SERVER_ERROR);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: attendanceActionTypes.FAILURE_ATTENDANCE,
+        response: attendanceProcessing.buildServerErrorUpdateAttendanceResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearAttendanceStateData(params) {
+
+  console.log(FILE_NAME + "In clearAttendanceStateData - ");
+  console.log("Type of Data to be cleared - ", params);
+
+  CLEAR_STATE_DATA_ALL = 'CLEAR_STATE_DATA_ALL';
+  CLEAR_STATE_ERROR_COUNTER = 'CLEAR_STATE_ERROR_COUNTER';
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var errorCounter = getState().attendance.errorCounter;
+    var attendanceData = getState().attendance.attendanceData;
+    var attendanceError = getState().attendance.attendanceError;
+
+    Object.keys(params).map(function (key) {
+
+      console.log("params attribute " + key + " value is - " + params[key]);
+
+      switch (params[key]) {
+        case CLEAR_STATE_DATA_ALL:
+
+          errorCounter = null;
+          attendanceData = null;
+          attendanceError = null;
+
+          break;
+
+        case CLEAR_STATE_ERROR_COUNTER:
+
+          errorCounter = null;
+
+          break;
+
+        default:
+
+      }
+    });
+
+    var response = {
+
+      errorCounter: errorCounter,
+      attendanceData: attendanceData,
+      attendanceError: attendanceError
+
+    };
+
+    dispatch({
+      type: attendanceActionTypes.CLEAR_STATE_DATA,
+      response: response
+    });
+  };
+}
+
+function clearAttendanceError(params) {
+
+  return {
+    type: attendanceActionTypes.CLEAR_ATTENDANCE_ERROR,
+    response: null
+  };
+}

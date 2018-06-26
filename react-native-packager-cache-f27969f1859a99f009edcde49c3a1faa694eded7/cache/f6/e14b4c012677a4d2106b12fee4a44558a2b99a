@@ -1,0 +1,78 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildUpdateAttendanceRequest = buildUpdateAttendanceRequest;
+exports.buildSuccessUpdateAttendanceResponse = buildSuccessUpdateAttendanceResponse;
+exports.buildFailedUpdateAttendanceResponse = buildFailedUpdateAttendanceResponse;
+exports.buildServerErrorUpdateAttendanceResponse = buildServerErrorUpdateAttendanceResponse;
+
+var _attendanceapiendpoints = require('./attendanceapiendpoints');
+
+var attendanceApiEndPoints = babelHelpers.interopRequireWildcard(_attendanceapiendpoints);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var FILE_NAME = "attendanceprocessing.js : ";
+
+function buildUpdateAttendanceRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildUpdateAttendanceRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + attendanceApiEndPoints.MARK_IN_ATTENDANCE + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME;
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var attendanceRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", attendanceRequest);
+
+  return attendanceRequest;
+};
+
+function buildSuccessUpdateAttendanceResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessUpdateAttendanceResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+};
+
+function buildFailedUpdateAttendanceResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedUpdateAttendanceResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorUpdateAttendanceResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorUpdateAttendanceResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

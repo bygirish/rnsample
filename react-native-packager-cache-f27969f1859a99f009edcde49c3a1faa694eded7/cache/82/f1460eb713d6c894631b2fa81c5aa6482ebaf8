@@ -1,0 +1,765 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.utils = exports.GiftedAvatar = exports.Time = exports.Send = exports.MessageContainer = exports.Message = exports.LoadEarlier = exports.InputToolbar = exports.Day = exports.Composer = exports.MessageText = exports.MessageImage = exports.SystemMessage = exports.Bubble = exports.Avatar = exports.Actions = exports.GiftedChat = undefined;
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactNativeActionSheet = require('@expo/react-native-action-sheet');
+
+var _reactNativeActionSheet2 = babelHelpers.interopRequireDefault(_reactNativeActionSheet);
+
+var _moment = require('moment');
+
+var _moment2 = babelHelpers.interopRequireDefault(_moment);
+
+var _uuid = require('uuid');
+
+var _uuid2 = babelHelpers.interopRequireDefault(_uuid);
+
+var _utils = require('./utils');
+
+var utils = babelHelpers.interopRequireWildcard(_utils);
+
+var _Actions = require('./Actions');
+
+var _Actions2 = babelHelpers.interopRequireDefault(_Actions);
+
+var _Avatar = require('./Avatar');
+
+var _Avatar2 = babelHelpers.interopRequireDefault(_Avatar);
+
+var _Bubble = require('./Bubble');
+
+var _Bubble2 = babelHelpers.interopRequireDefault(_Bubble);
+
+var _SystemMessage = require('./SystemMessage');
+
+var _SystemMessage2 = babelHelpers.interopRequireDefault(_SystemMessage);
+
+var _MessageImage = require('./MessageImage');
+
+var _MessageImage2 = babelHelpers.interopRequireDefault(_MessageImage);
+
+var _MessageText = require('./MessageText');
+
+var _MessageText2 = babelHelpers.interopRequireDefault(_MessageText);
+
+var _Composer = require('./Composer');
+
+var _Composer2 = babelHelpers.interopRequireDefault(_Composer);
+
+var _Day = require('./Day');
+
+var _Day2 = babelHelpers.interopRequireDefault(_Day);
+
+var _InputToolbar = require('./InputToolbar');
+
+var _InputToolbar2 = babelHelpers.interopRequireDefault(_InputToolbar);
+
+var _LoadEarlier = require('./LoadEarlier');
+
+var _LoadEarlier2 = babelHelpers.interopRequireDefault(_LoadEarlier);
+
+var _Message = require('./Message');
+
+var _Message2 = babelHelpers.interopRequireDefault(_Message);
+
+var _MessageContainer = require('./MessageContainer');
+
+var _MessageContainer2 = babelHelpers.interopRequireDefault(_MessageContainer);
+
+var _Send = require('./Send');
+
+var _Send2 = babelHelpers.interopRequireDefault(_Send);
+
+var _Time = require('./Time');
+
+var _Time2 = babelHelpers.interopRequireDefault(_Time);
+
+var _GiftedAvatar = require('./GiftedAvatar');
+
+var _GiftedAvatar2 = babelHelpers.interopRequireDefault(_GiftedAvatar);
+
+var _GiftedChatInteractionManager = require('./GiftedChatInteractionManager');
+
+var _GiftedChatInteractionManager2 = babelHelpers.interopRequireDefault(_GiftedChatInteractionManager);
+
+;
+
+var MIN_COMPOSER_HEIGHT = _reactNative.Platform.select({
+  ios: 33,
+  android: 41
+});
+var MAX_COMPOSER_HEIGHT = 100;
+
+var GiftedChat = function (_React$Component) {
+  babelHelpers.inherits(GiftedChat, _React$Component);
+
+  function GiftedChat(props) {
+    babelHelpers.classCallCheck(this, GiftedChat);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (GiftedChat.__proto__ || Object.getPrototypeOf(GiftedChat)).call(this, props));
+
+    _this._isMounted = false;
+    _this._keyboardHeight = 0;
+    _this._bottomOffset = 0;
+    _this._maxHeight = null;
+    _this._isFirstLayout = true;
+    _this._locale = 'en';
+    _this._messages = [];
+
+    _this.state = {
+      isInitialized: false,
+      composerHeight: MIN_COMPOSER_HEIGHT,
+      messagesContainerHeight: null,
+      typingDisabled: false
+    };
+
+    _this.onKeyboardWillShow = _this.onKeyboardWillShow.bind(_this);
+    _this.onKeyboardWillHide = _this.onKeyboardWillHide.bind(_this);
+    _this.onKeyboardDidShow = _this.onKeyboardDidShow.bind(_this);
+    _this.onKeyboardDidHide = _this.onKeyboardDidHide.bind(_this);
+    _this.onSend = _this.onSend.bind(_this);
+    _this.getLocale = _this.getLocale.bind(_this);
+    _this.onInputSizeChanged = _this.onInputSizeChanged.bind(_this);
+    _this.onInputTextChanged = _this.onInputTextChanged.bind(_this);
+    _this.onMainViewLayout = _this.onMainViewLayout.bind(_this);
+    _this.onInitialLayoutViewLayout = _this.onInitialLayoutViewLayout.bind(_this);
+
+    _this.invertibleScrollViewProps = {
+      inverted: true,
+      keyboardShouldPersistTaps: _this.props.keyboardShouldPersistTaps,
+      onKeyboardWillShow: _this.onKeyboardWillShow,
+      onKeyboardWillHide: _this.onKeyboardWillHide,
+      onKeyboardDidShow: _this.onKeyboardDidShow,
+      onKeyboardDidHide: _this.onKeyboardDidHide
+    };
+    return _this;
+  }
+
+  babelHelpers.createClass(GiftedChat, [{
+    key: 'getChildContext',
+    value: function getChildContext() {
+      var _this2 = this;
+
+      return {
+        actionSheet: function actionSheet() {
+          return _this2._actionSheetRef;
+        },
+        getLocale: this.getLocale
+      };
+    }
+  }, {
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      var _props = this.props,
+          messages = _props.messages,
+          text = _props.text;
+
+      this.setIsMounted(true);
+      this.initLocale();
+      this.setMessages(messages || []);
+      this.setTextFromProp(text);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.setIsMounted(false);
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps() {
+      var nextProps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var messages = nextProps.messages,
+          text = nextProps.text;
+
+      this.setMessages(messages || []);
+      this.setTextFromProp(text);
+    }
+  }, {
+    key: 'initLocale',
+    value: function initLocale() {
+      if (this.props.locale === null || _moment2.default.locales().indexOf(this.props.locale) === -1) {
+        this.setLocale('en');
+      } else {
+        this.setLocale(this.props.locale);
+      }
+    }
+  }, {
+    key: 'setLocale',
+    value: function setLocale(locale) {
+      this._locale = locale;
+    }
+  }, {
+    key: 'getLocale',
+    value: function getLocale() {
+      return this._locale;
+    }
+  }, {
+    key: 'setTextFromProp',
+    value: function setTextFromProp(textProp) {
+      if (textProp !== undefined && textProp !== this.state.text) {
+        this.setState({ text: textProp });
+      }
+    }
+  }, {
+    key: 'getTextFromProp',
+    value: function getTextFromProp(fallback) {
+      if (this.props.text === undefined) {
+        return fallback;
+      }
+      return this.props.text;
+    }
+  }, {
+    key: 'setMessages',
+    value: function setMessages(messages) {
+      this._messages = messages;
+    }
+  }, {
+    key: 'getMessages',
+    value: function getMessages() {
+      return this._messages;
+    }
+  }, {
+    key: 'setMaxHeight',
+    value: function setMaxHeight(height) {
+      this._maxHeight = height;
+    }
+  }, {
+    key: 'getMaxHeight',
+    value: function getMaxHeight() {
+      return this._maxHeight;
+    }
+  }, {
+    key: 'setKeyboardHeight',
+    value: function setKeyboardHeight(height) {
+      this._keyboardHeight = height;
+    }
+  }, {
+    key: 'getKeyboardHeight',
+    value: function getKeyboardHeight() {
+      if (_reactNative.Platform.OS === 'android' && !this.props.forceGetKeyboardHeight) {
+        return 0;
+      } else {
+        return this._keyboardHeight;
+      }
+    }
+  }, {
+    key: 'setBottomOffset',
+    value: function setBottomOffset(value) {
+      this._bottomOffset = value;
+    }
+  }, {
+    key: 'getBottomOffset',
+    value: function getBottomOffset() {
+      return this._bottomOffset;
+    }
+  }, {
+    key: 'setIsFirstLayout',
+    value: function setIsFirstLayout(value) {
+      this._isFirstLayout = value;
+    }
+  }, {
+    key: 'getIsFirstLayout',
+    value: function getIsFirstLayout() {
+      return this._isFirstLayout;
+    }
+  }, {
+    key: 'setIsTypingDisabled',
+    value: function setIsTypingDisabled(value) {
+      this.setState({
+        typingDisabled: value
+      });
+    }
+  }, {
+    key: 'getIsTypingDisabled',
+    value: function getIsTypingDisabled() {
+      return this.state.typingDisabled;
+    }
+  }, {
+    key: 'setIsMounted',
+    value: function setIsMounted(value) {
+      this._isMounted = value;
+    }
+  }, {
+    key: 'getIsMounted',
+    value: function getIsMounted() {
+      return this._isMounted;
+    }
+  }, {
+    key: 'getMinInputToolbarHeight',
+    value: function getMinInputToolbarHeight() {
+      return this.props.renderAccessory ? this.props.minInputToolbarHeight * 2 : this.props.minInputToolbarHeight;
+    }
+  }, {
+    key: 'calculateInputToolbarHeight',
+    value: function calculateInputToolbarHeight(composerHeight) {
+      return composerHeight + (this.getMinInputToolbarHeight() - MIN_COMPOSER_HEIGHT);
+    }
+  }, {
+    key: 'getBasicMessagesContainerHeight',
+    value: function getBasicMessagesContainerHeight() {
+      var composerHeight = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.state.composerHeight;
+
+      return this.getMaxHeight() - this.calculateInputToolbarHeight(composerHeight);
+    }
+  }, {
+    key: 'getMessagesContainerHeightWithKeyboard',
+    value: function getMessagesContainerHeightWithKeyboard() {
+      var composerHeight = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.state.composerHeight;
+
+      return this.getBasicMessagesContainerHeight(composerHeight) - this.getKeyboardHeight() + this.getBottomOffset();
+    }
+  }, {
+    key: 'prepareMessagesContainerHeight',
+    value: function prepareMessagesContainerHeight(value) {
+      if (this.props.isAnimated === true) {
+        return new _reactNative.Animated.Value(value);
+      }
+      return value;
+    }
+  }, {
+    key: 'onKeyboardWillShow',
+    value: function onKeyboardWillShow(e) {
+      this.setIsTypingDisabled(true);
+      this.setKeyboardHeight(e.endCoordinates ? e.endCoordinates.height : e.end.height);
+      this.setBottomOffset(this.props.bottomOffset);
+      var newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard();
+      if (this.props.isAnimated === true) {
+        _reactNative.Animated.timing(this.state.messagesContainerHeight, {
+          toValue: newMessagesContainerHeight,
+          duration: 210
+        }).start();
+      } else {
+        this.setState({
+          messagesContainerHeight: newMessagesContainerHeight
+        });
+      }
+    }
+  }, {
+    key: 'onKeyboardWillHide',
+    value: function onKeyboardWillHide() {
+      this.setIsTypingDisabled(true);
+      this.setKeyboardHeight(0);
+      this.setBottomOffset(0);
+      var newMessagesContainerHeight = this.getBasicMessagesContainerHeight();
+      if (this.props.isAnimated === true) {
+        _reactNative.Animated.timing(this.state.messagesContainerHeight, {
+          toValue: newMessagesContainerHeight,
+          duration: 210
+        }).start();
+      } else {
+        this.setState({
+          messagesContainerHeight: newMessagesContainerHeight
+        });
+      }
+    }
+  }, {
+    key: 'onKeyboardDidShow',
+    value: function onKeyboardDidShow(e) {
+      if (_reactNative.Platform.OS === 'android') {
+        this.onKeyboardWillShow(e);
+      }
+      this.setIsTypingDisabled(false);
+    }
+  }, {
+    key: 'onKeyboardDidHide',
+    value: function onKeyboardDidHide(e) {
+      if (_reactNative.Platform.OS === 'android') {
+        this.onKeyboardWillHide(e);
+      }
+      this.setIsTypingDisabled(false);
+    }
+  }, {
+    key: 'scrollToBottom',
+    value: function scrollToBottom() {
+      var animated = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+      if (this._messageContainerRef === null) {
+        return;
+      }
+      this._messageContainerRef.scrollTo({
+        y: 0,
+        animated: animated
+      });
+    }
+  }, {
+    key: 'renderMessages',
+    value: function renderMessages() {
+      var _this3 = this;
+
+      var AnimatedView = this.props.isAnimated === true ? _reactNative.Animated.View : _reactNative.View;
+      return _react2.default.createElement(
+        AnimatedView,
+        { style: {
+            height: this.state.messagesContainerHeight
+          } },
+        _react2.default.createElement(_MessageContainer2.default, babelHelpers.extends({}, this.props, {
+
+          invertibleScrollViewProps: this.invertibleScrollViewProps,
+
+          messages: this.getMessages(),
+
+          ref: function ref(component) {
+            return _this3._messageContainerRef = component;
+          }
+        })),
+        this.renderChatFooter()
+      );
+    }
+  }, {
+    key: 'onSend',
+    value: function onSend() {
+      var _this4 = this;
+
+      var messages = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var shouldResetInputToolbar = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (!Array.isArray(messages)) {
+        messages = [messages];
+      }
+
+      messages = messages.map(function (message) {
+        return babelHelpers.extends({}, message, {
+          user: _this4.props.user,
+          createdAt: new Date(),
+          _id: _this4.props.messageIdGenerator()
+        });
+      });
+
+      if (shouldResetInputToolbar === true) {
+        this.setIsTypingDisabled(true);
+        this.resetInputToolbar();
+      }
+
+      this.props.onSend(messages);
+      this.scrollToBottom();
+
+      if (shouldResetInputToolbar === true) {
+        setTimeout(function () {
+          if (_this4.getIsMounted() === true) {
+            _this4.setIsTypingDisabled(false);
+          }
+        }, 100);
+      }
+    }
+  }, {
+    key: 'resetInputToolbar',
+    value: function resetInputToolbar() {
+      if (this.textInput) {
+        this.textInput.clear();
+      }
+      this.notifyInputTextReset();
+      var newComposerHeight = MIN_COMPOSER_HEIGHT;
+      var newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight);
+      this.setState({
+        text: this.getTextFromProp(''),
+        composerHeight: newComposerHeight,
+        messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight)
+      });
+    }
+  }, {
+    key: 'focusTextInput',
+    value: function focusTextInput() {
+      if (this.textInput) {
+        this.textInput.focus();
+      }
+    }
+  }, {
+    key: 'onInputSizeChanged',
+    value: function onInputSizeChanged(size) {
+      var newComposerHeight = Math.max(MIN_COMPOSER_HEIGHT, Math.min(MAX_COMPOSER_HEIGHT, size.height));
+      var newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight);
+      this.setState({
+        composerHeight: newComposerHeight,
+        messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight)
+      });
+    }
+  }, {
+    key: 'onInputTextChanged',
+    value: function onInputTextChanged(text) {
+      if (this.getIsTypingDisabled()) {
+        return;
+      }
+      if (this.props.onInputTextChanged) {
+        this.props.onInputTextChanged(text);
+      }
+
+      if (this.props.text === undefined) {
+        this.setState({ text: text });
+      }
+    }
+  }, {
+    key: 'notifyInputTextReset',
+    value: function notifyInputTextReset() {
+      if (this.props.onInputTextChanged) {
+        this.props.onInputTextChanged('');
+      }
+    }
+  }, {
+    key: 'onInitialLayoutViewLayout',
+    value: function onInitialLayoutViewLayout(e) {
+      var layout = e.nativeEvent.layout;
+      if (layout.height <= 0) {
+        return;
+      }
+      this.notifyInputTextReset();
+      this.setMaxHeight(layout.height);
+      var newComposerHeight = MIN_COMPOSER_HEIGHT;
+      var newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight);
+      this.setState({
+        isInitialized: true,
+        text: this.getTextFromProp(''),
+        composerHeight: newComposerHeight,
+        messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight)
+      });
+    }
+  }, {
+    key: 'onMainViewLayout',
+    value: function onMainViewLayout(e) {
+      var layout = e.nativeEvent.layout;
+      if (this.getMaxHeight() !== layout.height || this.getIsFirstLayout() === true) {
+        this.setMaxHeight(layout.height);
+        this.setState({
+          messagesContainerHeight: this.prepareMessagesContainerHeight(this.getBasicMessagesContainerHeight())
+        });
+      }
+      if (this.getIsFirstLayout() === true) {
+        this.setIsFirstLayout(false);
+      }
+    }
+  }, {
+    key: 'renderInputToolbar',
+    value: function renderInputToolbar() {
+      var _this5 = this;
+
+      var inputToolbarProps = babelHelpers.extends({}, this.props, {
+        text: this.getTextFromProp(this.state.text),
+        composerHeight: Math.max(MIN_COMPOSER_HEIGHT, this.state.composerHeight),
+        onSend: this.onSend,
+        onInputSizeChanged: this.onInputSizeChanged,
+        onTextChanged: this.onInputTextChanged,
+        textInputProps: babelHelpers.extends({}, this.props.textInputProps, {
+          ref: function ref(textInput) {
+            return _this5.textInput = textInput;
+          },
+          maxLength: this.getIsTypingDisabled() ? 0 : this.props.maxInputLength
+        })
+      });
+      if (this.getIsTypingDisabled()) {
+        inputToolbarProps.textInputProps.maxLength = 0;
+      }
+      if (this.props.renderInputToolbar) {
+        return this.props.renderInputToolbar(inputToolbarProps);
+      }
+      return _react2.default.createElement(_InputToolbar2.default, inputToolbarProps);
+    }
+  }, {
+    key: 'renderChatFooter',
+    value: function renderChatFooter() {
+      if (this.props.renderChatFooter) {
+        var footerProps = babelHelpers.extends({}, this.props);
+        return this.props.renderChatFooter(footerProps);
+      }
+      return null;
+    }
+  }, {
+    key: 'renderLoading',
+    value: function renderLoading() {
+      if (this.props.renderLoading) {
+        return this.props.renderLoading();
+      }
+      return null;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this6 = this;
+
+      if (this.state.isInitialized === true) {
+        return _react2.default.createElement(
+          _reactNativeActionSheet2.default,
+          { ref: function ref(component) {
+              return _this6._actionSheetRef = component;
+            } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: styles.container, onLayout: this.onMainViewLayout },
+            this.renderMessages(),
+            this.renderInputToolbar()
+          )
+        );
+      }
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: styles.container, onLayout: this.onInitialLayoutViewLayout },
+        this.renderLoading()
+      );
+    }
+  }], [{
+    key: 'append',
+    value: function append() {
+      var currentMessages = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var messages = arguments[1];
+
+      if (!Array.isArray(messages)) {
+        messages = [messages];
+      }
+      return messages.concat(currentMessages);
+    }
+  }, {
+    key: 'prepend',
+    value: function prepend() {
+      var currentMessages = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var messages = arguments[1];
+
+      if (!Array.isArray(messages)) {
+        messages = [messages];
+      }
+      return currentMessages.concat(messages);
+    }
+  }]);
+  return GiftedChat;
+}(_react2.default.Component);
+
+var styles = _reactNative.StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});
+
+GiftedChat.childContextTypes = {
+  actionSheet: _propTypes2.default.func,
+  getLocale: _propTypes2.default.func
+};
+
+GiftedChat.defaultProps = {
+  messages: [],
+  text: undefined,
+  placeholder: 'Type a message...',
+  messageIdGenerator: function messageIdGenerator() {
+    return _uuid2.default.v4();
+  },
+  user: {},
+  onSend: function onSend() {},
+  locale: null,
+  timeFormat: 'LT',
+  dateFormat: 'll',
+  isAnimated: _reactNative.Platform.select({
+    ios: true,
+    android: false
+  }),
+  loadEarlier: false,
+  onLoadEarlier: function onLoadEarlier() {},
+  isLoadingEarlier: false,
+  renderLoading: null,
+  renderLoadEarlier: null,
+  renderAvatar: undefined,
+  showUserAvatar: false,
+  onPressAvatar: null,
+  renderAvatarOnTop: false,
+  renderBubble: null,
+  renderSystemMessage: null,
+  onLongPress: null,
+  renderMessage: null,
+  renderMessageText: null,
+  renderMessageImage: null,
+  imageProps: {},
+  lightboxProps: {},
+  renderCustomView: null,
+  renderDay: null,
+  renderTime: null,
+  renderFooter: null,
+  renderChatFooter: null,
+  renderInputToolbar: null,
+  renderComposer: null,
+  renderActions: null,
+  renderSend: null,
+  renderAccessory: null,
+  onPressActionButton: null,
+  bottomOffset: 0,
+  minInputToolbarHeight: 44,
+  listViewProps: {},
+  keyboardShouldPersistTaps: _reactNative.Platform.select({
+    ios: 'never',
+    android: 'always'
+  }),
+  onInputTextChanged: null,
+  maxInputLength: null,
+  forceGetKeyboardHeight: false
+};
+
+GiftedChat.propTypes = {
+  messages: _propTypes2.default.array,
+  text: _propTypes2.default.string,
+  placeholder: _propTypes2.default.string,
+  messageIdGenerator: _propTypes2.default.func,
+  user: _propTypes2.default.object,
+  onSend: _propTypes2.default.func,
+  locale: _propTypes2.default.string,
+  timeFormat: _propTypes2.default.string,
+  dateFormat: _propTypes2.default.string,
+  isAnimated: _propTypes2.default.bool,
+  loadEarlier: _propTypes2.default.bool,
+  onLoadEarlier: _propTypes2.default.func,
+  isLoadingEarlier: _propTypes2.default.bool,
+  renderLoading: _propTypes2.default.func,
+  renderLoadEarlier: _propTypes2.default.func,
+  renderAvatar: _propTypes2.default.func,
+  showUserAvatar: _propTypes2.default.bool,
+  onPressAvatar: _propTypes2.default.func,
+  renderAvatarOnTop: _propTypes2.default.bool,
+  renderBubble: _propTypes2.default.func,
+  renderSystemMessage: _propTypes2.default.func,
+  onLongPress: _propTypes2.default.func,
+  renderMessage: _propTypes2.default.func,
+  renderMessageText: _propTypes2.default.func,
+  renderMessageImage: _propTypes2.default.func,
+  imageProps: _propTypes2.default.object,
+  lightboxProps: _propTypes2.default.object,
+  renderCustomView: _propTypes2.default.func,
+  renderDay: _propTypes2.default.func,
+  renderTime: _propTypes2.default.func,
+  renderFooter: _propTypes2.default.func,
+  renderChatFooter: _propTypes2.default.func,
+  renderInputToolbar: _propTypes2.default.func,
+  renderComposer: _propTypes2.default.func,
+  renderActions: _propTypes2.default.func,
+  renderSend: _propTypes2.default.func,
+  renderAccessory: _propTypes2.default.func,
+  onPressActionButton: _propTypes2.default.func,
+  bottomOffset: _propTypes2.default.number,
+  minInputToolbarHeight: _propTypes2.default.number,
+  listViewProps: _propTypes2.default.object,
+  keyboardShouldPersistTaps: _propTypes2.default.oneOf(['always', 'never', 'handled']),
+  onInputTextChanged: _propTypes2.default.func,
+  maxInputLength: _propTypes2.default.number,
+  forceGetKeyboardHeight: _propTypes2.default.bool
+};
+
+exports.GiftedChat = GiftedChat;
+exports.Actions = _Actions2.default;
+exports.Avatar = _Avatar2.default;
+exports.Bubble = _Bubble2.default;
+exports.SystemMessage = _SystemMessage2.default;
+exports.MessageImage = _MessageImage2.default;
+exports.MessageText = _MessageText2.default;
+exports.Composer = _Composer2.default;
+exports.Day = _Day2.default;
+exports.InputToolbar = _InputToolbar2.default;
+exports.LoadEarlier = _LoadEarlier2.default;
+exports.Message = _Message2.default;
+exports.MessageContainer = _MessageContainer2.default;
+exports.Send = _Send2.default;
+exports.Time = _Time2.default;
+exports.GiftedAvatar = _GiftedAvatar2.default;
+exports.utils = utils;

@@ -1,0 +1,823 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _utils = require('../../utils');
+
+var _ewcomponents = require('../../utils/ewcomponents');
+
+var _ewmileageclaimscreen = require('./mileageclaim/ewmileageclaimscreen');
+
+var _ewmileageclaimscreen2 = babelHelpers.interopRequireDefault(_ewmileageclaimscreen);
+
+var _ewotherclaimscreen = require('./otherclaim/ewotherclaimscreen');
+
+var _ewotherclaimscreen2 = babelHelpers.interopRequireDefault(_ewotherclaimscreen);
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewexpenseclaimactionscreenstyles = require('./styles/ewexpenseclaimactionscreenstyles');
+
+var _ewexpenseclaimactionscreenstyles2 = babelHelpers.interopRequireDefault(_ewexpenseclaimactionscreenstyles);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _commonexpenseclaimerrorhandling = require('../../services/expenseclaim/common/commonexpenseclaimerrorhandling');
+
+var expenseError = babelHelpers.interopRequireWildcard(_commonexpenseclaimerrorhandling);
+
+var _commonexpenseclaimactions = require('../../services/expenseclaim/common/commonexpenseclaimactions');
+
+var _needtoactactions = require('../../services/needtoact/needtoactactions');
+
+var _expenseutils = require('./expenseutils');
+
+var expenseConstant = babelHelpers.interopRequireWildcard(_expenseutils);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _animationutils = require('../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _screennameidentifiers = require('../../utils/screennameidentifiers');
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var FILE_NAME = "ewexpenseclaimactionscreen.js : ";
+
+var SCREEN_NAME = "Expense Claim Action Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_TRAVEL_AND_EXPENSE;
+
+var EwExpenseClaimActionScreen = function (_Component) {
+  babelHelpers.inherits(EwExpenseClaimActionScreen, _Component);
+
+  function EwExpenseClaimActionScreen(props) {
+    babelHelpers.classCallCheck(this, EwExpenseClaimActionScreen);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwExpenseClaimActionScreen.__proto__ || Object.getPrototypeOf(EwExpenseClaimActionScreen)).call(this, props));
+
+    _this.renderUserInfo = function (expenseData) {
+
+      console.log(FILE_NAME + "In renderUserInfo");
+
+      var Designation = expenseData.Designation,
+          employeeCode = expenseData.employeeCode,
+          employeeName = expenseData.employeeName,
+          expenseClaimDate = expenseData.expenseClaimDate;
+
+
+      var employeeInfo = {
+        name: employeeName,
+        designation: Designation,
+        imageUrl: (0, _utils.getImageUrl)(_this.props.sessionToken, employeeCode),
+        datetime: expenseClaimDate
+      };
+
+      console.log("employeeInfo", employeeInfo);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _this.state.areActionButtonsVisible ? _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { backgroundColor: 'transparent', marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN } },
+            _react2.default.createElement(_ewcomponents.EwH2Text, {
+              text: 'Request From',
+              customStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN, marginBottom: 5 }
+            }),
+            _react2.default.createElement(_ewcomponents.EwBar, null)
+          ),
+          _react2.default.createElement(_ewcomponents.EwUserInfo, { info: employeeInfo })
+        ) : null
+      );
+    };
+
+    _this.updateActionButtonState = function (actionButtonState) {
+
+      console.log("Inside updateActionButtonState");
+
+      _this.setState({
+
+        areActionButtonsVisible: actionButtonState
+      });
+    };
+
+    _this.renderActionButtons = function (expenseClaimInformation) {
+
+      console.log(FILE_NAME + "In renderActionButtons");
+
+      var Status = expenseClaimInformation.Status;
+      var _this$state = _this.state,
+          isExpenseClaimRejected = _this$state.isExpenseClaimRejected,
+          isExpenseClaimReconsidered = _this$state.isExpenseClaimReconsidered,
+          areActionButtonsVisible = _this$state.areActionButtonsVisible;
+
+
+      if (areActionButtonsVisible) {
+
+        if (_this.isPendingApproval()) {
+          if (!isExpenseClaimRejected && !isExpenseClaimReconsidered) {
+
+            return _react2.default.createElement(
+              _reactNative.View,
+              { style: _ewexpenseclaimactionscreenstyles2.default.footerContainerStyle },
+              _react2.default.createElement(_ewcomponents.EwButton, {
+                label: expenseConstant.APPROVE_EXPENSE_CLAIM_ACTION_LABEL,
+                onButonClicked: function onButonClicked() {
+                  return _this.onPressAction(expenseConstant.APPROVE_EXPENSE_CLAIM_ACTION);
+                }
+              })
+            );
+          }
+
+          if (isExpenseClaimRejected) {
+            return _react2.default.createElement(
+              _reactNative.View,
+              { style: _ewexpenseclaimactionscreenstyles2.default.footerContainerStyle },
+              _react2.default.createElement(_ewcomponents.EwButton, {
+                label: expenseConstant.CANCEL_EXPENSE_CLAIM_ACTION_LABEL,
+                onButonClicked: function onButonClicked() {
+                  return _this.changeActionButtonState(expenseConstant.REJECT_EXPENSE_CLAIM_ACTION);
+                }
+              }),
+              _react2.default.createElement(_ewcomponents.EwButton, {
+                label: expenseConstant.REJECT_EXPENSE_CLAIM_ACTION_LABEL,
+                onButonClicked: function onButonClicked() {
+                  return _this.onPressAction(expenseConstant.REJECT_EXPENSE_CLAIM_ACTION);
+                },
+                customStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN }
+              })
+            );
+          }
+
+          if (isExpenseClaimReconsidered) {
+            return _react2.default.createElement(
+              _reactNative.View,
+              { style: _ewexpenseclaimactionscreenstyles2.default.footerContainerStyle },
+              _react2.default.createElement(_ewcomponents.EwButton, {
+                label: expenseConstant.CANCEL_EXPENSE_CLAIM_ACTION_LABEL,
+                onButonClicked: function onButonClicked() {
+                  return _this.changeActionButtonState(expenseConstant.RECONSIDER_EXPENSE_CLAIM_ACTION);
+                }
+              }),
+              _react2.default.createElement(_ewcomponents.EwButton, {
+                label: expenseConstant.RECONSIDER_EXPENSE_CLAIM_ACTION_LABEL,
+                onButonClicked: function onButonClicked() {
+                  return _this.onPressAction(expenseConstant.RECONSIDER_EXPENSE_CLAIM_ACTION);
+                },
+                customStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN }
+              })
+            );
+          }
+        }
+      }
+    };
+
+    _this.getExpenseClaimActionText = function (expenseClaimAction) {
+
+      actionText = '';
+
+      if (expenseClaimAction == expenseConstant.APPROVE_EXPENSE_CLAIM_ACTION) actionText = expenseConstant.APPROVE_EXPENSE_CLAIM_ACTION_LABEL;
+
+      if (expenseClaimAction == expenseConstant.REJECT_EXPENSE_CLAIM_ACTION) actionText = expenseConstant.REJECT_EXPENSE_CLAIM_ACTION_LABEL;
+
+      if (expenseClaimAction == expenseConstant.RECONSIDER_EXPENSE_CLAIM_ACTION) actionText = expenseConstant.RECONSIDER_EXPENSE_CLAIM_ACTION_LABEL;
+
+      return actionText;
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      console.log(FILE_NAME + "In clearCurrentMessage method");
+
+      _this.setState({
+        currentError: ''
+      });
+    };
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    _this.initialState = {
+
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      pendingExpenseClaimInformation: null,
+
+      isExpenseClaimRejected: false,
+
+      isExpenseClaimReconsidered: false,
+      rejectOrReconsiderReason: "",
+
+      areActionButtonsVisible: false,
+
+      approverComments: "",
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwExpenseClaimActionScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      if (this.props.isExpenseClaimDataAvailable) {
+
+        updatedExpenseClaimData = this.props.isExpenseClaimDataAvailable;
+
+        updatedExpenseClaimData.isApproverScreen = true;
+
+        this.setState({
+          isDataPreLoaded: true,
+          isLoading: false,
+          pendingExpenseClaimInformation: updatedExpenseClaimData
+        });
+      } else {
+
+        var params = {
+
+          expenseId: this.props.expenseClaimData.pi_Txn_Id
+        };
+
+        this.props.getExpenseClaimInformation(params);
+
+        this.setState({
+          isDataPreLoaded: false,
+          isLoading: true
+        });
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ");
+      console.log(nextProps);
+
+      if (nextProps.expenseClaimActionData != null && nextProps.expenseClaimActionError == null) {
+
+        console.log(FILE_NAME + "Action Successfull");
+
+        this.setState({
+          isDone: true,
+          isLoading: false,
+          currentError: ''
+        });
+      }
+
+      if (nextProps.expenseClaimActionData == null && nextProps.expenseClaimActionError != null) {
+
+        console.log(FILE_NAME + "Action Not Successfull");
+
+        this.setState({
+          isDone: false,
+          isLoading: false,
+          currentError: nextProps.expenseClaimActionError
+        });
+      }
+
+      if (nextProps.expenseClaimInformationData != null && nextProps.expenseClaimInformationError == null) {
+
+        nextProps.expenseClaimInformationData.isApproverScreen = true;
+
+        this.setState({
+          isLoading: false,
+          isDataPreLoaded: true,
+          pendingExpenseClaimInformation: nextProps.expenseClaimInformationData
+
+        });
+      }
+
+      if (nextProps.expenseClaimInformationData == null && nextProps.expenseClaimInformationError != null) {
+
+        this.setState({
+          isLoading: false,
+          isDataPreLoaded: false
+        });
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+          return _react2.default.createElement(_ewcomponents.EwLoadingIndicator, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              this.showUserActionAlertMessage();
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+                tracker.trackScreenView(' Expense Claim Action Screen');
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+                tracker.trackScreenView('Expense Claim Action Screen with Error - ' + this.state.currentError);
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_ALL'
+      };
+
+      this.props.clearCommonExpenseClaimStateData(params);
+
+      if (this.state.isDone && this.state.currentError == '') {
+
+        console.log(FILE_NAME + "Action Successfull");
+
+        var params = {
+          "0": 'CLEAR_STATE_DATA_ALL'
+        };
+
+        this.props.clearNeedToActStateData(params);
+      }
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In renderScreen");
+
+      console.log(" expense claim state is  ", this.state);
+
+      var _state = this.state,
+          pendingExpenseClaimInformation = _state.pendingExpenseClaimInformation,
+          approverComments = _state.approverComments,
+          areActionButtonsVisible = _state.areActionButtonsVisible;
+
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(_ewcomponents.EwHeader, {
+          onBackButtonPress: function onBackButtonPress() {
+            return _reactNativeRouterFlux.Actions.pop();
+          },
+          screenTitle: this.getScreenTitle(pendingExpenseClaimInformation.expenseType),
+          screenReportId: _screennameidentifiers.PENDING_EXPENSE_CLAIM_ACTION_ID
+        }),
+        this.renderUserInfo(pendingExpenseClaimInformation),
+        this.renderExpenseClaimView(pendingExpenseClaimInformation),
+        areActionButtonsVisible && this.isPendingApproval() ? _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+          label: expenseConstant.APPROVER_COMMENT_LABEL,
+          placeholderlabel: expenseConstant.APPROVER_COMMENT_PLACEHOLDER_LABEL,
+          customViewStyle: { margin: appstyleguide.DEFAULT_MARGIN },
+          autoCorrect: false,
+          autoCapitalize: 'none',
+          onChangeText: function onChangeText(approverComments) {
+            return _this2.setState({ approverComments: approverComments });
+          },
+          value: approverComments
+
+        }) : null,
+        this.showFooterTab(pendingExpenseClaimInformation)
+      );
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME, "In handleError Method");
+
+      console.log("this.state.currentError", this.state.currentError);
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+        case expenseError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+        case expenseError.APPROVER_NOT_FOUND:
+          this.showAlertMessage(expenseError.APPROVER_NOT_FOUND);
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        console.log("Handling Post Rendering Error");
+
+        switch (this.state.currentError) {
+
+          case expenseError.SERVER_EXCEPTION:
+
+            this.showAlertMessage(expenseError.SERVER_ERROR);
+
+            return this.renderScreen();
+
+            break;
+
+          default:
+
+            this.showAlertMessage(this.state.currentError);
+
+            return this.renderScreen();
+
+            break;
+
+        }
+      }
+    }
+  }, {
+    key: 'showUserActionAlertMessage',
+    value: function showUserActionAlertMessage() {
+
+      this.showAlertMessage('Successfully Done ', 'Expense Approval', 'success');
+    }
+  }, {
+    key: 'renderExpenseClaimView',
+    value: function renderExpenseClaimView(pendingExpenseClaimInformation) {
+      var _this3 = this;
+
+      if (pendingExpenseClaimInformation != null) {
+
+        console.log("pendingExpenseClaimInformation", pendingExpenseClaimInformation);
+
+        switch (pendingExpenseClaimInformation.expenseType) {
+
+          case expenseConstant.SERVER_OTHER_EXPENSE_LABEL:
+
+            return _react2.default.createElement(_ewotherclaimscreen2.default, {
+              othersClaimData: pendingExpenseClaimInformation,
+              actionsButtonVisible: this.state.areActionButtonsVisible,
+              updateParentState: function updateParentState(updatedExpenseArray) {
+                return _this3.updateExpenseActionState(updatedExpenseArray);
+              }
+            });
+
+            break;
+
+          case expenseConstant.SERVER_MILEAGE_EXPENSE_LABEL:
+
+            return _react2.default.createElement(_ewmileageclaimscreen2.default, {
+              mileageClaimData: pendingExpenseClaimInformation,
+              actionsButtonVisible: this.state.areActionButtonsVisible,
+              updateParentState: function updateParentState(updatedExpenseArray) {
+                return _this3.updateExpenseActionState(updatedExpenseArray);
+              }
+            });
+
+            break;
+
+          default:
+
+        }
+      }
+    }
+  }, {
+    key: 'getScreenTitle',
+    value: function getScreenTitle(expenseType) {
+
+      switch (expenseType) {
+        case expenseConstant.SERVER_OTHER_EXPENSE_LABEL:
+
+          return expenseConstant.APPROVER_OTHER_EXENSE_HEADING_LABEL;
+          break;
+
+        case expenseConstant.SERVER_MILEAGE_EXPENSE_LABEL:
+
+          return expenseConstant.APPROVER_MILEAGE_EXENSE_HEADING_LABEL;
+          break;
+        default:
+
+      }
+    }
+  }, {
+    key: 'updateExpenseActionState',
+    value: function updateExpenseActionState(updatedExpenseArray) {
+
+      console.log("updatedExpenseArray", updatedExpenseArray);
+
+      updatedPendingExpenseClaimInformation = babelHelpers.extends({}, this.state.pendingExpenseClaimInformation);
+
+      updatedPendingExpenseClaimInformation.expenseArray = updatedExpenseArray;
+
+      this.setState({
+
+        pendingExpenseClaimInformation: updatedPendingExpenseClaimInformation,
+        areActionButtonsVisible: true
+      });
+    }
+  }, {
+    key: 'showFooterTab',
+    value: function showFooterTab(pendingExpenseClaimInformation) {
+
+      console.log(FILE_NAME + "In showFooterTab method");
+
+      return this.renderActionButtons(pendingExpenseClaimInformation);
+    }
+  }, {
+    key: 'isPendingApproval',
+    value: function isPendingApproval() {
+      var Status = this.state.pendingExpenseClaimInformation.Status;
+
+
+      if (Status == expenseConstant.STATUS_PENDING_APPROVAL) return true;
+
+      return false;
+    }
+  }, {
+    key: 'localValidation',
+    value: function localValidation() {
+      var _state2 = this.state,
+          rejectOrReconsiderReason = _state2.rejectOrReconsiderReason,
+          isExpenseClaimRejected = _state2.isExpenseClaimRejected,
+          isExpenseClaimReconsidered = _state2.isExpenseClaimReconsidered;
+
+
+      if (isExpenseClaimReconsidered || isExpenseClaimRejected) {
+
+        if (rejectOrReconsiderReason == "") {
+
+          this.showAlertMessage(expenseConstant.REJECT_OR_RECONSIDER_EMPTY);
+          return false;
+        }
+      }
+
+      return true;
+    }
+  }, {
+    key: 'onPressAction',
+    value: function onPressAction(action) {
+
+      console.log(FILE_NAME + "In onPressAction method");
+
+      var _state3 = this.state,
+          pendingExpenseClaimInformation = _state3.pendingExpenseClaimInformation,
+          approverComments = _state3.approverComments;
+
+
+      tracker.trackEvent(SCREEN_CATEGORY, 'expense claim action taken - ' + this.getExpenseClaimActionText(action));
+
+      for (var _iterator = pendingExpenseClaimInformation.expenseArray, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref;
+
+        if (_isArray) {
+          if (_i >= _iterator.length) break;
+          _ref = _iterator[_i++];
+        } else {
+          _i = _iterator.next();
+          if (_i.done) break;
+          _ref = _i.value;
+        }
+
+        var expense = _ref;
+
+
+        expense.approvedAmount = expense.expenseAmount;
+
+        if (expense.invoiceDetails != null) {
+
+          expense.approvedCgstRate = expense.cgstRate;
+          expense.approvedCgstAmount = expense.cgstAmount;
+          expense.approvedSgstRate = expense.sgstRate;
+          expense.approvedSgstAmount = expense.sgstAmount;
+          expense.approvedIgstRate = expense.igstRate;
+          expense.approvedIgstAmount = expense.igstAmount;
+          expense.approvedPreTaxAmount = expense.preTaxAmount;
+          expense.approvedTaxAmount = expense.taxAmount;
+        }
+      }
+
+      var params = {
+
+        "expenseId": pendingExpenseClaimInformation.expenseId,
+        "action": action,
+        "expenseArray": pendingExpenseClaimInformation.expenseArray,
+        "token": this.props.sessionToken,
+        "deviceId": _utils.DEVICE_ID,
+        "approverComment": approverComments,
+        "expenseType": pendingExpenseClaimInformation.expenseType
+
+      };
+
+      this.props.expenseClaimAction(params);
+
+      this.setState({
+        isLoading: true,
+        isDone: false
+      });
+    }
+  }, {
+    key: 'changeActionButtonState',
+    value: function changeActionButtonState(expenseClaimAction) {
+
+      console.log(FILE_NAME + "In changeActionButtonState method");
+
+      switch (expenseClaimAction) {
+
+        case expenseConstant.REJECT_EXPENSE_CLAIM_ACTION:
+
+          this.setState({
+            isExpenseClaimRejected: !this.state.isExpenseClaimRejected
+          });
+          break;
+
+        case expenseConstant.RECONSIDER_EXPENSE_CLAIM_ACTION:
+
+          this.setState({
+            isExpenseClaimReconsidered: !this.state.isExpenseClaimReconsidered
+          });
+
+          break;
+
+        default:
+
+      }
+    }
+  }]);
+  return EwExpenseClaimActionScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction method");
+
+  return {
+    getExpenseClaimInformation: function getExpenseClaimInformation(params) {
+      return dispatch((0, _commonexpenseclaimactions.getExpenseClaimInformation)(params));
+    },
+    expenseClaimAction: function expenseClaimAction(params) {
+      return dispatch((0, _commonexpenseclaimactions.expenseClaimAction)(params));
+    },
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    },
+    clearCommonExpenseClaimStateData: function clearCommonExpenseClaimStateData(params) {
+      return dispatch((0, _commonexpenseclaimactions.clearCommonExpenseClaimStateData)(params));
+    },
+    clearNeedToActStateData: function clearNeedToActStateData(params) {
+      return dispatch((0, _needtoactactions.clearNeedToActStateData)(params));
+    }
+
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    isLoggedIn: state.auth.isLoggedIn,
+    sessionToken: state.auth.sessionToken,
+
+    pendingNeedToActData: state.needtoact.needToActData,
+
+    expenseClaimInformationData: state.commonExpenseClaim.expenseClaimInformationData,
+    expenseClaimInformationError: state.commonExpenseClaim.expenseClaimInformationError,
+
+    expenseClaimActionData: state.commonExpenseClaim.expenseClaimActionData,
+    expenseClaimActionError: state.commonExpenseClaim.expenseClaimActionError
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwExpenseClaimActionScreen);

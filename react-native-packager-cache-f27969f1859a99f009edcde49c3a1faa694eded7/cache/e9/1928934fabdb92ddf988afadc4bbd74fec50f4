@@ -1,0 +1,298 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../../utils');
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewh4text = require('../../../../components/ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewbutton = require('../../../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _ewh3text = require('../../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewbar = require('../../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewh1text = require('../../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewmodal = require('../../../../components/ewmodal/ewmodal');
+
+var _ewmodal2 = babelHelpers.interopRequireDefault(_ewmodal);
+
+var _ewh3lighttext = require('../../../../components/ewh3lighttext/ewh3lighttext');
+
+var _ewh3lighttext2 = babelHelpers.interopRequireDefault(_ewh3lighttext);
+
+var _ewcard = require('../../../../components/ewcard/ewcard');
+
+var _ewcard2 = babelHelpers.interopRequireDefault(_ewcard);
+
+var _ewfloatinglabel = require('../../../../components/ewfloatinglabel/ewfloatinglabel');
+
+var _ewfloatinglabel2 = babelHelpers.interopRequireDefault(_ewfloatinglabel);
+
+var _ewmultiplecomponentvalue = require('../../../../components/ewmultiplecomponentvalue/ewmultiplecomponentvalue');
+
+var _ewmultiplecomponentvalue2 = babelHelpers.interopRequireDefault(_ewmultiplecomponentvalue);
+
+var _commonexpenseclaimactions = require('../../../../services/expenseclaim/common/commonexpenseclaimactions');
+
+var _comment = require('./comment.js');
+
+var _comment2 = babelHelpers.interopRequireDefault(_comment);
+
+var _expenseutils = require('../../expenseutils');
+
+var expenseConstants = babelHelpers.interopRequireWildcard(_expenseutils);
+
+
+var FILE_NAME = " Commentsmodal.js ";
+
+var CommentsModal = function (_Component) {
+  babelHelpers.inherits(CommentsModal, _Component);
+
+  function CommentsModal(props, context) {
+    babelHelpers.classCallCheck(this, CommentsModal);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (CommentsModal.__proto__ || Object.getPrototypeOf(CommentsModal)).call(this, props, context));
+
+    _this.initialState = {
+
+      isCommentModalVisible: false,
+
+      comment: ""
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(CommentsModal, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var customViewStyle = this.props.customViewStyle;
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: customViewStyle },
+        _react2.default.createElement(_ewbutton2.default, {
+          label: 'Add Comment',
+          onButonClicked: function onButonClicked() {
+            return _this2.changeCommentModalVisibility();
+          },
+          customStyle: { backgroundColor: appstyleguide.APP_GRAY, alignSelf: "center" }
+        }),
+        this.showCommentModal()
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'showCommentModal',
+    value: function showCommentModal() {
+      var _this3 = this;
+
+      var _state = this.state,
+          isCommentModalVisible = _state.isCommentModalVisible,
+          isReveiwMode = _state.isReveiwMode;
+
+
+      if (isCommentModalVisible) {
+
+        return _react2.default.createElement(
+          _ewmodal2.default,
+          {
+            onBackButtonPress: function onBackButtonPress() {
+              return _this3.changeCommentModalVisibility();
+            },
+            isModalVisible: isCommentModalVisible,
+            onBackdropPress: function onBackdropPress() {
+              return _this3.changeCommentModalVisibility();
+            }
+          },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { margin: appstyleguide.DEFAULT_MARGIN } },
+            _react2.default.createElement(_ewfloatinglabel2.default, {
+              label: expenseConstants.COMMENT_LABEL,
+              placeholderlabel: expenseConstants.COMMENT_PLACEHOLDER_LABEL,
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              onChangeText: function onChangeText(comment) {
+                return _this3.setState({ comment: comment });
+              },
+              value: this.state.comment
+
+            }),
+            _react2.default.createElement(_ewbutton2.default, {
+              label: 'Add Comment',
+              onButonClicked: function onButonClicked() {
+                return _this3.updateParentState();
+              },
+              customStyle: { backgroundColor: appstyleguide.APP_GRAY, alignSelf: "center", marginTop: 15 }
+            })
+          )
+        );
+      }
+    }
+  }, {
+    key: 'addCommentToServer',
+    value: function addCommentToServer() {
+      var _props$otherProps, expenseLogId, expenseId, comment, params;
+
+      return regeneratorRuntime.async(function addCommentToServer$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _props$otherProps = this.props.otherProps, expenseLogId = _props$otherProps.expenseLogId, expenseId = _props$otherProps.expenseId;
+              comment = this.state.comment;
+
+
+              if (expenseLogId != null) {
+                params = {
+
+                  "expense_id": expenseId,
+                  "log_id": expenseLogId,
+                  "auth_token": this.props.sessionToken,
+                  "device_id": _utils.DEVICE_ID,
+                  "scope": "I",
+                  "comment": comment
+
+                };
+
+
+                console.log("params are", params);
+
+                this.props.saveExpenseComment(params);
+              }
+
+            case 3:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, null, this);
+    }
+  }, {
+    key: 'updateParentState',
+    value: function updateParentState() {
+
+      this.props.updateParentState(this.state.comment);
+      this.addCommentToServer();
+
+      this.changeCommentModalVisibility();
+    }
+  }, {
+    key: 'changeCommentModalVisibility',
+    value: function changeCommentModalVisibility() {
+
+      this.setState({
+
+        isCommentModalVisible: !this.state.isCommentModalVisible
+      });
+    }
+  }]);
+  return CommentsModal;
+}(_react.Component);
+
+function bindActions(dispatch) {
+
+  console.log(FILE_NAME, "In bindActions Method");
+
+  return {
+    saveExpenseComment: function saveExpenseComment(params) {
+      return dispatch((0, _commonexpenseclaimactions.saveExpenseComment)(params));
+    },
+
+    clearCommonExpenseClaimStateData: function clearCommonExpenseClaimStateData(params) {
+      return dispatch((0, _commonexpenseclaimactions.clearCommonExpenseClaimStateData)(params));
+    }
+  };
+}
+
+function mapStateToProps(state) {
+
+  console.log("State Updated state is -");
+
+  console.log(state);
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn
+
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(CommentsModal);

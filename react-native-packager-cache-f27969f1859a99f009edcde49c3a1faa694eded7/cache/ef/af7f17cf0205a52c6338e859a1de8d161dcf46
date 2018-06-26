@@ -1,0 +1,166 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = compensationReducer;
+
+var _compensationactiontypes = require('./compensationactiontypes');
+
+var compensationActionTypes = babelHelpers.interopRequireWildcard(_compensationactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _utils = require('../../utils');
+
+var FILE_NAME = "compensationreducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+
+  myCompensationData: null,
+  myCompensationError: null,
+
+  myAppliedClaimInformationData: null,
+  myAppliedClaimInformationError: null,
+
+  appliedCtcClaimData: null,
+  appliedCtcClaimError: null,
+
+  entitlementSummaryData: null,
+  entitlementSummaryError: null
+};
+
+function compensationReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method compensationReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case compensationActionTypes.SUCCESS_GET_MY_COMPENSATION:
+
+      console.log("In method compensationReducer SUCCESS_GET_MY_COMPENSATION");
+
+      return babelHelpers.extends({}, state, {
+        myCompensationData: action.response.data,
+        myCompensationError: action.response.error
+      });
+
+      break;
+
+    case compensationActionTypes.FAILURE_GET_MY_COMPENSATION:
+
+      console.log("In method compensationReducer FAILURE_GET_MY_COMPENSATION");
+
+      return babelHelpers.extends({}, state, {
+        myCompensationData: action.response.data,
+        myCompensationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case compensationActionTypes.SUCCESS_GET_MY_CTC_CLAIM_LIST:
+
+      console.log("In method compensationReducer SUCCESS_GET_MY_CTC_CLAIM_LIST");
+
+      return babelHelpers.extends({}, state, {
+        appliedCtcClaimData: action.response.data,
+        appliedCtcClaimError: action.response.error
+      });
+
+      break;
+
+    case compensationActionTypes.FAILURE_GET_MY_CTC_CLAIM_LIST:
+
+      console.log("In method compensationReducer FAILURE_GET_MY_CTC_CLAIM_LIST");
+
+      return babelHelpers.extends({}, state, {
+        appliedCtcClaimData: action.response.data,
+        appliedCtcClaimError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case compensationActionTypes.SUCCESS_GET_MY_CLAIM_INFORMATION:
+
+      console.log("In method compensationReducer SUCCESS_GET_MY_CLAIM_INFORMATION");
+
+      return {
+
+        myAppliedClaimInformationData: action.response.data,
+        myAppliedClaimInformationError: action.response.error
+      };
+
+      break;
+
+    case compensationActionTypes.FAILURE_GET_MY_CLAIM_INFORMATION:
+
+      console.log("In method compensationReducer FAILURE_GET_MY_CLAIM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        myAppliedClaimInformationData: action.response.data,
+        myAppliedClaimInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case compensationActionTypes.SUCCESS_GET_ENTITLEMENT_SUMMARY:
+
+      console.log("In method compensationReducer SUCCESS_GET_ENTITLEMENT_SUMMARY");
+
+      return {
+
+        entitlementSummaryData: action.response.data,
+        entitlementSummaryError: action.response.error
+      };
+
+      break;
+
+    case compensationActionTypes.FAILURE_GET_ENTITLEMENT_SUMMARY:
+
+      console.log("In method compensationReducer FAILURE_GET_ENTITLEMENT_SUMMARY");
+
+      return babelHelpers.extends({}, state, {
+        entitlementSummaryData: action.response.data,
+        entitlementSummaryError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case compensationActionTypes.CLEAR_COMPENSATION_ERROR:
+
+      console.log("In method compensationReducer CLEAR_COMPENSATION_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        myCompensationError: null
+      });
+
+      break;
+
+    case compensationActionTypes.CLEAR_COMPENSATION_STATE_DATA:
+
+      console.log("In method compensationReducer CLEAR_COMPENSATION_STATE_DATA");
+
+      return {
+        errorCounter: action.response.errorCounter,
+        myCompensationData: action.response.myCompensationData,
+        myCompensationError: action.response.myCompensationError
+      };
+
+      break;
+
+    default:
+
+      console.log("In method compensationReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

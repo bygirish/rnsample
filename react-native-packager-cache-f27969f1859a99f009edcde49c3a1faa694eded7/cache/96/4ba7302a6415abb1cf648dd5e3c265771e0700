@@ -1,0 +1,774 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getPendingTravelInformation = getPendingTravelInformation;
+exports.getAppliedTravelList = getAppliedTravelList;
+exports.travelAction = travelAction;
+exports.applyTravel = applyTravel;
+exports.getCityInformation = getCityInformation;
+exports.getCurrencyInformation = getCurrencyInformation;
+exports.getTravelPurpose = getTravelPurpose;
+exports.getTravelCityCategoryInformation = getTravelCityCategoryInformation;
+exports.getTravelClientAccounts = getTravelClientAccounts;
+exports.getTravelClientAccountProjects = getTravelClientAccountProjects;
+exports.getTravelApprover = getTravelApprover;
+exports.getTravelInformation = getTravelInformation;
+exports.clearTravelError = clearTravelError;
+exports.clearTravelStateData = clearTravelStateData;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _travelprocessing = require('./travelprocessing');
+
+var travelProcessing = babelHelpers.interopRequireWildcard(_travelprocessing);
+
+var _travelactiontypes = require('./travelactiontypes');
+
+var travelActionTypes = babelHelpers.interopRequireWildcard(_travelactiontypes);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var FILE_NAME = "travelactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_TRAVEL_AND_EXPENSE;
+
+function getPendingTravelInformation(params) {
+
+  console.log(FILE_NAME + "In getPendingTravelInformation method - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getPendingTravelInformationRequest = travelProcessing.buildGetPendingTravelInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getPendingTravelInformationRequest.url, getPendingTravelInformationRequest.data, getPendingTravelInformationRequest.config).then(function (result) {
+
+      console.log("getPendingTravelInformationRequest Result - ", result);
+
+      if (result.data.Travel != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPendingTravelInformation', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: travelActionTypes.SUCCESS_PENDING_TRAVEL_INFORMATION,
+          response: travelProcessing.buildSuccessGetPendingTravelInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPendingTravelInformation', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: travelActionTypes.FAILURE_PENDING_TRAVEL_INFORMATION,
+          response: travelProcessing.buildFailedGetPendingTravelInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPendingTravelInformation', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getPendingTravelInformationRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: travelActionTypes.FAILURE_PENDING_TRAVEL_INFORMATION,
+        response: travelProcessing.buildServerErrorGetPendingTravelInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function getAppliedTravelList(params) {
+
+  var functionName = "getAppliedTravelList";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getAppliedTravelList = travelProcessing.buildGetAppliedTravelListRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getAppliedTravelList.url, getAppliedTravelList.data, getAppliedTravelList.config).then(function (result) {
+
+      console.log("getAppliedTravelList Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: travelActionTypes.SUCCESS_APPLIED_TRAVEL_LIST,
+          response: travelProcessing.buildSuccesGetAppliedTravelListResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: travelActionTypes.FAILURE_APPLIED_TRAVEL_LIST,
+          response: travelProcessing.buildFailedGetAppliedTravelListResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getAppliedTravelList Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: travelActionTypes.FAILURE_APPLIED_TRAVEL_LIST,
+        response: travelProcessing.buildServerErrorGetAppliedTravelListResponse(err, params)
+      });
+    });
+  };
+}
+
+function travelAction(params) {
+
+  console.log(FILE_NAME + " In travelAction method- ");
+  console.log("params - ");console.log(params);
+
+  return function (dispatch, getState) {
+
+    var travelActionRequest = travelProcessing.buildTravelActionRequest(params, getState());
+
+    console.log("Current GetState Value is - ");console.log(getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.put(travelActionRequest.url, travelActionRequest.data, travelActionRequest.config).then(function (result) {
+
+      console.log("travelActionRequest Result - ", result);console.log(result);
+
+      if (result.data.update_Flag != 0) {
+
+        result.data["action"] = params.Travel.Travel_Data.action;
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'travelAction', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: travelActionTypes.SUCCESS_TRAVEL_ACTION_TAKEN,
+          response: travelProcessing.buildSuccessTravelActionResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'travelAction', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: travelActionTypes.FAILURE_TRAVEL_ACTION_TAKEN,
+          response: travelProcessing.buildFailedTravelActionResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'travelAction', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("travelActionRequest Error - ");console.log(err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: travelActionTypes.FAILURE_TRAVEL_ACTION_TAKEN,
+        response: travelProcessing.buildServerErrorTravelActionResponse(err, params)
+      });
+    });
+  };
+}
+
+function applyTravel(params) {
+
+  console.log(FILE_NAME + " In applyTravel - ");
+  console.log("params - ");console.log(params);
+
+  return function (dispatch, getState) {
+
+    var applyTravelRequest = travelProcessing.buildApplyTravel(params, getState());
+
+    console.log("Current GetState Value is - ");console.log(getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(applyTravelRequest.url, applyTravelRequest.data, applyTravelRequest.config).then(function (result) {
+
+      console.log("applyTravelRequest Result - ");console.log(result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'applyTravel', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: travelActionTypes.SUCCESS_APPLY_TRAVEL,
+          response: travelProcessing.buildSuccessApplyTravelResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'applyTravel', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: travelActionTypes.FAILURE_APPLY_TRAVEL,
+          response: travelProcessing.buildFailedApplyTravelResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'applyTravel', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("applyTravelRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: travelActionTypes.FAILURE_APPLY_TRAVEL,
+        response: travelProcessing.buildServerErrorApplyTravelResponse(err, params)
+      });
+    });
+  };
+}
+
+function getCityInformation(params) {
+
+  console.log(FILE_NAME + "In getCityInformation method - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getCityInformationRequest = travelProcessing.buildGetCityInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getCityInformationRequest.url, getCityInformationRequest.data, getCityInformationRequest.config).then(function (result) {
+
+      console.log("getCityInformationRequest Result - ", result);
+
+      if (result.data != '' && result.data != null) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getCityInformation', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: travelActionTypes.SUCCESS_GET_CITY_INFORMATION,
+          response: travelProcessing.buildSuccessGetCityInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getCityInformation', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: travelActionTypes.FAILURE_GET_CITY_INFORMATION,
+          response: travelProcessing.buildFailedGetCityInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getCityInformation', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getCityInformationRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: travelActionTypes.FAILURE_GET_CITY_INFORMATION,
+        response: travelProcessing.buildServerErrorGetCityInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function getCurrencyInformation(params) {
+
+  console.log(FILE_NAME + "In getCurrencyInformation method - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getCurrencyInformationRequest = travelProcessing.buildGetCurrencyInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getCurrencyInformationRequest.url, getCurrencyInformationRequest.data, getCurrencyInformationRequest.config).then(function (result) {
+
+      console.log("getCurrencyInformationRequest Result - ", result);
+
+      if (result.data != '' && result.data != null) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getCurrencyInformation', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: travelActionTypes.SUCCESS_GET_CURRENCY_INFORMATION,
+          response: travelProcessing.buildSuccessGetCurrencyInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getCurrencyInformation', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: travelActionTypes.FAILURE_GET_CURRENCY_INFORMATION,
+          response: travelProcessing.buildFailedGetCurrencyInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getCurrencyInformation', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getCurrencyInformationRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: travelActionTypes.FAILURE_GET_CURRENCY_INFORMATION,
+        response: travelProcessing.buildServerErrorGetCurrencyInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function getTravelPurpose(params) {
+
+  console.log(FILE_NAME + "In getTravelPurpose method - ");
+  console.log("params - ", params);
+
+  functionName = "getTravelPurpose";
+
+  return function (dispatch, getState) {
+
+    var getTravelPurposeRequest = travelProcessing.buildGetTravelPurposeRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getTravelPurposeRequest.url, getTravelPurposeRequest.data, getTravelPurposeRequest.config).then(function (result) {
+
+      console.log("getTravelPurposeRequest Result - ", result);
+
+      if (result.data != '' && result.data != null) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: travelActionTypes.SUCCESS_GET_TRAVEL_PURPOSE,
+          response: travelProcessing.buildSuccessGetTravelPurposeResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: travelActionTypes.FAILURE_GET_TRAVEL_PURPOSE,
+          response: travelProcessing.buildFailedGetTravelPurposeResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getTravelPurposeRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: travelActionTypes.FAILURE_GET_TRAVEL_PURPOSE,
+        response: travelProcessing.buildServerErrorGetTravelPurposeResponse(err, params)
+      });
+    });
+  };
+}
+
+function getTravelCityCategoryInformation(params) {
+
+  console.log(FILE_NAME + "In getTravelCityCategoryInformation method - ");
+  console.log("params - ", params);
+
+  functionName = "getTravelCityCategoryInformation";
+
+  return function (dispatch, getState) {
+
+    var getTravelCityCategoryInformationRequest = travelProcessing.buildGetTravelCityCategoryInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getTravelCityCategoryInformationRequest.url, getTravelCityCategoryInformationRequest.data, getTravelCityCategoryInformationRequest.config).then(function (result) {
+
+      console.log("getTravelCityCategoryInformationRequest Result - ", result, result.data != '', result.data != null);
+
+      if (result.data != null) {
+
+        result.data[0]["location"] = params.locationKey;
+        result.data[0]["stayIndex"] = params.stayIndex;
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: travelActionTypes.SUCCESS_GET_TRAVEL_CITY_CATEGORY,
+          response: travelProcessing.buildSuccessGetTravelCityCategoryInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: travelActionTypes.FAILURE_GET_TRAVEL_CITY_CATEGORY,
+          response: travelProcessing.buildFailedGetTravelCityCategoryInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("GetTravelCityCategoryInformation Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: travelActionTypes.FAILURE_GET_TRAVEL_CITY_CATEGORY,
+        response: travelProcessing.buildServerErrorGetTravelCityCategoryInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function getTravelClientAccounts(params) {
+
+  console.log(FILE_NAME + "In getTravelClientAccounts method - ");
+  console.log("params - ", params);
+
+  functionName = "getTravelClientAccounts";
+
+  return function (dispatch, getState) {
+
+    var getTravelClientAccountRequest = travelProcessing.buildGetTravelClientAccountsRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getTravelClientAccountRequest.url, getTravelClientAccountRequest.data, getTravelClientAccountRequest.config).then(function (result) {
+
+      console.log("getTravelClientAccountRequest Result - ", result);
+
+      if (result.data.root != '' && result.data.root != null) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: travelActionTypes.SUCCESS_GET_TRAVEL_CLIENT_ACCOUNT,
+          response: travelProcessing.buildSuccessGetTravelClientAccountsResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: travelActionTypes.FAILURE_GET_TRAVEL_CLIENT_ACCOUNT,
+          response: travelProcessing.buildFailedGetTravelClientAccountsResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getTravelAccountRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: travelActionTypes.FAILURE_GET_TRAVEL_CLIENT_ACCOUNT,
+        response: travelProcessing.buildServerErrorGetTravelClientAccountsResponse(err, params)
+      });
+    });
+  };
+}
+
+function getTravelClientAccountProjects(params) {
+
+  console.log(FILE_NAME + "In getTravelAccount method - ");
+  console.log("params - ", params);
+
+  functionName = "getTravelClientAccountProjects";
+
+  return function (dispatch, getState) {
+
+    var getTravelClientAccountProjectsRequest = travelProcessing.buildGetTravelClientAccountProjectsRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getTravelClientAccountProjectsRequest.url, getTravelClientAccountProjectsRequest.data, getTravelClientAccountProjectsRequest.config).then(function (result) {
+
+      console.log("getTravelClientAccountProjectsRequest Result - ", result);
+
+      if (result.data != null) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: travelActionTypes.SUCCESS_GET_TRAVEL_CLIENT_ACCOUNT_PROJECTS,
+          response: travelProcessing.buildSuccessGetTravelClientAccountProjectsResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: travelActionTypes.FAILURE_GET_TRAVEL_CLIENT_ACCOUNT_PROJECTS,
+          response: travelProcessing.buildFailedGetTravelClientAccountProjectsResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getTravelClientAccountProjectsRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: travelActionTypes.FAILURE_GET_TRAVEL_CLIENT_ACCOUNT_PROJECTS,
+        response: travelProcessing.buildServerErrorGetTravelClientAccountProjectsResponse(err, params)
+      });
+    });
+  };
+}
+
+function getTravelApprover(params) {
+
+  console.log(FILE_NAME + "In getTravelApprover method - ");
+  console.log("params - ", params);
+
+  functionName = "getTravelApprover";
+
+  return function (dispatch, getState) {
+
+    var getTravelApproverRequest = travelProcessing.buildGetTravelApproverRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getTravelApproverRequest.url, getTravelApproverRequest.data, getTravelApproverRequest.config).then(function (result) {
+
+      console.log("getTravelApproverRequest Result - ", result);
+
+      if (result.data != '' && result.data != null) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: travelActionTypes.SUCCESS_GET_TRAVEL_APPROVER,
+          response: travelProcessing.buildSuccessGetTravelApproverResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: travelActionTypes.FAILURE_GET_TRAVEL_APPROVER,
+          response: travelProcessing.buildFailedGetTravelApproverResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getTravelApproverRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: travelActionTypes.FAILURE_GET_TRAVEL_APPROVER,
+        response: travelProcessing.buildServerErrorGetTravelApproverResponse(err, params)
+      });
+    });
+  };
+}
+
+function getTravelInformation(params) {
+
+  console.log(FILE_NAME + "In getTravelInformation method - ");
+  console.log("params - ", params);
+
+  functionName = "getTravelInformation";
+
+  return function (dispatch, getState) {
+
+    var getTravelInformationRequest = travelProcessing.buildGetTravelInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getTravelInformationRequest.url, getTravelInformationRequest.data, getTravelInformationRequest.config).then(function (result) {
+
+      console.log("getTravelInformationRequest Result - ", result);
+
+      if (result.data != '' && result.data != null) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: travelActionTypes.SUCCESS_GET_TRAVEL_INFORMATION,
+          response: travelProcessing.buildSuccessGetTravelInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: travelActionTypes.FAILURE_GET_TRAVEL_INFORMATION,
+          response: travelProcessing.buildFailedGetTravelInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getTravelInformationRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: travelActionTypes.FAILURE_GET_TRAVEL_INFORMATION,
+        response: travelProcessing.buildServerErrorGetTravelInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearTravelError(params) {
+
+  return {
+    type: travelActionTypes.CLEAR_TRAVEL_ERROR,
+    response: null
+  };
+}
+
+function clearTravelStateData(params) {
+
+  console.log(FILE_NAME + "In cleareTravelStateData - ");
+  console.log("Type of Data to be cleared - ", params);
+
+  CLEAR_STATE_DATA_ALL = 'CLEAR_STATE_DATA_ALL';
+  CLEAR_STATE_DATA_CLIENT_ACCOUNT_INFORMATION = 'CLEAR_STATE_DATA_CLIENT_ACCOUNT_INFORMATION';
+  CLEAR_STATE_DATA_CLIENT_ACCOUNT_PROJECT_INFORMATION = 'CLEAR_STATE_DATA_CLIENT_ACCOUNT_PROJECT_INFORMATION';
+  CLEAR_STATE_ERROR_COUNTER = 'CLEAR_STATE_ERROR_COUNTER';
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var errorCounter = getState().travel.errorCounter;
+
+    var pendingTravelInformationData = getState().travel.pendingTravelInformationData;
+    var pendingTravelInformationError = getState().travel.pendingTravelInformationError;
+
+    var travelActionData = getState().travel.travelActionData;
+    var travelActionError = getState().travel.travelActionError;
+
+    var travelAppliedData = getState().travel.travelAppliedData;
+    var travelAppliedError = getState().travel.travelAppliedError;
+
+    var travelClientAccountInformationData = getState().travel.travelClientAccountInformationData;
+    var travelClientAccountInformationError = getState().travel.travelClientAccountInformationError;
+
+    var travelClientAccountProjectsInformationData = getState().travel.travelClientAccountProjectsInformationData;
+    var travelClientAccountProjectsInformationError = getState().travel.travelClientAccountProjectsInformationError;
+
+    Object.keys(params).map(function (key) {
+      console.log("params attribute " + key + " value is - " + params[key]);
+
+      switch (params[key]) {
+        case CLEAR_STATE_DATA_ALL:
+
+          errorCounter = 0;
+
+          pendingTravelInformationData = null;
+          pendingTravelInformationError = null;
+
+          travelActionData = null;
+          travelActionError = null;
+
+          travelAppliedData = null;
+          travelAppliedError = null;
+
+          travelClientAccountInformationData = null;
+          travelClientAccountInformationError = null;
+
+          travelClientAccountProjectsInformationData = null;
+          travelClientAccountProjectsInformationError = null;
+
+          break;
+
+        case CLEAR_STATE_DATA_CLIENT_ACCOUNT_INFORMATION:
+
+          travelClientAccountInformationData = null;
+          travelClientAccountInformationError = null;
+          break;
+
+        case CLEAR_STATE_DATA_CLIENT_ACCOUNT_PROJECT_INFORMATION:
+
+          travelClientAccountProjectsInformationData = null;
+          travelClientAccountProjectsInformationError = null;
+          break;
+
+        case CLEAR_STATE_ERROR_COUNTER:
+
+          errorCounter = 0;
+          break;
+
+        default:
+
+      }
+    });
+
+    var response = {
+      errorCounter: errorCounter,
+
+      pendingTravelInformationData: pendingTravelInformationData,
+      pendingTravelInformationError: pendingTravelInformationError,
+
+      travelClientAccountInformationData: travelClientAccountInformationData,
+      travelClientAccountInformationError: travelClientAccountInformationError,
+
+      travelClientAccountProjectsInformationData: travelClientAccountProjectsInformationData,
+      travelClientAccountProjectsInformationError: travelClientAccountProjectsInformationError,
+
+      travelActionData: travelActionData,
+      travelActionError: travelActionError,
+
+      travelAppliedData: travelAppliedData,
+      travelAppliedError: travelAppliedError
+    };
+
+    dispatch({
+      type: travelActionTypes.CLEAR_TRAVEL_STATE_DATA,
+      response: response
+    });
+  };
+}

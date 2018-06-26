@@ -1,0 +1,705 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _ewnetworkimage = require('../../components/ewnetworkimage/ewnetworkimage');
+
+var _ewnetworkimage2 = babelHelpers.interopRequireDefault(_ewnetworkimage);
+
+var _ewh1text = require('../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewscreentitle = require('../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _reactNativeModalDatetimePicker = require('react-native-modal-datetime-picker');
+
+var _reactNativeModalDatetimePicker2 = babelHelpers.interopRequireDefault(_reactNativeModalDatetimePicker);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _ewloadingindicator = require('../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _leaveUtils = require('./leaveUtils');
+
+var leaveConstants = babelHelpers.interopRequireWildcard(_leaveUtils);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appStyle = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _ewlistview = require('../../components/ewlistview/ewlistview');
+
+var _ewlistview2 = babelHelpers.interopRequireDefault(_ewlistview);
+
+var _leaveactions = require('../../services/leave/leaveactions');
+
+var _leaveerrorhandling = require('../../services/leave/leaveerrorhandling');
+
+var leaveError = babelHelpers.interopRequireWildcard(_leaveerrorhandling);
+
+var _ewmyappliedleavesscreenstyle = require('./styles/ewmyappliedleavesscreenstyle');
+
+var _ewmyappliedleavesscreenstyle2 = babelHelpers.interopRequireDefault(_ewmyappliedleavesscreenstyle);
+
+var FILE_NAME = "ewmyappliedleavescreen.js : ";
+
+var SCREEN_NAME = "My Applied Leaves Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var NUMBER_OF_RECORDS = 10;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwMyAppliedLeavesScreen = function (_Component) {
+  babelHelpers.inherits(EwMyAppliedLeavesScreen, _Component);
+
+  function EwMyAppliedLeavesScreen(props) {
+    babelHelpers.classCallCheck(this, EwMyAppliedLeavesScreen);
+
+
+    console.log(FILE_NAME + " In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwMyAppliedLeavesScreen.__proto__ || Object.getPrototypeOf(EwMyAppliedLeavesScreen)).call(this, props));
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+    };
+
+    _this._loadMoreLeavesAsync = function () {
+
+      console.log(FILE_NAME + "In _loadMoreLeavesAsync");
+
+      var areAllLeavesLoaded = _this.state.areAllLeavesLoaded;
+
+
+      if (_this.props.appliedLeavesError == null && !areAllLeavesLoaded) _this.getAppliedLeavesInformation();
+    };
+
+    _this.onPressListItem = function (data) {
+
+      console.log(FILE_NAME + " In onPressListItem method");
+
+      tracker.trackEvent(SCREEN_CATEGORY, 'my applied leaves list item clicked');
+
+      _reactNativeRouterFlux.Actions.ewmyleaveactionscreen({ leaveData: data });
+    };
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      appliedLeavesData: null,
+      areAllLeavesLoaded: false,
+      refreshing: false,
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwMyAppliedLeavesScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + " In componentWillMount method");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + " In componentWillReceiveProps method");
+
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.appliedLeavesData != null && nextProps.appliedLeavesError == null) {
+
+        elementValues = this.handleElementValues(nextProps.appliedLeavesData, this.state.appliedLeavesData);
+
+        this.setState({
+          appliedLeavesData: elementValues.appliedLeavesData,
+          areAllLeavesLoaded: elementValues.areAllLeavesLoaded,
+          isLoading: false,
+          refreshing: false
+        });
+      }
+
+      if (nextProps.appliedLeavesData == null && nextProps.appliedLeavesError != null) {
+
+        this.setState({
+          isLoading: false,
+          currentError: nextProps.appliedLeavesError,
+          refreshing: false
+        });
+      }
+
+      if (nextProps.appliedLeavesData == null && nextProps.appliedLeavesError == null && nextProps.leaveErrorCounter == 0) {
+
+        this.getAppliedLeavesInformation();
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + " In shouldComponentUpdate method");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + " In componentWillUpdate method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + " In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage();
+              }
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError === '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + " In componentDidMount method");
+
+      this.getAppliedLeavesInformation();
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + " In componentDidUpdate method");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + " In componentWillUnmount method");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_ALL'
+      };
+
+      this.props.clearLeaveStateData(params);
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+
+      console.log(FILE_NAME + " In renderScreen method");
+
+      var appliedLeavesData = this.state.appliedLeavesData;
+
+
+      console.log(appliedLeavesData);
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        this.props.isMyRequest ? null : _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: 'My Leaves'
+            })
+          )
+        ),
+        this.showMyAppliedLeavesList(appliedLeavesData)
+      );
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME + " In handleError method");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      console.log("this.state.currentError", this.state.currentError);
+
+      if (this.state.currentError == '') {
+        return null;
+      }
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+        case leaveError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (this.state.currentError) {
+
+          case leaveError.SERVER_EXCEPTION:
+            this.showAlertMessage(leaveError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          default:
+            this.showAlertMessage();
+            return this.renderScreen();
+        }
+      }
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(appliedLeavesList, currentListVisible) {
+
+      areAllLeavesLoaded = this.state.areAllLeavesLoaded;
+      console.log("handleElementValues", appliedLeavesList, currentListVisible);
+      if (currentListVisible != null) {
+
+        if (appliedLeavesList != null) {
+
+          if (appliedLeavesList.length == 0) {
+
+            areAllLeavesLoaded = true;
+
+            appliedLeavesList = this.state.appliedLeavesData;
+          } else {
+
+            updatedEmployeeListVisible = [].concat(babelHelpers.toConsumableArray(currentListVisible), babelHelpers.toConsumableArray(appliedLeavesList));
+
+            console.log("updatedEmployeeListVisible", updatedEmployeeListVisible);
+            appliedLeavesList = updatedEmployeeListVisible;
+          }
+        }
+      }
+
+      elementValues = {
+
+        appliedLeavesData: appliedLeavesList,
+        areAllLeavesLoaded: areAllLeavesLoaded
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: 'getAppliedLeavesInformation',
+    value: function getAppliedLeavesInformation() {
+      var appliedLeavesData = this.state.appliedLeavesData;
+
+
+      currentId = 0;
+
+      if (appliedLeavesData != null && appliedLeavesData.length != 0) currentId = appliedLeavesData[appliedLeavesData.length - 1].pi_Txn_Id;
+
+      var params = {
+        requestType: 'MyLeave',
+        currentId: currentId,
+        numberOfRecords: NUMBER_OF_RECORDS
+      };
+
+      this.props.getAppliedLeavesList(params);
+    }
+  }, {
+    key: '_onRefresh',
+    value: function _onRefresh() {
+
+      console.log(FILE_NAME + "In _onRefresh method");
+
+      this.setState({ refreshing: true });
+
+      this.getAppliedLeavesInformation();
+    }
+  }, {
+    key: 'renderListItem',
+    value: function renderListItem(_ref) {
+      var _this2 = this;
+
+      var item = _ref.item;
+
+
+      console.log(FILE_NAME + " In renderListItem method", item);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(
+          _nativeBase.ListItem,
+          { avatar: true, onPress: function onPress() {
+              return _this2.onPressListItem(item);
+            } },
+          _react2.default.createElement(
+            _nativeBase.Left,
+            null,
+            _react2.default.createElement(_ewnetworkimage2.default, { networkUrl: (0, _utils.getImageUrl)(this.props.sessionToken, item.gen_id, 'My Leaves', this.props.currentImageTimestamp) })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            null,
+            _react2.default.createElement(_ewh1text2.default, {
+              text: item.requestType
+            }),
+            _react2.default.createElement(_ewh2text2.default, {
+              text: item.pi_dt
+            }),
+            this.getStatusOfLeave(item.pi_Txn_Subtype)
+          ),
+          _react2.default.createElement(
+            _nativeBase.Right,
+            null,
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              item.noOfDays,
+              ' day(s)'
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: 'showMyAppliedLeavesList',
+    value: function showMyAppliedLeavesList(appliedLeavesData) {
+      var _this3 = this;
+
+      console.log(FILE_NAME + " In showMyAppliedLeavesList method");
+
+      if (appliedLeavesData != null && this.props.appliedLeavesError == null) {
+
+        return _react2.default.createElement(_ewlistview2.default, {
+          listData: appliedLeavesData,
+          listKey: function listKey(data, index) {
+            return index;
+          },
+          renderListItem: function renderListItem(data) {
+            return _this3.renderListItem(data);
+          },
+          onEndReached: function onEndReached() {
+            return _this3._loadMoreLeavesAsync();
+          },
+          onEndReachedThreshold: 0.5,
+          isAllDataLoaded: this.state.areAllLeavesLoaded,
+          refreshing: this.state.refreshing,
+          onRefresh: this._onRefresh.bind(this)
+        });
+      } else if (appliedLeavesData == null && this.props.appliedLeavesError == null) {
+
+        console.log("2nd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewmyappliedleavesscreenstyle2.default.spinnerContainer },
+          _react2.default.createElement(_nativeBase.Spinner, { size: 'small' }),
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: _ewmyappliedleavesscreenstyle2.default.spinnerTextStyle },
+            'Loading Your Applied Leaves...'
+          )
+        );
+      } else if (appliedLeavesData == null && this.props.appliedLeavesError != null) {
+
+        console.log("3rd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewmyappliedleavesscreenstyle2.default.loadAgainButtonContainer },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { onPress: function onPress() {
+                return _this3.getAppliedLeavesInformation();
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Load Again'
+            )
+          )
+        );
+      } else {
+
+        console.log("4th Case");
+        console.log("appliedLeavesData, ", appliedLeavesData);
+        console.log("this.props.appliedLeavesError, ", this.props.appliedLeavesError);
+        (function () {
+          return _this3.getAppliedLeavesInformation();
+        });
+      }
+    }
+  }, {
+    key: 'getStatusOfLeave',
+    value: function getStatusOfLeave(leaveStatusId) {
+
+      console.log(FILE_NAME + " In getStatusOfLeave method");
+
+      leaveStatusText = "";
+      leaveStatusColor = appStyle.APP_BLACK;
+
+      switch (leaveStatusId) {
+        case leaveConstants.PENDING_APPROVAL:
+
+          leaveStatusText = leaveConstants.PENDING_APPROVAL_LABEL;
+          leaveStatusColor = appStyle.APP_ORANGE;
+          break;
+
+        case leaveConstants.APPROVED:
+
+          leaveStatusText = leaveConstants.APPROVED_LABEL;
+          leaveStatusColor = appStyle.APP_GREEN;
+          break;
+
+        case leaveConstants.REJECTED:
+
+          leaveStatusText = leaveConstants.REJECTED_LABEL;
+          leaveStatusColor = appStyle.APP_RED;
+          break;
+
+        case leaveConstants.RECONSIDER:
+
+          leaveStatusText = leaveConstants.RECONSIDER_LABEL;
+          leaveStatusColor = appStyle.APP_LIGHT_BLUE;
+          break;
+
+        case leaveConstants.CANCELLED:
+
+          leaveStatusText = leaveConstants.CANCELLED_LABEL;
+          leaveStatusColor = appStyle.APP_BLACK;
+          break;
+
+        case leaveConstants.CANCELLATION_REQUESTED:
+
+          leaveStatusText = leaveConstants.CANCELLATION_REQUESTED_LABEL;
+          leaveStatusColor = appStyle.APP_GRAY;
+          break;
+
+        case leaveConstants.CANCELLATION_APPROVED:
+
+          leaveStatusText = leaveConstants.CANCELLATION_APPROVED_LABEL;
+          leaveStatusColor = appStyle.APP_GREEN;
+          break;
+
+        default:
+
+      }
+
+      return _react2.default.createElement(_ewh3text2.default, {
+        text: leaveStatusText,
+        customStyle: { color: leaveStatusColor }
+      });
+    }
+  }]);
+  return EwMyAppliedLeavesScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + " In bindAction method");
+
+  return {
+
+    clearLeaveStateData: function clearLeaveStateData(params) {
+      return dispatch((0, _leaveactions.clearLeaveStateData)(params));
+    },
+    getAppliedLeavesList: function getAppliedLeavesList(params) {
+      return dispatch((0, _leaveactions.getAppliedLeavesList)(params));
+    },
+    clearLeaveError: function clearLeaveError(params) {
+      return dispatch((0, _leaveactions.clearLeaveError)(params));
+    },
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    }
+
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+    errorWebService: state.auth.errorWebService,
+
+    appliedLeavesData: state.leave.appliedLeavesData,
+    appliedLeavesError: state.leave.appliedLeavesError,
+
+    currentImageTimestamp: state.common.currentImageTimestamp,
+    leaveErrorCounter: state.leave.errorCounter
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwMyAppliedLeavesScreen);

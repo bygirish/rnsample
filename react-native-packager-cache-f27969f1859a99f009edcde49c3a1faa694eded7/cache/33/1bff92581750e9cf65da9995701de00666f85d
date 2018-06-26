@@ -1,0 +1,81 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _reactNativeModalDatetimePicker = require('react-native-modal-datetime-picker');
+
+var _reactNativeModalDatetimePicker2 = babelHelpers.interopRequireDefault(_reactNativeModalDatetimePicker);
+
+var EwDateTimePicker = function (_Component) {
+  babelHelpers.inherits(EwDateTimePicker, _Component);
+
+  function EwDateTimePicker() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    babelHelpers.classCallCheck(this, EwDateTimePicker);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (_ref = EwDateTimePicker.__proto__ || Object.getPrototypeOf(EwDateTimePicker)).call.apply(_ref, [this].concat(args))), _this), _this._hideDateTimePicker = function () {
+      console.log("ewdatetimepicker.js : In _hideDateTimePicker");
+      console.log("Mod is - ", _this.props.modeEwDateTimePicker);
+      console.log("For Element is - ", _this.props.elementKey);
+
+      _this.props._hideEwDateTimePicker(_this.props.elementKey);
+    }, _this._handleDateTimePicked = function (date) {
+      console.log("ewdatetimepicker.js : In _handleDateTimePicked");
+      console.log("Returned value is - ", date);
+      console.log("Mod is - ", _this.props.modeEwDateTimePicker);
+      console.log("For Element is - ", _this.props.elementKey);
+      _this.props._handleEwDateTimePicked(date, _this.props.modeEwDateTimePicker, _this.props.elementKey);
+      _this._hideDateTimePicker();
+    }, _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
+  }
+
+  babelHelpers.createClass(EwDateTimePicker, [{
+    key: 'render',
+    value: function render() {
+      console.log("ewdatetimepicker.js : In render");
+      console.log("Mod is - ", this.props.modeEwDateTimePicker);
+      console.log("For Element is - ", this.props.elementKey);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(_reactNativeModalDatetimePicker2.default, {
+          isVisible: this.props.isEwDateTimePickerVisible,
+          mode: this.props.modeEwDateTimePicker,
+          onConfirm: this._handleDateTimePicked,
+          onCancel: this._hideDateTimePicker,
+          minimumDate: this.props.minDateTimePicker,
+          maximumDate: this.props.maxDateTimePicker,
+          date: this.props.setDateTimePicker,
+          is24Hour: this.props.set24TimeFormat
+        })
+      );
+    }
+  }]);
+  return EwDateTimePicker;
+}(_react.Component);
+
+exports.default = EwDateTimePicker;

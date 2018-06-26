@@ -1,0 +1,235 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = othersClaimReducer;
+
+var _othersclaimactiontypes = require('./othersclaimactiontypes');
+
+var othersClaimActionTypes = babelHelpers.interopRequireWildcard(_othersclaimactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var FILE_NAME = "othersclaimreducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+
+  othersClaimInformationData: null,
+  othersClaimInformationError: null,
+
+  othersExpenseComponentInformationData: null,
+  othersExpenseComponentInformationError: null,
+
+  othersMasterItemData: null,
+  othersMasterItemError: null,
+
+  othersLineItemData: null,
+  othersLineItemError: null,
+
+  deleteOthersLineItemData: null,
+  deleteOthersLineItemError: null,
+
+  submitOthersClaimInformationData: null,
+  submitOthersClaimInformationError: null
+
+};
+
+function othersClaimReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method othersClaimReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case othersClaimActionTypes.SUCCESS_GET_OTHERS_CLAIM_INFORMATION:
+
+      console.log("In method othersClaimReducer SUCCESS_GET_OTHERS_CLAIM_INFORMATION");
+
+      return {
+        errorCounter: state.errorCounter,
+        othersClaimInformationData: action.response.data,
+        othersClaimInformationError: action.response.error
+      };
+
+      break;
+
+    case othersClaimActionTypes.FAILURE_GET_OTHERS_CLAIM_INFORMATION:
+
+      console.log("In method othersClaimReducer FAILURE_GET_OTHERS_CLAIM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        othersClaimInformationData: action.response.data,
+        othersClaimInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case othersClaimActionTypes.SUCCESS_SAVE_OTHERS_MASTER_ITEM_INFORMATION:
+
+      console.log("In method othersClaimReducer SUCCESS_SAVE_OTHERS_MASTER_ITEM_INFORMATION");
+
+      return {
+        errorCounter: state.errorCounter,
+        othersMasterItemData: action.response.data,
+        othersMasterItemError: action.response.error
+      };
+
+      break;
+
+    case othersClaimActionTypes.FAILURE_SAVE_OTHERS_MASTER_ITEM_INFORMATION:
+
+      console.log("In method othersClaimReducer FAILURE_SAVE_OTHERS_MASTER_ITEM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        othersMasterItemData: action.response.data,
+        othersMasterItemError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case othersClaimActionTypes.SUCCESS_GET_OTHERS_EXPENSE_COMPONENT_INFORMATION:
+
+      console.log("In method othersClaimReducer SUCCESS_GET_OTHERS_EXPENSE_COMPONENT_INFORMATION");
+
+      return {
+        errorCounter: state.errorCounter,
+        othersExpenseComponentInformationData: action.response.data,
+        othersExpenseComponentInformationError: action.response.error
+      };
+
+      break;
+
+    case othersClaimActionTypes.FAILURE_GET_OTHERS_EXPENSE_COMPONENT_INFORMATION:
+
+      console.log("In method othersClaimReducer FAILURE_GET_OTHERS_EXPENSE_COMPONENT_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        othersExpenseComponentInformationData: action.response.data,
+        othersExpenseComponentInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case othersClaimActionTypes.SUCCESS_SAVE_OTHERS_LINE_ITEM_INFORMATION:
+
+      console.log("In method othersClaimReducer SUCCESS_SAVE_OTHERS_LINE_ITEM_INFORMATION");
+
+      return {
+        errorCounter: state.errorCounter,
+        othersLineItemData: action.response.data,
+        othersLineItemError: action.response.error
+      };
+
+      break;
+
+    case othersClaimActionTypes.FAILURE_SAVE_OTHERS_LINE_ITEM_INFORMATION:
+
+      console.log("In method othersClaimReducer FAILURE_SAVE_OTHERS_LINE_ITEM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        othersLineItemData: action.response.data,
+        othersLineItemError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case othersClaimActionTypes.SUCCESS_SUBMIT_OTHERS_EXPENSE_CLAIM_INFORMATION:
+
+      console.log("In method othersClaimReducer SUCCESS_SUBMIT_OTHERS_EXPENSE_CLAIM_INFORMATION");
+
+      return {
+        errorCounter: state.errorCounter,
+        submitOthersClaimInformationData: action.response.data,
+        submitOthersClaimInformationError: action.response.error
+      };
+
+      break;
+
+    case othersClaimActionTypes.FAILURE_SUBMIT_OTHERS_EXPENSE_CLAIM_INFORMATION:
+
+      console.log("In method othersClaimReducer FAILURE_SUBMIT_OTHERS_EXPENSE_CLAIM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        submitOthersClaimInformationData: action.response.data,
+        submitOthersClaimInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case othersClaimActionTypes.SUCCESS_DELETE_OTHERS_LINE_ITEM_INFORMATION:
+
+      console.log("In method othersClaimReducer SUCCESS_DELETE_OTHERS_LINE_ITEM_INFORMATION");
+
+      return {
+        errorCounter: state.errorCounter,
+        deleteOthersLineItemData: action.response.data,
+        deleteOthersLineItemError: action.response.error
+      };
+
+      break;
+
+    case othersClaimActionTypes.FAILURE_DELETE_OTHERS_LINE_ITEM_INFORMATION:
+
+      console.log("In method othersClaimReducer FAILURE_DELETE_OTHERS_LINE_ITEM_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        deleteOthersLineItemData: action.response.data,
+        deleteOthersLineItemError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case othersClaimActionTypes.CLEAR_EXPENSE_OTHERS_CLAIM_ERROR:
+
+      console.log("In method othersClaimReducer CLEAR_EXPENSE_OTHERS_CLAIM_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        othersMasterItemError: null,
+        othersClaimInformationError: null,
+        othersLineItemError: null,
+        deleteOthersLineItemError: null,
+        submitOthersClaimInformationError: null
+      });
+
+      break;
+
+    case othersClaimActionTypes.CLEAR_EXPENSE_OTHERS_CLAIM_STATE_DATA:
+
+      console.log("In method othersClaimReducer CLEAR_EXPENSE_OTHERS_CLAIM_STATE_DATA");
+
+      return {
+        errorCounter: action.response.errorCounter,
+        othersExpenseComponentInformationData: action.response.othersExpenseComponentInformationData,
+        othersExpenseComponentInformationError: action.response.othersExpenseComponentInformationError,
+        othersClaimInformationData: action.response.othersClaimInformationData,
+        othersClaimInformationError: action.response.othersClaimInformationError,
+        othersMasterItemData: action.response.othersMasterItemData,
+        othersMasterItemError: action.response.othersMasterItemError,
+        othersLineItemData: action.response.othersLineItemData,
+        othersLineItemError: action.response.othersLineItemError,
+        deleteOthersLineItemData: action.response.deleteOthersLineItemData,
+        deleteOthersLineItemError: action.response.deleteOthersLineItemError,
+        submitOthersClaimInformationData: action.response.submitOthersClaimInformationData,
+        submitOthersClaimInformationError: action.response.submitOthersClaimInformationError
+      };
+
+      break;
+
+    default:
+
+      console.log("In method othersClaimReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

@@ -1,0 +1,159 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _reactNative = require('react-native');
+
+var _LightboxOverlay = require('./LightboxOverlay');
+
+var _LightboxOverlay2 = babelHelpers.interopRequireDefault(_LightboxOverlay);
+
+var Lightbox = function (_Component) {
+  babelHelpers.inherits(Lightbox, _Component);
+
+  function Lightbox() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    babelHelpers.classCallCheck(this, Lightbox);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (_ref = Lightbox.__proto__ || Object.getPrototypeOf(Lightbox)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      isOpen: false,
+      origin: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
+      },
+      layoutOpacity: new _reactNative.Animated.Value(1)
+    }, _this.getContent = function () {
+      if (_this.props.renderContent) {
+        return _this.props.renderContent();
+      } else if (_this.props.activeProps) {
+        return (0, _react.cloneElement)(_react.Children.only(_this.props.children), _this.props.activeProps);
+      }
+      return _this.props.children;
+    }, _this.getOverlayProps = function () {
+      return {
+        isOpen: _this.state.isOpen,
+        origin: _this.state.origin,
+        renderHeader: _this.props.renderHeader,
+        swipeToDismiss: _this.props.swipeToDismiss,
+        springConfig: _this.props.springConfig,
+        backgroundColor: _this.props.backgroundColor,
+        children: _this.getContent(),
+        onClose: _this.onClose
+      };
+    }, _this.open = function () {
+      _this._root.measure(function (ox, oy, width, height, px, py) {
+        _this.props.onOpen();
+
+        _this.setState({
+          isOpen: _this.props.navigator ? true : false,
+          isAnimating: true,
+          origin: {
+            width: width,
+            height: height,
+            x: px,
+            y: py
+          }
+        }, function () {
+          if (_this.props.navigator) {
+            var route = {
+              component: _LightboxOverlay2.default,
+              passProps: _this.getOverlayProps()
+            };
+            var routes = _this.props.navigator.getCurrentRoutes();
+            routes.push(route);
+            _this.props.navigator.immediatelyResetRouteStack(routes);
+          } else {
+            _this.setState({
+              isOpen: true
+            });
+          }
+          setTimeout(function () {
+            _this._root && _this.state.layoutOpacity.setValue(0);
+          });
+        });
+      });
+    }, _this.close = function () {
+      throw new Error('Lightbox.close method is deprecated. Use renderHeader(close) prop instead.');
+    }, _this.onClose = function () {
+      _this.state.layoutOpacity.setValue(1);
+      _this.setState({
+        isOpen: false
+      }, _this.props.onClose);
+      if (_this.props.navigator) {
+        var routes = _this.props.navigator.getCurrentRoutes();
+        routes.pop();
+        _this.props.navigator.immediatelyResetRouteStack(routes);
+      }
+    }, _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
+  }
+
+  babelHelpers.createClass(Lightbox, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        {
+          ref: function ref(component) {
+            return _this2._root = component;
+          },
+          style: this.props.style,
+          onLayout: function onLayout() {}
+        },
+        _react2.default.createElement(
+          _reactNative.Animated.View,
+          { style: { opacity: this.state.layoutOpacity } },
+          _react2.default.createElement(
+            _reactNative.TouchableHighlight,
+            {
+              underlayColor: this.props.underlayColor,
+              onPress: this.open
+            },
+            this.props.children
+          )
+        ),
+        this.props.navigator ? false : _react2.default.createElement(_LightboxOverlay2.default, this.getOverlayProps())
+      );
+    }
+  }]);
+  return Lightbox;
+}(_react.Component);
+
+Lightbox.propTypes = {
+  activeProps: _propTypes2.default.object,
+  renderHeader: _propTypes2.default.func,
+  renderContent: _propTypes2.default.func,
+  underlayColor: _propTypes2.default.string,
+  backgroundColor: _propTypes2.default.string,
+  onOpen: _propTypes2.default.func,
+  onClose: _propTypes2.default.func,
+  springConfig: _propTypes2.default.shape({
+    tension: _propTypes2.default.number,
+    friction: _propTypes2.default.number
+  }),
+  swipeToDismiss: _propTypes2.default.bool
+};
+Lightbox.defaultProps = {
+  swipeToDismiss: true,
+  onOpen: function onOpen() {},
+  onClose: function onClose() {}
+};
+exports.default = Lightbox;

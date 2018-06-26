@@ -1,0 +1,624 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _ewbar = require('../../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewdatebutton = require('../../../../components/ewdatebutton/ewdatebutton');
+
+var _ewdatebutton2 = babelHelpers.interopRequireDefault(_ewdatebutton);
+
+var _ewtext = require('../../../../components/ewtext/ewtext');
+
+var _ewtext2 = babelHelpers.interopRequireDefault(_ewtext);
+
+var _ewcard = require('../../../../components/ewcard/ewcard');
+
+var _ewcard2 = babelHelpers.interopRequireDefault(_ewcard);
+
+var _ewh1text = require('../../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewh4text = require('../../../../components/ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewicon = require('../../../../components/ewicon/ewicon');
+
+var _ewicon2 = babelHelpers.interopRequireDefault(_ewicon);
+
+var _ewcheckbox = require('../../../../components/ewcheckbox/ewcheckbox');
+
+var _ewcheckbox2 = babelHelpers.interopRequireDefault(_ewcheckbox);
+
+var _ewfloatinglabel = require('../../../../components/ewfloatinglabel/ewfloatinglabel');
+
+var _ewfloatinglabel2 = babelHelpers.interopRequireDefault(_ewfloatinglabel);
+
+var _ewautocompleteinput = require('../../../../components/ewautocompleteinput/ewautocompleteinput');
+
+var _ewautocompleteinput2 = babelHelpers.interopRequireDefault(_ewautocompleteinput);
+
+var _ewbutton = require('../../../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _ewmodal = require('../../../../components/ewmodal/ewmodal');
+
+var _ewmodal2 = babelHelpers.interopRequireDefault(_ewmodal);
+
+var _ewradiobutton = require('../../../../components/ewradiobutton/ewradiobutton');
+
+var _ewradiobutton2 = babelHelpers.interopRequireDefault(_ewradiobutton);
+
+var _ewdropdownpicker = require('../../../../components/ewdropdownpicker/ewdropdownpicker');
+
+var _ewdropdownpicker2 = babelHelpers.interopRequireDefault(_ewdropdownpicker);
+
+var _utils = require('../../../../utils');
+
+var _travelutils = require('../../travelutils');
+
+var travelConstants = babelHelpers.interopRequireWildcard(_travelutils);
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+
+travelModes = [{
+  "key": -1,
+  "label": "Select travel mode",
+  "travelModeId": -1
+
+}, {
+  "key": 1,
+  "label": "Mode1",
+  "travelModeId": 0
+}, {
+  "key": 2,
+  "label": "Mode2",
+  "travelModeId": 1
+}];
+
+travelClass = [{
+  "key": -1,
+  "label": "Select travel class",
+  "travelClassId": -1
+
+}, {
+  "key": 0,
+  "label": "Class 1",
+  "travelClassId": 0,
+  "travelModeId": 1
+}, {
+  "key": 1,
+  "label": "Class2",
+  "travelClassId": 1,
+  "travelModeId": 1
+}, {
+  "key": 2,
+  "label": "Class3",
+  "travelClassId": 2,
+  "travelModeId": 0
+}, {
+  "key": 3,
+  "label": "Class4",
+  "travelClassId": 3,
+  "travelModeId": 0
+}];
+
+locationData = ['Delhi', 'Mumbai', 'Goa'];
+
+var context;
+
+var FILE_NAME = "ewtravelcomponent.js";
+
+var EwTravelComponent = function (_Component) {
+  babelHelpers.inherits(EwTravelComponent, _Component);
+
+  function EwTravelComponent(props, context) {
+    babelHelpers.classCallCheck(this, EwTravelComponent);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwTravelComponent.__proto__ || Object.getPrototypeOf(EwTravelComponent)).call(this, props, context));
+
+    _this.onTextStateChanged = function (newText, textInputKey) {
+      var isDropdownItemPressed = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+
+      console.log(FILE_NAME + "In onTextStateChanged", newText, isDropdownItemPressed);
+
+      switch (textInputKey) {
+
+        case travelConstants.SOURCE_CITY_REF_KEY:
+
+          console.log("newtext received", newText);
+
+          if (isDropdownItemPressed) cityName = newText;else cityName = newText;
+
+          _this.setState({
+            sourceCity: cityName
+          });
+
+          break;
+
+        case travelConstants.DESTINATION_CITY_REF_KEY:
+
+          console.log("newtext received", newText);
+
+          if (isDropdownItemPressed) cityName = newText;else cityName = newText;
+
+          _this.setState({
+            destinationCity: cityName
+          });
+
+          break;
+
+      }
+    };
+
+    _this._handleEwDateTimePicked = function (date, mode, elementKey) {
+
+      console.log(FILE_NAME, "In _handleEwDateTimePicked method");
+
+      console.log("Returned Date value is - ", date);
+      console.log("Mod is - ", mode);
+      console.log("For Element is - ", elementKey);
+
+      var valueDateTimePicker;
+
+      travelElementKey = elementKey.replace(/\d+/g, '');
+
+      travelItenaryIndex = parseInt(elementKey.replace(/\D/g, ''));
+
+      console.log("travelIndex", travelElementKey, travelItenaryIndex);
+
+      var dateSelected = new Date(date).getTime();
+
+      if (travelElementKey == travelConstants.FROM_DATE_KEY + travelConstants.TRAVEL_DETAIL_KEY) {
+
+        _this.setState({
+
+          departureDate: {
+
+            key: _this.state.departureDate.key,
+            value: dateSelected,
+            mode: _this.state.departureDate.mode
+
+          }
+        });
+      }
+    };
+
+    console.log("initial state testing ", props);
+
+    if (_this.props.initialState == null) {
+
+      _this.initialState = {
+
+        currentMode: travelConstants.EDIT_MODE,
+
+        sourceCity: "",
+        destinationCity: "",
+
+        departureDate: {
+          key: travelConstants.FROM_DATE_KEY + travelConstants.TRAVEL_DETAIL_KEY + _this.props.index,
+          value: (0, _utils.getCurrentDate)(),
+          mode: 'date'
+        },
+
+        travelMode: -1,
+        travelClass: -1,
+
+        deviationReason: "",
+
+        departureDuration: travelConstants.travelDuration[0].value,
+
+        travelPreferences: "",
+
+        airPreferences: {
+
+          "Airline": "",
+          "flightNumber": "",
+          "Terminal": "",
+          "departureTime": "",
+          "mealSelected": travelConstants.NO_MEAL_REQUIRED
+        },
+
+        isBookingRequired: false,
+
+        travelId: null };
+
+      _this.state = _this.initialState;
+    } else {
+
+      _this.state = _this.props.initialState;
+    }
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwTravelComponent, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log("In componentWillMount");
+
+      context = this;
+
+      if (this.props.initialState == null) {
+
+        this.props.updateParentState(this.state);
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.initialState != this.state) {
+
+        this.state = nextProps.initialState;
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log(FILE_NAME + "In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          reveiwMode = _props.reveiwMode,
+          props = babelHelpers.objectWithoutProperties(_props, ['reveiwMode']);
+      var currentMode = this.state.currentMode;
+
+      console.log("travel component State is -", this.state);
+
+      if (currentMode == travelConstants.EDIT_MODE && !this.props.reveiwMode) {
+
+        return _react2.default.createElement(
+          _ewcard2.default,
+          {
+            customStyle: { margin: appstyleguide.DEFAULT_MARGIN }
+          },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN, marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN } },
+            this.renderTravelModes(),
+            this.renderTravelView()
+          )
+        );
+      } else {
+
+        return _react2.default.createElement(
+          _ewcard2.default,
+          { customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", marginTop: appstyleguide.DEFAULT_TOP_MARGIN, alignItems: "center", justifyContent: "center" } },
+            _react2.default.createElement(_ewh2text2.default, {
+              text: this.state.sourceCity,
+              customStyle: { marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN, color: appstyleguide.APP_BLUE }
+            }),
+            _react2.default.createElement(_ewicon2.default, {
+              iconSource: rightArrowIcon
+            }),
+            _react2.default.createElement(_ewh2text2.default, {
+              text: this.state.destinationCity,
+              customStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN, color: appstyleguide.APP_BLUE }
+
+            })
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.07, marginLeft: 5, marginTop: 5 } },
+              _react2.default.createElement(_ewicon2.default, {
+                iconSource: this.getTravelIconSource(travelClass)
+              })
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.2 } },
+              _react2.default.createElement(_ewh3text2.default, {
+                text: travelClass.label + " class"
+              })
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.55 } },
+              _react2.default.createElement(_ewh3text2.default, {
+                text: (0, _utils.showDeviceDateFormat)(this.state.departureDate.value)
+              }),
+              this.state.departureDuration != travelConstants.travelDuration[0].value ? _react2.default.createElement(_ewh3text2.default, {
+                text: travelConstants.travelDuration[this.state.departureDuration].label,
+                customStyle: { marginTop: 3 }
+              }) : null
+            )
+          )
+        );
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log("In componentDidUpdate");
+
+      if (this.props.initialState != this.state) this.props.updateParentState(this.state);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }, {
+    key: 'getCurrentState',
+    value: function getCurrentState() {
+
+      return this.state;
+    }
+  }, {
+    key: 'renderTravelModes',
+    value: function renderTravelModes() {
+      var _this2 = this;
+
+      filteredTravelModes = travelModes;
+
+      if ((0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID && filteredTravelModes.length < travelConstants.MINIMUM_SIZE_TO_SHOW_DROPDOWN) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewh4text2.default, {
+            text: ' Travel Mode',
+            customStyle: { marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN }
+          }),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', justifyContent: this.getJustifyContentStyles(filteredTravelModes) } },
+            Object.keys(filteredTravelModes).map(function (key, index) {
+              return key > 0 ? _react2.default.createElement(_ewradiobutton2.default, {
+                label: filteredTravelModes[key].label,
+                isSelected: _this2.state.travelMode == filteredTravelModes[key].travelModeId,
+                onRadioButtonClick: function onRadioButtonClick() {
+                  return _this2.setState({ travelMode: filteredTravelModes[key].travelModeId });
+                },
+                customViewStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN },
+                customTextStyle: { color: _this2.getTextColor(filteredTravelModes[key]) }
+              }) : null;
+            })
+          )
+        );
+      } else {
+
+        customPickerView = Object.keys(filteredTravelModes).map(function (key) {
+
+          return _react2.default.createElement(_nativeBase.Item, { label: filteredTravelModes[key].label, value: filteredTravelModes[key].travelModeId, color: context.getTextColor(filteredTravelModes[key]) });
+        });
+
+        return _react2.default.createElement(_ewdropdownpicker2.default, {
+          pickerLabel: 'Travel Mode',
+          pickerPlaceholderLabel: filteredTravelModes[0].label,
+          isDefaultPickerValueSelected: this.state.travelMode == filteredTravelModes[0].value,
+          customPickerView: customPickerView,
+          customViewStyle: { marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+          selectedValue: this.state.travelMode,
+          onPickerValueChange: function onPickerValueChange(travelMode) {
+            return _this2.setState({ travelMode: travelMode });
+          }
+        });
+      }
+    }
+  }, {
+    key: 'renderTravelView',
+    value: function renderTravelView() {
+      var _this3 = this;
+
+      travelItenaryIndex = this.props.index;
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flexDirection: 'row', flex: 1 } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flex: 0.5, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+
+              onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+
+                _this3.setState({
+
+                  currentFocussedTextInput: travelConstants.SOURCE_CITY_REF_KEY + travelItenaryIndex
+                });
+              }
+            },
+            _react2.default.createElement(_ewautocompleteinput2.default, {
+              dropdownData: locationData,
+              hideResults: !this.isAutoCompleteDropdownVisible(travelConstants.SOURCE_CITY_REF_KEY + travelItenaryIndex, this.state.sourceCity),
+              updateScrollState: function updateScrollState(scrollViewState) {
+                return _this3.setState({ enableScrollViewScroll: scrollViewState });
+              },
+              scrollViewVisibility: this.state.enableScrollViewScroll,
+              renderListItem: function renderListItem(data) {
+                return _this3.renderLocationListItem(travelConstants.SOURCE_CITY_REF_KEY, data);
+              },
+
+              customTextInput: function customTextInput() {
+                return _react2.default.createElement(_ewfloatinglabel2.default, {
+                  label: 'From',
+                  placeholderlabel: 'From City',
+                  autoCorrect: false,
+                  autoCapitalize: 'none',
+                  onChangeText: function onChangeText(sourceCity) {
+                    return _this3.onTextStateChanged(sourceCity, travelConstants.SOURCE_CITY_REF_KEY);
+                  },
+                  value: _this3.state.sourceCity
+                });
+              }
+
+            })
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            {
+              style: { flex: 0.5, marginLeft: 10, marginRight: 10 },
+              onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+
+                _this3.setState({
+
+                  currentFocussedTextInput: travelConstants.DESTINATION_CITY_REF_KEY + travelItenaryIndex
+                });
+              }
+            },
+            _react2.default.createElement(_ewautocompleteinput2.default, {
+              dropdownData: locationData,
+              hideResults: !this.isAutoCompleteDropdownVisible(travelConstants.DESTINATION_CITY_REF_KEY + travelItenaryIndex, this.state.destinationCity),
+              updateScrollState: function updateScrollState(scrollViewState) {
+                return _this3.setState({ enableScrollViewScroll: scrollViewState });
+              },
+              scrollViewVisibility: this.state.enableScrollViewScroll,
+              renderListItem: function renderListItem(data) {
+                return _this3.renderLocationListItem(travelConstants.DESTINATION_CITY_REF_KEY, data);
+              },
+
+              customTextInput: function customTextInput() {
+                return _react2.default.createElement(_ewfloatinglabel2.default, {
+                  label: 'To',
+                  placeholderlabel: 'To City',
+                  autoCorrect: false,
+                  autoCapitalize: 'none',
+                  onChangeText: function onChangeText(destinationCity) {
+                    return _this3.onTextStateChanged(destinationCity, travelConstants.DESTINATION_CITY_REF_KEY);
+                  },
+                  value: _this3.state.destinationCity
+                });
+              }
+
+            })
+          )
+        ),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flexDirection: 'row', marginTop: 20 } },
+          _react2.default.createElement(_ewdatebutton2.default, {
+            label: 'On',
+            customViewStyle: { flex: 0.5, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+            dateObject: this.state.departureDate,
+            _handleEwDateTimePicked: function _handleEwDateTimePicked(date, mode, elementKey) {
+              return _this3._handleEwDateTimePicked(date, mode, elementKey);
+            }
+          }),
+          _react2.default.createElement(_ewdropdownpicker2.default, {
+            selectedValue: this.state.departureDuration,
+            customViewStyle: { flex: 0.5, marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+            pickerLabel: 'In',
+            isDefaultPickerValueSelected: this.state.departureDuration == "-1",
+            onPickerValueChange: function onPickerValueChange(departureDuration) {
+              return _this3.setState({ departureDuration: departureDuration });
+            },
+            dataArray: travelConstants.travelDuration
+          })
+        )
+      );
+    }
+  }, {
+    key: 'getTextColor',
+    value: function getTextColor(travelMode) {
+
+      console.log(FILE_NAME + "In getTextColor", travelMode);
+
+      if (travelMode.value == "-1") return appstyleguide.APP_BLACK;else {
+
+        if (travelMode.isApplicableToEmployee) return appstyleguide.APP_GREEN;
+
+        return appstyleguide.APP_RED;
+      }
+    }
+  }, {
+    key: 'getJustifyContentStyles',
+    value: function getJustifyContentStyles(array) {
+
+      defaultStyle = "space-between";
+
+      if (array.length > 2) defaultStyle = "space-around";
+
+      return defaultStyle;
+    }
+  }, {
+    key: 'renderLocationListItem',
+    value: function renderLocationListItem(travelLocationKey, data) {
+      var _this4 = this;
+
+      console.log(FILE_NAME + "In renderLocationListItem");
+
+      return _react2.default.createElement(
+        _reactNative.TouchableOpacity,
+        { style: styles.autoCompleteListItemStyle, onPress: function onPress() {
+            return _this4.onTextStateChanged(data, travelLocationKey, true);
+          } },
+        _react2.default.createElement(_ewh3text2.default, {
+          text: data
+        })
+      );
+    }
+  }, {
+    key: 'isAutoCompleteDropdownVisible',
+    value: function isAutoCompleteDropdownVisible(textInputKey, textInputValue) {
+
+      console.log(FILE_NAME + "In isAutoCompleteDropdownVisible");
+
+      console.log("isAutoCompleteDropdownVisible", textInputKey, textInputValue);
+
+      return false;
+    }
+  }]);
+  return EwTravelComponent;
+}(_react.Component);
+
+exports.default = EwTravelComponent;

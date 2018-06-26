@@ -1,0 +1,558 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeImageCropPicker = require('react-native-image-crop-picker');
+
+var _reactNativeImageCropPicker2 = babelHelpers.interopRequireDefault(_reactNativeImageCropPicker);
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _needtoactactions = require('../../services/needtoact/needtoactactions');
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _ewloadingindicator = require('../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewscreentitle = require('../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _utils = require('../../utils');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _commonerrorhandling = require('../../services/common/commonerrorhandling');
+
+var commonError = babelHelpers.interopRequireWildcard(_commonerrorhandling);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var FILE_NAME = "ewimageuploadscreen.js : ";
+
+var SCREEN_NAME = "Image Upload Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_EMPLOYEE_INFORMATION_PORTAL;
+
+var EwImageUpload = function (_Component) {
+  babelHelpers.inherits(EwImageUpload, _Component);
+
+  function EwImageUpload(props) {
+    babelHelpers.classCallCheck(this, EwImageUpload);
+
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    console.log(FILE_NAME + "In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwImageUpload.__proto__ || Object.getPrototypeOf(EwImageUpload)).call(this, props));
+
+    _this.onBackButtonPressed = function () {
+
+      console.log(FILE_NAME + "In onBackButtonPressed method");
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_ALL'
+
+      };
+
+      if (_this.state.uploadImageStatusData != null) {
+
+        _this.props.updateImageTimestamp(null);
+      }
+
+      _reactNativeRouterFlux.Actions.pop();
+
+      return true;
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentError();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentError = function () {
+      _this.setState({
+        currentError: ''
+      });
+
+      _this.props.clearCommonError(null);
+    };
+
+    _this.onError = function (error) {
+
+      console.log(FILE_NAME + "In onError method");
+
+      _this.setState({ imageProperties: require('./../../../img/profile_icon.png') });
+    };
+
+    _this.removeProfilePhoto = function () {
+
+      console.log(FILE_NAME + "In removeProfilePhoto method");
+
+      _this.setState({ imageProperties: require('./../../../img/profile_icon.png') });
+
+      _this.uploadImage("null");
+    };
+
+    _this.uploadImage = function (base64Image) {
+
+      console.log(FILE_NAME + "In uploadImage method");
+
+      tracker.trackEvent(SCREEN_CATEGORY, 'upload image event');
+
+      var params = {
+        base64String: base64Image
+      };
+
+      _this.props.uploadImage(params);
+    };
+
+    var userImage = "null";
+
+    if (_this.props.uri != null) {
+      userImage = _this.props.uri;
+    }
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      imageProperties: {
+        uri: userImage
+      },
+
+      uploadImageStatusData: null,
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwImageUpload, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.uploadImageStatusData != null && nextProps.uploadImageStatusError == null) {
+
+        this.setState({
+          isLoading: false,
+          uploadImageStatusData: nextProps.uploadImageStatusData
+        });
+
+        this.props.updateTotalActivityCount(null);
+      }
+
+      if (nextProps.uploadImageStatusData == null && nextProps.uploadImageStatusError != null) {
+
+        this.setState({
+          isLoading: false,
+
+          currentError: nextProps.uploadImageStatusError
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage();
+              }
+              _reactNativeRouterFlux.Actions.pop({ type: ActionConst.REFRESH });
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+
+      _reactNative.BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressed);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      _reactNative.BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressed);
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In renderScreen Method");
+
+      var trashIcon;
+
+      if (this.state.imageProperties.uri != null) {
+
+        trashIcon = _react2.default.createElement(
+          _reactNative.TouchableOpacity,
+          { onPress: function onPress() {
+              _this2.showAlert();
+            } },
+          _react2.default.createElement(_nativeBase.Icon, { name: 'trash', style: { color: 'white' } })
+        );
+      } else {
+        trashIcon = _react2.default.createElement(_nativeBase.Text, null);
+      }
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: _styles2.default.modalContainerStyle },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: _styles2.default.headerBarStyle },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginRight: _utils.DEVICE_WIDTH * 0.45 } },
+            _react2.default.createElement(
+              _reactNative.TouchableOpacity,
+              { onPress: function onPress() {
+                  _this2.onBackButtonPressed();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back', style: { color: 'white' } })
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginRight: _utils.DEVICE_WIDTH * 0.1 } },
+            trashIcon
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginRight: _utils.DEVICE_WIDTH * 0.1 } },
+            _react2.default.createElement(
+              _reactNative.TouchableOpacity,
+              { onPress: function onPress() {
+                  _this2.selectFromGallery();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'images', style: { color: 'white' } })
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            null,
+            _react2.default.createElement(
+              _reactNative.TouchableWithoutFeedback,
+              { onPress: function onPress() {
+                  _this2.selectFromCamera();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'camera', style: { color: 'white', marginLeft: 5, marginRight: 5 } })
+            )
+          )
+        ),
+        _react2.default.createElement(_reactNative.Image, {
+          style: _styles2.default.imageModalStyle,
+          source: this.state.imageProperties,
+          onError: this.onError.bind(this)
+        })
+      );
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError(errorMessage) {
+
+      console.log(FILE_NAME + "In handleError");
+      console.log("this.state.currentError", this.state.currentError);
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+          break;
+
+        case commonError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (errorMessage) {
+
+          case commonError.SERVER_EXCEPTION:
+            this.showAlertMessage(commonError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          default:
+            this.showAlertMessage();
+            return this.renderScreen();
+
+        }
+      }
+    }
+  }, {
+    key: 'showAlert',
+    value: function showAlert() {
+      var _this3 = this;
+
+      _reactNative.Alert.alert('', 'Remove Profile Photo ?', [{ text: 'CANCEL', style: 'cancel' }, { text: 'REMOVE', onPress: function onPress() {
+          _this3.removeProfilePhoto();
+        } }]);
+    }
+  }, {
+    key: 'selectFromCamera',
+    value: function selectFromCamera() {
+      var _this4 = this;
+
+      console.log(FILE_NAME + "In selectFromCamera method");
+
+      tracker.trackEvent(SCREEN_CATEGORY, 'camera icon clicked');
+
+      _reactNativeImageCropPicker2.default.openCamera({
+        width: _utils.DEVICE_HEIGHT,
+        height: _utils.DEVICE_HEIGHT,
+        cropping: true,
+        includeBase64: true,
+        compressImageQuality: 0.8
+      }).then(function (image) {
+        console.log("imageProperties from Camera - ", image);
+
+        _this4.uploadImage(image.data);
+
+        _this4.setState({ imageProperties: {
+            uri: image.path
+          } });
+      }).catch(function (err) {
+        if (err == "Error: Cannot find image data") _reactNative.Alert.alert("Error", "Upload correct format");
+      });
+    }
+  }, {
+    key: 'selectFromGallery',
+    value: function selectFromGallery() {
+      var _this5 = this;
+
+      tracker.trackEvent(SCREEN_CATEGORY, 'gallery icon clicked');
+
+      console.log(FILE_NAME + "In selectFromGallery method");
+
+      _reactNativeImageCropPicker2.default.openPicker({
+        width: _utils.DEVICE_HEIGHT,
+        height: _utils.DEVICE_HEIGHT,
+        includeBase64: true,
+        compressImageQuality: 0.8,
+        cropping: true
+      }).then(function (image) {
+        console.log("imageProperties from Gallery - ", image);
+
+        _this5.uploadImage(image.data);
+
+        _this5.setState({ imageProperties: {
+            uri: image.path
+          } });
+      }).catch(function (err) {
+        if (err == "Error: Cannot find image data") _reactNative.Alert.alert("Error", "Upload correct format");
+      });
+    }
+  }]);
+  return EwImageUpload;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction");
+
+  return {
+    uploadImage: function uploadImage(params) {
+      return dispatch((0, _commonactions.uploadImage)(params));
+    },
+    clearNeedToActStateData: function clearNeedToActStateData(params) {
+      return dispatch((0, _needtoactactions.clearNeedToActStateData)(params));
+    },
+    updateImageTimestamp: function updateImageTimestamp(params) {
+      return dispatch((0, _commonactions.updateImageTimestamp)(params));
+    },
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    },
+    clearCommonError: function clearCommonError(params) {
+      return dispatch((0, _commonactions.clearCommonError)(params));
+    },
+    updateTotalActivityCount: function updateTotalActivityCount(params) {
+      return dispatch((0, _commonactions.updateTotalActivityCount)(params));
+    }
+
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.auth.isLoggedIn,
+    sessionToken: state.auth.sessionToken,
+    errorCounter: state.common.errorCounter,
+
+    uploadImageStatusData: state.common.uploadImageStatusData,
+    uploadImageStatusError: state.common.uploadImageStatusError
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwImageUpload);

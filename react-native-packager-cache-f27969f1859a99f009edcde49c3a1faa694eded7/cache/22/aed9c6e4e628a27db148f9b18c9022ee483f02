@@ -1,0 +1,77 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../../../utils');
+
+var React = require('react-native');
+
+var StyleSheet = React.StyleSheet,
+    Platform = React.Platform;
+exports.default = {
+
+  outerViewStyle: {
+
+    justifyContent: 'space-between'
+  },
+
+  innerViewStyle: {
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'column'
+  },
+
+  headingTextStyle: {
+    flex: 2,
+    color: '#bbbbbb'
+  },
+
+  contentContainerStyle: {
+    marginLeft: 5,
+    marginRight: 5,
+    alignSelf: 'stretch'
+  },
+
+  ewbarTextStyle: {
+    marginLeft: 10,
+    marginTop: 5,
+    marginBottom: 5,
+    alignSelf: 'auto',
+    color: 'black'
+  },
+
+  ewbarContainerStyle: {
+    marginBottom: 10,
+    marginTop: 5,
+    backgroundColor: 'transparent',
+    alignSelf: 'stretch'
+  },
+
+  headingContainerStyle: {
+    marginLeft: 10,
+    marginTop: 5
+  },
+
+  reasonLabelInputStyle: {
+    marginTop: 5,
+    marginLeft: 0,
+    marginRight: 0,
+    borderColor: '#000'
+  },
+
+  stackedLabelStyle: {
+    marginTop: 10,
+    alignItems: 'center'
+  },
+
+  dateHeadingStyle: {
+    flexDirection: 'row',
+    marginLeft: 10,
+    marginTop: 5
+  }
+
+};

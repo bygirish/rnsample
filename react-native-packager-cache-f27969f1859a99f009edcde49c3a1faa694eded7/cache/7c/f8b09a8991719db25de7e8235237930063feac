@@ -1,0 +1,115 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = payrollReducer;
+
+var _payrollactiontypes = require("./payrollactiontypes");
+
+var payrollActionTypes = babelHelpers.interopRequireWildcard(_payrollactiontypes);
+
+var FILE_NAME = "payrollreducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+
+  availablePayslipsData: null,
+  availablePayslipsError: null,
+
+  paySlipInformationData: null,
+  paySlipInformationError: null
+
+};
+
+function payrollReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method payrollReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case payrollActionTypes.SUCCESS_AVAILABLE_PAY_SLIPS:
+
+      console.log("In method payrollReducer SUCCESS_AVAILABLE_PAY_SLIPS");
+
+      return babelHelpers.extends({}, state, {
+        availablePayslipsData: action.response.data,
+        availablePayslipsError: action.response.error
+      });
+
+      break;
+
+    case payrollActionTypes.FAILURE_AVAILABLE_PAY_SLIPS:
+
+      console.log("In method payrollReducer FAILURE_AVAILABLE_PAY_SLIPS");
+
+      return babelHelpers.extends({}, state, {
+        availablePayslipsData: action.response.data,
+        availablePayslipsError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case payrollActionTypes.SUCCESS_PAY_SLIP_DATA:
+
+      console.log("In method payrollReducer SUCCESS_PAY_SLIP_DATA");
+
+      return {
+
+        paySlipInformationData: action.response.data,
+        paySlipInformationError: action.response.error
+      };
+
+      break;
+
+    case payrollActionTypes.FAILURE_PAY_SLIP_DATA:
+
+      console.log("In method payrollReducer FAILURE_PAY_SLIP_DATA");
+
+      return {
+
+        paySlipInformationData: action.response.data,
+        paySlipInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      };
+
+      break;
+
+    case payrollActionTypes.CLEAR_PAYROLL_ERROR:
+
+      console.log("In method payrollReducer CLEAR_PAYROLL_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        paySlipInformationError: null,
+        availablePayslipsError: null
+      });
+
+      break;
+
+    case payrollActionTypes.CLEAR_PAYROLL_STATE_DATA:
+
+      console.log("In method payrollReducer CLEAR_PAYROLL_STATE_DATA");
+
+      return {
+        errorCounter: action.response.errorCounter,
+
+        availablePayslipsData: action.response.availablePayslipsData,
+        availablePayslipsError: action.response.availablePayslipsError,
+
+        paySlipInformationData: action.response.paySlipInformationData,
+        paySlipInformationError: action.response.paySlipInformationError
+
+      };
+
+      break;
+
+    default:
+
+      console.log("In method payrollReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

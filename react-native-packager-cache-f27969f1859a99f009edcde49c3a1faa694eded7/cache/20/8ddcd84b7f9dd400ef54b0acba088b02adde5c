@@ -1,0 +1,9 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var AUTHENTICATION_FAILURE = exports.AUTHENTICATION_FAILURE = 'Not Authorized';
+var SERVER_EXCEPTION = exports.SERVER_EXCEPTION = 'Exception occured';
+var INVALID_STATE = exports.INVALID_STATE = 'Invalid state';
+var APPROVER_NOT_FOUND = exports.APPROVER_NOT_FOUND = "No approver found";
+
+var SERVER_ERROR = exports.SERVER_ERROR = "Server is down, please try after some time";

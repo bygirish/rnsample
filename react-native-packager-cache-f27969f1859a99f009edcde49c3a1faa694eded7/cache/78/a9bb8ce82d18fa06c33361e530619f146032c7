@@ -1,0 +1,311 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _reactNativeModalDatetimePicker = require('react-native-modal-datetime-picker');
+
+var _reactNativeModalDatetimePicker2 = babelHelpers.interopRequireDefault(_reactNativeModalDatetimePicker);
+
+var _ewdatetimepicker = require('./ewdatetimepicker');
+
+var _ewdatetimepicker2 = babelHelpers.interopRequireDefault(_ewdatetimepicker);
+
+var EwDateTimePickerTester = function (_Component) {
+  babelHelpers.inherits(EwDateTimePickerTester, _Component);
+
+  function EwDateTimePickerTester(props) {
+    babelHelpers.classCallCheck(this, EwDateTimePickerTester);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwDateTimePickerTester.__proto__ || Object.getPrototypeOf(EwDateTimePickerTester)).call(this, props));
+
+    _this.onPressButton1 = function () {
+
+      console.log("In onPressButton1");
+      console.log("state is ", _this.state);
+      console.log("value ", _this.state.button1.value);
+      console.log("Key ", _this.state.button1.key);
+
+      _this._showEwDateTimePicker(_this.state.button1.key, _this.state.button1.mode);
+    };
+
+    _this.onPressButton2 = function () {
+      _this._showEwDateTimePicker(_this.state.button2.key, _this.state.button2.mode);
+    };
+
+    _this.onPressButton3 = function () {
+      _this._showEwDateTimePicker(_this.state.button3.key, _this.state.button3.mode);
+    };
+
+    _this.onPressButton4 = function () {
+      _this._showEwDateTimePicker(_this.state.button4.key, _this.state.button4.mode);
+    };
+
+    _this._showEwDateTimePicker = function (elementKey, mode) {
+      console.log("ewdatetimepickertester.js : In _showEwDateTimePicker");
+
+      _this.setState({
+        isEwDateTimePickerVisible: true,
+        activeEwDateTimePickerElementKey: elementKey,
+        modeEwDateTimePicker: mode
+      });
+    };
+
+    _this._hideEwDateTimePicker = function (elementKey) {
+      console.log("ewdatetimepickertester.js : In _hideEwDateTimePicker");
+
+      _this.setState({
+        isEwDateTimePickerVisible: false,
+        activeEwDateTimePickerElementKey: '',
+        modeEwDateTimePicker: ''
+      });
+    };
+
+    _this._handleEwDateTimePicked = function (date, mode, elementKey) {
+
+      console.log("ewdatetimepickertester.js : In _handleEwDateTimePicked");
+      console.log("Returned value is - ", date);
+      console.log("Mod is - ", mode);
+      console.log("For Element is - ", elementKey);
+
+      var valueDateTimePicker;
+      var d = new Date(date);
+      if (mode == 'date') {
+        valueDateTimePicker = d.getTime();
+      } else {
+        valueDateTimePicker = d.getHours() + ':' + d.getMinutes();
+      }
+
+      switch (elementKey) {
+        case _this.state.button1.key:
+          _this.setState({
+            button1: {
+              mode: mode,
+              key: elementKey,
+              value: valueDateTimePicker
+            }
+          });
+          break;
+        case _this.state.button2.key:
+          _this.setState({
+            button2: {
+              mode: mode,
+              key: elementKey,
+              value: valueDateTimePicker
+            }
+          });
+          break;
+        case _this.state.button3.key:
+          _this.setState({
+            button3: {
+              mode: mode,
+              key: elementKey,
+              value: valueDateTimePicker
+            }
+          });
+          break;
+        case _this.state.button4.key:
+          _this.setState({
+            button4: {
+              mode: mode,
+              key: elementKey,
+              value: valueDateTimePicker
+            }
+          });
+          break;
+        default:
+
+      }
+    };
+
+    console.log("ewdatetimepickertester.js : In Constructor");
+
+    _this.initialState = {
+
+      button1: {
+        key: "button1",
+        value: new Date().getTime(),
+        mode: 'date'
+      },
+
+      button2: {
+        key: "button2",
+        value: new Date().getTime(),
+        mode: 'date'
+      },
+
+      button3: {
+        key: "button3",
+        value: "9:30",
+        mode: 'time'
+      },
+
+      button4: {
+        key: "button4",
+        value: "6:30",
+        mode: 'time'
+      },
+
+      isEwDateTimePickerVisible: false,
+      modeEwDateTimePicker: 'date',
+      activeEwDateTimePickerElementKey: '',
+      minDateTimePicker: undefined,
+      maxDateTimePicker: undefined
+
+    };
+    _this.state = _this.initialState;
+
+    _this.onPressButton1 = _this.onPressButton1.bind(_this);
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwDateTimePickerTester, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      console.log("ewdatetimepickertester.js : In render");
+
+      console.log("state is - ", this.state);
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(_nativeBase.Left, null),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            null,
+            _react2.default.createElement(
+              _nativeBase.Title,
+              null,
+              'Leave'
+            )
+          ),
+          _react2.default.createElement(_nativeBase.Right, null)
+        ),
+        _react2.default.createElement(
+          _nativeBase.Content,
+          { style: { marginLeft: 5, marginRight: 5, alignSelf: 'stretch' } },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            {
+              onPress: this.onPressButton1
+            },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              new Date(this.state.button1.value).toDateString()
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Button,
+            {
+              onPress: this.onPressButton2
+            },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              new Date(this.state.button2.value).toDateString()
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Button,
+            {
+              onPress: this.onPressButton3
+            },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              this.state.button3.value
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Button,
+            {
+              onPress: this.onPressButton4
+            },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              this.state.button4.value
+            )
+          ),
+          _react2.default.createElement(_ewdatetimepicker2.default, {
+            isEwDateTimePickerVisible: this.state.isEwDateTimePickerVisible,
+            modeEwDateTimePicker: this.state.modeEwDateTimePicker,
+            _handleEwDateTimePicked: function _handleEwDateTimePicked(date, mode, elementKey) {
+              return _this2._handleEwDateTimePicked(date, mode, elementKey);
+            },
+            _hideEwDateTimePicker: function _hideEwDateTimePicker(elementKey) {
+              return _this2._hideEwDateTimePicker(elementKey);
+            },
+            elementKey: this.state.activeEwDateTimePickerElementKey,
+            minDateTimePicker: this.state.minDateTimePicker,
+            maxDateTimePicker: this.state.maxDateTimePicker
+
+          }),
+          this.randomGirish()
+        ),
+        _react2.default.createElement(
+          _nativeBase.Footer,
+          null,
+          _react2.default.createElement(
+            _nativeBase.FooterTab,
+            null,
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { onPress: function onPress() {
+                  return _this2.onPressCancel();
+                } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                'Cancel'
+              )
+            ),
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { onPress: function onPress() {
+                  return _this2.onPressApply();
+                } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                'Apply'
+              )
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: 'randomGirish',
+    value: function randomGirish() {
+      console.log("In randomGirish");
+
+      console.log("state is ", this.state);
+    }
+  }]);
+  return EwDateTimePickerTester;
+}(_react.Component);
+
+exports.default = (0, _reactRedux.connect)()(EwDateTimePickerTester);

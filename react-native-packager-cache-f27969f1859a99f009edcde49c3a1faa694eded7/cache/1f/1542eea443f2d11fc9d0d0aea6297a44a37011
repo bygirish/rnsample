@@ -1,0 +1,200 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _ewh3text = require('../ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewtext = require('../ewtext/ewtext');
+
+var _ewtext2 = babelHelpers.interopRequireDefault(_ewtext);
+
+var _ewh4text = require('../ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewicon = require('../ewicon/ewicon');
+
+var _ewicon2 = babelHelpers.interopRequireDefault(_ewicon);
+
+var _ewdatetimepicker = require('../ewdatetimepicker/ewdatetimepicker');
+
+var _ewdatetimepicker2 = babelHelpers.interopRequireDefault(_ewdatetimepicker);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../../js/utils');
+
+var dateIcon = require('../../../img/dateIcon.png');
+
+var FILE_NAME = "ewdatebutton.js : ";
+
+var EwDateButton = function (_Component) {
+  babelHelpers.inherits(EwDateButton, _Component);
+
+  function EwDateButton(props, context) {
+    babelHelpers.classCallCheck(this, EwDateButton);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwDateButton.__proto__ || Object.getPrototypeOf(EwDateButton)).call(this, props, context));
+
+    _this.addEwDateTimePicker = function () {
+
+      console.log(FILE_NAME + "In addEwDateTimePicker method");
+
+      var _handleEwDateTimePicked = _this.props._handleEwDateTimePicked;
+
+
+      return _react2.default.createElement(_ewdatetimepicker2.default, {
+        isEwDateTimePickerVisible: _this.state.isEwDateTimePickerVisible,
+        modeEwDateTimePicker: _this.state.modeEwDateTimePicker,
+        _handleEwDateTimePicked: function _handleEwDateTimePicked(date, mode, elementKey) {
+          return _this.props._handleEwDateTimePicked(date, mode, elementKey);
+        },
+        _hideEwDateTimePicker: function _hideEwDateTimePicker(elementKey) {
+          return _this._hideEwDateTimePicker(elementKey);
+        },
+        elementKey: _this.state.activeEwDateTimePickerElementKey,
+        minDateTimePicker: _this.state.minDateTimePicker,
+        maxDateTimePicker: _this.state.maxDateTimePicker,
+        setDateTimePicker: _this.state.setDateTimePicker,
+        set24TimeFormat: false
+
+      });
+    };
+
+    _this._showEwDateTimePicker = function (elementKey, mode, date) {
+
+      console.log(FILE_NAME + "In _showEwDateTimePicker method");
+
+      _this.setState({
+        isEwDateTimePickerVisible: true,
+        activeEwDateTimePickerElementKey: elementKey,
+        modeEwDateTimePicker: mode,
+        setDateTimePicker: date
+      });
+    };
+
+    _this._hideEwDateTimePicker = function (elementKey) {
+
+      console.log(FILE_NAME + "In _hideEwDateTimePicker");
+
+      _this.setState({
+        isEwDateTimePickerVisible: false,
+        activeEwDateTimePickerElementKey: '',
+        modeEwDateTimePicker: ''
+      });
+    };
+
+    maxDateTimePicker = undefined;
+
+    if (_this.props.maxDateTimePicker != null && _this.props.maxDateTimePicker != undefined) maxDateTimePicker = _this.props.maxDateTimePicker;
+
+    _this.initialState = {
+
+      isEwDateTimePickerVisible: false,
+      modeEwDateTimePicker: 'date',
+      activeEwDateTimePickerElementKey: '',
+      minDateTimePicker: undefined,
+      maxDateTimePicker: maxDateTimePicker,
+      setDateTimePicker: new Date() };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwDateButton, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      console.log("Inside componentDidUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      console.log("Inside render");
+
+      var _props = this.props,
+          label = _props.label,
+          dateObject = _props.dateObject,
+          placeholderLabel = _props.placeholderLabel,
+          customViewStyle = _props.customViewStyle,
+          props = babelHelpers.objectWithoutProperties(_props, ['label', 'dateObject', 'placeholderLabel', 'customViewStyle']);
+      var key = dateObject.key,
+          mode = dateObject.mode,
+          value = dateObject.value;
+
+
+      textStyle = _styles2.default.textStyle;
+
+      dateLabel = "";
+      dateText = "";
+      selectedDate = this.getDateString((0, _utils.getCurrentDate)());
+
+      if (this.props.textStyle) textStyle = this.props.textStyle;
+
+      if (value == null) {
+
+        dateText = placeholderLabel;
+      } else {
+
+        dateLabel = label;
+        dateText = (0, _utils.showDeviceDateFormat)(value);
+        selectedDate = this.getDateString(value);
+      }
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: [_styles2.default.dateViewStyle, customViewStyle] },
+        _react2.default.createElement(_ewh4text2.default, {
+          text: dateLabel
+        }),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flexDirection: "row" } },
+          _react2.default.createElement(_ewh3text2.default, {
+            text: dateText
+          }),
+          _react2.default.createElement(_ewicon2.default, {
+            iconSource: dateIcon,
+            onIconPressed: function onIconPressed() {
+              return _this2._showEwDateTimePicker(key, mode, selectedDate);
+            },
+            customIconStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN }
+          })
+        ),
+        this.addEwDateTimePicker()
+      );
+    }
+  }, {
+    key: 'getDateString',
+    value: function getDateString(milliseconds) {
+
+      date = new Date(milliseconds);
+
+      return date;
+    }
+  }]);
+  return EwDateButton;
+}(_react.Component);
+
+exports.default = EwDateButton;

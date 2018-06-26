@@ -1,0 +1,102 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _moment = require('moment');
+
+var _moment2 = babelHelpers.interopRequireDefault(_moment);
+
+var _utils = require('./utils');
+
+var Day = function (_React$Component) {
+  babelHelpers.inherits(Day, _React$Component);
+
+  function Day() {
+    babelHelpers.classCallCheck(this, Day);
+    return babelHelpers.possibleConstructorReturn(this, (Day.__proto__ || Object.getPrototypeOf(Day)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(Day, [{
+    key: 'render',
+    value: function render() {
+      var dateFormat = this.props.dateFormat;
+
+
+      if (!(0, _utils.isSameDay)(this.props.currentMessage, this.props.previousMessage)) {
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: [styles.container, this.props.containerStyle] },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: [styles.wrapper, this.props.wrapperStyle] },
+            _react2.default.createElement(
+              _reactNative.Text,
+              { style: [styles.text, this.props.textStyle] },
+              (0, _moment2.default)(this.props.currentMessage.createdAt).locale(this.context.getLocale()).format(dateFormat).toUpperCase()
+            )
+          )
+        );
+      }
+      return null;
+    }
+  }]);
+  return Day;
+}(_react2.default.Component);
+
+exports.default = Day;
+
+
+var styles = _reactNative.StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 5,
+    marginBottom: 10
+  },
+  wrapper: {},
+  text: {
+    backgroundColor: 'transparent',
+    color: '#b2b2b2',
+    fontSize: 12,
+    fontWeight: '600'
+  }
+});
+
+Day.contextTypes = {
+  getLocale: _propTypes2.default.func
+};
+
+Day.defaultProps = {
+  currentMessage: {
+    createdAt: null
+  },
+  previousMessage: {},
+  containerStyle: {},
+  wrapperStyle: {},
+  textStyle: {},
+
+  isSameDay: (0, _utils.warnDeprecated)(_utils.isSameDay),
+  isSameUser: (0, _utils.warnDeprecated)(_utils.isSameUser)
+};
+
+Day.propTypes = {
+  currentMessage: _propTypes2.default.object,
+  previousMessage: _propTypes2.default.object,
+  containerStyle: _reactNative.ViewPropTypes.style,
+  wrapperStyle: _reactNative.ViewPropTypes.style,
+  textStyle: _reactNative.Text.propTypes.style,
+
+  isSameDay: _propTypes2.default.func,
+  isSameUser: _propTypes2.default.func,
+  dateFormat: _propTypes2.default.string
+};

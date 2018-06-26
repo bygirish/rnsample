@@ -1,0 +1,72 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EwAppLaunch = undefined;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _ewlogin = require('./auth/ewlogin');
+
+var _ewlogin2 = babelHelpers.interopRequireDefault(_ewlogin);
+
+var _ewdashboarddrawer = require('./dashboard/ewdashboarddrawer');
+
+var _ewdashboarddrawer2 = babelHelpers.interopRequireDefault(_ewdashboarddrawer);
+
+var _ewloadingindicator = require('../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var FILE_NAME = "ewapplaunch.js : ";
+
+var EwAppLaunch = exports.EwAppLaunch = function (_Component) {
+  babelHelpers.inherits(EwAppLaunch, _Component);
+
+  function EwAppLaunch(props, context) {
+    babelHelpers.classCallCheck(this, EwAppLaunch);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwAppLaunch.__proto__ || Object.getPrototypeOf(EwAppLaunch)).call(this, props, context));
+
+    console.log(FILE_NAME + "In constructor");
+    return _this;
+  }
+
+  babelHelpers.createClass(EwAppLaunch, [{
+    key: 'ComponentWillMount',
+    value: function ComponentWillMount() {}
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render method");
+
+      console.log("isUserLoggedIn is ", this.props.isLoggedIn);
+
+      if (this.props.isLoggedIn) return _react2.default.createElement(_ewdashboarddrawer2.default, null);else {
+        return _react2.default.createElement(_ewlogin2.default, null);
+      }
+    }
+  }]);
+  return EwAppLaunch;
+}(_react.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.auth.isLoggedIn,
+    isReduxStateRecovered: state.auth.isReduxStateRecovered
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(EwAppLaunch);

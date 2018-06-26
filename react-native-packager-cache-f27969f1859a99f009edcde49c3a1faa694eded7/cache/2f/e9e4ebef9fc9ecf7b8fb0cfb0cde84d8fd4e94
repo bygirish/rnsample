@@ -1,0 +1,4007 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _ewdatetimepicker = require('../../../../components/ewdatetimepicker/ewdatetimepicker');
+
+var _ewdatetimepicker2 = babelHelpers.interopRequireDefault(_ewdatetimepicker);
+
+var _ewbar = require('../../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewdatebutton = require('../../../../components/ewdatebutton/ewdatebutton');
+
+var _ewdatebutton2 = babelHelpers.interopRequireDefault(_ewdatebutton);
+
+var _ewtext = require('../../../../components/ewtext/ewtext');
+
+var _ewtext2 = babelHelpers.interopRequireDefault(_ewtext);
+
+var _ewcard = require('../../../../components/ewcard/ewcard');
+
+var _ewcard2 = babelHelpers.interopRequireDefault(_ewcard);
+
+var _ewh1text = require('../../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewh4text = require('../../../../components/ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewicon = require('../../../../components/ewicon/ewicon');
+
+var _ewicon2 = babelHelpers.interopRequireDefault(_ewicon);
+
+var _ewcheckbox = require('../../../../components/ewcheckbox/ewcheckbox');
+
+var _ewcheckbox2 = babelHelpers.interopRequireDefault(_ewcheckbox);
+
+var _ewfloatinglabel = require('../../../../components/ewfloatinglabel/ewfloatinglabel');
+
+var _ewfloatinglabel2 = babelHelpers.interopRequireDefault(_ewfloatinglabel);
+
+var _ewbutton = require('../../../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _ewmodal = require('../../../../components/ewmodal/ewmodal');
+
+var _ewmodal2 = babelHelpers.interopRequireDefault(_ewmodal);
+
+var _ewradiobutton = require('../../../../components/ewradiobutton/ewradiobutton');
+
+var _ewradiobutton2 = babelHelpers.interopRequireDefault(_ewradiobutton);
+
+var _ewdropdownpicker = require('../../../../components/ewdropdownpicker/ewdropdownpicker');
+
+var _ewdropdownpicker2 = babelHelpers.interopRequireDefault(_ewdropdownpicker);
+
+var _utils = require('../../../../utils');
+
+var _datetimeutils = require('../../../../utils/datetimeutils');
+
+var _travelutils = require('../../travelutils');
+
+var travelConstants = babelHelpers.interopRequireWildcard(_travelutils);
+
+var _ewautocompleteinput = require('../../../../components/ewautocompleteinput/ewautocompleteinput');
+
+var _ewautocompleteinput2 = babelHelpers.interopRequireDefault(_ewautocompleteinput);
+
+var _travelactions = require('../../../../services/travel/travelactions');
+
+var _ewcreatetravelstyles = require('../../styles/ewcreatetravelstyles');
+
+var _ewcreatetravelstyles2 = babelHelpers.interopRequireDefault(_ewcreatetravelstyles);
+
+var _ewtravelplanstyles = require('../../styles/ewtravelplanstyles');
+
+var _ewtravelplanstyles2 = babelHelpers.interopRequireDefault(_ewtravelplanstyles);
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var FILE_NAME = "EwTravelPlan.js : ";
+
+var editIcon = require('../../../../../img/travelicons/editIcon.png');
+var deleteIcon = require('../../../../../img/travelicons/cancel.png');
+var addIcon = require('../../../../../img/travelicons/addIcon.png');
+
+var stayIcon = require('../../../../../img/travelicons/stayIcon.png');
+var localTravelIcon = require('../../../../../img/travelicons/localtravelIcon.png');
+var airplaneIcon = require('../../../../../img/travelicons/airplane.png');
+var trainIcon = require('../../../../../img/travelicons/trainIcon.png');
+
+var rightArrowIcon = require('../../../../../img/travelicons/rightarrow.png');
+
+var transportIcon = require('../../../../../img/travelicons/transportIcon.png');
+
+var returnIcon = require('../../../../../img/returnicon.png');
+
+var context;
+
+tourTypePicker = [{
+  "value": travelConstants.TOUR_TYPE_PLACEHOLDER_KEY,
+  "label": travelConstants.TOUR_TYPE_PLACEHOLDER_LABEL
+}, {
+  "value": travelConstants.ONE_CITY_KEY,
+  "label": travelConstants.ONE_CITY_LABEL
+}, {
+  "value": travelConstants.MULTI_CIY_KEY,
+  "label": travelConstants.MULTI_CIY_LABEL
+}];
+
+mealTypePicker = [{
+  "value": travelConstants.NO_MEAL_REQUIRED,
+  "label": travelConstants.NO_MEAL_REQUIRED_LABEL
+}, {
+  "value": travelConstants.MEAL_REQUIRED_NON_VEG,
+  "label": travelConstants.MEAL_REQUIRED_NON_VEG_LABEL
+}, {
+  "value": travelConstants.MEAL_REQUIRED_VEG,
+  "label": travelConstants.MEAL_REQUIRED_VEG_LABEL
+}];
+
+defaultPickerSelected = -1;
+
+var EwTravelPlan = function (_Component) {
+  babelHelpers.inherits(EwTravelPlan, _Component);
+
+  function EwTravelPlan(props) {
+    babelHelpers.classCallCheck(this, EwTravelPlan);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwTravelPlan.__proto__ || Object.getPrototypeOf(EwTravelPlan)).call(this, props));
+
+    _this.addTravelModel = function (travelItenary) {
+      var travelModelToAdd = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+      var isReturnTravel = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+
+      console.log(FILE_NAME + "In addTravelModel");
+
+      updatedTravelItenary = travelItenary;
+
+      if (!_this.state.initialScreen) {
+
+        if (_this.localValidation()) {
+
+          for (var index = 0; index < travelModelToAdd; index++) {
+            updatedTravelItenary.push(_this.getTravelDetailModel(travelItenary.length, travelConstants.EDIT_MODE, isReturnTravel));
+          }_this.setState({
+            travelItenary: updatedTravelItenary
+          });
+
+          _this.changeModeOfAllViews(travelItenary.length - 1, travelConstants.TRAVEL_DETAIL_KEY);
+        }
+      } else {
+
+        for (var index = 0; index < travelModelToAdd; index++) {
+          updatedTravelItenary.push(_this.getTravelDetailModel(travelItenary.length, travelConstants.EDIT_MODE));
+        }_this.setState({
+          travelItenary: updatedTravelItenary
+        });
+      }
+    };
+
+    _this.addStayModel = function (stayAndLocalTravelModel, location) {
+
+      console.log(FILE_NAME + "In addStayModel", stayAndLocalTravelModel, location);
+
+      updatedStayAndLocalTravelModel = stayAndLocalTravelModel;
+
+      isValidated = _this.localValidation();
+
+      if (stayAndLocalTravelModel[location] == null) {
+
+        updatedStayAndLocalTravelModel[location] = {};
+      }
+
+      if (stayAndLocalTravelModel[location].stayModel == null) {
+
+        updatedStayAndLocalTravelModel[location].stayModel = [];
+      }
+
+      if (isValidated) updatedStayAndLocalTravelModel[location].stayModel.push(_this.getStayModel(updatedStayAndLocalTravelModel[location].stayModel.length, travelConstants.EDIT_MODE, location));
+
+      _this.setState({
+        stayAndLocalTravelModel: updatedStayAndLocalTravelModel
+      });
+
+      if (isValidated) {
+
+        stayModelLength = updatedStayAndLocalTravelModel[location].stayModel.length - 1;
+
+        _this.changeModeOfAllViews(stayModelLength, travelConstants.STAY_KEY, location);
+
+        _this.getCityCategoryData(updatedStayAndLocalTravelModel[location].stayModel[stayModelLength].stayLocation, location, stayModelLength);
+
+        if (!_this.state.isDoneButtonVisible) {
+
+          _this.setState({
+
+            isDoneButtonVisible: true
+          });
+        }
+      }
+    };
+
+    _this.addLocalTravelModel = function (stayAndLocalTravelModel, location) {
+
+      console.log(FILE_NAME + "In addLocalTravelModel");
+
+      updatedStayAndLocalTravelModel = stayAndLocalTravelModel;
+
+      isValidated = _this.localValidation();
+
+      if (stayAndLocalTravelModel[location] == null) {
+
+        updatedStayAndLocalTravelModel[location] = {};
+      }
+
+      if (stayAndLocalTravelModel[location].localTravelModel == null) {
+
+        updatedStayAndLocalTravelModel[location].localTravelModel = [];
+      }
+
+      if (isValidated) updatedStayAndLocalTravelModel[location].localTravelModel.push(_this.getLocaltravelModel(updatedStayAndLocalTravelModel[location].localTravelModel.length, travelConstants.EDIT_MODE, location));
+
+      _this.setState({
+        stayAndLocalTravelModel: updatedStayAndLocalTravelModel
+      });
+
+      if (isValidated) _this.changeModeOfAllViews(stayAndLocalTravelModel[location].localTravelModel.length - 1, travelConstants.LOCAL_TRAVEL_KEY, location);
+    };
+
+    _this.renderTravelScheduleList = function (travelItenary, travelItenaryIndex) {
+
+      console.log(FILE_NAME + "In renderTravelScheduleList", travelItenary);
+
+      if (_this.isTravelVisible(travelItenaryIndex)) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _this.showReturnText(travelItenary, travelItenaryIndex),
+          _this.renderTravelDetails(travelItenary, travelItenaryIndex)
+        );
+      }
+    };
+
+    _this.renderCancelView = function (travelItenary, travelItenaryIndex, deleteKey, locationKey) {
+
+      console.log(FILE_NAME + "In renderCancelView");
+
+      if (!_this.state.initialScreen && !_this.props.reveiwMode) {
+
+        switch (deleteKey) {
+
+          case travelConstants.TRAVEL_DETAIL_KEY:
+
+            if (_this.state.isSingleCity) {
+
+              if (travelItenary.length > 1) {
+
+                return _react2.default.createElement(_ewicon2.default, {
+                  iconSource: deleteIcon,
+                  onIconPressed: function onIconPressed() {
+                    return _this.renderRemoveTravelItenaryAlert(travelItenary, travelItenaryIndex, deleteKey, locationKey);
+                  }
+                });
+              }
+            } else {
+              if (travelItenary.length > 3) {
+
+                return _react2.default.createElement(_ewicon2.default, {
+                  iconSource: deleteIcon,
+                  onIconPressed: function onIconPressed() {
+                    return _this.renderRemoveTravelItenaryAlert(travelItenary, travelItenaryIndex, deleteKey, locationKey);
+                  }
+                });
+              }
+            }
+
+            break;
+
+          case travelConstants.STAY_KEY:
+          case travelConstants.LOCAL_TRAVEL_KEY:
+
+            return _react2.default.createElement(_ewicon2.default, {
+              iconSource: deleteIcon,
+              onIconPressed: function onIconPressed() {
+                return _this.renderRemoveTravelItenaryAlert(travelItenary, travelItenaryIndex, deleteKey, locationKey);
+              }
+            });
+            break;
+          default:
+
+        }
+      }
+    };
+
+    _this.removeTravelModel = function (travelItenary, travelItenaryIndex) {
+
+      console.log(FILE_NAME + "In removeTravelModel");
+
+      updatedTravelItenary = travelItenary;
+
+      if (_this.state.isSingleCity) {
+
+        if (travelItenary.length > 2) updatedTravelItenary.splice(2, travelItenary.length - 2);
+
+        updatedTravelItenary.splice(travelItenaryIndex, 1);
+      } else updatedTravelItenary.splice(travelItenaryIndex, 1);
+
+      _this.setState({
+        travelItenary: updatedTravelItenary
+      });
+    };
+
+    _this.removeStayAndLocalTravelModel = function (stayAndLocalTravelItenary, stayAndLocalTravelItenaryIndex, removeKey, locationKey) {
+
+      console.log(FILE_NAME + "In removeStayAndLocalTravelModel", stayAndLocalTravelItenary);
+
+      updatedStayAndLocalTravelItenary = stayAndLocalTravelItenary;
+
+      switch (removeKey) {
+        case travelConstants.STAY_KEY:
+
+          updatedStayAndLocalTravelItenary[locationKey].stayModel.splice(stayAndLocalTravelItenaryIndex, 1);
+
+          break;
+
+        case travelConstants.LOCAL_TRAVEL_KEY:
+
+          updatedStayAndLocalTravelItenary[locationKey].localTravelModel.splice(stayAndLocalTravelItenaryIndex, 1);
+
+          break;
+        default:
+
+      }
+
+      _this.setState({
+        stayAndLocalTravelModel: updatedStayAndLocalTravelItenary
+      });
+    };
+
+    _this.renderStayDetails = function (stayAndLocalItenary, stayAndLocalItenaryIndex, locationKey) {
+
+      console.log(FILE_NAME + "In renderStayDetails", stayAndLocalItenary);
+
+      var locationData = _this.state.locationData;
+
+
+      stayTypes = stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].stayTypes;
+
+      stayClass = _this.getStayAndLocalModeType(stayTypes, stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].stayClass);
+
+      if (stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].currentMode == travelConstants.EDIT_MODE && !_this.props.reveiwMode) {
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { alignItems: "flex-end", margin: appstyleguide.DEFAULT_MARGIN } },
+            _this.renderCancelView(stayAndLocalItenary, stayAndLocalItenaryIndex, travelConstants.STAY_KEY, locationKey)
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row' } },
+            _react2.default.createElement(
+              _reactNative.View,
+              {
+                style: { flex: 0.6 },
+                onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+
+                  _this.setState({
+
+                    currentFocussedTextInput: travelConstants.STAY_LOCATION_KEY + locationKey + stayAndLocalItenaryIndex
+                  });
+                }
+              },
+              _react2.default.createElement(_ewautocompleteinput2.default, {
+                dropdownData: locationData,
+                hideResults: !_this.isAutoCompleteDropdownVisible(travelConstants.STAY_LOCATION_KEY + locationKey + stayAndLocalItenaryIndex, stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].stayLocation),
+                updateScrollState: function updateScrollState(scrollViewState) {
+                  return _this.setState({ enableScrollViewScroll: scrollViewState });
+                },
+                scrollViewVisibility: _this.state.enableScrollViewScroll,
+                renderListItem: function renderListItem(data) {
+                  return _this.renderStayAndLocalLocationListItem(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, data, travelConstants.STAY_LOCATION_KEY);
+                },
+
+                customTextInput: function customTextInput() {
+                  return _react2.default.createElement(_ewfloatinglabel2.default, {
+                    label: 'Stay Location',
+                    placeholderlabel: 'Enter Stay Location',
+                    ref: function ref(textinputref) {
+                      return _this.textInputRef[travelConstants.STAY_LOCATION_KEY + locationKey + stayAndLocalItenaryIndex] = textinputref;
+                    },
+                    autoCorrect: false,
+                    autoCapitalize: 'none',
+                    onChangeText: function onChangeText(stayLocation) {
+                      return _this.onStayAndLocalTextInputChanged(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, stayLocation, travelConstants.STAY_LOCATION_KEY);
+                    },
+                    value: stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].stayLocation
+                  });
+                }
+
+              })
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.4, alignItems: "center" } },
+              _this.renderCityCategoryText(stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].cityCategoryData)
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+            _this.renderDropdownOrRadioButton(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, travelConstants.STAY_CLASS_KEY, stayTypes, stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].stayClass, "Stay type", stayTypes[0].label)
+          ),
+          _this.isDeviationExist(stayClass) ? _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewtravelplanstyles2.default.deviationCommentStyle },
+            _react2.default.createElement(_ewfloatinglabel2.default, {
+              label: travelConstants.DEVIATION_LABEL,
+              placeholderlabel: travelConstants.DEVIATION_PLACEHOLDER_LABEL,
+              ref: function ref(textinputref) {
+                return _this.textInputRef[travelConstants.STAY_DEVIATION_KEY + locationKey + stayAndLocalItenaryIndex] = textinputref;
+              },
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              onChangeText: function onChangeText(updatedText) {
+                return _this.onStayAndLocalTextInputChanged(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, updatedText, travelConstants.STAY_DEVIATION_KEY);
+              },
+              value: stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].deviationReason
+            })
+          ) : null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, flexDirection: 'row' } },
+            _react2.default.createElement(_ewdatebutton2.default, {
+              label: 'From',
+              customViewStyle: { flex: 0.5, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+              dateObject: stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].fromDate,
+              _handleEwDateTimePicked: function _handleEwDateTimePicked(date, mode, elementKey) {
+                return _this._handleEwDateTimePicked(date, mode, elementKey);
+              }
+            }),
+            _react2.default.createElement(_ewdatebutton2.default, {
+              label: 'To',
+              customViewStyle: { flex: 0.5, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+              dateObject: stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].toDate,
+              _handleEwDateTimePicked: function _handleEwDateTimePicked(date, mode, elementKey) {
+                return _this._handleEwDateTimePicked(date, mode, elementKey);
+              }
+            })
+          ),
+          _react2.default.createElement(_ewcheckbox2.default, {
+            label: travelConstants.BOOKING_REQUIRED_LABEL,
+            isChecked: stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].isStayBookingRequired,
+            onCheckboxClick: function onCheckboxClick() {
+              return _this.onStayAndLocalCheckboxStateChange(stayAndLocalItenary, stayAndLocalItenaryIndex, travelConstants.STAY_BOOKING_KEY, locationKey);
+            },
+            customViewStyle: [{ marginTop: 20 }, _ewtravelplanstyles2.default.checkboxStyles]
+          }),
+          _react2.default.createElement(_ewfloatinglabel2.default, {
+            label: 'Preferences',
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            onChangeText: function onChangeText(stayPreferences) {
+              return _this.onStayAndLocalTextInputChanged(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, stayPreferences, travelConstants.STAY_PREFERENCES_KEY);
+            },
+            value: stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].stayPreferences
+          }),
+          _this.renderDoneButton(stayAndLocalItenary, stayAndLocalItenaryIndex, travelConstants.STAY_KEY, locationKey)
+        );
+      } else {
+
+        stayText = "Stay in " + stayClass.label + " " + stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].stayLocation + " from " + (0, _utils.showDeviceDateFormat)(stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].fromDate.value) + " to " + (0, _utils.showDeviceDateFormat)(stayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].toDate.value);
+
+        return _react2.default.createElement(
+          _ewcard2.default,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", margin: appstyleguide.DEFAULT_MARGIN } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.8 } },
+              _react2.default.createElement(_ewh3text2.default, {
+                text: stayText
+              })
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.2, flexDirection: "row", alignItems: "center", marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN } },
+              _this.renderCancelView(stayAndLocalItenary, stayAndLocalItenaryIndex, travelConstants.STAY_KEY, locationKey),
+              !_this.props.reveiwMode ? _react2.default.createElement(_ewicon2.default, {
+                iconSource: editIcon,
+                customIconStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN },
+                onIconPressed: function onIconPressed() {
+                  return _this.onEditButtonPressed(stayAndLocalItenaryIndex, travelConstants.STAY_KEY, locationKey);
+                }
+              }) : null
+            )
+          )
+        );
+      }
+    };
+
+    _this.renderLocalTravelDetails = function (stayAndLocalItenary, stayAndLocalItenaryIndex, locationKey) {
+
+      console.log(FILE_NAME + "In renderLocalTravelDetails", stayAndLocalItenary, locationKey);
+
+      var _this$state = _this.state,
+          locationData = _this$state.locationData,
+          localTravelModes = _this$state.localTravelModes;
+
+
+      transportType = _this.getStayAndLocalModeType(localTravelModes, stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].transportType);
+
+      if (stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].currentMode == travelConstants.EDIT_MODE && !_this.props.reveiwMode) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { alignItems: "flex-end", marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+            _this.renderCancelView(stayAndLocalItenary, stayAndLocalItenaryIndex, travelConstants.LOCAL_TRAVEL_KEY, locationKey)
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            {
+
+              onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+
+                _this.setState({
+
+                  currentFocussedTextInput: travelConstants.LOCAL_TRAVEL_LOCATION_KEY + locationKey + stayAndLocalItenaryIndex
+                });
+              }
+            },
+            _react2.default.createElement(_ewautocompleteinput2.default, {
+              dropdownData: locationData,
+              hideResults: !_this.isAutoCompleteDropdownVisible(travelConstants.LOCAL_TRAVEL_LOCATION_KEY + locationKey + stayAndLocalItenaryIndex, stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].localTravelLocation),
+              updateScrollState: function updateScrollState(scrollViewState) {
+                return _this.setState({ enableScrollViewScroll: scrollViewState });
+              },
+              scrollViewVisibility: _this.state.enableScrollViewScroll,
+              renderListItem: function renderListItem(data) {
+                return _this.renderStayAndLocalLocationListItem(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, data, travelConstants.LOCAL_TRAVEL_LOCATION_KEY);
+              },
+
+              customTextInput: function customTextInput() {
+                return _react2.default.createElement(_ewfloatinglabel2.default, {
+                  label: 'Location',
+                  autoCorrect: false,
+                  autoCapitalize: 'none',
+                  ref: function ref(textinputref) {
+                    return _this.textInputRef[travelConstants.LOCAL_TRAVEL_LOCATION_KEY + locationKey + stayAndLocalItenaryIndex];
+                  },
+                  onChangeText: function onChangeText(localTravelLocation) {
+                    return _this.onStayAndLocalTextInputChanged(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, localTravelLocation, travelConstants.LOCAL_TRAVEL_LOCATION_KEY);
+                  },
+                  value: stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].localTravelLocation
+                });
+              }
+            })
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN } },
+            _this.renderDropdownOrRadioButton(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, travelConstants.LOCAL_TRAVEL_MODE_KEY, localTravelModes, stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].transportType, "Transport type", localTravelModes[0].label)
+          ),
+          _this.isDeviationExist(transportType) ? _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewtravelplanstyles2.default.deviationCommentStyle },
+            _react2.default.createElement(_ewfloatinglabel2.default, {
+              label: travelConstants.DEVIATION_LABEL,
+              placeholderlabel: travelConstants.DEVIATION_PLACEHOLDER_LABEL,
+              ref: function ref(textinputref) {
+                return _this.textInputRef[travelConstants.LOCAL_TRAVEL_DEVIATION_KEY + locationKey + stayAndLocalItenaryIndex] = textinputref;
+              },
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              onChangeText: function onChangeText(updatedText) {
+                return _this.onStayAndLocalTextInputChanged(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, updatedText, travelConstants.LOCAL_TRAVEL_DEVIATION_KEY);
+              },
+              value: stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].deviationReason
+            })
+          ) : null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, flexDirection: 'row' } },
+            _react2.default.createElement(_ewdatebutton2.default, {
+              label: 'From',
+              customViewStyle: { flex: 0.5, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+              dateObject: stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].fromDate,
+              _handleEwDateTimePicked: function _handleEwDateTimePicked(date, mode, elementKey) {
+                return _this._handleEwDateTimePicked(date, mode, elementKey);
+              }
+            }),
+            _react2.default.createElement(_ewdatebutton2.default, {
+              label: 'To',
+              customViewStyle: { flex: 0.5, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+              dateObject: stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].toDate,
+              _handleEwDateTimePicked: function _handleEwDateTimePicked(date, mode, elementKey) {
+                return _this._handleEwDateTimePicked(date, mode, elementKey);
+              }
+            })
+          ),
+          _react2.default.createElement(_ewcheckbox2.default, {
+            label: travelConstants.BOOKING_REQUIRED_LABEL,
+            isChecked: stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].isLocalBookingRequired,
+            onCheckboxClick: function onCheckboxClick() {
+              return _this.onStayAndLocalCheckboxStateChange(stayAndLocalItenary, stayAndLocalItenaryIndex, travelConstants.LOCAL_TRAVEL_BOOKING_KEY, locationKey);
+            },
+            customViewStyle: [{ marginTop: 20 }, _ewtravelplanstyles2.default.checkboxStyles]
+          }),
+          _react2.default.createElement(_ewfloatinglabel2.default, {
+            label: 'Preferences',
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            onChangeText: function onChangeText(localTravelPreferences) {
+              return _this.onStayAndLocalTextInputChanged(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, localTravelPreferences, travelConstants.LOCAL_TRAVEL_PREFERENCES_KEY);
+            },
+            value: stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].localPreferences
+          }),
+          _this.renderDoneButton(stayAndLocalItenary, stayAndLocalItenaryIndex, travelConstants.LOCAL_TRAVEL_KEY, locationKey)
+        );
+      } else {
+
+        localTravelText = transportType.label + " is required in " + stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].localTravelLocation + " from " + (0, _utils.showDeviceDateFormat)(stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].fromDate.value) + " to " + (0, _utils.showDeviceDateFormat)(stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].toDate.value);
+
+        return _react2.default.createElement(
+          _ewcard2.default,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", margin: appstyleguide.DEFAULT_MARGIN } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.8 } },
+              _react2.default.createElement(_ewh3text2.default, {
+                text: localTravelText
+              })
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.2, flexDirection: "row", alignItems: "center", marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN } },
+              _this.renderCancelView(stayAndLocalItenary, stayAndLocalItenaryIndex, travelConstants.LOCAL_TRAVEL_KEY, locationKey),
+              !_this.props.reveiwMode ? _react2.default.createElement(_ewicon2.default, {
+                iconSource: editIcon,
+                customIconStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN },
+                onIconPressed: function onIconPressed() {
+                  return _this.onEditButtonPressed(stayAndLocalItenaryIndex, travelConstants.LOCAL_TRAVEL_KEY, locationKey);
+                }
+              }) : null
+            )
+          )
+        );
+      }
+    };
+
+    _this.onStayAndLocalPickerStateChange = function (stayAndLocalItenary, stayAndLocalItenaryIndex, newPickerValue, pickerKey, locationKey) {
+
+      console.log(FILE_NAME + "In onStayAndLocalPickerStateChange");
+
+      updatedStayAndLocalItenary = stayAndLocalItenary;
+
+      switch (pickerKey) {
+
+        case travelConstants.STAY_CLASS_KEY:
+
+          updatedStayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].stayClass = newPickerValue;
+
+          break;
+        default:
+
+      }
+
+      _this.setState({
+        stayAndLocalTravelModel: updatedStayAndLocalItenary
+      });
+    };
+
+    _this.onCheckboxStateChange = function (checkBoxKey, travelItenary, travelItenaryIndex) {
+
+      console.log(FILE_NAME + "In onCheckboxStateChange");
+
+      updatedTravelItenary = travelItenary;
+
+      switch (checkBoxKey) {
+        case travelConstants.TRAVEL_BOOKING_KEY:
+
+          updatedTravelItenary[travelItenaryIndex].isBookingRequired = !updatedTravelItenary[travelItenaryIndex].isBookingRequired;
+          break;
+
+        default:
+
+      }
+
+      _this.setState({
+        travelModel: updatedTravelItenary
+      });
+    };
+
+    _this.onTextStateChanged = function (travelItenary, travelItenaryIndex, newText, textInputKey) {
+      var isDropdownItemPressed = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+
+
+      console.log(FILE_NAME + "In onTextStateChanged", newText, isDropdownItemPressed);
+
+      updatedTravelItenary = travelItenary;
+
+      textinputRefKey = textInputKey + travelItenaryIndex;
+
+      focussedTextinput = _this.state.currentFocussedTextInput;
+
+      console.log("travelitenary", updatedTravelItenary, travelItenaryIndex);
+
+      switch (textInputKey) {
+
+        case travelConstants.SOURCE_CITY_REF_KEY:
+
+          console.log("newtext received", newText);
+
+          if (isDropdownItemPressed) cityName = newText.cityName;else cityName = newText;
+
+          updatedTravelItenary[travelItenaryIndex].sourceCity = cityName;
+
+          if (_this.state.isSingleCity && updatedTravelItenary.length > 1 && travelItenaryIndex == 0) updatedTravelItenary[travelItenaryIndex + 1].destinationCity = cityName;
+
+          focussedTextinput = textinputRefKey;
+
+          _this.updateCityMapping(newText);
+
+          _this.handleDropDownPress(isDropdownItemPressed, newText);
+
+          break;
+
+        case travelConstants.DESTINATION_CITY_REF_KEY:
+
+          if (isDropdownItemPressed) cityName = newText.cityName;else cityName = newText;
+
+          updatedTravelItenary[travelItenaryIndex].destinationCity = cityName;
+
+          _this.updateCityMapping(newText);
+
+          for (travelIndex = travelItenaryIndex + 1; travelIndex < updatedTravelItenary.length; travelIndex++) {
+
+            updatedTravelItenary[travelIndex].sourceCity = cityName;
+          }
+
+          focussedTextinput = textinputRefKey;
+
+          console.log("updatedTravelItenary", updatedTravelItenary);
+
+          _this.handleDropDownPress(isDropdownItemPressed, newText);
+
+          break;
+
+        case travelConstants.TRAVEL_PREFERENCES_KEY:
+
+          updatedTravelItenary[travelItenaryIndex].travelPreferences = newText;
+
+          focussedTextinput = textinputRefKey;
+
+          break;
+
+        case travelConstants.TRAVEL_DEVIATION_KEY:
+
+          updatedTravelItenary[travelItenaryIndex].deviationReason = newText;
+
+          focussedTextinput = textinputRefKey;
+
+          break;
+
+        case travelConstants.AIR_PREFERENCES_AIRLINE_KEY:
+
+          updatedTravelItenary[travelItenaryIndex].airPreferences.Airline = newText;
+
+          focussedTextinput = textinputRefKey;
+
+          break;
+
+        case travelConstants.AIR_PREFERENCES_FLIGHT_KEY:
+
+          updatedTravelItenary[travelItenaryIndex].airPreferences.flightNumber = newText;
+
+          focussedTextinput = textinputRefKey;
+
+          break;
+
+        case travelConstants.AIR_PREFERENCES_TERMINAL_KEY:
+
+          updatedTravelItenary[travelItenaryIndex].airPreferences.Terminal = newText;
+
+          focussedTextinput = textinputRefKey;
+
+          break;
+
+        default:
+
+      }
+
+      console.log("travelitenary", updatedTravelItenary);
+
+      _this.setState({
+        travelModel: updatedTravelItenary,
+
+        currentFocussedTextInput: focussedTextinput
+      });
+    };
+
+    _this.renderTravelDetails = function (travelItenary, travelItenaryIndex) {
+
+      console.log(FILE_NAME + "In renderTravelDetails", travelItenary);
+
+      console.log("travelItenaryIndex", travelItenary[travelItenaryIndex], travelItenaryIndex);
+
+      var travelClass = _this.getTravelClass(travelItenary, travelItenaryIndex);
+
+      if (travelItenary[travelItenaryIndex].currentMode == travelConstants.EDIT_MODE && !_this.props.reveiwMode) {
+
+        if (travelItenaryIndex == 0 || !_this.state.initialScreen) {
+
+          return _react2.default.createElement(
+            _ewcard2.default,
+            {
+              customStyle: { margin: appstyleguide.DEFAULT_MARGIN }
+            },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN, marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN } },
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { alignItems: "flex-end", marginRight: 10, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN } },
+                _this.renderCancelView(travelItenary, travelItenaryIndex, travelConstants.TRAVEL_DETAIL_KEY)
+              ),
+              _this.renderTravelModes(travelItenary, travelItenaryIndex),
+              _this.renderTravelView(travelItenary, travelItenaryIndex, travelClass),
+              _this.renderDoneButton(travelItenary, travelItenaryIndex, travelConstants.TRAVEL_DETAIL_KEY)
+            )
+          );
+        }
+      } else {
+
+        return _react2.default.createElement(
+          _ewcard2.default,
+          { customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", marginTop: appstyleguide.DEFAULT_TOP_MARGIN, alignItems: "center", justifyContent: "center" } },
+            _react2.default.createElement(_ewh2text2.default, {
+              text: travelItenary[travelItenaryIndex].sourceCity,
+              customStyle: { marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN, color: appstyleguide.APP_BLUE }
+            }),
+            _react2.default.createElement(_ewicon2.default, {
+              iconSource: rightArrowIcon
+            }),
+            _react2.default.createElement(_ewh2text2.default, {
+              text: travelItenary[travelItenaryIndex].destinationCity,
+              customStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN, color: appstyleguide.APP_BLUE }
+
+            })
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.07, marginLeft: 5, marginTop: 5 } },
+              _react2.default.createElement(_ewicon2.default, {
+                iconSource: _this.getTravelIconSource(travelClass)
+              })
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.2 } },
+              _react2.default.createElement(_ewh3text2.default, {
+                text: travelClass.label + " class"
+              })
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.55 } },
+              _react2.default.createElement(_ewh3text2.default, {
+                text: (0, _utils.showDeviceDateFormat)(travelItenary[travelItenaryIndex].departureDate.value)
+              }),
+              travelItenary[travelItenaryIndex].departureDuration != travelConstants.travelDuration[0].value ? _react2.default.createElement(_ewh3text2.default, {
+                text: travelConstants.travelDuration[travelItenary[travelItenaryIndex].departureDuration].label,
+                customStyle: { marginTop: 3 }
+              }) : null
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.18, flexDirection: "row" } },
+              _this.renderCancelView(travelItenary, travelItenaryIndex, travelConstants.TRAVEL_DETAIL_KEY),
+              !_this.props.reveiwMode ? _react2.default.createElement(_ewicon2.default, {
+                iconSource: editIcon,
+                customIconStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN },
+                onIconPressed: function onIconPressed() {
+                  return _this.onEditButtonPressed(travelItenaryIndex, travelConstants.TRAVEL_DETAIL_KEY);
+                }
+              }) : null
+            )
+          )
+        );
+      }
+    };
+
+    _this.onTravelPickerStateChange = function (travelItenary, travelItenaryIndex, newPickerValue, pickerKey) {
+
+      console.log(FILE_NAME + "In onTravelPickerStateChange");
+
+      updatedTravelItenary = travelItenary;
+
+      switch (pickerKey) {
+
+        case travelConstants.DEPARTURE_DURATION_KEY:
+
+          updatedTravelItenary[travelItenaryIndex].departureDuration = newPickerValue;
+
+          break;
+        default:
+
+      }
+
+      _this.setState({
+        travelModel: updatedTravelItenary
+      });
+    };
+
+    _this.getTravelDetailModel = function (travelModelIndex, modelMode, isReturnTravel, travelData) {
+
+      console.log(FILE_NAME + "In getTravelDetailModel");
+
+      console.log("travelModelIndex", travelModelIndex);
+
+      sourceCity = "";
+      destinationCity = "";
+      deviationReason = "";
+      travelPreferences = "";
+      departureDate = (0, _utils.getCurrentDate)();
+
+      var travelMode = -1;
+      var travelClass = -1;
+      var mealSelected = travelConstants.NO_MEAL_REQUIRED;
+      var Airline = "";
+      var Terminal = "";
+      var flightNumber = "";
+      var departureTime = "";
+      var departureDuration = travelConstants.travelDuration[0].value;
+
+      var travelId = null;
+
+      isBookingRequired = false;
+
+      var _this$props$currentTr = _this.props.currentTravelState.travelInformation,
+          travelModes = _this$props$currentTr.travelModes,
+          travelClasses = _this$props$currentTr.travelClasses;
+
+
+      if (travelData != null) {
+
+        sourceCity = travelData.From_City.toString();
+        destinationCity = travelData.To_City.toString();
+        departureDate = _this.convertToDateFormat(travelData.From_Date);
+        travelMode = _this.getTravelMode(travelModes, travelData.Travel_Mode_Class_Id, travelClasses);
+        travelClass = travelData.Travel_Mode_Class_Id;
+        travelPreferences = travelData.Preferences;
+        travelId = travelData.Travel_Detail_Id;
+
+        if (travelData.Reason != null) deviationReason = travelData.Reason;
+
+        isBookingRequired = travelData.Booking_Required == "Yes" ? true : false;
+
+        if (travelData.Travel_Air != null) {
+
+          Airline = travelData.Travel_Air.Airline.toString();
+          Terminal = travelData.Travel_Air.Terminal.toString();
+          mealSelected = travelData.Travel_Air.Meal_Preference;
+          flightNumber = travelData.Travel_Air.Flight_No;
+          departureTime = travelData.Travel_Air.Depart_Time_From;
+        }
+      } else {
+        var travelModel = _this.state.travelModel;
+
+
+        if (travelModel.length > 0 && travelModel[travelModelIndex - 1] != null) {
+
+          sourceCity = travelModel[travelModelIndex - 1].destinationCity;
+          departureDate = travelModel[travelModelIndex - 1].departureDate.value;
+
+          if (travelModel[travelModelIndex - 1].travelMode != defaultPickerSelected) {
+
+            travelMode = travelModel[travelModelIndex - 1].travelMode;
+            travelClass = travelClasses[travelModes[travelMode].label][1].value;
+          }
+        }
+
+        if (isReturnTravel) {
+
+          destinationCity = travelModel[travelModelIndex - 1].sourceCity;
+        }
+      }
+
+      travelDetailModel = {
+
+        currentMode: modelMode,
+
+        sourceCity: sourceCity,
+        destinationCity: destinationCity,
+
+        departureDate: {
+          key: travelConstants.FROM_DATE_KEY + travelConstants.TRAVEL_DETAIL_KEY + travelModelIndex,
+          value: departureDate,
+          mode: 'date'
+        },
+
+        travelMode: travelMode,
+        travelClass: travelClass,
+
+        deviationReason: deviationReason,
+
+        departureDuration: departureDuration,
+
+        travelPreferences: travelPreferences,
+
+        airPreferences: {
+
+          "Airline": Airline,
+          "flightNumber": flightNumber,
+          "Terminal": Terminal,
+          "departureTime": departureTime,
+          "mealSelected": mealSelected
+        },
+
+        isBookingRequired: isBookingRequired,
+
+        travelId: travelId };
+
+      return travelDetailModel;
+    };
+
+    _this.getStayModel = function (stayModelIndex, modelMode, location, stayData) {
+
+      console.log(FILE_NAME + "In getStayModel");
+
+      startDate = (0, _utils.getCurrentDate)();
+      endDate = (0, _utils.getCurrentDate)();
+      stayPreferences = "";
+      deviationReason = "";
+      isStayBookingRequired = false;
+      cityCategoryData = [];
+      stayId = null;
+
+      var stayTypes = _this.props.currentTravelState.travelInformation.stayTypes;
+
+
+      if (stayData != null) {
+
+        startDate = _this.convertToDateFormat(stayData.From_Date);
+        endDate = _this.convertToDateFormat(stayData.To_Date);
+        stayType = stayData.Type_ID;
+        stayPreferences = stayData.Preferences;
+        stayId = stayData.Accommodation_Detail_Id;
+
+        if (stayData.Reason != null) deviationReason = stayData.Reason;
+
+        isStayBookingRequired = stayData.Booking_Required == "Yes" ? true : false;
+
+        cityCategoryDataValue = {
+
+          "cityCategory_Name": stayData.City_Category,
+          "cityCategory_Id": stayData.City_Category_ID
+        };
+        cityCategoryData.push(cityCategoryDataValue);
+      } else {
+        var travelModel = _this.state.travelModel;
+
+
+        stayType = stayTypes[1].value;
+        startDate = travelModel[0].departureDate.value;
+        endDate = travelModel[0].departureDate.value;
+      }
+
+      stayModel = {
+
+        stayLocation: location.toString(),
+
+        currentMode: modelMode,
+
+        fromDate: {
+          key: travelConstants.FROM_DATE_KEY + travelConstants.STAY_KEY + stayModelIndex + location,
+          value: startDate,
+          mode: 'date'
+        },
+        toDate: {
+          key: travelConstants.TO_DATE_KEY + travelConstants.STAY_KEY + stayModelIndex + location,
+          value: endDate,
+          mode: 'date'
+
+        },
+        stayClass: stayType,
+        stayPreferences: stayPreferences,
+
+        deviationReason: deviationReason,
+
+        stayTypes: stayTypes,
+        cityCategoryData: cityCategoryData,
+
+        isStayBookingRequired: isStayBookingRequired,
+        stayId: stayId };
+
+      return stayModel;
+    };
+
+    _this.getLocaltravelModel = function (localTravelModelIndex, modelMode, location, localTravelData) {
+
+      console.log(FILE_NAME + "In getLocaltravelModel");
+
+      startDate = (0, _utils.getCurrentDate)();
+      endDate = (0, _utils.getCurrentDate)();
+      isLocalBookingRequired = false;
+      deviationReason = "";
+      localPreferences = "";
+
+      localTravelId = null;
+
+      var localTravelModes = _this.props.currentTravelState.travelInformation.localTravelModes;
+
+
+      if (localTravelData != null) {
+
+        startDate = _this.convertToDateFormat(localTravelData.From_Date);
+        endDate = _this.convertToDateFormat(localTravelData.To_Date);
+        transportType = localTravelData.Convey_Mode_Id;
+        isLocalBookingRequired = localTravelData.Booking_Required == "Yes" ? true : false;
+        localPreferences = localTravelData.Instructions;
+        localTravelId = localTravelData.Convey_Detail_Id;
+
+        if (localTravelData.Reason != null) deviationReason = localTravelData.Reason;
+      } else {
+        var travelModel = _this.state.travelModel;
+
+
+        transportType = localTravelModes[1].value;
+
+        startDate = travelModel[0].departureDate.value;
+        endDate = travelModel[0].departureDate.value;
+      }
+
+      console.log("localTravelModes received", localTravelModes);
+
+      localTravelModel = {
+
+        currentMode: modelMode,
+
+        localTravelLocation: location.toString(),
+
+        fromDate: {
+          key: travelConstants.FROM_DATE_KEY + travelConstants.LOCAL_TRAVEL_KEY + localTravelModelIndex + location,
+          value: startDate,
+          mode: 'date'
+        },
+
+        toDate: {
+          key: travelConstants.TO_DATE_KEY + travelConstants.LOCAL_TRAVEL_KEY + localTravelModelIndex + location,
+          value: endDate,
+          mode: 'date'
+        },
+
+        transportType: transportType,
+
+        localPreferences: localPreferences,
+
+        deviationReason: deviationReason,
+
+        isLocalBookingRequired: isLocalBookingRequired,
+
+        localTravelId: localTravelId };
+
+      return localTravelModel;
+    };
+
+    _this._handleEwDateTimePicked = function (date, mode, elementKey) {
+
+      console.log(FILE_NAME, "In _handleEwDateTimePicked method");
+
+      console.log("Returned Date value is - ", date);
+      console.log("Mod is - ", mode);
+      console.log("For Element is - ", elementKey);
+
+      var valueDateTimePicker;
+
+      travelElementKey = elementKey.replace(/\d+/g, '');
+
+      travelItenaryIndex = parseInt(elementKey.replace(/\D/g, ''));
+
+      console.log("travelIndex", travelElementKey, travelItenaryIndex);
+
+      var dateSelected = new Date(date).getTime();
+
+      updatedStayAndLocalTravelItenary = _this.state.stayAndLocalTravelModel;
+
+      updatedTravelItenary = _this.state.travelModel;
+
+      if (travelElementKey == travelConstants.FROM_DATE_KEY + travelConstants.TRAVEL_DETAIL_KEY) {
+
+        if (travelItenaryIndex > 0 && dateSelected < updatedTravelItenary[travelItenaryIndex - 1].departureDate.value) {
+
+          _this.props.showAlertMessage(travelConstants.DEPART_DATE_SMALLER_MESSAGE);
+        } else {
+
+          if (travelItenaryIndex == 0) {
+
+            updatedStayAndLocalTravelItenary = _this.changeStayAndLocalTravelDates(updatedTravelItenary, updatedStayAndLocalTravelItenary, dateSelected);
+          }
+
+          updatedTravelItenary[travelItenaryIndex].departureDate.value = dateSelected;
+
+          for (travelIndex = travelItenaryIndex + 1; travelIndex < updatedTravelItenary.length; travelIndex++) {
+
+            if (updatedTravelItenary[travelIndex].departureDate.value < dateSelected) updatedTravelItenary[travelIndex].departureDate.value = dateSelected;
+          }
+        }
+
+        _this.setState({
+          travelModel: updatedTravelItenary,
+          stayAndLocalTravelModel: updatedStayAndLocalTravelItenary
+        });
+      } else {
+
+        if (travelElementKey.includes(travelConstants.FROM_DATE_KEY + travelConstants.STAY_KEY)) {
+
+          if (_this.isDateBetweenTravelDates(dateSelected)) {
+
+            locationKey = travelElementKey.replace(travelConstants.FROM_DATE_KEY + travelConstants.STAY_KEY, '');
+
+            updatedStayAndLocalTravelItenary[locationKey].stayModel[travelItenaryIndex].fromDate.value = dateSelected;
+
+            if (dateSelected > updatedStayAndLocalTravelItenary[locationKey].stayModel[travelItenaryIndex].toDate.value) updatedStayAndLocalTravelItenary[locationKey].stayModel[travelItenaryIndex].toDate.value = dateSelected;
+
+            _this.setState({
+              stayAndLocalTravelModel: updatedStayAndLocalTravelItenary
+            });
+          } else {
+
+            _this.props.showAlertMessage(travelConstants.STAY_OUTSIDE_TRAVEL_DATE_MESAGE);
+          }
+        } else if (travelElementKey.includes(travelConstants.TO_DATE_KEY + travelConstants.STAY_KEY)) {
+
+          locationKey = travelElementKey.replace(travelConstants.TO_DATE_KEY + travelConstants.STAY_KEY, '');
+
+          if (dateSelected < updatedStayAndLocalTravelItenary[locationKey].stayModel[travelItenaryIndex].fromDate.value) _this.props.showAlertMessage(travelConstants.TO_DATE_GREATER_MESAGE);else {
+
+            if (_this.isDateBetweenTravelDates(dateSelected)) {
+
+              updatedStayAndLocalTravelItenary[locationKey].stayModel[travelItenaryIndex].toDate.value = dateSelected;
+
+              _this.setState({
+                stayAndLocalTravelModel: updatedStayAndLocalTravelItenary
+              });
+            } else {
+
+              _this.props.showAlertMessage(travelConstants.STAY_OUTSIDE_TRAVEL_DATE_MESAGE);
+            }
+          }
+        } else if (travelElementKey.includes(travelConstants.FROM_DATE_KEY + travelConstants.LOCAL_TRAVEL_KEY)) {
+
+          if (_this.isDateBetweenTravelDates(dateSelected)) {
+
+            locationKey = travelElementKey.replace(travelConstants.FROM_DATE_KEY + travelConstants.LOCAL_TRAVEL_KEY, '');
+
+            updatedStayAndLocalTravelItenary[locationKey].localTravelModel[travelItenaryIndex].fromDate.value = dateSelected;
+
+            if (dateSelected > updatedStayAndLocalTravelItenary[locationKey].localTravelModel[travelItenaryIndex].toDate.value) updatedStayAndLocalTravelItenary[locationKey].localTravelModel[travelItenaryIndex].toDate.value = dateSelected;
+
+            _this.setState({
+              stayAndLocalTravelModel: updatedStayAndLocalTravelItenary
+            });
+          } else {
+
+            _this.props.showAlertMessage(travelConstants.LOCAL_TRAVEL_OUTSIDE_TRAVEL_DATE_MESAGE);
+          }
+        } else if (travelElementKey.includes(travelConstants.TO_DATE_KEY + travelConstants.LOCAL_TRAVEL_KEY)) {
+
+          locationKey = travelElementKey.replace(travelConstants.TO_DATE_KEY + travelConstants.LOCAL_TRAVEL_KEY, '');
+
+          if (dateSelected < updatedStayAndLocalTravelItenary[locationKey].localTravelModel[travelItenaryIndex].fromDate.value) _this.props.showAlertMessage(travelConstants.TO_DATE_GREATER_MESAGE);else {
+
+            if (_this.isDateBetweenTravelDates(dateSelected)) {
+
+              updatedStayAndLocalTravelItenary[locationKey].localTravelModel[travelItenaryIndex].toDate.value = dateSelected;
+
+              _this.setState({
+                stayAndLocalTravelModel: updatedStayAndLocalTravelItenary
+              });
+            } else {
+
+              _this.props.showAlertMessage(travelConstants.LOCAL_TRAVEL_OUTSIDE_TRAVEL_DATE_MESAGE);
+            }
+          }
+        } else {}
+      }
+    };
+
+    _this.textInputRef = [];
+
+    console.log("existingComponentState is - ", _this.props.existingComponentState);
+
+    if (_this.props.initialState == null) {
+
+      elementValues = _this.handleElementsValues(_this.props.customTravelData);
+
+      _this.state = {
+
+        isSingleCity: elementValues.isSingleCity,
+        isMultiCity: elementValues.isMultiCity,
+
+        initialScreen: elementValues.initialScreen,
+
+        travelModel: elementValues.travelModel,
+
+        stayAndLocalTravelModel: elementValues.stayAndLocalTravelModel,
+
+        locationData: [],
+
+        cityIdMapping: [],
+
+        currentFocussedTextInput: "",
+
+        isAirPreferenceModalVisible: false,
+        isDoneButtonVisible: false,
+        activeAirPreferenceIndex: "",
+
+        travelModes: elementValues.travelModes,
+        travelClasses: elementValues.travelClasses,
+
+        stayTypes: elementValues.stayTypes,
+        localTravelModes: elementValues.localTravelModes,
+
+        enableScrollViewScroll: true
+      };
+
+      if (_this.props.customTravelData != null) {
+
+        _this.updateParentState(_this.state);
+      }
+    } else _this.state = _this.props.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwTravelPlan, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      this.props.getValidationMethod(this.localValidation.bind(this));
+      this.props.getComponentState(this.getCurrentState.bind(this));
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.cityInformationData != null && nextProps.cityInformationError == null) {
+
+        this.setState({
+
+          locationData: nextProps.cityInformationData
+
+        });
+      }
+
+      if (nextProps.cityInformationData == null && nextProps.cityInformationError != null) {}
+
+      if (nextProps.cityCategoryInformationData != null && nextProps.cityCategoryInformationError == null) {
+
+        updatedStayTypes = this.state.stayTypes;
+
+        updatedStayAndLocalTravelModel = this.state.stayAndLocalTravelModel;
+
+        var _nextProps$cityCatego = nextProps.cityCategoryInformationData[0],
+            location = _nextProps$cityCatego.location,
+            stayIndex = _nextProps$cityCatego.stayIndex,
+            applicableHeadType = _nextProps$cityCatego.applicableHeadType;
+
+
+        updatedStayAndLocalTravelModel[location].stayModel[stayIndex].cityCategoryData = nextProps.cityCategoryInformationData;
+
+        console.log("updatedstayandlocalll", updatedStayAndLocalTravelModel);
+
+        console.log("updatedstayandlocalll", updatedStayAndLocalTravelModel);
+
+        for (var _iterator = updatedStayTypes, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+          var _ref;
+
+          if (_isArray) {
+            if (_i >= _iterator.length) break;
+            _ref = _iterator[_i++];
+          } else {
+            _i = _iterator.next();
+            if (_i.done) break;
+            _ref = _i.value;
+          }
+
+          var stayType = _ref;
+
+
+          if (stayType.value != defaultPickerSelected) {
+
+            if (applicableHeadType.includes(stayType.value)) stayType.isApplicableToEmployee = 1;else stayType.isApplicableToEmployee = 0;
+          }
+        }
+
+        updatedStayAndLocalTravelModel[location].stayModel[stayIndex].stayTypes = updatedStayTypes;
+
+        console.log("updatedstayandlocalll", updatedStayAndLocalTravelModel);
+
+        console.log("updatedstayandlocalll", updatedStayAndLocalTravelModel);
+
+        this.setState({
+
+          stayAndLocalTravelModel: updatedStayAndLocalTravelModel
+
+        });
+      }
+
+      if (nextProps.cityInformationData == null && nextProps.cityCategoryInformationError != null) {}
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log(FILE_NAME + "In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In render");
+
+      console.log("locationData", this.state.currentFocussedTextInput);
+
+      console.log("Received props are - ", this.props);
+
+      var _state = this.state,
+          travelModel = _state.travelModel,
+          stayAndLocalTravelModel = _state.stayAndLocalTravelModel,
+          cityIdMapping = _state.cityIdMapping;
+
+
+      console.log("cityIDMapping", cityIdMapping);
+
+      console.log("travelitenary", travelModel, stayAndLocalTravelModel);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        {
+          style: { flex: 1 },
+          onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+
+            console.log("Inside onStartShouldSetResponderCapture");
+            _this2.setState({
+              enableScrollViewScroll: true,
+              currentFocussedTextInput: ""
+            });
+          }
+
+        },
+        _react2.default.createElement(
+          _nativeBase.Content,
+          {
+            keyboardShouldPersistTaps: 'handled',
+            scrollEnabled: this.state.enableScrollViewScroll
+
+          },
+          this.showTripTypeView(),
+          this.state.travelModel.length > 0 ? _react2.default.createElement(
+            _reactNative.View,
+            null,
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { margin: 10 } },
+              Object.keys(travelModel).map(function (key, travelItenaryIndex) {
+                return _react2.default.createElement(
+                  _reactNative.View,
+                  null,
+                  _this2.renderTravelScheduleList(travelModel, travelItenaryIndex)
+                );
+              }),
+              this.renderTravelAddButton(travelModel)
+            ),
+            !this.state.initialScreen ? this.showStayAndLocalTravelView(stayAndLocalTravelModel) : null
+          ) : null,
+          this.renderAirPreferenceModal()
+        )
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      context = this;
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }, {
+    key: 'handleElementsValues',
+    value: function handleElementsValues(customTravelData) {
+      var _props$currentTravelS = this.props.currentTravelState.travelInformation,
+          travelModes = _props$currentTravelS.travelModes,
+          travelClasses = _props$currentTravelS.travelClasses,
+          stayTypes = _props$currentTravelS.stayTypes,
+          localTravelModes = _props$currentTravelS.localTravelModes;
+
+
+      var isSingleCity = false;
+      var isMultiCity = false;
+      var initialScreen = true;
+      var travelModel = [];
+      var stayAndLocalTravelModel = {};
+      var travelModes = travelModes;
+      var travelClasses = travelClasses;
+      var stayTypes = stayTypes;
+      var localTravelModes = localTravelModes;
+
+      if (customTravelData != null) {
+
+        initialScreen = false;
+
+        var accomodationDetails = customTravelData.accomodationDetails,
+            travelList = customTravelData.travelList,
+            conveyanceDetails = customTravelData.conveyanceDetails;
+
+
+        if (travelList.length > travelConstants.DEFAULT_SINGLE_CITY_MODEL) isMultiCity = true;else isSingleCity = true;
+
+        for (var _iterator2 = travelList, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+          var _ref2;
+
+          if (_isArray2) {
+            if (_i2 >= _iterator2.length) break;
+            _ref2 = _iterator2[_i2++];
+          } else {
+            _i2 = _iterator2.next();
+            if (_i2.done) break;
+            _ref2 = _i2.value;
+          }
+
+          var travelDetail = _ref2;
+
+
+          travelModel.push(this.getTravelDetailModel(travelModel.length, travelConstants.VIEW_MODE, false, travelDetail));
+        }
+
+        if (accomodationDetails.length != 0) {
+
+          for (var _iterator3 = accomodationDetails, _isArray3 = Array.isArray(_iterator3), _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+            var _ref3;
+
+            if (_isArray3) {
+              if (_i3 >= _iterator3.length) break;
+              _ref3 = _iterator3[_i3++];
+            } else {
+              _i3 = _iterator3.next();
+              if (_i3.done) break;
+              _ref3 = _i3.value;
+            }
+
+            var accomodationDetail = _ref3;
+
+
+            var location = accomodationDetail.Place_Of_Stay;
+
+            console.log("stayAndLocalTravelModel value -", stayAndLocalTravelModel);
+
+            if (stayAndLocalTravelModel[location] == null) {
+
+              babelHelpers.extends(stayAndLocalTravelModel, this.initializeStayAndLocalModel(location));
+            }
+
+            stayAndLocalTravelModel[location].stayModel.push(this.getStayModel(stayAndLocalTravelModel[location].stayModel.length, travelConstants.VIEW_MODE, location, accomodationDetail));
+          }
+        }
+
+        if (conveyanceDetails.length != 0) {
+
+          for (var _iterator4 = conveyanceDetails, _isArray4 = Array.isArray(_iterator4), _i4 = 0, _iterator4 = _isArray4 ? _iterator4 : _iterator4[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+            var _ref4;
+
+            if (_isArray4) {
+              if (_i4 >= _iterator4.length) break;
+              _ref4 = _iterator4[_i4++];
+            } else {
+              _i4 = _iterator4.next();
+              if (_i4.done) break;
+              _ref4 = _i4.value;
+            }
+
+            var conveyanceDetail = _ref4;
+
+
+            var location = conveyanceDetail.Place;
+
+            if (stayAndLocalTravelModel[location] == null) {
+
+              babelHelpers.extends(stayAndLocalTravelModel, this.initializeStayAndLocalModel(location));
+            }
+
+            stayAndLocalTravelModel[location].localTravelModel.push(this.getLocaltravelModel(stayAndLocalTravelModel[location].localTravelModel.length, travelConstants.VIEW_MODE, location, conveyanceDetail));
+          }
+        }
+      }
+
+      console.log("stayAndLocalTravelModel", stayAndLocalTravelModel);
+
+      elementValues = {
+
+        isSingleCity: isSingleCity,
+        isMultiCity: isMultiCity,
+        initialScreen: initialScreen,
+        travelModel: travelModel,
+        stayAndLocalTravelModel: stayAndLocalTravelModel,
+        travelModes: travelModes,
+        travelClasses: travelClasses,
+        stayTypes: stayTypes,
+        localTravelModes: localTravelModes
+
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: 'initializeStayAndLocalModel',
+    value: function initializeStayAndLocalModel(location) {
+
+      stayAndLocalTravelModel = {};
+      stayAndLocalTravelModel[location] = {};
+      stayAndLocalTravelModel[location].stayModel = [];
+      stayAndLocalTravelModel[location].localTravelModel = [];
+      stayAndLocalTravelModel[location].isServerData = true;
+
+      console.log("stayAndLocalTravelModel", stayAndLocalTravelModel);
+      return stayAndLocalTravelModel;
+    }
+  }, {
+    key: 'updateParentState',
+    value: function updateParentState() {
+
+      console.log(FILE_NAME + "In updateParentState");
+
+      if (this.localValidation()) this.props.updateParentState(this.state);
+    }
+  }, {
+    key: 'getCurrentState',
+    value: function getCurrentState() {
+
+      return this.state;
+    }
+  }, {
+    key: 'showStayAndLocalTravelView',
+    value: function showStayAndLocalTravelView(stayAndLocalTravelModel) {
+      var _this3 = this;
+
+      console.log(FILE_NAME + "In showStayAndLocalTravelView");
+
+      var travelModel = this.state.travelModel;
+
+
+      uniqueTravelCity = [];
+
+      if (Object.keys(stayAndLocalTravelModel).length === 0 && !this.props.reveiwMode) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { margin: appstyleguide.DEFAULT_MARGIN, alignSelf: 'center' } },
+          _react2.default.createElement(_ewbutton2.default, {
+            label: 'Stay And Local Transport',
+            onButonClicked: function onButonClicked() {
+              return _this3.showLocalAndStayView(stayAndLocalTravelModel);
+            }
+          })
+        );
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewbar2.default, {
+            customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+          }),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { alignItems: "center", justifyContent: "center" } },
+            _react2.default.createElement(_ewh1text2.default, {
+              text: 'Stay & local Transport',
+              customStyle: { margin: 10 }
+            })
+          ),
+          _react2.default.createElement(_ewbar2.default, null),
+          _react2.default.createElement(
+            _ewcard2.default,
+            {
+              customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+            },
+            Object.keys(travelModel).map(function (key, stayItenaryIndex) {
+              return _this3.renderStayAndLocalView(stayAndLocalTravelModel, travelModel, key, uniqueTravelCity);
+            }),
+            this.renderServerStayAndLocal(stayAndLocalTravelModel, travelModel, uniqueTravelCity)
+          ),
+          this.props.reveiwMode ? null : this.showCompleteLocationButtons(stayAndLocalTravelModel),
+          this.renderAdditionalDetailsButton()
+        );
+      }
+    }
+  }, {
+    key: 'renderServerStayAndLocal',
+    value: function renderServerStayAndLocal(stayAndLocalTravelModel, travelModel, uniqueTravelCity) {
+      var _this4 = this;
+
+      if (this.props.customTravelData != null) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          Object.keys(stayAndLocalTravelModel).map(function (key, stayItenaryIndex) {
+            return _this4.renderStayAndLocalView(stayAndLocalTravelModel, travelModel, key, uniqueTravelCity, true, stayItenaryIndex);
+          })
+        );
+      }
+    }
+  }, {
+    key: 'renderAdditionalDetailsButton',
+    value: function renderAdditionalDetailsButton() {
+      var _this5 = this;
+
+      if (!this.props.reveiwMode && !this.props.currentTravelState.istravelCostVisible) {
+
+        return _react2.default.createElement(_ewbutton2.default, {
+          label: 'Add Additional Details',
+          customStyle: { margin: 10, alignSelf: 'center' },
+          onButonClicked: function onButonClicked() {
+            return _this5.updateParentState();
+          }
+        });
+      }
+    }
+  }, {
+    key: 'isStayAndLocalEmpty',
+    value: function isStayAndLocalEmpty(stayAndLocalTravelModel, locationKey) {
+
+      if ((stayAndLocalTravelModel[locationKey].stayModel == null || stayAndLocalTravelModel[locationKey].stayModel.length == 0) && (stayAndLocalTravelModel[locationKey].localTravelModel == null || stayAndLocalTravelModel[locationKey].localTravelModel.length == 0)) return true;
+
+      return false;
+    }
+  }, {
+    key: 'renderLocationText',
+    value: function renderLocationText(stayAndLocalTravelModel, locationKey) {
+
+      if (!(this.props.reveiwMode && this.isStayAndLocalEmpty(stayAndLocalTravelModel, locationKey))) {
+
+        return _react2.default.createElement(_ewh1text2.default, {
+          text: locationKey,
+          customStyle: { alignSelf: "center", color: appstyleguide.APP_BLUE, margin: appstyleguide.DEFAULT_MARGIN }
+        });
+      }
+    }
+  }, {
+    key: 'renderStayAndLocalView',
+    value: function renderStayAndLocalView(stayAndLocalTravelModel, travelModel, key, uniqueTravelCity) {
+      var isCustomTravelData = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+
+
+      console.log(FILE_NAME + "In renderStayAndLocalView");
+
+      console.log("renderStayAndLocalView", key, isCustomTravelData, stayAndLocalTravelModel[key]);
+
+      if (isCustomTravelData || stayAndLocalTravelModel[key] != null && stayAndLocalTravelModel[key].isServerData) locationKey = key;else locationKey = travelModel[key].destinationCity;
+
+      console.log("uniqueTravelCity", uniqueTravelCity);
+
+      if (stayAndLocalTravelModel[locationKey] != null && !uniqueTravelCity.includes(locationKey)) {
+
+        uniqueTravelCity.push(locationKey);
+
+        return _react2.default.createElement(
+          _ewcard2.default,
+          {
+            customStyle: { margin: appstyleguide.DEFAULT_MARGIN }
+          },
+          this.renderLocationText(stayAndLocalTravelModel, locationKey),
+          _react2.default.createElement(_ewbar2.default, {
+            customStyle: { marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN }
+          }),
+          this.showStayView(stayAndLocalTravelModel, locationKey),
+          _react2.default.createElement(_ewbar2.default, {
+            customStyle: { marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN }
+          }),
+          this.showLocalTravelView(stayAndLocalTravelModel, locationKey)
+        );
+      }
+    }
+  }, {
+    key: 'showCompleteLocationButtons',
+    value: function showCompleteLocationButtons(stayAndLocalTravelModel) {
+      var _this6 = this;
+
+      console.log(FILE_NAME + "In showCompleteLocationButtons");
+
+      return Object.keys(this.state.travelModel).map(function (key, travelIndex) {
+        return _this6.renderStayCompleteButton(stayAndLocalTravelModel, travelIndex);
+      });
+    }
+  }, {
+    key: 'renderStayCompleteButton',
+    value: function renderStayCompleteButton(stayAndLocalTravelModel, travelIndex) {
+
+      console.log(FILE_NAME + "In renderStayCompleteButton");
+
+      if (stayAndLocalTravelModel[this.state.travelModel[travelIndex].destinationCity] == null) {
+        console.log("renderStayCompleteButton", stayAndLocalTravelModel, travelIndex);
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          this.renderDestinationCityInComplete(stayAndLocalTravelModel, travelIndex)
+        );
+      }
+    }
+  }, {
+    key: 'isReturnTrip',
+    value: function isReturnTrip(travelModel) {
+      var _state2 = this.state,
+          isSingleCity = _state2.isSingleCity,
+          isMultiCity = _state2.isMultiCity;
+
+
+      if (isSingleCity) {
+
+        if (travelModel[0].sourceCity == travelModel[1].destinationCity) return true;
+      } else {
+
+        if (travelModel[0].sourceCity == travelModel[travelModel.length - 1].destinationCity) return true;
+      }
+
+      return false;
+    }
+  }, {
+    key: 'isRenderDestinationConditionSatisfied',
+    value: function isRenderDestinationConditionSatisfied(travelModel, travelIndex) {
+
+      console.log(FILE_NAME + "In isRenderDestinationConditionSatisfied");
+
+      var _state3 = this.state,
+          isSingleCity = _state3.isSingleCity,
+          isMultiCity = _state3.isMultiCity;
+
+
+      if (isSingleCity) {
+
+        if (travelIndex > 1 || travelIndex == 1 && this.isReturnTrip(travelModel)) return false;
+      } else {
+
+        if (travelIndex == travelModel.length - 1 && this.isReturnTrip(travelModel)) return false;
+      }
+
+      return true;
+    }
+  }, {
+    key: 'renderDestinationCityInComplete',
+    value: function renderDestinationCityInComplete(stayAndLocalTravelModel, travelIndex) {
+      var _this7 = this;
+
+      console.log(FILE_NAME + "In renderDestinationCityInComplete");
+
+      var travelModel = this.state.travelModel;
+
+
+      if (this.isRenderDestinationConditionSatisfied(travelModel, travelIndex)) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { justifyContent: "center", alignItems: "center", margin: appstyleguide.DEFAULT_MARGIN } },
+          _react2.default.createElement(_ewh1text2.default, {
+            text: this.state.travelModel[travelIndex].destinationCity,
+            customStyle: { color: appstyleguide.APP_BLUE, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN }
+          }),
+          _react2.default.createElement(_ewbutton2.default, {
+            label: 'Complete Stay & Local transport',
+            customStyle: { alignSelf: 'center', backgroundColor: appstyleguide.APP_GRAY },
+            onButonClicked: function onButonClicked() {
+              return _this7.addStayModel(stayAndLocalTravelModel, _this7.state.travelModel[travelIndex].destinationCity);
+            }
+          })
+        );
+      }
+    }
+  }, {
+    key: 'showStayElementText',
+    value: function showStayElementText(stayAndLocalTravelModel, locationKey, index) {
+
+      console.log(FILE_NAME + "In showStayElementText");
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { margin: 10, flexDirection: "row" } },
+        _react2.default.createElement(_ewicon2.default, {
+          iconSource: stayIcon
+        }),
+        _react2.default.createElement(_ewh3text2.default, {
+          text: 'Stay',
+          customStyle: { marginLeft: 5, color: appstyleguide.APP_BLUE }
+        })
+      );
+    }
+  }, {
+    key: 'showLocalTravelElementText',
+    value: function showLocalTravelElementText(stayAndLocalTravelModel, locationKey, index) {
+
+      console.log(FILE_NAME + "In showLocalTravelElementText");
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { margin: 5, flexDirection: "row" } },
+        _react2.default.createElement(_ewicon2.default, {
+          iconSource: transportIcon
+        }),
+        _react2.default.createElement(_ewh3text2.default, {
+          text: 'Local Travel',
+          customStyle: { marginLeft: 5, color: appstyleguide.APP_BLUE }
+        })
+      );
+    }
+  }, {
+    key: 'showStayView',
+    value: function showStayView(stayAndLocalTravelModel, locationKey) {
+      var _this8 = this;
+
+      console.log(FILE_NAME + "In showStayView");
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { margin: 5 } },
+        this.renderStayDetailView(stayAndLocalTravelModel, locationKey),
+        !this.props.reveiwMode ? _react2.default.createElement(
+          _reactNative.View,
+          { style: { alignItems: "flex-end", flexDirection: "row", justifyContent: "flex-end", margin: 10 } },
+          _react2.default.createElement(_ewicon2.default, {
+            iconSource: addIcon,
+            onIconPressed: function onIconPressed() {
+              return _this8.addStayModel(stayAndLocalTravelModel, locationKey);
+            }
+          })
+        ) : null
+      );
+    }
+  }, {
+    key: 'renderStayDetailView',
+    value: function renderStayDetailView(stayAndLocalTravelModel, locationKey) {
+      var _this9 = this;
+
+      if (stayAndLocalTravelModel[locationKey] != null && stayAndLocalTravelModel[locationKey].stayModel != null && stayAndLocalTravelModel[locationKey].stayModel.length != 0) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          this.showStayElementText(),
+          Object.keys(stayAndLocalTravelModel[locationKey].stayModel).map(function (key, stayItenaryIndex) {
+            return _react2.default.createElement(
+              _ewcard2.default,
+              {
+                customStyle: { margin: appstyleguide.DEFAULT_MARGIN }
+              },
+              _this9.renderStayDetails(stayAndLocalTravelModel, stayItenaryIndex, locationKey)
+            );
+          })
+        );
+      } else {
+
+        if (!this.props.reveiwMode) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            this.showStayElementText()
+          );
+        }
+      }
+    }
+  }, {
+    key: 'showLocalTravelView',
+    value: function showLocalTravelView(stayAndLocalTravelModel, locationKey) {
+      var _this10 = this;
+
+      console.log(FILE_NAME + "In showLocalTravelView");
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { margin: 5 } },
+        this.renderLocalTravelView(stayAndLocalTravelModel, locationKey),
+        !this.props.reveiwMode ? _react2.default.createElement(
+          _reactNative.View,
+          { style: { alignItems: "flex-end", flexDirection: "row", justifyContent: "flex-end", margin: appstyleguide.DEFAULT_MARGIN } },
+          _react2.default.createElement(_ewicon2.default, {
+            iconSource: addIcon,
+            onIconPressed: function onIconPressed() {
+              return _this10.addLocalTravelModel(stayAndLocalTravelModel, locationKey);
+            }
+          })
+        ) : null
+      );
+    }
+  }, {
+    key: 'renderLocalTravelView',
+    value: function renderLocalTravelView(stayAndLocalTravelModel, locationKey) {
+      var _this11 = this;
+
+      if (stayAndLocalTravelModel[locationKey] != null && stayAndLocalTravelModel[locationKey].localTravelModel != null && stayAndLocalTravelModel[locationKey].localTravelModel.length != 0) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          this.showLocalTravelElementText(),
+          Object.keys(stayAndLocalTravelModel[locationKey].localTravelModel).map(function (key, localTravelItenaryIndex) {
+            return _react2.default.createElement(
+              _ewcard2.default,
+              {
+                customStyle: { margin: appstyleguide.DEFAULT_MARGIN }
+              },
+              _this11.renderLocalTravelDetails(stayAndLocalTravelModel, localTravelItenaryIndex, locationKey)
+            );
+          })
+        );
+      } else {
+
+        if (!this.props.reveiwMode) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            this.showLocalTravelElementText()
+          );
+        }
+      }
+    }
+  }, {
+    key: 'showLocalAndStayView',
+    value: function showLocalAndStayView(stayAndLocalTravelModel) {
+
+      console.log(FILE_NAME + "In showLocalAndStayView");
+
+      if (this.travelLocalValidation()) {
+
+        this.addStayModel(stayAndLocalTravelModel, this.state.travelModel[0].destinationCity);
+      }
+    }
+  }, {
+    key: 'showTripTypeView',
+    value: function showTripTypeView() {
+      var _this12 = this;
+
+      console.log(FILE_NAME + "In showTripTypeView");
+
+      if (!this.props.reveiwMode) {
+
+        if ((0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', justifyContent: 'space-around', padding: 10 } },
+            _react2.default.createElement(_ewradiobutton2.default, {
+              label: travelConstants.ONE_CITY_LABEL,
+              isSelected: this.state.isSingleCity,
+              onRadioButtonClick: function onRadioButtonClick() {
+                return _this12.onRadioButtonSelected(travelConstants.ONE_CITY_KEY);
+              }
+            }),
+            _react2.default.createElement(_ewradiobutton2.default, {
+              label: travelConstants.MULTI_CIY_LABEL,
+              isSelected: this.state.isMultiCity,
+              onRadioButtonClick: function onRadioButtonClick() {
+                return _this12.onRadioButtonSelected(travelConstants.MULTI_CIY_KEY);
+              }
+            })
+          );
+        } else {
+
+          return _react2.default.createElement(_ewdropdownpicker2.default, {
+            pickerLabel: travelConstants.TOUR_TYPE_LABEL,
+            pickerPlaceholderLabel: tourTypePicker[0].label,
+            customViewStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN, marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+            dataArray: tourTypePicker,
+            isDefaultPickerValueSelected: this.getTourTypeSelected() == tourTypePicker[0].value,
+            selectedValue: this.getTourTypeSelected(),
+            onPickerValueChange: function onPickerValueChange(newPickerValue) {
+              return _this12.onRadioButtonSelected(newPickerValue);
+            }
+          });
+        }
+      }
+    }
+  }, {
+    key: 'getTourTypeSelected',
+    value: function getTourTypeSelected() {
+
+      defaultSelectedKey = tourTypePicker[0].value;
+
+      if (this.state.isSingleCity) defaultSelectedKey = travelConstants.ONE_CITY_KEY;
+
+      if (this.state.isMultiCity) defaultSelectedKey = travelConstants.MULTI_CIY_KEY;
+
+      return defaultSelectedKey;
+    }
+  }, {
+    key: 'onRadioButtonSelected',
+    value: function onRadioButtonSelected(radioButtonKey) {
+
+      console.log(FILE_NAME + "In onRadioButtonSelected");
+
+      isSingleCity = false;
+      isMultiCity = false;
+
+      var travelModel = this.state.travelModel;
+
+
+      if (radioButtonKey != travelConstants.TOUR_TYPE_PLACEHOLDER_KEY) {
+
+        switch (radioButtonKey) {
+
+          case travelConstants.MULTI_CIY_KEY:
+
+            isMultiCity = true;
+
+            travelModelsToAdd = 3 - travelModel.length;
+
+            if (travelModelsToAdd > 0) {
+
+              this.addTravelModel(travelModel, travelModelsToAdd);
+            }
+
+            break;
+
+          case travelConstants.ONE_CITY_KEY:
+
+            travelModelsToAdd = 2 - travelModel.length;
+
+            if (travelModelsToAdd > 0) {
+
+              this.addTravelModel(travelModel, travelModelsToAdd);
+            }
+
+            isSingleCity = true;
+
+            break;
+
+          default:
+
+        }
+
+        this.setState({
+          isSingleCity: isSingleCity,
+          isMultiCity: isMultiCity
+
+        });
+      }
+    }
+  }, {
+    key: 'isTravelVisible',
+    value: function isTravelVisible(travelItenaryIndex) {
+
+      console.log(FILE_NAME + "In isTravelVisible");
+
+      if (this.state.isSingleCity && travelItenaryIndex < 2 || this.state.isMultiCity) return true;
+
+      return false;
+    }
+  }, {
+    key: 'showReturnText',
+    value: function showReturnText(travelItenary, travelItenaryIndex) {
+
+      console.log(FILE_NAME + "In showReturnText");
+
+      if (!this.state.initialScreen && this.state.isSingleCity && travelItenary[travelItenaryIndex].currentMode == travelConstants.EDIT_MODE && travelItenaryIndex == 1) {
+
+        return _react2.default.createElement(_ewicon2.default, {
+          iconSource: returnIcon,
+          customIconStyle: { margin: 10, alignSelf: "center" }
+        });
+      }
+    }
+  }, {
+    key: 'renderDoneButton',
+    value: function renderDoneButton(travelItenary, travelItenaryIndex, doneKey, locationKey) {
+      var _this13 = this;
+
+      if (this.state.isDoneButtonVisible) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN } },
+          _react2.default.createElement(_ewbutton2.default, {
+            label: 'Done',
+            onButonClicked: function onButonClicked() {
+              return _this13.changeTravelViewState(travelItenary, travelItenaryIndex, doneKey, locationKey);
+            },
+            customStyle: { backgroundColor: appstyleguide.APP_GRAY, alignSelf: "center" }
+          })
+        );
+      }
+    }
+  }, {
+    key: 'changeTravelViewState',
+    value: function changeTravelViewState(travelItenary, travelItenaryIndex, doneKey, locationKey) {
+
+      updatedTravelDetails = travelItenary;
+
+      switch (doneKey) {
+
+        case travelConstants.TRAVEL_DETAIL_KEY:
+
+          if (this.localValidation()) {
+
+            updatedTravelDetails[travelItenaryIndex].currentMode = travelConstants.VIEW_MODE;
+
+            this.setState({
+
+              travelModel: updatedTravelDetails
+            });
+          }
+
+          break;
+
+        case travelConstants.STAY_KEY:
+
+          if (this.localValidation()) {
+
+            updatedTravelDetails[locationKey].stayModel[travelItenaryIndex].currentMode = travelConstants.VIEW_MODE;
+
+            this.setState({
+
+              stayAndLocalTravelModel: updatedTravelDetails
+            });
+          }
+
+          break;
+
+        case travelConstants.LOCAL_TRAVEL_KEY:
+
+          if (this.localValidation()) {
+
+            updatedTravelDetails[locationKey].localTravelModel[travelItenaryIndex].currentMode = travelConstants.VIEW_MODE;
+
+            this.setState({
+
+              stayAndLocalTravelModel: updatedTravelDetails
+            });
+          }
+
+          break;
+      }
+    }
+  }, {
+    key: 'renderRemoveTravelItenaryAlert',
+    value: function renderRemoveTravelItenaryAlert(travelItenary, travelItenaryIndex, deleteKey, locationKey) {
+      var _this14 = this;
+
+      _reactNative.Alert.alert('Travel', 'Do you want to remove this', [{ text: 'Ok', onPress: function onPress() {
+          return _this14.removeTravelItenaryModel(travelItenary, travelItenaryIndex, deleteKey, locationKey);
+        } }, { text: 'Cancel' }]);
+    }
+  }, {
+    key: 'removeTravelItenaryModel',
+    value: function removeTravelItenaryModel(travelItenary, travelItenaryIndex, deleteKey, locationKey) {
+
+      switch (deleteKey) {
+        case travelConstants.TRAVEL_DETAIL_KEY:
+          this.removeTravelModel(travelItenary, travelItenaryIndex);
+
+          break;
+
+        case travelConstants.STAY_KEY:
+        case travelConstants.LOCAL_TRAVEL_KEY:
+
+          this.removeStayAndLocalTravelModel(travelItenary, travelItenaryIndex, deleteKey, locationKey);
+          break;
+        default:
+
+      }
+    }
+  }, {
+    key: 'renderDropdownOrRadioButton',
+    value: function renderDropdownOrRadioButton(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, stayOrLocalKey, data, dropdownOrRadioValue, pickerLabel, pickerPlaceholderLabel) {
+      var _this15 = this;
+
+      console.log(FILE_NAME + "In renderDropdownOrRadioButton");
+
+      if ((0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID && data.length < travelConstants.MINIMUM_SIZE_TO_SHOW_DROPDOWN) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewh4text2.default, {
+            text: pickerLabel,
+            customStyle: { marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN }
+          }),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', justifyContent: "space-around" } },
+            Object.keys(data).map(function (key, index) {
+              return _react2.default.createElement(_ewradiobutton2.default, {
+                label: data[key].label,
+                isSelected: _this15.isExpenseHeadSelected(dropdownOrRadioValue, data[key].value),
+                onRadioButtonClick: function onRadioButtonClick() {
+                  return _this15.onStayAndLocalTravelTypeSelected(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, stayOrLocalKey, data[key].value);
+                },
+                customViewStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN },
+                customTextStyle: { color: _this15.getTextColor(data[key]) }
+              });
+            })
+          )
+        );
+      } else {
+
+        customPickerView = Object.keys(data).map(function (key) {
+
+          return _react2.default.createElement(_nativeBase.Item, { label: data[key].label, value: data[key].value, color: context.getTextColor(data[key]) });
+        });
+
+        return _react2.default.createElement(_ewdropdownpicker2.default, {
+          pickerLabel: pickerLabel,
+          pickerPlaceholderLabel: pickerPlaceholderLabel,
+          isDefaultPickerValueSelected: dropdownOrRadioValue == "-1",
+          customPickerView: customPickerView,
+          selectedValue: dropdownOrRadioValue,
+          onPickerValueChange: function onPickerValueChange(newPickerValue) {
+            return _this15.onStayAndLocalTravelTypeSelected(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, stayOrLocalKey, newPickerValue);
+          }
+        });
+      }
+    }
+  }, {
+    key: 'isExpenseHeadSelected',
+    value: function isExpenseHeadSelected(selectedExpenseHead, expenseHeadId) {
+
+      console.log(FILE_NAME + "In isExpenseHeadSelected");
+
+      if (selectedExpenseHead == expenseHeadId) return true;
+
+      return false;
+    }
+  }, {
+    key: 'renderCityCategoryText',
+    value: function renderCityCategoryText(cityCategoryData) {
+
+      console.log(FILE_NAME + "In renderCityCategoryText");
+
+      cityCategoryText = "";
+
+      console.log("cityCategoryData", cityCategoryData);
+
+      if (cityCategoryData != null && cityCategoryData.length != 0) {
+
+        cityCategoryText = cityCategoryData[0].cityCategory_Name;
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewh4text2.default, {
+
+            text: 'City Category',
+            customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+
+          }),
+          _react2.default.createElement(_ewh3text2.default, {
+            text: cityCategoryText,
+            customStyle: { marginTop: 5, color: this.getTextColor(cityCategoryData[0]) }
+
+          })
+        );
+      }
+    }
+  }, {
+    key: 'getStayAndLocalModeType',
+    value: function getStayAndLocalModeType(data, modeValue) {
+
+      console.log(FILE_NAME + "In getStayAndLocalModeType");
+
+      console.log("modeValue", data, modeValue);
+
+      modeType = "-1";
+
+      if (modeValue != "-1") {
+
+        for (var _iterator5 = data, _isArray5 = Array.isArray(_iterator5), _i5 = 0, _iterator5 = _isArray5 ? _iterator5 : _iterator5[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+          var _ref5;
+
+          if (_isArray5) {
+            if (_i5 >= _iterator5.length) break;
+            _ref5 = _iterator5[_i5++];
+          } else {
+            _i5 = _iterator5.next();
+            if (_i5.done) break;
+            _ref5 = _i5.value;
+          }
+
+          var mode = _ref5;
+
+
+          if (mode.value == modeValue) {
+
+            modeType = mode;
+            break;
+          }
+        }
+      }
+
+      return modeType;
+    }
+  }, {
+    key: 'getLocalTravelTransportType',
+    value: function getLocalTravelTransportType(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex) {
+
+      console.log(FILE_NAME + "In getLocalTravelTransportType");
+
+      var localTravelModes = this.state.localTravelModes;
+
+
+      transportType = "";
+
+      for (var _iterator6 = localTravelModes, _isArray6 = Array.isArray(_iterator6), _i6 = 0, _iterator6 = _isArray6 ? _iterator6 : _iterator6[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref6;
+
+        if (_isArray6) {
+          if (_i6 >= _iterator6.length) break;
+          _ref6 = _iterator6[_i6++];
+        } else {
+          _i6 = _iterator6.next();
+          if (_i6.done) break;
+          _ref6 = _i6.value;
+        }
+
+        var localTravelMode = _ref6;
+
+
+        if (localTravelMode.value == stayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].transportType) {
+
+          transportType = localTravelMode.label;
+          break;
+        }
+      }
+
+      return transportType;
+    }
+  }, {
+    key: 'onStayAndLocalTravelTypeSelected',
+    value: function onStayAndLocalTravelTypeSelected(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, key, newValue) {
+
+      console.log(FILE_NAME + "In onStayAndLocalTravelTypeSelected");
+
+      updatedStayAndLocalItenary = stayAndLocalItenary;
+
+      console.log("travelitenary", stayAndLocalItenary, stayAndLocalItenaryIndex);
+
+      switch (key) {
+        case travelConstants.LOCAL_TRAVEL_MODE_KEY:
+
+          updatedStayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].transportType = newValue;
+          updatedStayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].deviationReason = "";
+
+          break;
+
+        case travelConstants.STAY_CLASS_KEY:
+
+          updatedStayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].stayClass = newValue;
+          updatedStayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].deviationReason = "";
+
+          break;
+
+        default:
+
+      }
+
+      this.setState({
+        stayAndLocalTravelModel: updatedStayAndLocalItenary
+      });
+    }
+  }, {
+    key: 'onStayAndLocalCheckboxStateChange',
+    value: function onStayAndLocalCheckboxStateChange(stayAndLocalItenary, stayAndLocalItenaryIndex, checkboxKey, locationKey) {
+
+      console.log(FILE_NAME + "In onStayAndLocalCheckboxStateChange");
+
+      updatedStayAndLocalItenary = stayAndLocalItenary;
+
+      console.log("travelitenary", updatedStayAndLocalItenary, stayAndLocalItenaryIndex);
+
+      switch (checkboxKey) {
+
+        case travelConstants.STAY_BOOKING_KEY:
+
+          updatedStayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].isStayBookingRequired = !updatedStayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].isStayBookingRequired;
+
+          break;
+
+        case travelConstants.LOCAL_TRAVEL_BOOKING_KEY:
+
+          updatedStayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].isLocalBookingRequired = !updatedStayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].isLocalBookingRequired;
+
+          break;
+
+      }
+
+      this.setState({
+        stayAndLocalTravelModel: updatedStayAndLocalItenary
+      });
+    }
+  }, {
+    key: 'onStayAndLocalTextInputChanged',
+    value: function onStayAndLocalTextInputChanged(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, newText, textInputKey) {
+      var isDropdownItemPressed = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+
+
+      console.log(FILE_NAME + "In onStayAndLocalTextInputChanged");
+
+      updatedStayAndLocalItenary = stayAndLocalItenary;
+
+      textinputRefKey = textInputKey + locationKey + stayAndLocalItenaryIndex;
+
+      focussedTextinput = this.state.currentFocussedTextInput;
+
+      console.log("travelitenary", updatedStayAndLocalItenary, stayAndLocalItenaryIndex);
+
+      switch (textInputKey) {
+
+        case travelConstants.STAY_PREFERENCES_KEY:
+
+          focussedTextinput = textinputRefKey;
+
+          updatedStayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].stayPreferences = newText;
+
+          break;
+
+        case travelConstants.STAY_DEVIATION_KEY:
+
+          focussedTextinput = textinputRefKey;
+
+          updatedStayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].deviationReason = newText;
+
+          break;
+
+        case travelConstants.LOCAL_TRAVEL_DEVIATION_KEY:
+
+          focussedTextinput = textinputRefKey;
+
+          updatedStayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].deviationReason = newText;
+
+          break;
+
+        case travelConstants.STAY_LOCATION_KEY:
+
+          focussedTextinput = textinputRefKey;
+
+          if (isDropdownItemPressed) updatedStayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].stayLocation = newText.cityName;else updatedStayAndLocalItenary[locationKey].stayModel[stayAndLocalItenaryIndex].stayLocation = newText;
+
+          this.handleDropDownPress(isDropdownItemPressed, newText);
+
+          this.getCityCategoryData(newText, locationKey, stayAndLocalItenaryIndex);
+
+          break;
+
+        case travelConstants.LOCAL_TRAVEL_PREFERENCES_KEY:
+
+          focussedTextinput = textinputRefKey;
+
+          updatedStayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].localPreferences = newText;
+
+          break;
+
+        case travelConstants.LOCAL_TRAVEL_LOCATION_KEY:
+
+          focussedTextinput = textinputRefKey;
+
+          if (isDropdownItemPressed) updatedStayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].localTravelLocation = newText.cityName;else updatedStayAndLocalItenary[locationKey].localTravelModel[stayAndLocalItenaryIndex].localTravelLocation = newText;
+
+          this.handleDropDownPress(isDropdownItemPressed, newText);
+
+          break;
+      }
+
+      this.setState({
+        stayAndLocalTravelModel: updatedStayAndLocalItenary,
+        currentFocussedTextInput: focussedTextinput
+      });
+    }
+  }, {
+    key: 'getCityCategoryData',
+    value: function getCityCategoryData(newText, locationKey, stayAndLocalItenaryIndex) {
+
+      console.log(FILE_NAME + "In getCityCategoryData");
+
+      var countryId = 0;
+      var cityName = newText;
+
+      if (newText.countryId != null) countryId = newText.countryId;
+
+      if (newText.cityName != null) cityName = newText.cityName;
+
+      if (countryId == 0 && this.state.cityIdMapping[cityName] != null) {
+
+        countryId = this.state.cityIdMapping[cityName];
+      }
+
+      travelType = this.getTravelType();
+
+      var params = {
+
+        countryId: countryId,
+        cityName: cityName,
+        travelType: travelType,
+        locationKey: locationKey,
+        stayIndex: stayAndLocalItenaryIndex
+      };
+
+      this.props.getTravelCityCategoryInformation(params);
+    }
+  }, {
+    key: 'updateCityMapping',
+    value: function updateCityMapping(cityInfo) {
+
+      if (cityInfo.countryId != null) {
+
+        updatedCityIdMapping = this.state.cityIdMapping;
+
+        updatedCityIdMapping[cityInfo.cityName] = cityInfo.countryId;
+
+        this.setState({
+
+          cityIdMapping: updatedCityIdMapping
+
+        });
+      }
+    }
+  }, {
+    key: 'handleDropDownPress',
+    value: function handleDropDownPress(isDropdownItemPressed, newText) {
+
+      console.log(FILE_NAME + "In handleDropDownPress");
+
+      if (isDropdownItemPressed) {
+
+        this.setState({
+          locationData: []
+        });
+      } else {
+        this.getLocationsData(newText);
+      }
+    }
+  }, {
+    key: 'getTravelType',
+    value: function getTravelType() {
+
+      console.log(FILE_NAME + "In getTravelType");
+
+      var currentTravelState = this.props.currentTravelState;
+
+
+      travelType = "";
+
+      if (currentTravelState.travelPurposeDetails != null) {
+
+        if (currentTravelState.travelPurposeDetails.isTravelTypeDomestic) travelType = travelConstants.TRAVEL_TYPE_DOMESTIC_SERVER_LABEL;else travelType = travelConstants.TRAVEL_TYPE_OVERSEAS_SERVER_LABEL;
+      }
+
+      return travelType;
+    }
+  }, {
+    key: 'getLocationsData',
+    value: function getLocationsData(newText) {
+
+      console.log(FILE_NAME + "In getLocations", newText, this.state.locationData);
+
+      if (newText.length > travelConstants.MINIMUM_AUTOCOMPLETE_TEXT_REQUIRED) {
+
+        travelType = this.getTravelType();
+
+        var params = {
+          travel_type: travelType,
+          QueryString: newText,
+          maxRecords: 50
+        };
+
+        this.props.getCityInformation(params);
+      }
+    }
+  }, {
+    key: 'renderTravelView',
+    value: function renderTravelView(travelItenary, travelItenaryIndex, travelClass) {
+      var _this16 = this;
+
+      var locationData = this.state.locationData;
+
+
+      if (travelClass != "-1") {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN } },
+            this.renderTravelClass(travelItenary, travelItenaryIndex)
+          ),
+          this.isDeviationExist(travelClass) ? _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewtravelplanstyles2.default.deviationCommentStyle
+
+            },
+            _react2.default.createElement(_ewfloatinglabel2.default, {
+              label: travelConstants.DEVIATION_LABEL,
+              placeholderlabel: travelConstants.DEVIATION_PLACEHOLDER_LABEL,
+              ref: function ref(textinputref) {
+                return _this16.textInputRef[travelConstants.TRAVEL_DEVIATION_KEY + travelItenaryIndex] = textinputref;
+              },
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              onChangeText: function onChangeText(updatedText) {
+                return _this16.onTextStateChanged(travelItenary, travelItenaryIndex, updatedText, travelConstants.TRAVEL_DEVIATION_KEY);
+              },
+              value: travelItenary[travelItenaryIndex].deviationReason
+            })
+          ) : null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', flex: 1 } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.5, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+
+                onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+
+                  _this16.setState({
+
+                    currentFocussedTextInput: travelConstants.SOURCE_CITY_REF_KEY + travelItenaryIndex
+                  });
+                }
+              },
+              _react2.default.createElement(_ewautocompleteinput2.default, {
+                dropdownData: locationData,
+                hideResults: !this.isAutoCompleteDropdownVisible(travelConstants.SOURCE_CITY_REF_KEY + travelItenaryIndex, travelItenary[travelItenaryIndex].sourceCity),
+                updateScrollState: function updateScrollState(scrollViewState) {
+                  return _this16.setState({ enableScrollViewScroll: scrollViewState });
+                },
+                scrollViewVisibility: this.state.enableScrollViewScroll,
+                renderListItem: function renderListItem(data) {
+                  return _this16.renderLocationListItem(travelItenary, travelItenaryIndex, travelConstants.SOURCE_CITY_REF_KEY, data);
+                },
+
+                customTextInput: function customTextInput() {
+                  return _react2.default.createElement(_ewfloatinglabel2.default, {
+                    label: 'From',
+                    placeholderlabel: 'From City',
+                    ref: function ref(textinputref) {
+                      return _this16.textInputRef[travelConstants.SOURCE_CITY_REF_KEY + travelItenaryIndex] = textinputref;
+                    },
+                    autoCorrect: false,
+                    autoCapitalize: 'none',
+                    onChangeText: function onChangeText(sourceCity) {
+                      return _this16.onTextStateChanged(travelItenary, travelItenaryIndex, sourceCity, travelConstants.SOURCE_CITY_REF_KEY);
+                    },
+                    value: travelItenary[travelItenaryIndex].sourceCity
+                  });
+                }
+
+              })
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              {
+                style: { flex: 0.5, marginLeft: 10, marginRight: 10 },
+                onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+
+                  _this16.setState({
+
+                    currentFocussedTextInput: travelConstants.DESTINATION_CITY_REF_KEY + travelItenaryIndex
+                  });
+                }
+              },
+              _react2.default.createElement(_ewautocompleteinput2.default, {
+                dropdownData: locationData,
+                hideResults: !this.isAutoCompleteDropdownVisible(travelConstants.DESTINATION_CITY_REF_KEY + travelItenaryIndex, travelItenary[travelItenaryIndex].destinationCity),
+                updateScrollState: function updateScrollState(scrollViewState) {
+                  return _this16.setState({ enableScrollViewScroll: scrollViewState });
+                },
+                scrollViewVisibility: this.state.enableScrollViewScroll,
+                renderListItem: function renderListItem(data) {
+                  return _this16.renderLocationListItem(travelItenary, travelItenaryIndex, travelConstants.DESTINATION_CITY_REF_KEY, data);
+                },
+
+                customTextInput: function customTextInput() {
+                  return _react2.default.createElement(_ewfloatinglabel2.default, {
+                    label: 'To',
+                    placeholderlabel: 'To City',
+                    ref: function ref(textinputref) {
+                      return _this16.textInputRef[travelConstants.DESTINATION_CITY_REF_KEY + travelItenaryIndex] = textinputref;
+                    },
+                    autoCorrect: false,
+                    autoCapitalize: 'none',
+                    onChangeText: function onChangeText(destinationCity) {
+                      return _this16.onTextStateChanged(travelItenary, travelItenaryIndex, destinationCity, travelConstants.DESTINATION_CITY_REF_KEY);
+                    },
+                    value: travelItenary[travelItenaryIndex].destinationCity
+                  });
+                }
+
+              })
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', marginTop: 20 } },
+            _react2.default.createElement(_ewdatebutton2.default, {
+              label: 'On',
+              customViewStyle: { flex: 0.5, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+              dateObject: travelItenary[travelItenaryIndex].departureDate,
+              _handleEwDateTimePicked: function _handleEwDateTimePicked(date, mode, elementKey) {
+                return _this16._handleEwDateTimePicked(date, mode, elementKey);
+              }
+            }),
+            _react2.default.createElement(_ewdropdownpicker2.default, {
+              selectedValue: travelItenary[travelItenaryIndex].departureDuration,
+              customViewStyle: { flex: 0.5, marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+              pickerLabel: 'In',
+              isDefaultPickerValueSelected: travelItenary[travelItenaryIndex].departureDuration == "-1",
+              onPickerValueChange: function onPickerValueChange(departureDuration) {
+                return _this16.onTravelPickerStateChange(travelItenary, travelItenaryIndex, departureDuration, travelConstants.DEPARTURE_DURATION_KEY);
+              },
+              dataArray: travelConstants.travelDuration
+            })
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN } },
+            _react2.default.createElement(_ewcheckbox2.default, {
+              label: travelConstants.BOOKING_REQUIRED_LABEL,
+              onCheckboxClick: function onCheckboxClick() {
+                return _this16.onCheckboxStateChange(travelConstants.TRAVEL_BOOKING_KEY, travelItenary, travelItenaryIndex);
+              },
+              isChecked: travelItenary[travelItenaryIndex].isBookingRequired,
+              customViewStyle: [{ flex: 0.5, alignSelf: "center" }, _ewtravelplanstyles2.default.checkboxStyles]
+            }),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.5 } },
+              this.renderAirPreferences(travelItenary, travelItenaryIndex, travelClass)
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN } },
+            this.renderTravelPreferences(travelItenary, travelItenaryIndex, travelClass)
+          )
+        );
+      }
+    }
+  }, {
+    key: 'getTravelIconSource',
+    value: function getTravelIconSource(travelClass) {
+
+      defaultIconSource = trainIcon;
+
+      if (this.isFlightModeSelected(travelClass)) defaultIconSource = airplaneIcon;
+
+      return defaultIconSource;
+    }
+  }, {
+    key: 'isDeviationExist',
+    value: function isDeviationExist(expenseHead) {
+
+      console.log(FILE_NAME + "In isDeviationExist", expenseHead);
+
+      if (expenseHead == defaultPickerSelected || expenseHead.value == defaultPickerSelected || expenseHead.isApplicableToEmployee) return false;
+
+      return true;
+    }
+  }, {
+    key: 'getTravelClass',
+    value: function getTravelClass(travelItenary, travelItenaryIndex) {
+
+      console.log(FILE_NAME + "In getTravelClass");
+
+      var _state4 = this.state,
+          travelModes = _state4.travelModes,
+          travelClasses = _state4.travelClasses;
+
+
+      console.log(FILE_NAME + "In getTravelClass", travelModes, travelClasses);
+
+      if (!this.isDefaultTravelModeSelected(travelItenary, travelItenaryIndex)) {
+
+        console.log("travelModeAndClass", travelItenary[travelItenaryIndex].travelClass, travelModes[travelItenary[travelItenaryIndex].travelMode].label);
+
+        for (var _iterator7 = travelClasses[travelModes[travelItenary[travelItenaryIndex].travelMode].label], _isArray7 = Array.isArray(_iterator7), _i7 = 0, _iterator7 = _isArray7 ? _iterator7 : _iterator7[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+          var _ref7;
+
+          if (_isArray7) {
+            if (_i7 >= _iterator7.length) break;
+            _ref7 = _iterator7[_i7++];
+          } else {
+            _i7 = _iterator7.next();
+            if (_i7.done) break;
+            _ref7 = _i7.value;
+          }
+
+          var travelClass = _ref7;
+
+
+          if (travelClass.value === travelItenary[travelItenaryIndex].travelClass) return travelClass;
+        }
+      }
+
+      return "-1";
+    }
+  }, {
+    key: 'getTextColor',
+    value: function getTextColor(travelMode) {
+
+      console.log(FILE_NAME + "In getTextColor", travelMode);
+
+      if (travelMode.value == "-1") return appstyleguide.APP_BLACK;else {
+
+        if (travelMode.isApplicableToEmployee) return appstyleguide.APP_GREEN;
+
+        return appstyleguide.APP_RED;
+      }
+    }
+  }, {
+    key: 'renderTravelModes',
+    value: function renderTravelModes(travelItenary, travelItenaryIndex) {
+      var _this17 = this;
+
+      console.log(FILE_NAME + "In renderTravelModes");
+
+      var _state5 = this.state,
+          travelModes = _state5.travelModes,
+          travelPlan = _state5.travelPlan;
+
+
+      travelType = this.getTravelType();
+
+      filteredTravelModes = travelModes.filter(function (travelMode) {
+
+        if (travelMode.travelType == 2 && travelType == travelConstants.TRAVEL_TYPE_DOMESTIC_SERVER_LABEL) return false;
+
+        return true;
+      });
+
+      if ((0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID && travelModes.length < travelConstants.MINIMUM_SIZE_TO_SHOW_DROPDOWN) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewh4text2.default, {
+            text: ' Travel Mode',
+            customStyle: { marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN }
+          }),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', justifyContent: this.getJustifyContentStyles(filteredTravelModes) } },
+            Object.keys(filteredTravelModes).map(function (key, index) {
+              return key > 0 ? _react2.default.createElement(_ewradiobutton2.default, {
+                label: filteredTravelModes[key].label,
+                isSelected: _this17.isExpenseHeadSelected(travelItenary[travelItenaryIndex].travelMode, filteredTravelModes[key].travelModeId),
+                onRadioButtonClick: function onRadioButtonClick() {
+                  return _this17.onTravelModeSelected(travelItenary, travelItenaryIndex, filteredTravelModes[key].travelModeId);
+                },
+                customViewStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN },
+                customTextStyle: { color: _this17.getTextColor(filteredTravelModes[key]) }
+              }) : null;
+            })
+          )
+        );
+      } else {
+
+        customPickerView = Object.keys(filteredTravelModes).map(function (key) {
+
+          return _react2.default.createElement(_nativeBase.Item, { label: filteredTravelModes[key].label, value: filteredTravelModes[key].travelModeId, color: context.getTextColor(filteredTravelModes[key]) });
+        });
+
+        return _react2.default.createElement(_ewdropdownpicker2.default, {
+          pickerLabel: 'Travel Mode',
+          pickerPlaceholderLabel: filteredTravelModes[0].label,
+          isDefaultPickerValueSelected: travelItenary[travelItenaryIndex].travelMode == filteredTravelModes[0].value,
+          customPickerView: customPickerView,
+          customViewStyle: { marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+          selectedValue: travelItenary[travelItenaryIndex].travelMode,
+          onPickerValueChange: function onPickerValueChange(newPickerValue) {
+            return _this17.onTravelModeSelected(travelItenary, travelItenaryIndex, newPickerValue);
+          }
+        });
+      }
+    }
+  }, {
+    key: 'isDefaultTravelModeSelected',
+    value: function isDefaultTravelModeSelected(travelItenary, travelItenaryIndex) {
+
+      if (travelItenary[travelItenaryIndex].travelMode == defaultPickerSelected) return true;
+
+      return false;
+    }
+  }, {
+    key: 'renderTravelClass',
+    value: function renderTravelClass(travelItenary, travelItenaryIndex) {
+      var _this18 = this;
+
+      console.log(FILE_NAME + "In renderTravelClass");
+
+      var _state6 = this.state,
+          travelClasses = _state6.travelClasses,
+          travelModes = _state6.travelModes;
+
+
+      console.log(" travelModes value ", travelModes, travelItenary[travelItenaryIndex].travelMode);
+
+      if (!this.isDefaultTravelModeSelected(travelItenary, travelItenaryIndex)) {
+
+        travelClasses = travelClasses[travelModes[travelItenary[travelItenaryIndex].travelMode].label];
+
+        console.log("filteredItems", travelClasses);
+        travelType = this.getTravelType();
+
+        filteredItems = travelClasses.filter(function (travelClass) {
+
+          if (travelClass.travelType == 2 && travelType == travelConstants.TRAVEL_TYPE_DOMESTIC_SERVER_LABEL) return false;
+
+          return true;
+        });
+
+        console.log("filteredItems", filteredItems);
+
+        if ((0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID && filteredItems.length < travelConstants.MINIMUM_SIZE_TO_SHOW_DROPDOWN) {
+
+          console.log("filteredItems", filteredItems, travelItenary, travelItenaryIndex);
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flex: 1 } },
+            _react2.default.createElement(_ewh4text2.default, {
+              text: ' Travel Class',
+              customStyle: { marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN }
+            }),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 1, flexDirection: "row", justifyContent: this.getJustifyContentStyles(filteredItems) } },
+              Object.keys(filteredItems).map(function (key, index) {
+                return key > 0 ? _this18.renderTravelClassView(travelItenary, travelItenaryIndex, key, filteredItems) : null;
+              })
+            )
+          );
+        } else {
+
+          customPickerView = Object.keys(filteredItems).map(function (key) {
+
+            return _react2.default.createElement(_nativeBase.Item, { label: filteredItems[key].label, value: filteredItems[key].value, color: context.getTextColor(filteredItems[key]) });
+          });
+
+          return _react2.default.createElement(_ewdropdownpicker2.default, {
+            pickerLabel: 'Travel Class',
+            pickerPlaceholderLabel: filteredItems[0].label,
+            isDefaultPickerValueSelected: travelItenary[travelItenaryIndex].travelClass == "-1",
+            customPickerView: customPickerView,
+            customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+            selectedValue: travelItenary[travelItenaryIndex].travelClass,
+            onPickerValueChange: function onPickerValueChange(newPickerValue) {
+              return _this18.onTravelClassSelected(travelItenary, newPickerValue, travelItenaryIndex);
+            }
+          });
+        }
+      }
+    }
+  }, {
+    key: 'getJustifyContentStyles',
+    value: function getJustifyContentStyles(array) {
+
+      defaultStyle = "space-between";
+
+      if (array.length > 2) defaultStyle = "space-around";
+
+      return defaultStyle;
+    }
+  }, {
+    key: 'renderTravelClassView',
+    value: function renderTravelClassView(travelItenary, travelItenaryIndex, key, filteredItems) {
+      var _this19 = this;
+
+      console.log(FILE_NAME + "In renderTravelClassView");
+
+      console.log("key is ", key);
+
+      return _react2.default.createElement(_ewradiobutton2.default, {
+        label: filteredItems[key].label,
+        isSelected: this.isExpenseHeadSelected(travelItenary[travelItenaryIndex].travelClass, filteredItems[key].value),
+        onRadioButtonClick: function onRadioButtonClick() {
+          return _this19.onTravelClassSelected(travelItenary, filteredItems[key].value, travelItenaryIndex);
+        },
+        customViewStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN },
+        customTextStyle: { color: this.getTextColor(filteredItems[key]) }
+      });
+    }
+  }, {
+    key: 'renderLocationListItem',
+    value: function renderLocationListItem(travelItenary, travelItenaryIndex, travelLocationKey, data) {
+      var _this20 = this;
+
+      console.log(FILE_NAME + "In renderLocationListItem");
+
+      return _react2.default.createElement(
+        _reactNative.TouchableOpacity,
+        { style: _ewcreatetravelstyles2.default.autoCompleteListItemStyle, onPress: function onPress() {
+            return _this20.onTextStateChanged(travelItenary, travelItenaryIndex, data, travelLocationKey, true);
+          } },
+        _react2.default.createElement(_ewh3text2.default, {
+          text: data.cityName
+        })
+      );
+    }
+  }, {
+    key: 'renderStayAndLocalLocationListItem',
+    value: function renderStayAndLocalLocationListItem(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, data, stayAndLocalItenaryKey) {
+      var _this21 = this;
+
+      console.log(FILE_NAME + "In renderStayAndLocalLocationListItem");
+
+      return _react2.default.createElement(
+        _reactNative.TouchableOpacity,
+        { style: _ewcreatetravelstyles2.default.autoCompleteListItemStyle, onPress: function onPress() {
+            return _this21.onStayAndLocalTextInputChanged(stayAndLocalItenary, locationKey, stayAndLocalItenaryIndex, data, stayAndLocalItenaryKey, true);
+          } },
+        _react2.default.createElement(_ewh3text2.default, {
+          text: data.cityName
+        })
+      );
+    }
+  }, {
+    key: 'renderTravelPreferences',
+    value: function renderTravelPreferences(travelItenary, travelItenaryIndex, travelClass) {
+      var _this22 = this;
+
+      console.log(FILE_NAME + "In renderTravelPreferences");
+
+      if (!this.isFlightModeSelected(travelClass)) {
+
+        return _react2.default.createElement(_ewfloatinglabel2.default, {
+          label: 'Preferences',
+          autoCorrect: false,
+          autoCapitalize: 'none',
+          onChangeText: function onChangeText(travelPreferences) {
+            return _this22.onTextStateChanged(travelItenary, travelItenaryIndex, travelPreferences, travelConstants.TRAVEL_PREFERENCES_KEY);
+          },
+          value: travelItenary[travelItenaryIndex].travelPreferences
+        });
+      }
+    }
+  }, {
+    key: 'isFlightModeSelected',
+    value: function isFlightModeSelected(travelClass) {
+
+      console.log(FILE_NAME + "In isFlightModeSelected");
+
+      if (travelClass.type == travelConstants.TRAVEL_CLASS_AIR) return true;
+
+      return false;
+    }
+  }, {
+    key: 'renderAirPreferences',
+    value: function renderAirPreferences(travelItenary, travelItenaryIndex, travelClass) {
+      var _this23 = this;
+
+      console.log(FILE_NAME + "In renderAirPreferences");
+
+      if (this.isFlightModeSelected(travelClass)) {
+
+        return _react2.default.createElement(_ewbutton2.default, {
+          label: 'Preferences',
+          customStyle: { alignSelf: "center", backgroundColor: appstyleguide.APP_GRAY },
+          onButonClicked: function onButonClicked() {
+            return _this23.changeAirPreferenceModalState(travelItenaryIndex);
+          }
+        });
+      }
+    }
+  }, {
+    key: 'renderAirPreferenceModal',
+    value: function renderAirPreferenceModal() {
+      var _this24 = this;
+
+      console.log(FILE_NAME + "In renderAirPreferenceModal");
+
+      console.log("isAirPreferenceModalVisible", this.state.isAirPreferenceModalVisible);
+
+      var _state7 = this.state,
+          isAirPreferenceModalVisible = _state7.isAirPreferenceModalVisible,
+          activeAirPreferenceIndex = _state7.activeAirPreferenceIndex,
+          travelItenary = _state7.travelItenary;
+
+
+      if (isAirPreferenceModalVisible) {
+
+        return _react2.default.createElement(
+          _ewmodal2.default,
+          {
+            onBackButtonPress: function onBackButtonPress() {
+              return _this24.changeAirPreferenceModalState();
+            },
+            isModalVisible: isAirPreferenceModalVisible,
+            onBackdropPress: function onBackdropPress() {
+              return _this24.changeAirPreferenceModalState();
+            }
+          },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { margin: appstyleguide.DEFAULT_MARGIN } },
+            _react2.default.createElement(_ewh1text2.default, {
+              text: 'Travel Preferences',
+              customStyle: { alignSelf: "center", margin: appstyleguide.DEFAULT_MARGIN }
+            }),
+            _react2.default.createElement(_ewfloatinglabel2.default, {
+              label: 'Airline',
+              placeholderlabel: 'Enter airline name',
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              onChangeText: function onChangeText(updatedText) {
+                return _this24.onTextStateChanged(travelItenary, activeAirPreferenceIndex, updatedText, travelConstants.AIR_PREFERENCES_AIRLINE_KEY);
+              },
+              value: travelItenary[activeAirPreferenceIndex].airPreferences.Airline
+            }),
+            _react2.default.createElement(_ewfloatinglabel2.default, {
+              label: 'Flight Number',
+              placeholderlabel: 'Enter flight number',
+              customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              onChangeText: function onChangeText(updatedText) {
+                return _this24.onTextStateChanged(travelItenary, activeAirPreferenceIndex, updatedText, travelConstants.AIR_PREFERENCES_FLIGHT_KEY);
+              },
+              value: travelItenary[activeAirPreferenceIndex].airPreferences.flightNumber
+            }),
+            _react2.default.createElement(_ewfloatinglabel2.default, {
+              label: 'Terminal',
+              placeholderlabel: 'Enter terminal',
+              customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              onChangeText: function onChangeText(updatedText) {
+                return _this24.onTextStateChanged(travelItenary, activeAirPreferenceIndex, updatedText, travelConstants.AIR_PREFERENCES_TERMINAL_KEY);
+              },
+              value: travelItenary[activeAirPreferenceIndex].airPreferences.Terminal
+            }),
+            this.renderMealPreferenceView(isAirPreferenceModalVisible, activeAirPreferenceIndex, travelItenary),
+            _react2.default.createElement(_ewfloatinglabel2.default, {
+              label: 'Preferences',
+              placeholderlabel: 'Enter any other preferences',
+              customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              onChangeText: function onChangeText(updatedText) {
+                return _this24.onTextStateChanged(travelItenary, activeAirPreferenceIndex, updatedText, travelConstants.TRAVEL_PREFERENCES_KEY);
+              },
+              value: travelItenary[activeAirPreferenceIndex].travelPreferences
+            }),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { alignSelf: "center", justifyContent: "center", marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+              _react2.default.createElement(_ewbutton2.default, {
+                label: 'Done',
+                onButonClicked: function onButonClicked() {
+                  return _this24.changeAirPreferenceModalState();
+                }
+              })
+            )
+          )
+        );
+      }
+    }
+  }, {
+    key: 'renderMealPreferenceView',
+    value: function renderMealPreferenceView(isAirPreferenceModalVisible, activeAirPreferenceIndex, travelItenary) {
+      var _this25 = this;
+
+      if ((0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewtext2.default, {
+            text: 'Meal',
+            customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+          }),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", marginTop: appstyleguide.DEFAULT_TOP_MARGIN, justifyContent: "space-around" } },
+            _react2.default.createElement(_ewradiobutton2.default, {
+              isSelected: this.isAirPreferenceRadioButtonSelected(travelItenary, activeAirPreferenceIndex, travelConstants.NO_MEAL_REQUIRED),
+              onRadioButtonClick: function onRadioButtonClick() {
+                return _this25.onMealPreferenceChange(travelItenary, activeAirPreferenceIndex, travelConstants.NO_MEAL_REQUIRED);
+              },
+              label: travelConstants.NO_MEAL_REQUIRED_LABEL,
+              customViewStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN }
+            }),
+            _react2.default.createElement(_ewradiobutton2.default, {
+              isSelected: this.isAirPreferenceRadioButtonSelected(travelItenary, activeAirPreferenceIndex, travelConstants.MEAL_REQUIRED_VEG),
+              onRadioButtonClick: function onRadioButtonClick() {
+                return _this25.onMealPreferenceChange(travelItenary, activeAirPreferenceIndex, travelConstants.MEAL_REQUIRED_VEG);
+              },
+              label: travelConstants.MEAL_REQUIRED_VEG_LABEL,
+              customViewStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN }
+            }),
+            _react2.default.createElement(_ewradiobutton2.default, {
+              isSelected: this.isAirPreferenceRadioButtonSelected(travelItenary, activeAirPreferenceIndex, travelConstants.MEAL_REQUIRED_NON_VEG),
+              onRadioButtonClick: function onRadioButtonClick() {
+                return _this25.onMealPreferenceChange(travelItenary, activeAirPreferenceIndex, travelConstants.MEAL_REQUIRED_NON_VEG);
+              },
+              label: travelConstants.MEAL_REQUIRED_NON_VEG_LABEL,
+              customViewStyle: { marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN }
+            })
+          )
+        );
+      } else {
+
+        return _react2.default.createElement(_ewdropdownpicker2.default, {
+          pickerLabel: 'Meal',
+          customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+          dataArray: mealTypePicker,
+          isDefaultPickerValueSelected: false,
+          selectedValue: travelItenary[activeAirPreferenceIndex].airPreferences.mealSelected,
+          onPickerValueChange: function onPickerValueChange(newPickerValue) {
+            return _this25.onMealPreferenceChange(travelItenary, activeAirPreferenceIndex, newPickerValue);
+          }
+        });
+      }
+    }
+  }, {
+    key: 'isAirPreferenceRadioButtonSelected',
+    value: function isAirPreferenceRadioButtonSelected(travelItenary, activeAirPreferenceIndex, mealKey) {
+
+      console.log(FILE_NAME + "In isAirPreferenceRadioButtonSelected");
+
+      if (travelItenary[activeAirPreferenceIndex].airPreferences.mealSelected == mealKey) return true;
+
+      return false;
+    }
+  }, {
+    key: 'onMealPreferenceChange',
+    value: function onMealPreferenceChange(travelItenary, activeAirPreferenceIndex, mealKey) {
+
+      console.log(FILE_NAME + "In onMealPreferenceChange");
+
+      updatedTravelItenary = travelItenary;
+
+      updatedTravelItenary[activeAirPreferenceIndex].airPreferences.mealSelected = mealKey;
+
+      this.setState({
+        travelItenary: updatedTravelItenary
+      });
+    }
+  }, {
+    key: 'changeAirPreferenceModalState',
+    value: function changeAirPreferenceModalState() {
+      var travelItenaryIndex = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+
+
+      console.log(FILE_NAME + "In changeAirPreferenceModalState");
+
+      this.setState({
+        isAirPreferenceModalVisible: !this.state.isAirPreferenceModalVisible,
+        activeAirPreferenceIndex: travelItenaryIndex
+      });
+    }
+  }, {
+    key: 'isAutoCompleteDropdownVisible',
+    value: function isAutoCompleteDropdownVisible(textInputKey, textInputValue) {
+
+      console.log(FILE_NAME + "In isAutoCompleteDropdownVisible");
+
+      var currentFocussedTextInput = this.state.currentFocussedTextInput;
+
+
+      console.log("isAutoCompleteDropdownVisible", textInputKey, currentFocussedTextInput, textInputValue);
+
+      if (currentFocussedTextInput != "") {
+
+        if (currentFocussedTextInput == textInputKey && textInputValue.length > 2) {
+
+          return true;
+        }
+      }
+
+      return false;
+    }
+  }, {
+    key: 'handleTextInputFocus',
+    value: function handleTextInputFocus(textInputKey) {
+
+      this.setState({
+
+        currentFocussedTextInput: textInputKey
+
+      });
+    }
+  }, {
+    key: 'renderTravelAddButton',
+    value: function renderTravelAddButton(travelItenary) {
+      var _this26 = this;
+
+      console.log(FILE_NAME + "In renderTravelAddButton");
+
+      if (!this.props.reveiwMode) {
+
+        if (this.state.isMultiCity && !this.state.initialScreen) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { alignItems: "flex-end", flexDirection: "row", justifyContent: "flex-end", marginTop: 5, marginBottom: 5 } },
+            _react2.default.createElement(_ewicon2.default, {
+              iconSource: addIcon,
+              onIconPressed: function onIconPressed() {
+                return _this26.addTravelModel(travelItenary);
+              }
+            })
+          );
+        }
+
+        if (this.state.isSingleCity && travelItenary.length == 1) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { alignItems: "center", flexDirection: "row", justifyContent: "center" } },
+            _react2.default.createElement(_ewbutton2.default, {
+              label: 'Add Return',
+              customStyle: { backgroundColor: appstyleguide.APP_GRAY },
+              onButonClicked: function onButonClicked() {
+                return _this26.addTravelModel(travelItenary, 1, true);
+              }
+
+            })
+          );
+        }
+      }
+    }
+  }, {
+    key: 'onEditButtonPressed',
+    value: function onEditButtonPressed(travelItenaryIndex, travelItenaryIndexKey, locationKey) {
+
+      console.log(FILE_NAME + "In onEditButtonPressed");
+
+      if (this.localValidation()) this.changeModeOfAllViews(travelItenaryIndex, travelItenaryIndexKey, locationKey);
+    }
+  }, {
+    key: 'changeModeOfAllViews',
+    value: function changeModeOfAllViews(currentActiveIndex, currentActiveIndexKey, locationKey) {
+
+      console.log(FILE_NAME + "In changeModeOfAllViews");
+
+      updatedTravelItenary = this.state.travelModel;
+
+      for (travelPlan = 0; travelPlan < this.state.travelModel.length; travelPlan++) {
+
+        if (currentActiveIndexKey == travelConstants.TRAVEL_DETAIL_KEY && currentActiveIndex == travelPlan) updatedTravelItenary[travelPlan].currentMode = travelConstants.EDIT_MODE;else updatedTravelItenary[travelPlan].currentMode = travelConstants.VIEW_MODE;
+      }
+
+      console.log("updatedTravelItenary", currentActiveIndex, currentActiveIndexKey, updatedTravelItenary);
+
+      updatedStayAndLocalItenary = this.state.stayAndLocalTravelModel;
+
+      Object.keys(updatedStayAndLocalItenary).map(function (key) {
+
+        for (stayPlan = 0; stayPlan < updatedStayAndLocalItenary[key].stayModel.length; stayPlan++) {
+
+          if (locationKey == key && currentActiveIndexKey == travelConstants.STAY_KEY && currentActiveIndex == stayPlan) updatedStayAndLocalItenary[key].stayModel[stayPlan].currentMode = travelConstants.EDIT_MODE;else updatedStayAndLocalItenary[key].stayModel[stayPlan].currentMode = travelConstants.VIEW_MODE;
+        }
+
+        if (updatedStayAndLocalItenary[key].localTravelModel != null) {
+
+          for (localTravelPlan = 0; localTravelPlan < updatedStayAndLocalItenary[key].localTravelModel.length; localTravelPlan++) {
+
+            if (locationKey == key && currentActiveIndexKey == travelConstants.LOCAL_TRAVEL_KEY && currentActiveIndex == localTravelPlan) updatedStayAndLocalItenary[key].localTravelModel[localTravelPlan].currentMode = travelConstants.EDIT_MODE;else updatedStayAndLocalItenary[key].localTravelModel[localTravelPlan].currentMode = travelConstants.VIEW_MODE;
+          }
+        }
+      });
+
+      this.setState({
+        travelModel: updatedTravelItenary,
+        stayAndLocalTravelModel: updatedStayAndLocalItenary
+      });
+    }
+  }, {
+    key: 'onTravelModeSelected',
+    value: function onTravelModeSelected(travelItenary, travelItenaryIndex, selectedValue) {
+
+      console.log(FILE_NAME + "In onTravelModeSelected");
+
+      var _state8 = this.state,
+          travelModes = _state8.travelModes,
+          travelClasses = _state8.travelClasses,
+          initialScreen = _state8.initialScreen;
+
+
+      updatedTravelItenary = travelItenary;
+
+      console.log("travelitenary", updatedTravelItenary, travelItenaryIndex, selectedValue);
+
+      if (initialScreen) {
+
+        for (var _iterator8 = updatedTravelItenary, _isArray8 = Array.isArray(_iterator8), _i8 = 0, _iterator8 = _isArray8 ? _iterator8 : _iterator8[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+          var _ref8;
+
+          if (_isArray8) {
+            if (_i8 >= _iterator8.length) break;
+            _ref8 = _iterator8[_i8++];
+          } else {
+            _i8 = _iterator8.next();
+            if (_i8.done) break;
+            _ref8 = _i8.value;
+          }
+
+          var travelItenary = _ref8;
+
+
+          travelItenary.travelMode = selectedValue;
+
+          travelItenary.travelClass = travelClasses[travelModes[selectedValue].label][0].value;
+        }
+      } else {
+
+        updatedTravelItenary[travelItenaryIndex].travelMode = selectedValue;
+        updatedTravelItenary[travelItenaryIndex].deviationReason = "";
+
+        updatedTravelItenary[travelItenaryIndex].travelClass = travelClasses[travelModes[selectedValue].label][0].value;
+      }
+
+      this.setState({
+        travelModel: updatedTravelItenary,
+        initialScreen: false
+      });
+    }
+  }, {
+    key: 'onTravelClassSelected',
+    value: function onTravelClassSelected(travelItenary, key, travelItenaryIndex) {
+
+      console.log(FILE_NAME + "In onTravelClassSelected");
+
+      updatedTravelItenary = travelItenary;
+
+      console.log("travelitenary", updatedTravelItenary, travelItenaryIndex);
+
+      updatedTravelItenary[travelItenaryIndex].travelClass = key;
+
+      updatedTravelItenary[travelItenaryIndex].deviationReason = "";
+
+      this.setState({
+        travelModel: updatedTravelItenary
+      });
+    }
+  }, {
+    key: 'getTravelMode',
+    value: function getTravelMode(travelModeArray, travelModeId, travelClasses) {
+
+      console.log("travelModeArray", travelModeId, travelClasses);
+      modeCounter = 0;
+
+      for (var _iterator9 = travelModeArray, _isArray9 = Array.isArray(_iterator9), _i9 = 0, _iterator9 = _isArray9 ? _iterator9 : _iterator9[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref9;
+
+        if (_isArray9) {
+          if (_i9 >= _iterator9.length) break;
+          _ref9 = _iterator9[_i9++];
+        } else {
+          _i9 = _iterator9.next();
+          if (_i9.done) break;
+          _ref9 = _i9.value;
+        }
+
+        var travelMode = _ref9;
+
+
+        modeId = null;
+
+        if (travelMode.value != "-1") {
+
+          for (var _iterator10 = travelClasses[travelMode.label], _isArray10 = Array.isArray(_iterator10), _i10 = 0, _iterator10 = _isArray10 ? _iterator10 : _iterator10[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+            var _ref10;
+
+            if (_isArray10) {
+              if (_i10 >= _iterator10.length) break;
+              _ref10 = _iterator10[_i10++];
+            } else {
+              _i10 = _iterator10.next();
+              if (_i10.done) break;
+              _ref10 = _i10.value;
+            }
+
+            var travelClass = _ref10;
+
+
+            console.log("travelModeArray1", travelClass.value, travelModeId, modeCounter);
+            if (travelClass.value == travelModeId) {
+              modeId = travelMode.travelModeId;
+              break;
+            }
+          }
+        }
+
+        if (modeId != null) return modeId;
+      }
+    }
+  }, {
+    key: 'convertToDateFormat',
+    value: function convertToDateFormat(serverDate) {
+
+      var customDate = (0, _utils.convertServerDateToMilliseconds)(serverDate + " 00:00:00");
+
+      return customDate;
+    }
+  }, {
+    key: 'changeStayAndLocalTravelDates',
+    value: function changeStayAndLocalTravelDates(updatedTravelItenary, updatedStayAndLocalTravelItenary, dateSelected) {
+
+      console.log(FILE_NAME, "In changeStayAndLocalTravelDates method");
+
+      for (var _iterator11 = updatedTravelItenary, _isArray11 = Array.isArray(_iterator11), _i11 = 0, _iterator11 = _isArray11 ? _iterator11 : _iterator11[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref11;
+
+        if (_isArray11) {
+          if (_i11 >= _iterator11.length) break;
+          _ref11 = _iterator11[_i11++];
+        } else {
+          _i11 = _iterator11.next();
+          if (_i11.done) break;
+          _ref11 = _i11.value;
+        }
+
+        var travelDetail = _ref11;
+
+
+        locationKey = travelDetail.destinationCity;
+
+        if (updatedStayAndLocalTravelItenary[locationKey] != null) {
+
+          for (var _iterator12 = updatedStayAndLocalTravelItenary[locationKey].stayModel, _isArray12 = Array.isArray(_iterator12), _i12 = 0, _iterator12 = _isArray12 ? _iterator12 : _iterator12[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+            var _ref12;
+
+            if (_isArray12) {
+              if (_i12 >= _iterator12.length) break;
+              _ref12 = _iterator12[_i12++];
+            } else {
+              _i12 = _iterator12.next();
+              if (_i12.done) break;
+              _ref12 = _i12.value;
+            }
+
+            var stayModel = _ref12;
+
+
+            if (dateSelected > stayModel.fromDate.value) {
+
+              stayModel.fromDate.value = dateSelected;
+              stayModel.toDate.value = dateSelected;
+            }
+          }
+
+          if (updatedStayAndLocalTravelItenary[locationKey].localTravelModel != null) {
+
+            for (var _iterator13 = updatedStayAndLocalTravelItenary[locationKey].localTravelModel, _isArray13 = Array.isArray(_iterator13), _i13 = 0, _iterator13 = _isArray13 ? _iterator13 : _iterator13[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+              var _ref13;
+
+              if (_isArray13) {
+                if (_i13 >= _iterator13.length) break;
+                _ref13 = _iterator13[_i13++];
+              } else {
+                _i13 = _iterator13.next();
+                if (_i13.done) break;
+                _ref13 = _i13.value;
+              }
+
+              var localTravelModel = _ref13;
+
+
+              if (dateSelected > localTravelModel.fromDate.value) {
+
+                localTravelModel.fromDate.value = dateSelected;
+                localTravelModel.toDate.value = dateSelected;
+              }
+            }
+          }
+        }
+      }
+
+      return updatedStayAndLocalTravelItenary;
+    }
+  }, {
+    key: 'isDateBetweenTravelDates',
+    value: function isDateBetweenTravelDates(dateSelected) {
+
+      console.log(FILE_NAME + "In isDateBetweenTravelDates method");
+
+      var travelModel = this.state.travelModel;
+
+
+      if (dateSelected < travelModel[0].departureDate.value) return false;
+
+      if (travelModel.length > 1) {
+
+        if (dateSelected > travelModel[travelModel.length - 1].departureDate.value) return false;
+      }
+
+      return true;
+    }
+  }, {
+    key: 'localValidation',
+    value: function localValidation() {
+
+      console.log(FILE_NAME + "In localValidation method");
+
+      if (!this.travelLocalValidation()) return false;
+
+      if (!this.stayAndLocalTravelValidation()) return false;
+
+      return true;
+    }
+  }, {
+    key: 'stayAndLocalTravelValidation',
+    value: function stayAndLocalTravelValidation() {
+
+      console.log(FILE_NAME + "In stayAndLocalTravelValidation method");
+
+      var _state9 = this.state,
+          stayAndLocalTravelModel = _state9.stayAndLocalTravelModel,
+          travelModel = _state9.travelModel,
+          localTravelModes = _state9.localTravelModes;
+
+
+      for (var _iterator14 = travelModel, _isArray14 = Array.isArray(_iterator14), _i14 = 0, _iterator14 = _isArray14 ? _iterator14 : _iterator14[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref14;
+
+        if (_isArray14) {
+          if (_i14 >= _iterator14.length) break;
+          _ref14 = _iterator14[_i14++];
+        } else {
+          _i14 = _iterator14.next();
+          if (_i14.done) break;
+          _ref14 = _i14.value;
+        }
+
+        var travelDetail = _ref14;
+
+
+        locationKey = travelDetail.destinationCity;
+
+        console.log("In stayAndLocalTravelValidation method", travelDetail);
+
+        if (stayAndLocalTravelModel[locationKey] != null) {
+
+          console.log("In stayAndLocalTravelValidation method", stayAndLocalTravelModel[locationKey]);
+
+          for (var stay in stayAndLocalTravelModel[locationKey].stayModel) {
+
+            if (stayAndLocalTravelModel[locationKey].stayModel[stay].currentMode == travelConstants.EDIT_MODE) {
+
+              stayTypes = stayAndLocalTravelModel[locationKey].stayModel[stay].stayTypes;
+
+              stayClass = this.getStayAndLocalModeType(stayTypes, stayAndLocalTravelModel[locationKey].stayModel[stay].stayClass);
+
+              if (stayClass == "-1") {
+
+                this.props.showAlertMessage(travelConstants.STAY_TYPE_NOT_SELECTED_MESSAGE);
+
+                return false;
+              }
+
+              if (stayAndLocalTravelModel[locationKey].stayModel[stay].cityCategoryData.length == 0) {
+
+                this.props.showAlertMessage(travelConstants.CITY_CATEGORY_NOT_EXIST);
+
+                return false;
+              }
+
+              if (stayAndLocalTravelModel[locationKey].stayModel[stay].stayLocation.trim() == "") {
+
+                this.textInputRef[travelConstants.STAY_LOCATION_KEY + locationKey + stay].focus();
+
+                this.props.showAlertMessage(travelConstants.LOCATION_EMPTY_MESSAGE);
+
+                return false;
+              }
+
+              if (this.isDeviationExist(stayClass) && stayAndLocalTravelModel[locationKey].stayModel[stay].deviationReason.trim() == "") {
+
+                this.textInputRef[travelConstants.STAY_DEVIATION_KEY + locationKey + stay].focus();
+
+                this.props.showAlertMessage(travelConstants.DEVIATION_MESSAGE_EMPTY);
+
+                return false;
+              }
+            }
+          }
+
+          for (var localtravel in stayAndLocalTravelModel[locationKey].localTravelModel) {
+
+            if (stayAndLocalTravelModel[locationKey].localTravelModel[localtravel].currentMode == travelConstants.EDIT_MODE) {
+
+              transportType = this.getStayAndLocalModeType(localTravelModes, stayAndLocalTravelModel[locationKey].localTravelModel[localtravel].transportType);
+
+              if (transportType == "-1") {
+
+                this.props.showAlertMessage(travelConstants.TRANSPORT_TYPE_NOT_SELECTED_MESSAGE);
+
+                return false;
+              }
+
+              if (stayAndLocalTravelModel[locationKey].localTravelModel[localtravel].localTravelLocation.trim() == "") {
+
+                this.textInputRef[travelConstants.LOCAL_TRAVEL_LOCATION_KEY + locationKey + localtravel].focus();
+
+                this.props.showAlertMessage(travelConstants.LOCATION_EMPTY_MESSAGE);
+
+                return false;
+              }
+
+              if (this.isDeviationExist(transportType) && stayAndLocalTravelModel[locationKey].localTravelModel[localtravel].deviationReason.trim() == "") {
+
+                this.textInputRef[travelConstants.LOCAL_TRAVEL_DEVIATION_KEY + locationKey + stay].focus();
+
+                this.props.showAlertMessage(travelConstants.DEVIATION_MESSAGE_EMPTY);
+
+                return false;
+              }
+            }
+          }
+        }
+      }
+
+      return true;
+    }
+  }, {
+    key: 'travelLocalValidation',
+    value: function travelLocalValidation() {
+
+      console.log(FILE_NAME + "In travelLocalValidation method");
+
+      var travelModel = this.state.travelModel;
+
+
+      for (var travels in travelModel) {
+
+        if (travelModel[travels].currentMode == travelConstants.EDIT_MODE && this.isTravelVisible(travels)) {
+
+          var travelClass = this.getTravelClass(travelModel, travels);
+
+          if (this.isDefaultTravelModeSelected(travelModel, travels)) {
+
+            this.props.showAlertMessage(travelConstants.TRAVEL_MODE_NOT_SELECTED_MESSAGE);
+
+            return false;
+          }
+
+          if (travelModel[travels].travelClass == defaultPickerSelected) {
+
+            this.props.showAlertMessage(travelConstants.TRAVEL_CLASS_NOT_SELECTED_MESSAGE);
+
+            return false;
+          }
+
+          if (travelModel[travels].sourceCity == "") {
+            this.textInputRef[travelConstants.SOURCE_CITY_REF_KEY + travels].focus();
+
+            this.props.showAlertMessage(travelConstants.SOURCE_CITY_EMPTY);
+
+            return false;
+          }
+
+          if (travelModel[travels].destinationCity == "") {
+
+            this.textInputRef[travelConstants.DESTINATION_CITY_REF_KEY + travels].focus();
+
+            this.props.showAlertMessage(travelConstants.DESTINATION_CITY_EMPTY);
+
+            return false;
+          }
+
+          if (travelModel[travels].sourceCity == travelModel[travels].destinationCity) {
+
+            this.props.showAlertMessage(travelConstants.SOURCE_AND_DESTINATION_CITY_SAME);
+
+            return false;
+          }
+
+          if (this.isDeviationExist(travelClass) && travelModel[travels].deviationReason == "") {
+
+            this.textInputRef[travelConstants.TRAVEL_DEVIATION_KEY + travels].focus();
+
+            this.props.showAlertMessage(travelConstants.DEVIATION_MESSAGE_EMPTY);
+
+            return false;
+          }
+        }
+      }
+
+      return true;
+    }
+  }]);
+  return EwTravelPlan;
+}(_react.Component);
+
+function bindActions(dispatch) {
+
+  console.log(FILE_NAME + "In bindActions");
+
+  return {
+
+    getCityInformation: function getCityInformation(params) {
+      return dispatch((0, _travelactions.getCityInformation)(params));
+    },
+    getTravelInformation: function getTravelInformation(params) {
+      return dispatch((0, _travelactions.getTravelInformation)(params));
+    },
+    getTravelCityCategoryInformation: function getTravelCityCategoryInformation(params) {
+      return dispatch((0, _travelactions.getTravelCityCategoryInformation)(params));
+    }
+  };
+}
+
+function mapStateToProps(state) {
+
+  console.log("State Updated state is -");
+
+  console.log(state);
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    cityInformationData: state.travel.cityInformationData,
+    cityInformationError: state.travel.cityInformationError,
+
+    cityCategoryInformationData: state.travel.cityCategoryInformationData,
+    cityCategoryInformationError: state.travel.cityCategoryInformationError
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(EwTravelPlan);

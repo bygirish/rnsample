@@ -1,0 +1,4 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var UPDATE_FCM_TOKEN = exports.UPDATE_FCM_TOKEN = '/notification?scope=I';

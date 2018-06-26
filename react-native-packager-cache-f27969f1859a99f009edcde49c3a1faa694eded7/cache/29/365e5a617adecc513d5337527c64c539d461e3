@@ -1,0 +1,403 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetPastAttendanceInformationRequest = buildGetPastAttendanceInformationRequest;
+exports.buildSuccessGetPastAttendanceInformationResponse = buildSuccessGetPastAttendanceInformationResponse;
+exports.buildFailedGetPastAttendanceInformationResponse = buildFailedGetPastAttendanceInformationResponse;
+exports.buildServerErrorGetPastAttendanceInformationResponse = buildServerErrorGetPastAttendanceInformationResponse;
+exports.buildApplyPastAttendance = buildApplyPastAttendance;
+exports.buildSuccessApplyPastAttendanceResponse = buildSuccessApplyPastAttendanceResponse;
+exports.buildFailedApplyPastAttendanceResponse = buildFailedApplyPastAttendanceResponse;
+exports.buildServerErrorApplyPastAttendanceResponse = buildServerErrorApplyPastAttendanceResponse;
+exports.buildPastAttendanceActionRequest = buildPastAttendanceActionRequest;
+exports.buildSuccessPastAttendanceActionResponse = buildSuccessPastAttendanceActionResponse;
+exports.buildFailedPastAttendanceActionResponse = buildFailedPastAttendanceActionResponse;
+exports.buildServerErrorPastAttendanceActionResponse = buildServerErrorPastAttendanceActionResponse;
+exports.buildGetPendingPastAttendanceInformationRequest = buildGetPendingPastAttendanceInformationRequest;
+exports.buildSuccessGetPendingPastAttendanceInformationResponse = buildSuccessGetPendingPastAttendanceInformationResponse;
+exports.buildFailedGetPendingPastAttendanceInformationResponse = buildFailedGetPendingPastAttendanceInformationResponse;
+exports.buildServerErrorGetPendingPastAttendanceInformationResponse = buildServerErrorGetPendingPastAttendanceInformationResponse;
+exports.buildGetRosterInformationRequest = buildGetRosterInformationRequest;
+exports.buildSuccessGetRosterInformationResponse = buildSuccessGetRosterInformationResponse;
+exports.buildFailedGetRosterInformationResponse = buildFailedGetRosterInformationResponse;
+exports.buildServerErrorGetRosterInformationResponse = buildServerErrorGetRosterInformationResponse;
+exports.buildGetAppliedPastAttendanceListRequest = buildGetAppliedPastAttendanceListRequest;
+exports.buildSuccesGetAppliedPastAttendanceListResponse = buildSuccesGetAppliedPastAttendanceListResponse;
+exports.buildFailedGetAppliedPastAttendanceListResponse = buildFailedGetAppliedPastAttendanceListResponse;
+exports.buildServerErrorGetAppliedPastAttendanceListResponse = buildServerErrorGetAppliedPastAttendanceListResponse;
+
+var _pastattendanceapiendpoints = require('./pastattendanceapiendpoints');
+
+var pastAttendanceApiEndPoints = babelHelpers.interopRequireWildcard(_pastattendanceapiendpoints);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var FILE_NAME = "pastattendanceprocessing.js : ";
+
+function buildGetPastAttendanceInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetPastAttendanceInformationRequest" + " Method - ");
+  console.log("params - ");
+  console.log(params);
+
+  var url = _utils.BASIC_URL + pastAttendanceApiEndPoints.GET_PAST_ATTENDANCE_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var pastAttendanceRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -");console.log(pastAttendanceRequest);
+
+  return pastAttendanceRequest;
+};
+
+function buildSuccessGetPastAttendanceInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetPastAttendanceInformationResponse" + " Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+};
+
+function buildFailedGetPastAttendanceInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetPastAttendanceInformationResponse" + " Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetPastAttendanceInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetPastAttendanceInformationResponse" + " Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildApplyPastAttendance(params, getState) {
+
+  console.log(FILE_NAME + "In buildApplyPastAttendance Method - ");
+  console.log("params - ");
+  console.log(params);
+
+  var url = _utils.BASIC_URL + pastAttendanceApiEndPoints.APPLY_PAST_ATTENDANCE + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME;
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var applyPastAttendance = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -");console.log(applyPastAttendance);
+
+  return applyPastAttendance;
+};
+
+function buildSuccessApplyPastAttendanceResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessApplyPastAttendanceResponse Method");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+};
+
+function buildFailedApplyPastAttendanceResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedApplyPastAttendanceResponse Method");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorApplyPastAttendanceResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorApplyPastAttendanceResponse Method");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildPastAttendanceActionRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildPastAttendanceActionRequest Method - ");
+  console.log("params - ");
+  console.log(params);
+
+  var url = _utils.BASIC_URL + pastAttendanceApiEndPoints.PAST_ATTENDANCE_ACTION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME;
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var pastAttendanceRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -");console.log(pastAttendanceRequest);
+
+  return pastAttendanceRequest;
+};
+
+function buildSuccessPastAttendanceActionResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessPastAttendanceActionResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+};
+
+function buildFailedPastAttendanceActionResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedPastAttendanceActionResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorPastAttendanceActionResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorPastAttendanceActionResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetPendingPastAttendanceInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetPendingPastAttendanceInformationRequest Method - ");
+  console.log("params - ");
+  console.log(params);
+
+  var url = _utils.BASIC_URL + pastAttendanceApiEndPoints.PENDING_PAST_ATTENDANCE_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&pi_txn_id=" + params.pastAttendanceId + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var pendingPastAttendanceRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -");console.log(pendingPastAttendanceRequest);
+
+  return pendingPastAttendanceRequest;
+};
+
+function buildSuccessGetPendingPastAttendanceInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetPendingPastAttendanceInformationResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+};
+
+function buildFailedGetPendingPastAttendanceInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetPendingPastAttendanceInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetPendingPastAttendanceInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetPendingPastAttendanceInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetRosterInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetRosterInformationRequest Method");
+  console.log("params - ");
+  console.log(params);
+
+  var url = _utils.BASIC_URL + pastAttendanceApiEndPoints.ROSTER_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&roster_data=Y&apply_date=" + params.applyDate + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var rosterInformation = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -");console.log(rosterInformation);
+
+  return rosterInformation;
+};
+
+function buildSuccessGetRosterInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetRosterInformationResponse Method");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+};
+
+function buildFailedGetRosterInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetRosterInformationResponse Method");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetRosterInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetRosterInformationResponse Method");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetAppliedPastAttendanceListRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetAppliedPastAttendanceListRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + pastAttendanceApiEndPoints.GET_APPLIED_PAST_ATTENDANCE_LIST + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&request_type=" + params.requestType + "&current_id=" + params.currentId + "&no_of_record=" + params.numberOfRecords + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var appliedPastAttendanceListRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", appliedPastAttendanceListRequest);
+
+  return appliedPastAttendanceListRequest;
+}
+
+function buildSuccesGetAppliedPastAttendanceListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetAppliedPastAttendanceListResponses Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetAppliedPastAttendanceListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetAppliedPastAttendanceListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetAppliedPastAttendanceListResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetAppliedPastAttendanceListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

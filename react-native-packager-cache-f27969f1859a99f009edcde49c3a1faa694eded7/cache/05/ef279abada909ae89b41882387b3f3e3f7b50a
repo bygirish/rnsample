@@ -1,0 +1,79 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _reactNativeAutocompleteInput = require('react-native-autocomplete-input');
+
+var _reactNativeAutocompleteInput2 = babelHelpers.interopRequireDefault(_reactNativeAutocompleteInput);
+
+var EwAutocompleteInput = function (_Component) {
+  babelHelpers.inherits(EwAutocompleteInput, _Component);
+
+  function EwAutocompleteInput(props, context) {
+    babelHelpers.classCallCheck(this, EwAutocompleteInput);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwAutocompleteInput.__proto__ || Object.getPrototypeOf(EwAutocompleteInput)).call(this, props, context));
+
+    console.log("propsreceived", props);
+
+    _this.initialState = {
+
+      enableScrollViewScroll: true
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwAutocompleteInput, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props = this.props,
+          dropdownData = _props.dropdownData,
+          customTextInput = _props.customTextInput,
+          scrollViewVisibility = _props.scrollViewVisibility;
+
+
+      console.log("dropdownData received is", dropdownData);
+
+      return _react2.default.createElement(_reactNativeAutocompleteInput2.default, babelHelpers.extends({
+        data: dropdownData,
+        ref: 'autocomplete',
+        inputContainerStyle: { borderWidth: 0 },
+        listStyle: _styles2.default.listStyle,
+        renderTextInput: customTextInput,
+        renderItem: this.props.renderListItem,
+
+        onStartShouldSetResponderCapture: function onStartShouldSetResponderCapture() {
+
+          console.log("inside onStartShouldSetResponderCapture", _this2.refs);
+
+          _this2.props.updateScrollState(false);
+
+          if (_this2.refs.autocomplete.resultList.scrollProperties.offset === 0 && scrollViewVisibility === false) {
+            _this2.props.updateScrollState(true);
+          }
+        }
+
+      }, this.props));
+    }
+  }]);
+  return EwAutocompleteInput;
+}(_react.Component);
+
+exports.default = EwAutocompleteInput;
+;

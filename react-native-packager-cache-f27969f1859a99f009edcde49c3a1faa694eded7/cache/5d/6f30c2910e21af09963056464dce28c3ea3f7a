@@ -1,0 +1,79 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require("react");
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require("react-native");
+
+var _propTypes = require("prop-types");
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var SystemMessage = function (_React$Component) {
+  babelHelpers.inherits(SystemMessage, _React$Component);
+
+  function SystemMessage() {
+    babelHelpers.classCallCheck(this, SystemMessage);
+    return babelHelpers.possibleConstructorReturn(this, (SystemMessage.__proto__ || Object.getPrototypeOf(SystemMessage)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(SystemMessage, [{
+    key: "render",
+    value: function render() {
+      var currentMessage = this.props.currentMessage;
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: [styles.container, this.props.containerStyle] },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: [styles.wrapper, this.props.wrapperStyle] },
+          _react2.default.createElement(
+            _reactNative.Text,
+            { style: [styles.text, this.props.textStyle] },
+            currentMessage.text
+          )
+        )
+      );
+    }
+  }]);
+  return SystemMessage;
+}(_react2.default.Component);
+
+exports.default = SystemMessage;
+
+
+var styles = _reactNative.StyleSheet.create({
+  container: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    marginTop: 5,
+    marginBottom: 10
+  },
+  text: {
+    backgroundColor: "transparent",
+    color: "#b2b2b2",
+    fontSize: 12,
+    fontWeight: "300"
+  }
+});
+
+SystemMessage.defaultProps = {
+  currentMessage: {
+    system: false
+  },
+  containerStyle: {},
+  wrapperStyle: {},
+  textStyle: {}
+};
+
+SystemMessage.propTypes = {
+  currentMessage: _propTypes2.default.object,
+  containerStyle: _reactNative.ViewPropTypes.style,
+  wrapperStyle: _reactNative.ViewPropTypes.style,
+  textStyle: _reactNative.Text.propTypes.style
+};

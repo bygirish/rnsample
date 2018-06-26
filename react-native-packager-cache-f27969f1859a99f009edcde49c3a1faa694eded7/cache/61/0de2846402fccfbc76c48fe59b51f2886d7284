@@ -1,0 +1,612 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../utils');
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewcomponents = require('../../../utils/ewcomponents');
+
+var _ewnpsscore = require('./ewnpsscore');
+
+var _ewnpsscore2 = babelHelpers.interopRequireDefault(_ewnpsscore);
+
+var _ewimages = require('../../../utils/ewimages');
+
+var _GoogleAnalyticController = require('../../../GoogleAnalyticController');
+
+var _commonactions = require('../../../services/common/commonactions');
+
+var _dashboardutils = require('../dashboardutils');
+
+var dashboardConstants = babelHelpers.interopRequireWildcard(_dashboardutils);
+
+var _modulelist = require('../../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _ewdashboardstyle = require('../styles/ewdashboardstyle');
+
+var _ewdashboardstyle2 = babelHelpers.interopRequireDefault(_ewdashboardstyle);
+
+var FILE_NAME = "appratingmodal.js";
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var SCREEN_CATEGORY = modules.MODULE_RATING;
+
+var AppRatingModal = function (_Component) {
+  babelHelpers.inherits(AppRatingModal, _Component);
+
+  function AppRatingModal(props, context) {
+    babelHelpers.classCallCheck(this, AppRatingModal);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (AppRatingModal.__proto__ || Object.getPrototypeOf(AppRatingModal)).call(this, props, context));
+
+    _this.initialState = {
+
+      isAppRatingModalVisible: true,
+      rating: dashboardConstants.DEFAULT_RATING,
+      reason: "",
+      isReviewSubmitted: false,
+      isSecondaryDialogueShown: false,
+      npsRating: null
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(AppRatingModal, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+
+      if (this.props.firstPromptTransactionRange == null) {
+
+        this.props.getAppRatingConfiguration(null);
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.updateUserRatingStatusData != null && nextProps.updateUserRatingStatusError == null) {
+
+        updateReveiwSubmitted = this.state.isReviewSubmitted;
+        updatedAppRatingModalVisible = this.state.isAppRatingModalVisible;
+
+        if (nextProps.updateUserRatingStatusData.rating > 0 && !nextProps.updateUserRatingStatusData.app_store_redirected && !this.state.isSecondaryDialogueShown) {
+
+          updatedAppRatingModalVisible = true, updateReveiwSubmitted = true;
+        }
+
+        this.setState({
+          isReviewSubmitted: updateReveiwSubmitted,
+          isAppRatingModalVisible: updatedAppRatingModalVisible
+        });
+
+        this.clearUpdateAppRatingReduxData();
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log("rating is", this.state.rating);
+
+      console.log("app rating is ", this.state);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        this.userRatingModal()
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'clearUpdateAppRatingReduxData',
+    value: function clearUpdateAppRatingReduxData() {
+
+      var params = {
+
+        0: 'CLEAR_STATE_UPDATE_USER_RATING_DATA'
+      };
+
+      this.props.clearCommonStateData(params);
+    }
+  }, {
+    key: 'changeModalState',
+    value: function changeModalState() {
+
+      this.setState({
+        isAppRatingModalVisible: !this.state.isAppRatingModalVisible
+      });
+    }
+  }, {
+    key: 'isRatingModelVisible',
+    value: function isRatingModelVisible() {
+      var _props = this.props,
+          firstPromptTransactionRange = _props.firstPromptTransactionRange,
+          promptTransactionRange = _props.promptTransactionRange,
+          rating = _props.rating,
+          totalActivityCount = _props.totalActivityCount,
+          promptTransactionDate = _props.promptTransactionDate,
+          promptDuration = _props.promptDuration;
+
+
+      console.log("insidepromptTransactionDate", rating);
+
+      if (rating == 0) {
+        console.log("insidepromptTransactionDate", promptTransactionDate);
+
+        if (promptTransactionDate == null) {
+
+          console.log("insidepromptTransactionDate", totalActivityCount, firstPromptTransactionRange);
+
+          if (totalActivityCount >= firstPromptTransactionRange) {
+
+            return true;
+          }
+        } else {
+
+            var currentTime = (0, _utils.getCurrentTime)();
+            console.log("insidepromptTransactionDate", totalActivityCount, promptTransactionRange, new Date(currentTime), new Date(promptTransactionDate), promptDuration);
+
+            if (totalActivityCount != 0 && totalActivityCount % promptTransactionRange == 0 && currentTime - promptTransactionDate > promptDuration) {
+
+              return true;
+            }
+          }
+      }
+
+      return false;
+    }
+  }, {
+    key: 'userRatingModal',
+    value: function userRatingModal() {
+      var _this2 = this;
+
+      var _state = this.state,
+          isReviewSubmitted = _state.isReviewSubmitted,
+          rating = _state.rating;
+      var rating = this.props.rating;
+
+
+      if (isReviewSubmitted) {
+
+        if (this.state.isAppRatingModalVisible) {
+
+          return _react2.default.createElement(
+            _ewcomponents.EwModal,
+            {
+              onBackButtonPress: function onBackButtonPress() {
+                return _this2.changeModalState();
+              },
+              isModalVisible: this.state.isAppRatingModalVisible,
+              onBackdropPress: function onBackdropPress() {
+                return _this2.changeModalState();
+              }
+            },
+            this.renderRatingModalView()
+          );
+        }
+      } else {
+
+        if (this.isRatingModelVisible()) {
+
+          return _react2.default.createElement(
+            _ewcomponents.EwModal,
+            {
+              onBackButtonPress: function onBackButtonPress() {
+                return console.log("onBackdropPress");
+              },
+              isModalVisible: this.state.isAppRatingModalVisible,
+              onBackdropPress: function onBackdropPress() {
+                return console.log("onBackdropPress");
+              }
+            },
+            this.renderRatingModalView()
+          );
+        }
+      }
+    }
+  }, {
+    key: 'showReason',
+    value: function showReason() {
+      var _this3 = this;
+
+      if (this.isNegativeRating()) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewcomponents.EwH1Text, {
+            text: dashboardConstants.RATING_NEGATIVE_BODY_H2,
+            customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+          }),
+          _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+            label: 'Feedback',
+            placeholderlabel: ' Enter Your Feedback',
+            autoCorrect: false,
+            onChangeText: function onChangeText(reason) {
+              return _this3.setState({ reason: reason });
+            },
+            value: this.state.reason,
+            customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN }
+
+          })
+        );
+      }
+    }
+  }, {
+    key: 'doLocalValidation',
+    value: function doLocalValidation() {
+      var _state2 = this.state,
+          rating = _state2.rating,
+          reason = _state2.reason;
+
+
+      console.log("propsreceived", this.props);
+
+      return true;
+    }
+  }, {
+    key: 'sendRatingToServer',
+    value: function sendRatingToServer(action) {
+
+      console.log("Inside sendRatingToServer");
+
+      var _state3 = this.state,
+          rating = _state3.rating,
+          reason = _state3.reason,
+          npsRating = _state3.npsRating;
+      var totalActivityCount = this.props.totalActivityCount;
+
+
+      currentDateTime = (0, _utils.getCurrentTime)();
+
+      if (this.doLocalValidation()) {
+
+        switch (action) {
+          case dashboardConstants.SKIP_RATING:
+
+            var params = {
+
+              action: dashboardConstants.SKIP_RATING,
+              skipTransactionValue: totalActivityCount,
+              skipDate: currentDateTime
+
+            };
+
+            this.props.updateUserRating(params);
+            this.props.updatePromptTransactionDate(currentDateTime);
+            this.changeModalState();
+            tracker.trackEvent(SCREEN_CATEGORY, 'rating skipped');
+
+            break;
+
+          case dashboardConstants.RATING_SUBMIT:
+
+            var params = {
+
+              action: dashboardConstants.RATING_SUBMIT,
+              rating: rating,
+              review: reason,
+              npsRating: npsRating,
+              reveiwDateTime: currentDateTime
+            };
+
+            this.props.updateUserRating(params);
+            this.props.updatePromptTransactionDate(currentDateTime);
+            this.changeModalState();
+            tracker.trackEvent(SCREEN_CATEGORY, 'rating submitted');
+
+            break;
+
+          case dashboardConstants.UPDATE_IS_APP_REDIRECTED_FLAG:
+
+            var params = {
+
+              action: dashboardConstants.UPDATE_IS_APP_REDIRECTED_FLAG
+
+            };
+
+            this.props.updateUserRating(params);
+            this.changeModalState();
+
+            break;
+
+          default:
+
+        }
+
+        if (this.state.isReviewSubmitted) {
+          this.setState({
+            isSecondaryDialogueShown: true
+          });
+        }
+      }
+    }
+  }, {
+    key: 'isNegativeRating',
+    value: function isNegativeRating() {
+
+      if (this.state.rating != dashboardConstants.DEFAULT_RATING && this.state.rating < dashboardConstants.MIN_STAR_RATING_REQUIRED) return true;
+
+      return false;
+    }
+  }, {
+    key: 'renderUserReveiwSumbitted',
+    value: function renderUserReveiwSumbitted() {
+      var _this4 = this;
+
+      if (this.isNegativeRating()) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          this.renderRatingIconText(),
+          _react2.default.createElement(_ewcomponents.EwH2LightText, {
+            text: dashboardConstants.RATING_NEGATIVE_BODY,
+            customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+          }),
+          _react2.default.createElement(_ewnpsscore2.default, {
+            initialState: this.state.npsRating,
+            updateParentState: function updateParentState(componentState) {
+              return _this4.updateRatingModalState(dashboardConstants.NPS_SCORE_COMPONENT_ID, componentState);
+            }
+
+          }),
+          this.showReason()
+        );
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          this.renderRatingIconText(),
+          _react2.default.createElement(_ewcomponents.EwH2LightText, {
+            text: dashboardConstants.RATING_POSITIVE_BODY,
+            customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+          }),
+          _react2.default.createElement(_ewcomponents.EwH1Text, {
+            text: dashboardConstants.RATING_POSITIVE_BODY_H2,
+            customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN }
+          })
+        );
+      }
+    }
+  }, {
+    key: 'updateIsUserRedirectedFlagOnServer',
+    value: function updateIsUserRedirectedFlagOnServer() {
+
+      this.sendRatingToServer(dashboardConstants.UPDATE_IS_APP_REDIRECTED_FLAG);
+
+      (0, _utils.redirectToAppStore)();
+    }
+  }, {
+    key: 'renderRatingModalView',
+    value: function renderRatingModalView() {
+      var _this5 = this;
+
+      var _state4 = this.state,
+          rating = _state4.rating,
+          isReviewSubmitted = _state4.isReviewSubmitted;
+
+
+      console.log("Inside renderRatingModalView");
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        !isReviewSubmitted ? _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { alignItems: "center", justifyContent: "center" } },
+            _react2.default.createElement(_ewcomponents.EwScreenTitle, {
+              text: isReviewSubmitted ? dashboardConstants.RATING_SUBMIT_HEADING : dashboardConstants.RATING_HEADING
+            })
+          )
+        ) : null,
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { margin: appstyleguide.DEFAULT_MARGIN } },
+          isReviewSubmitted ? this.renderUserReveiwSumbitted() : this.renderUserRatingView(),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { margin: appstyleguide.DEFAULT_TOP_MARGIN, flexDirection: "row", justifyContent: "space-around" } },
+            _react2.default.createElement(_ewcomponents.EwButton, {
+              label: dashboardConstants.SKIP_BUTTON_LABEL,
+              customStyle: { backgroundColor: appstyleguide.APP_GRAY },
+              onButonClicked: function onButonClicked() {
+                return _this5.sendRatingToServer(dashboardConstants.SKIP_RATING);
+              }
+            }),
+            _react2.default.createElement(_ewcomponents.EwButton, {
+              label: isReviewSubmitted && !this.isNegativeRating() ? dashboardConstants.RATE_US_BUTTON_LABEL : dashboardConstants.SUBMIT_BUTTON_LABEL,
+              onButonClicked: function onButonClicked() {
+                return isReviewSubmitted && !_this5.isNegativeRating() ? _this5.updateIsUserRedirectedFlagOnServer() : _this5.sendRatingToServer(dashboardConstants.RATING_SUBMIT);
+              }
+            })
+          )
+        )
+      );
+    }
+  }, {
+    key: 'updateRatingModalState',
+    value: function updateRatingModalState(componentId, componentState) {
+
+      switch (componentId) {
+
+        case dashboardConstants.NPS_SCORE_COMPONENT_ID:
+
+          this.setState({
+
+            npsRating: componentState
+
+          });
+
+          break;
+        default:
+
+      }
+    }
+  }, {
+    key: 'renderUserRatingView',
+    value: function renderUserRatingView() {
+      var npsRating = this.state.npsRating;
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(_ewcomponents.EwH1Text, {
+          text: dashboardConstants.RATING_BODY
+        }),
+        _react2.default.createElement(_ewcomponents.EwH2LightText, {
+          text: dashboardConstants.RATING_BODY_H2,
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+        }),
+        this.renderRatingsComponent()
+      );
+    }
+  }, {
+    key: 'renderRatingIconText',
+    value: function renderRatingIconText() {
+
+      iconSource = this.isNegativeRating() ? _ewimages.SAD_SMILEY_ICON : _ewimages.THUMBS_UP_ICON;
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { alignItems: "center", justifyContent: "center" } },
+        _react2.default.createElement(_ewcomponents.EwIcon, {
+          iconSource: iconSource,
+          customIconStyle: _ewdashboardstyle2.default.iconStyle
+        }),
+        _react2.default.createElement(_ewcomponents.EwH2Text, {
+          text: this.isNegativeRating() ? "Oh No!" : "Awesome",
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+        })
+      );
+    }
+  }, {
+    key: 'renderRatingsComponent',
+    value: function renderRatingsComponent() {
+      var _this6 = this;
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN, alignItems: "center", justifyContent: "center" } },
+        _react2.default.createElement(_ewcomponents.EwRatings, {
+          rating: this.state.rating,
+          isRatingActive: true,
+          onRatingChanged: function onRatingChanged(rating) {
+            return _this6.setState({ rating: rating });
+          }
+        })
+      );
+    }
+  }]);
+  return AppRatingModal;
+}(_react.Component);
+
+function bindActions(dispatch) {
+
+  console.log(FILE_NAME, "In bindActions Method");
+
+  return {
+
+    getAppRatingConfiguration: function getAppRatingConfiguration(params) {
+      return dispatch((0, _commonactions.getAppRatingConfiguration)(params));
+    },
+    updateUserRating: function updateUserRating(params) {
+      return dispatch((0, _commonactions.updateUserRating)(params));
+    },
+    updatePromptTransactionDate: function updatePromptTransactionDate(params) {
+      return dispatch((0, _commonactions.updatePromptTransactionDate)(params));
+    },
+    clearCommonStateData: function clearCommonStateData(params) {
+      return dispatch((0, _commonactions.clearCommonStateData)(params));
+    }
+  };
+}
+
+function mapStateToProps(state) {
+
+  console.log("State Updated state is -");
+
+  console.log(state);
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    firstPromptTransactionRange: state.common.firstPromptTransactionRange,
+    promptTransactionRange: state.common.promptTransactionRange,
+    promptTransactionDate: state.common.promptTransactionDate,
+    promptDuration: state.common.promptDuration,
+    totalActivityCount: state.common.totalActivityCount,
+    rating: state.common.rating,
+
+    updateUserRatingStatusData: state.common.updateUserRatingStatusData,
+    updateUserRatingStatusError: state.common.updateUserRatingStatusError
+
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(AppRatingModal);

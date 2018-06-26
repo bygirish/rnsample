@@ -1,0 +1,385 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetMyCompensationInformationRequest = buildGetMyCompensationInformationRequest;
+exports.buildSuccesGetMyCompensationInformationResponse = buildSuccesGetMyCompensationInformationResponse;
+exports.buildFailedGetMyCompensationInformationResponse = buildFailedGetMyCompensationInformationResponse;
+exports.buildServerErrorGetMyCompensationInformationResponse = buildServerErrorGetMyCompensationInformationResponse;
+exports.buildGetAppliedCtcClaimListInformationRequest = buildGetAppliedCtcClaimListInformationRequest;
+exports.buildSuccesGetAppliedCtcClaimListInformationResponse = buildSuccesGetAppliedCtcClaimListInformationResponse;
+exports.buildFailedGetAppliedCtcClaimListInformationResponse = buildFailedGetAppliedCtcClaimListInformationResponse;
+exports.buildServerErrorGetAppliedCtcClaimListInformationResponse = buildServerErrorGetAppliedCtcClaimListInformationResponse;
+exports.buildGetClaimInformationRequest = buildGetClaimInformationRequest;
+exports.buildSuccesGetClaimInformationResponse = buildSuccesGetClaimInformationResponse;
+exports.buildFailedGetClaimInformationResponse = buildFailedGetClaimInformationResponse;
+exports.buildServerErrorGetClaimInformationResponse = buildServerErrorGetClaimInformationResponse;
+exports.buildGetEntitlementSummaryInformationRequest = buildGetEntitlementSummaryInformationRequest;
+exports.buildSuccesGetEntitlementSummaryInformationResponse = buildSuccesGetEntitlementSummaryInformationResponse;
+exports.buildFailedGetEntitlementSummaryInformationResponse = buildFailedGetEntitlementSummaryInformationResponse;
+exports.buildServerErrorGetEntitlementSummaryInformationResponse = buildServerErrorGetEntitlementSummaryInformationResponse;
+
+var _compensationapiendpoints = require('./compensationapiendpoints');
+
+var compensationApiEndPoints = babelHelpers.interopRequireWildcard(_compensationapiendpoints);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _objectmapping = require('./objectmapping');
+
+var FILE_NAME = "compensationprocessing.js : ";
+
+function buildGetMyCompensationInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetMyCompensationInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + compensationApiEndPoints.GET_MY_COMPENSATION + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Device-ID': _utils.DEVICE_ID,
+      'Auth-Token': getState.auth.sessionToken
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var myCompensationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", myCompensationRequest);
+
+  return myCompensationRequest;
+}
+
+function buildSuccesGetMyCompensationInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetMyCompensationInformationResponse Method - ");
+
+  console.log("result", result);
+
+  serverData = result.data.emp_data;
+
+  compensationData = {
+
+    "currency": serverData.emp.emp_comp.emp_comp_ctc_currency,
+    "annualCTC": serverData.emp.emp_comp.emp_comp_ctc_annual,
+    "compensationPayheads": serverData.emp.emp_comp.emp_comp_data
+  };
+
+  var response = {
+    data: compensationData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetMyCompensationInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetMyCompensationInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetMyCompensationInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetMyCompensationInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetAppliedCtcClaimListInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetAppliedCtcClaimListInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + compensationApiEndPoints.GET_MY_CTC_CLAIM_LIST + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Device-ID': "3e95c54e941eb7dce",
+      'Auth-Token': "MTljNmUyNGYtYjdjMy00ZmEyLThlYjMtYWQ2YWZkODZmNDM5"
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var myCtcClaimListRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", myCtcClaimListRequest);
+
+  return myCtcClaimListRequest;
+}
+
+function buildSuccesGetAppliedCtcClaimListInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetAppliedCtcClaimListInformationResponse Method - ");
+
+  console.log("result", result);
+
+  var serverData = result.data;
+
+  ctcClaimData = [];
+
+  for (var _iterator = serverData, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref;
+
+    if (_isArray) {
+      if (_i >= _iterator.length) break;
+      _ref = _iterator[_i++];
+    } else {
+      _i = _iterator.next();
+      if (_i.done) break;
+      _ref = _i.value;
+    }
+
+    var ctcClaim = _ref;
+
+
+    var ctcClaimModel = {
+
+      "claim_reference_id": ctcClaim.CLAIM_REFERENCE,
+      "claim_date": ctcClaim.CREATE_DATE,
+      "claim_status": ctcClaim.STATUS,
+      "claimed_amount": ctcClaim.CLAIM_AMT,
+      "approved_amount": ctcClaim.APP_AMT,
+      "paid_amout": ctcClaim.PAID_AMOUNT,
+      "currency": ctcClaim.CURRENCY_SYMBOL
+
+    };
+
+    ctcClaimData.push(ctcClaimModel);
+  }
+
+  var response = {
+    data: ctcClaimData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetAppliedCtcClaimListInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetAppliedCtcClaimListInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetAppliedCtcClaimListInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetAppliedCtcClaimListInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetClaimInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetClaimInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + compensationApiEndPoints.GET_MY_CLAIM_INFORMATION + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+
+    headers: {
+      'Device-ID': "3e95c54e941eb7dc",
+      'Auth-Token': "e9b00f01-78b1-40f5-9b02-c649ed0392cc22ww"
+    },
+    responseType: 'json'
+  };
+
+  var myClaimInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", myClaimInformationRequest);
+
+  return myClaimInformationRequest;
+}
+
+function buildSuccesGetClaimInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetClaimInformationResponse Method - ");
+
+  console.log("result", result);
+
+  serverData = result.data.employee_data[0];
+
+  approvedAmount = 0;
+  paidAmount = 0;
+  claimedAmount = 0;
+
+  for (var _iterator2 = serverData.claim_details[0].reclaimdetailsinfo, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+    var _ref2;
+
+    if (_isArray2) {
+      if (_i2 >= _iterator2.length) break;
+      _ref2 = _iterator2[_i2++];
+    } else {
+      _i2 = _iterator2.next();
+      if (_i2.done) break;
+      _ref2 = _i2.value;
+    }
+
+    var payheadComponent = _ref2;
+
+
+    if (payheadComponent.App_Amt != "") approvedAmount += parseInt(payheadComponent.App_Amt);
+
+    if (payheadComponent.Claim_Amt != "") claimedAmount += parseInt(payheadComponent.Claim_Amt);
+
+    if (payheadComponent.Paid_Amount != "") paidAmount += parseInt(payheadComponent.Paid_Amount);
+  }
+
+  serverData.claim_details[0].approvedAmount = approvedAmount;
+  serverData.claim_details[0].claimedAmount = claimedAmount;
+  serverData.claim_details[0].paidAmount = paidAmount;
+  serverData.claim_details[0].Currency = serverData.claim_details[0].reclaimdetailsinfo[0].currency_symbol;
+
+  var claimData = {
+
+    "claimDetails": serverData.claim_details[0],
+    "employee_code": serverData.employee_code,
+    "employee_id": serverData.employee_id,
+    "claim_reference_no": serverData.claim_reference_no
+  };
+
+  var response = {
+    data: claimData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetClaimInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetClaimInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetClaimInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetClaimInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetEntitlementSummaryInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetEntitlementSummaryInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + compensationApiEndPoints.GET_ENTITLEMENT_SUMMARY + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+
+    headers: {
+      'Device-ID': "3e95c54e941eb7dc",
+      'Auth-Token': "e9b00f01-78b1-40f5-9b02-c649ed0392cc22ww"
+    },
+    responseType: 'json'
+  };
+
+  var entitlementSummaryRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", entitlementSummaryRequest);
+
+  return entitlementSummaryRequest;
+}
+
+function buildSuccesGetEntitlementSummaryInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetEntitlementSummaryInformationResponse Method - ");
+
+  console.log("result", result);
+
+  entitlementData = (0, _objectmapping.getEntitlementSummaryData)(result.data);
+
+  var response = {
+    data: entitlementData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetEntitlementSummaryInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetEntitlementSummaryInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetEntitlementSummaryInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetEntitlementSummaryInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

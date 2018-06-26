@@ -1,0 +1,227 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../../utils');
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewh4text = require('../../../../components/ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewbutton = require('../../../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _ewh3text = require('../../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewbar = require('../../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewh1text = require('../../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewmodal = require('../../../../components/ewmodal/ewmodal');
+
+var _ewmodal2 = babelHelpers.interopRequireDefault(_ewmodal);
+
+var _ewh3lighttext = require('../../../../components/ewh3lighttext/ewh3lighttext');
+
+var _ewh3lighttext2 = babelHelpers.interopRequireDefault(_ewh3lighttext);
+
+var _ewfloatinglabel = require('../../../../components/ewfloatinglabel/ewfloatinglabel');
+
+var _ewfloatinglabel2 = babelHelpers.interopRequireDefault(_ewfloatinglabel);
+
+var _ewcard = require('../../../../components/ewcard/ewcard');
+
+var _ewcard2 = babelHelpers.interopRequireDefault(_ewcard);
+
+var _ewmultiplecomponentvalue = require('../../../../components/ewmultiplecomponentvalue/ewmultiplecomponentvalue');
+
+var _ewmultiplecomponentvalue2 = babelHelpers.interopRequireDefault(_ewmultiplecomponentvalue);
+
+var _comment = require('./comment.js');
+
+var _comment2 = babelHelpers.interopRequireDefault(_comment);
+
+var _expenseutils = require('../../expenseutils');
+
+var expenseConstants = babelHelpers.interopRequireWildcard(_expenseutils);
+
+var CommentsModal = function (_Component) {
+  babelHelpers.inherits(CommentsModal, _Component);
+
+  function CommentsModal(props, context) {
+    babelHelpers.classCallCheck(this, CommentsModal);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (CommentsModal.__proto__ || Object.getPrototypeOf(CommentsModal)).call(this, props, context));
+
+    elementValues = _this.handleElementValues(_this.props.initialState);
+
+    _this.initialState = {
+
+      comment: elementValues.comment
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(CommentsModal, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+
+      if (this.props.initialState == null) {
+
+        this.props.updateParentState(this.getCommentObject());
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (this.isStateChanged(nextProps.initialState)) {
+
+        this.setState({
+
+          comment: nextProps.initialState.comment
+
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var activeCommentIndex = this.props.otherDetails.activeCommentIndex;
+      var index = this.props.index;
+
+
+      isEditable = false;
+
+      if (activeCommentIndex == index) isEditable = true;
+
+      console.log("index is ", index, activeCommentIndex);
+
+      return _react2.default.createElement(_ewfloatinglabel2.default, {
+        label: expenseConstants.COMMENT_LABEL,
+        placeholderlabel: expenseConstants.COMMENT_PLACEHOLDER_LABEL,
+        autoCorrect: false,
+        autoCapitalize: 'none',
+        editable: isEditable,
+        onChangeText: function onChangeText(comment) {
+          return _this2.setState({ comment: comment });
+        },
+        value: this.state.comment
+      });
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+
+      if (this.isStateChanged(this.props.initialState)) this.props.updateParentState(this.getCommentObject());
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'updateParentState',
+    value: function updateParentState() {
+
+      this.props.updateParentState(this.state.commentsData);
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(propsData) {
+
+      comment = "";
+
+      if (propsData != null) {
+
+        comment = propsData.comment;
+      }
+
+      elementValues = {
+
+        comment: comment
+
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: 'isStateChanged',
+    value: function isStateChanged(initialState) {
+
+      if (JSON.stringify(initialState) != JSON.stringify(this.getCommentObject())) return true;
+
+      return false;
+    }
+  }, {
+    key: 'getCommentObject',
+    value: function getCommentObject() {
+
+      var commentObject = {
+
+        comment: this.state.comment
+
+      };
+
+      return commentObject;
+    }
+  }]);
+  return CommentsModal;
+}(_react.Component);
+
+exports.default = CommentsModal;

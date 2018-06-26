@@ -1,0 +1,519 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../../utils');
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewcomponents = require('../../../../utils/ewcomponents');
+
+var _expenseutils = require('../../expenseutils');
+
+var expenseConstant = babelHelpers.interopRequireWildcard(_expenseutils);
+
+
+defaultMargin = appstyleguide.DEFAULT_MARGIN;
+
+beneficiaryGstin = [{
+
+  "value": "0",
+  "label": "Select GSTIN"
+
+}, {
+
+  "value": "1",
+  "label": "12"
+
+}, {
+
+  "value": "2",
+  "label": "123"
+
+}, {
+
+  "value": "3",
+  "label": "1234"
+
+}];
+
+var BeneficiaryDetails = function (_Component) {
+  babelHelpers.inherits(BeneficiaryDetails, _Component);
+
+  function BeneficiaryDetails(props, context) {
+    babelHelpers.classCallCheck(this, BeneficiaryDetails);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (BeneficiaryDetails.__proto__ || Object.getPrototypeOf(BeneficiaryDetails)).call(this, props, context));
+
+    elementValues = _this.handleElementValues(_this.props);
+
+    _this.initialState = {
+
+      isReveiwMode: isReveiwMode,
+
+      cgstRate: elementValues.cgstRate,
+      cgstAmount: elementValues.cgstAmount,
+      igstRate: elementValues.igstRate,
+      igstAmount: elementValues.igstAmount,
+      sgstRate: elementValues.sgstRate,
+      sgstAmount: elementValues.sgstAmount,
+      beneficiaryGstin: elementValues.beneficiaryGstin,
+
+      preTaxAmount: elementValues.preTaxAmount,
+      taxAmount: elementValues.taxAmount,
+
+      approvedCgstRate: elementValues.approvedCgstRate,
+      approvedCgstAmount: elementValues.approvedCgstAmount,
+      approvedIgstRate: elementValues.approvedIgstRate,
+      approvedIgstAmount: elementValues.approvedIgstAmount,
+      approvedSgstRate: elementValues.approvedSgstRate,
+      approvedSgstAmount: elementValues.approvedSgstAmount,
+
+      approvedPreTaxAmount: elementValues.approvedPreTaxAmount,
+      approvedTaxAmount: elementValues.approvedTaxAmount,
+
+      activeGstView: elementValues.activeGstView
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(BeneficiaryDetails, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+
+      if (this.props.initialState == null) {
+
+        this.props.updateParentState(this.getBeneficiaryDetailStateObject());
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (this.isStateChanged(nextProps.initialState)) {
+
+        this.setState({
+
+          cgstRate: nextProps.initialState.cgstRate,
+          cgstAmount: nextProps.initialState.cgstAmount,
+          igstRate: nextProps.initialState.igstRate,
+          igstAmount: nextProps.initialState.igstAmount,
+          sgstRate: nextProps.initialState.sgstRate,
+          sgstAmount: nextProps.initialState.sgstAmount,
+          beneficiaryGstin: nextProps.initialState.beneficiaryGstin,
+          preTaxAmount: nextProps.initialState.preTaxAmount,
+          taxAmount: nextProps.initialState.taxAmount
+
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _state = this.state,
+          cgstRate = _state.cgstRate,
+          cgstAmount = _state.cgstAmount,
+          igstRate = _state.igstRate,
+          igstAmount = _state.igstAmount,
+          sgstRate = _state.sgstRate,
+          sgstAmount = _state.sgstAmount;
+      var _props$configuration = this.props.configuration,
+          isbenficiaryGstVisible = _props$configuration.isbenficiaryGstVisible,
+          isGstVisible = _props$configuration.isGstVisible,
+          isGstApplicable = _props$configuration.isGstApplicable;
+
+
+      console.log("beneficiary details props", this.props);
+
+      if (isGstVisible) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginTop: 15 } },
+          _react2.default.createElement(_ewcomponents.EwH2Text, {
+            text: 'Beneficiary Details'
+          }),
+          isbenficiaryGstVisible ? _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row" } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.5, marginTop: 10 } },
+              _react2.default.createElement(EwDropdownPicker, {
+                dataArray: beneficiaryGstin,
+                selectedValue: this.state.beneficiaryGstin,
+                onPickerValueChange: function onPickerValueChange(newPickerValue) {
+                  _this2.setState({ beneficiaryGstin: newPickerValue });
+                }
+              })
+            )
+          ) : null,
+          this.renderGstView(isGstApplicable, isGstVisible)
+        );
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          this.renderGstView(isGstApplicable, isGstVisible)
+        );
+      }
+
+      return null;
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+
+      if (this.isStateChanged(this.props.initialState)) {
+
+        console.log("updating master screen", this.getBeneficiaryDetailStateObject());
+
+        this.props.updateParentState(this.getBeneficiaryDetailStateObject());
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(propsData) {
+
+      cgstRate = "";
+      cgstAmount = "";
+      igstRate = "";
+      igstAmount = "";
+      sgstRate = "";
+      sgstAmount = "";
+      beneficiaryGstin = "0";
+
+      preTaxAmount = "";
+      taxAmount = "";
+      activeGstView = expenseConstant.NO_GST_VIEW_SELECTED;
+
+      approvedCgstRate = "";
+      approvedCgstAmount = "";
+      approvedIgstRate = "";
+      approvedIgstAmount = "";
+      approvedSgstRate = "";
+      approvedSgstAmount = "";
+
+      approvedPreTaxAmount = "";
+      approvedTaxAmount = "";
+
+      isReveiwMode = false;
+
+      if (propsData.initialState != null) {
+
+        cgstRate = propsData.initialState.cgstRate;
+        cgstAmount = propsData.initialState.cgstAmount;
+        igstRate = propsData.initialState.igstRate;
+        igstAmount = propsData.initialState.igstAmount;
+        sgstRate = propsData.initialState.sgstRate;
+        sgstAmount = propsData.initialState.sgstAmount;
+
+        taxAmount = propsData.initialState.taxAmount;
+        activeGstView = propsData.initialState.activeGstView;
+        isReveiwMode = propsData.configuration.isReveiwMode;
+        preTaxAmount = propsData.configuration.preTaxAmount;
+
+        approvedCgstRate = propsData.initialState.approvedCgstRate;
+        approvedCgstAmount = propsData.initialState.approvedCgstAmount;
+        approvedIgstRate = propsData.initialState.approvedIgstRate;
+        approvedIgstAmount = propsData.initialState.approvedIgstAmount;
+        approvedSgstRate = propsData.initialState.approvedSgstRate;
+        approvedSgstAmount = propsData.initialState.approvedSgstAmount;
+
+        approvedPreTaxAmount = propsData.initialState.approvedPreTaxAmount;
+        approvedTaxAmount = propsData.initialState.approvedTaxAmount;
+      } else {
+
+        if (this.props.configuration != null) {
+
+          isReveiwMode = propsData.configuration.isReveiwMode;
+          preTaxAmount = propsData.configuration.preTaxAmount;
+        }
+      }
+
+      elementValues = {
+
+        cgstRate: cgstRate,
+        cgstAmount: cgstAmount,
+        igstRate: igstRate,
+        igstAmount: igstAmount,
+        sgstRate: sgstRate,
+        sgstAmount: sgstAmount,
+        preTaxAmount: preTaxAmount,
+        taxAmount: taxAmount,
+        beneficiaryGstin: beneficiaryGstin,
+        activeGstView: activeGstView,
+        isReveiwMode: isReveiwMode,
+
+        approvedCgstRate: approvedCgstRate,
+        approvedCgstAmount: approvedCgstAmount,
+        approvedIgstRate: approvedIgstRate,
+        approvedIgstAmount: approvedIgstAmount,
+        approvedSgstRate: approvedSgstRate,
+        approvedSgstAmount: approvedSgstAmount,
+
+        approvedPreTaxAmount: approvedPreTaxAmount,
+        approvedTaxAmount: approvedTaxAmount
+
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: 'isStateChanged',
+    value: function isStateChanged(initialState) {
+
+      if (JSON.stringify(initialState) != JSON.stringify(this.getBeneficiaryDetailStateObject())) return true;
+
+      return false;
+    }
+  }, {
+    key: 'calculateAmount',
+    value: function calculateAmount(rate) {
+      var preTaxAmount = this.state.preTaxAmount;
+
+
+      gstAmount = preTaxAmount * rate / 100;
+
+      console.log("calculateAmount", preTaxAmount, rate);
+
+      return gstAmount.toString();
+    }
+  }, {
+    key: 'renderGstView',
+    value: function renderGstView(isGstApplicable, isGstVisible) {
+      var _this3 = this;
+
+      var _state2 = this.state,
+          cgstRate = _state2.cgstRate,
+          cgstAmount = _state2.cgstAmount,
+          igstRate = _state2.igstRate,
+          igstAmount = _state2.igstAmount,
+          sgstRate = _state2.sgstRate,
+          sgstAmount = _state2.sgstAmount,
+          taxAmount = _state2.taxAmount,
+          isReveiwMode = _state2.isReveiwMode;
+
+
+      if (isGstApplicable) {
+
+        if (isGstVisible) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { marginTop: defaultMargin, flexDirection: "row" } },
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { flex: 0.5 } },
+                isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+                  heading: expenseConstant.CGST_RATE_LABEL,
+                  value: cgstRate
+                }) : _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+                  label: expenseConstant.CGST_RATE_LABEL,
+                  placeholderlabel: expenseConstant.CGST_RATE_PLACEHOLDERLABEL,
+                  autoCorrect: false,
+                  autoCapitalize: 'none',
+                  keyboardType: 'numeric',
+                  onChangeText: function onChangeText(cgstRate) {
+                    return _this3.setState({ cgstRate: cgstRate, igstAmount: "", igstRate: "", cgstAmount: _this3.calculateAmount(cgstRate), activeGstView: expenseConstant.CGST_SGST_VIEW });
+                  },
+                  value: cgstRate
+                })
+              ),
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { flex: 0.5, marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN } },
+                isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+                  heading: expenseConstant.CGST_AMOUNT_LABEL,
+                  value: cgstAmount
+                }) : _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+                  label: expenseConstant.CGST_AMOUNT_LABEL,
+                  placeholderlabel: expenseConstant.CGST_AMOUNT_PLACEHOLDERLABEL,
+                  autoCorrect: false,
+                  autoCapitalize: 'none',
+                  keyboardType: 'numeric',
+                  editable: false,
+                  value: cgstAmount
+                })
+              )
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { marginTop: defaultMargin, flexDirection: "row" } },
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { flex: 0.5 } },
+                isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+                  heading: expenseConstant.SGST_RATE_LABEL,
+                  value: sgstRate
+                }) : _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+                  label: expenseConstant.SGST_RATE_LABEL,
+                  placeholderlabel: expenseConstant.SGST_RATE_PLACEHOLDERLABEL,
+                  autoCorrect: false,
+                  autoCapitalize: 'none',
+                  keyboardType: 'numeric',
+                  onChangeText: function onChangeText(sgstRate) {
+                    return _this3.setState({ sgstRate: sgstRate, igstAmount: "", igstRate: "", sgstAmount: _this3.calculateAmount(sgstRate), activeGstView: expenseConstant.CGST_SGST_VIEW });
+                  },
+                  value: sgstRate
+                })
+              ),
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { flex: 0.5, marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN } },
+                isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+                  heading: expenseConstant.SGST_AMOUNT_LABEL,
+                  value: sgstAmount
+                }) : _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+                  label: expenseConstant.SGST_AMOUNT_LABEL,
+                  placeholderlabel: expenseConstant.SGST_AMOUNT_PLACEHOLDERLABEL,
+                  autoCorrect: false,
+                  autoCapitalize: 'none',
+                  keyboardType: 'numeric',
+                  editable: false,
+                  value: sgstAmount
+                })
+              )
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { marginTop: defaultMargin, flexDirection: "row" } },
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { flex: 0.5 } },
+                isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+                  heading: expenseConstant.IGST_RATE_LABEL,
+                  value: igstRate
+                }) : _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+                  label: expenseConstant.IGST_RATE_LABEL,
+                  placeholderlabel: expenseConstant.IGST_RATE_PLACEHOLDERLABEL,
+                  autoCorrect: false,
+                  autoCapitalize: 'none',
+                  keyboardType: 'numeric',
+                  onChangeText: function onChangeText(igstRate) {
+                    return _this3.setState({ igstRate: igstRate, cgstAmount: "", cgstRate: "", sgstRate: "", sgstAmount: "", igstAmount: _this3.calculateAmount(igstRate), activeGstView: expenseConstant.IGST_VIEW });
+                  },
+                  value: igstRate
+                })
+              ),
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { flex: 0.5, marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN } },
+                isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+                  heading: expenseConstant.IGST_AMOUNT_LABEL,
+                  value: igstAmount
+                }) : _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+                  label: expenseConstant.IGST_AMOUNT_LABEL,
+                  placeholderlabel: expenseConstant.IGST_AMOUNT_PLACEHOLDERLABEL,
+                  autoCorrect: false,
+                  autoCapitalize: 'none',
+                  keyboardType: 'numeric',
+                  editable: false,
+                  value: igstAmount
+                })
+              )
+            )
+          );
+        }
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstant.EXPENSE_AMOUNT_TAX_LABEL,
+            value: taxAmount
+          }) : _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+            label: expenseConstant.EXPENSE_AMOUNT_TAX_LABEL,
+            placeholderlabel: expenseConstant.EXPENSE_AMOUNT_TAX_PLACEHOLDER_LABEL,
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            onChangeText: function onChangeText(taxAmount) {
+              return _this3.setState({ taxAmount: taxAmount });
+            },
+            value: taxAmount
+          })
+        );
+      }
+    }
+  }, {
+    key: 'getBeneficiaryDetailStateObject',
+    value: function getBeneficiaryDetailStateObject() {
+
+      var beneficiaryDetailStateObject = {
+
+        cgstRate: this.state.cgstRate,
+        cgstAmount: this.state.cgstAmount,
+        igstRate: this.state.igstRate,
+        igstAmount: this.state.igstAmount,
+        sgstRate: this.state.sgstRate,
+        sgstAmount: this.state.sgstAmount,
+        beneficiaryGstin: this.state.beneficiaryGstin,
+        preTaxAmount: this.state.preTaxAmount,
+        taxAmount: this.state.taxAmount,
+        activeGstView: this.state.activeGstView
+
+      };
+
+      return beneficiaryDetailStateObject;
+    }
+  }]);
+  return BeneficiaryDetails;
+}(_react.Component);
+
+exports.default = BeneficiaryDetails;

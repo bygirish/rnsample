@@ -1,0 +1,30 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var LOGIN = exports.LOGIN = "/loginM?scope=I";
+var LOGOUT = exports.LOGOUT = "/loginM?scope=I";
+var CHANGE_PASSWORD = exports.CHANGE_PASSWORD = "/changepassword";
+var VERIFY_SESSION = exports.VERIFY_SESSION = "/verifysession";
+
+var GET_PROFILE_DATA = exports.GET_PROFILE_DATA = "/getprofiledata";
+
+var GET_NEED_TO_ACT = exports.GET_NEED_TO_ACT = "/getneedtoact";
+
+var MARK_ATTENDANCE = exports.MARK_ATTENDANCE = "/markattendance";
+
+var GET_MY_APPLIED_LEAVES = exports.GET_MY_APPLIED_LEAVES = "/getmyappliedleaves";
+var APPLY_FOR_LEAVE = exports.APPLY_FOR_LEAVE = "/applyforleave";
+var GET_LEAVE_BALANCE = exports.GET_LEAVE_BALANCE = "/getleavebalance";
+var GET_LEAVE_INFO = exports.GET_LEAVE_INFO = "/getleaveinfo";
+var APPROVE_LEAVE = exports.APPROVE_LEAVE = "/approveleave";
+var REJECT_LEAVE = exports.REJECT_LEAVE = "/rejectleave";
+
+var APPLY_FOR_PAST_ATTENDANCE = exports.APPLY_FOR_PAST_ATTENDANCE = "/applyforpastattendance";
+var GET_PAST_ATTENDANCE_INFO = exports.GET_PAST_ATTENDANCE_INFO = "/getpastattendanceinfo";
+var APPROVE_PAST_ATTENDANCE = exports.APPROVE_PAST_ATTENDANCE = "/approvepastattendance";
+var REJECT_PAST_ATTENDANCE = exports.REJECT_PAST_ATTENDANCE = "/rejectpastattendance";
+
+var APPLY_FOR_OD = exports.APPLY_FOR_OD = "/applyforod";
+var APPROVE_OD_REQUEST = exports.APPROVE_OD_REQUEST = "/approveodrequest";
+var REJECT_OD_REQUEST = exports.REJECT_OD_REQUEST = "/approveodrequest";
+var GET_OD_INFO = exports.GET_OD_INFO = "/getodinfo";

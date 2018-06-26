@@ -1,0 +1,21 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var AUTHENTICATION_FAILURE = exports.AUTHENTICATION_FAILURE = 'Not Authorized';
+var INVALID_STATE = exports.INVALID_STATE = 'Invalid state';
+var SERVER_EXCEPTION = exports.SERVER_EXCEPTION = 'Exception occured';
+var PAST_ATTENDANCE_REJECTION_EXCEPTION = exports.PAST_ATTENDANCE_REJECTION_EXCEPTION = 'Problem in rejection';
+var PAST_ATTENDANCE_APPROVER_NOT_FOUND = exports.PAST_ATTENDANCE_APPROVER_NOT_FOUND = 'Approver Not Found';
+
+var PAST_ATTENDANCE_EXIST = exports.PAST_ATTENDANCE_EXIST = 'Past Attendance already exists';
+var PAST_ATTENDANCE_PLAN_TIME_OUT_ERROR = exports.PAST_ATTENDANCE_PLAN_TIME_OUT_ERROR = "Out date time can't be greater than next date plan in time";
+
+var DATE_CANNOT_BE_BEFORE_ABSENCE_PERIOD = exports.DATE_CANNOT_BE_BEFORE_ABSENCE_PERIOD = "Date cannot be in Separation/Leave of Absence period";
+var REQUEST_BEFORE_DOJ = exports.REQUEST_BEFORE_DOJ = "Past Attendance cannot be applied before date of joining";
+var APPLY_IN_DATE_CAN_NOT_BE_FUTURE = exports.APPLY_IN_DATE_CAN_NOT_BE_FUTURE = "Request can not be for future date";
+var APPLY_OUT_DATE_CAN_NOT_BE_FUTURE = exports.APPLY_OUT_DATE_CAN_NOT_BE_FUTURE = "To date can not be future date";
+var IN_TIME_CAN_NOT_BE_FUTURE = exports.IN_TIME_CAN_NOT_BE_FUTURE = "In time should be before current time";
+var OUT_TIME_CAN_NOT_BE_FUTURE = exports.OUT_TIME_CAN_NOT_BE_FUTURE = "Out time can not be after current time";
+var IN_TIME_CAN_NOT_BE_AFTER_OUT_TIME = exports.IN_TIME_CAN_NOT_BE_AFTER_OUT_TIME = "In time can not be after out time";
+
+var SERVER_ERROR = exports.SERVER_ERROR = "Server is down, please try after some time";

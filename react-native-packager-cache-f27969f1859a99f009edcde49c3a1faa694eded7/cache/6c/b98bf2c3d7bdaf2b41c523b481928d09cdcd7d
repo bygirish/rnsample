@@ -1,0 +1,338 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildUploadImageRequest = buildUploadImageRequest;
+exports.buildSuccessUploadImageResponse = buildSuccessUploadImageResponse;
+exports.buildFailedUploadImageResponse = buildFailedUploadImageResponse;
+exports.buildServerErrorUploadImageResponse = buildServerErrorUploadImageResponse;
+exports.buildAppUpdateConfigurationRequest = buildAppUpdateConfigurationRequest;
+exports.buildSuccessAppUpdateConfigurationResponse = buildSuccessAppUpdateConfigurationResponse;
+exports.buildFailedAppUpdateConfigurationResponse = buildFailedAppUpdateConfigurationResponse;
+exports.buildServerErrorAppUpdateConfigurationResponse = buildServerErrorAppUpdateConfigurationResponse;
+exports.buildGetAppRatingConfigurationRequest = buildGetAppRatingConfigurationRequest;
+exports.buildSuccessGetAppRatingConfigurationResponse = buildSuccessGetAppRatingConfigurationResponse;
+exports.buildFailedGetAppRatingConfigurationResponse = buildFailedGetAppRatingConfigurationResponse;
+exports.buildServerErrorGetAppRatingConfigurationResponse = buildServerErrorGetAppRatingConfigurationResponse;
+exports.buildUpdateUserRatingRequest = buildUpdateUserRatingRequest;
+exports.buildSuccessUpdateUserRatingResponse = buildSuccessUpdateUserRatingResponse;
+exports.buildFailedUpdateUserRatingResponse = buildFailedUpdateUserRatingResponse;
+exports.buildServerErrorUpdateUserRatingResponse = buildServerErrorUpdateUserRatingResponse;
+exports.buildCreateUserFeedbackRequest = buildCreateUserFeedbackRequest;
+exports.buildSuccessCreateUserFeedbackResponse = buildSuccessCreateUserFeedbackResponse;
+exports.buildFailedCreateUserFeedbackResponse = buildFailedCreateUserFeedbackResponse;
+exports.buildServerErrorCreateUserFeedbackResponse = buildServerErrorCreateUserFeedbackResponse;
+
+var _commonapiendpoints = require('./commonapiendpoints');
+
+var commonApiEndPoints = babelHelpers.interopRequireWildcard(_commonapiendpoints);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var FILE_NAME = "commonprocessing.js : ";
+
+function buildUploadImageRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildUploadImageRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + commonApiEndPoints.UPLOAD_IMAGE + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+    "token": getState.auth.sessionToken,
+    "device_id": _utils.DEVICE_ID,
+    "base64String": params.base64String
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var uploadImageRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", uploadImageRequest);
+
+  return uploadImageRequest;
+}
+
+function buildSuccessUploadImageResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessUploadImageResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedUploadImageResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedUploadImageResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorUploadImageResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorUploadImageResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildAppUpdateConfigurationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildAppUpdateConfigurationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.NODE_JS_BASIC_URL + commonApiEndPoints.GET_APP_UPDATE_CONFIGURATION + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var appUpdateConfigurationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", appUpdateConfigurationRequest);
+
+  return appUpdateConfigurationRequest;
+}
+
+function buildSuccessAppUpdateConfigurationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessAppUpdateConfigurationResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedAppUpdateConfigurationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedAppUpdateConfigurationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorAppUpdateConfigurationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorAppUpdateConfigurationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetAppRatingConfigurationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetAppRatingConfigurationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.NODE_JS_BASIC_URL + commonApiEndPoints.GET_APP_RATING_CONFIGURATION + "&emailId=" + getState.needtoact.needToActData.employeeInfo.email + "&os=" + (0, _utils.getMobileOS)() + "&userId=" + getState.auth.userId + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var appRatingConfigurationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", appRatingConfigurationRequest);
+
+  return appRatingConfigurationRequest;
+}
+
+function buildSuccessGetAppRatingConfigurationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetAppRatingConfigurationResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetAppRatingConfigurationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetAppRatingConfigurationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetAppRatingConfigurationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetAppRatingConfigurationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildUpdateUserRatingRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildUpdateUserRatingRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.NODE_JS_BASIC_URL + commonApiEndPoints.UPDATE_USER_RATING + getState.common.appReveiwId + "?scope=I&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var updateUserRatingRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", updateUserRatingRequest);
+
+  return updateUserRatingRequest;
+}
+
+function buildSuccessUpdateUserRatingResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessUpdateUserRatingResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedUpdateUserRatingResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedUpdateUserRatingResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorUpdateUserRatingResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorUpdateUserRatingResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildCreateUserFeedbackRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildCreateUserFeedbackRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.FRESHDESK_URL + commonApiEndPoints.CREATE_USER_FEEDBACK;
+
+  var data = params;
+
+  var config = {
+    responseType: 'json',
+    headers: {
+      'Authorization': 'RmFRZnJTdEFmWVkyaFNqVExaYjpY',
+      'Content-Type': 'multipart/form-data;'
+    }
+  };
+
+  var createUserFeedbackRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", createUserFeedbackRequest);
+
+  return createUserFeedbackRequest;
+}
+
+function buildSuccessCreateUserFeedbackResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessCreateUserFeedbackResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedCreateUserFeedbackResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedCreateUserFeedbackResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_message
+  };
+
+  return response;
+}
+
+function buildServerErrorCreateUserFeedbackResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorCreateUserFeedbackResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

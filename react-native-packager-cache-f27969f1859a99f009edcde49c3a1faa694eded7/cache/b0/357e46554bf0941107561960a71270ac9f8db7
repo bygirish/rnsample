@@ -1,0 +1,19 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require("react-native");
+
+exports.default = babelHelpers.extends({}, _reactNative.InteractionManager, {
+  runAfterInteractions: function runAfterInteractions(f) {
+    var called = false;
+    var timeout = setTimeout(function () {
+      called = true;f();
+    }, 500);
+    _reactNative.InteractionManager.runAfterInteractions(function () {
+      if (called) return;
+      clearTimeout(timeout);
+      f();
+    });
+  }
+});

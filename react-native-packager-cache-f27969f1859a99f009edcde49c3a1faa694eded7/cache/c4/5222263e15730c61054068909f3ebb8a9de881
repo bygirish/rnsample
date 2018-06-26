@@ -1,0 +1,284 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _ewbar = require('../../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewdatebutton = require('../../../../components/ewdatebutton/ewdatebutton');
+
+var _ewdatebutton2 = babelHelpers.interopRequireDefault(_ewdatebutton);
+
+var _ewtext = require('../../../../components/ewtext/ewtext');
+
+var _ewtext2 = babelHelpers.interopRequireDefault(_ewtext);
+
+var _ewcard = require('../../../../components/ewcard/ewcard');
+
+var _ewcard2 = babelHelpers.interopRequireDefault(_ewcard);
+
+var _ewh1text = require('../../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewh4text = require('../../../../components/ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewicon = require('../../../../components/ewicon/ewicon');
+
+var _ewicon2 = babelHelpers.interopRequireDefault(_ewicon);
+
+var _ewcheckbox = require('../../../../components/ewcheckbox/ewcheckbox');
+
+var _ewcheckbox2 = babelHelpers.interopRequireDefault(_ewcheckbox);
+
+var _ewfloatinglabel = require('../../../../components/ewfloatinglabel/ewfloatinglabel');
+
+var _ewfloatinglabel2 = babelHelpers.interopRequireDefault(_ewfloatinglabel);
+
+var _ewautocompleteinput = require('../../../../components/ewautocompleteinput/ewautocompleteinput');
+
+var _ewautocompleteinput2 = babelHelpers.interopRequireDefault(_ewautocompleteinput);
+
+var _ewbutton = require('../../../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _ewmodal = require('../../../../components/ewmodal/ewmodal');
+
+var _ewmodal2 = babelHelpers.interopRequireDefault(_ewmodal);
+
+var _ewradiobutton = require('../../../../components/ewradiobutton/ewradiobutton');
+
+var _ewradiobutton2 = babelHelpers.interopRequireDefault(_ewradiobutton);
+
+var _ewdropdownpicker = require('../../../../components/ewdropdownpicker/ewdropdownpicker');
+
+var _ewdropdownpicker2 = babelHelpers.interopRequireDefault(_ewdropdownpicker);
+
+var _utils = require('../../../../utils');
+
+var _onboardingutils = require('../../onboardingutils');
+
+var onboardingutils = babelHelpers.interopRequireWildcard(_onboardingutils);
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+
+var context;
+
+var FILE_NAME = "homeaddress.js";
+
+countryData = [{
+  "key": -1,
+  "label": "Select Country"
+}, {
+  "key": 1,
+  "label": "Delhi"
+}, {
+  "key": 2,
+  "label": "Mumbai"
+}, {
+  "key": 3,
+  "label": "Goa"
+}];
+
+var HomeAddress = function (_Component) {
+  babelHelpers.inherits(HomeAddress, _Component);
+
+  function HomeAddress(props, context) {
+    babelHelpers.classCallCheck(this, HomeAddress);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (HomeAddress.__proto__ || Object.getPrototypeOf(HomeAddress)).call(this, props, context));
+
+    console.log("initial state testing ", props);
+
+    if (_this.props.initialState == null) {
+
+      _this.initialState = {
+
+        streetAddress: "",
+        City: "",
+        Pincode: "",
+        State: "",
+        Country: -1,
+        Phone: ""
+
+      };
+
+      _this.state = _this.initialState;
+    } else {
+
+      _this.state = _this.props.initialState;
+    }
+
+    return _this;
+  }
+
+  babelHelpers.createClass(HomeAddress, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log("In componentWillMount");
+
+      context = this;
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log(FILE_NAME + "In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props = this.props,
+          addressType = _props.addressType,
+          props = babelHelpers.objectWithoutProperties(_props, ['addressType']);
+      var _state = this.state,
+          streetAddress = _state.streetAddress,
+          City = _state.City,
+          State = _state.State,
+          Pincode = _state.Pincode,
+          Phone = _state.Phone,
+          Country = _state.Country;
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(_ewfloatinglabel2.default, {
+          label: onboardingutils.STREET_ADDRESS_LABEL,
+          placeholderlabel: onboardingutils.STREET_ADDRESS_PLACEHOLDER_LABEL,
+          autoCorrect: false,
+          autoCapitalize: 'none',
+          onChangeText: function onChangeText(streetAddress) {
+            return _this2.setState({ streetAddress: streetAddress });
+          },
+          value: streetAddress
+        }),
+        _react2.default.createElement(_ewfloatinglabel2.default, {
+          label: onboardingutils.CITY_LABEL,
+          placeholderlabel: onboardingutils.CITY_PLACEHOLDER_LABEL,
+          autoCorrect: false,
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+          autoCapitalize: 'none',
+          onChangeText: function onChangeText(City) {
+            return _this2.setState({ City: City });
+          },
+          value: City
+        }),
+        _react2.default.createElement(_ewfloatinglabel2.default, {
+          label: onboardingutils.PINCODE_LABEL,
+          placeholderlabel: onboardingutils.PINCODE_PLACEHOLDER_LABEL,
+          autoCorrect: false,
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+          autoCapitalize: 'none',
+          onChangeText: function onChangeText(Pincode) {
+            return _this2.setState({ Pincode: Pincode });
+          },
+          value: Pincode
+        }),
+        _react2.default.createElement(_ewfloatinglabel2.default, {
+          label: onboardingutils.STATE_LABEL,
+          placeholderlabel: onboardingutils.STATE_PLACEHOLDER_LABEL,
+          autoCorrect: false,
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+          autoCapitalize: 'none',
+          onChangeText: function onChangeText(State) {
+            return _this2.setState({ State: State });
+          },
+          value: State
+        }),
+        _react2.default.createElement(_ewdropdownpicker2.default, {
+          pickerLabel: onboardingutils.COUNTRY_LABEL,
+          pickerPlaceholderLabel: countryData[0].label,
+          dataArray: countryData,
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+          isDefaultPickerValueSelected: Country == countryData[0].key,
+          selectedValue: Country,
+          onPickerValueChange: function onPickerValueChange(Country) {
+            return _this2.setState({ Country: Country });
+          }
+        }),
+        addressType != onboardingutils.ADDRESS_TYPE_WORK ? _react2.default.createElement(_ewfloatinglabel2.default, {
+          label: onboardingutils.PHONE_LABEL,
+          placeholderlabel: onboardingutils.PHONE_PLACEHOLDER_LABEL,
+          autoCorrect: false,
+          autoCapitalize: 'none',
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+          onChangeText: function onChangeText(Phone) {
+            return _this2.setState({ Phone: Phone });
+          },
+          value: Phone
+        }) : null
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log("In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }, {
+    key: 'getCurrentState',
+    value: function getCurrentState() {
+
+      return this.state;
+    }
+  }]);
+  return HomeAddress;
+}(_react.Component);
+
+exports.default = HomeAddress;

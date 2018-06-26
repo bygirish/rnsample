@@ -1,0 +1,162 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getAppFeedbackModel = getAppFeedbackModel;
+exports.getAppUpdateServerModel = getAppUpdateServerModel;
+exports.getUpdateAppReveiwModel = getUpdateAppReveiwModel;
+
+var _utils = require('../../utils');
+
+var _dashboardutils = require('../../ewscreens/dashboard/dashboardutils');
+
+var dashboardConstants = babelHelpers.interopRequireWildcard(_dashboardutils);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+
+var DeviceInfo = require('react-native-device-info');
+
+function getAppFeedbackModel(clientData, currentState) {
+  var _currentState$needtoa = currentState.needtoact.needToActData.employeeInfo,
+      email = _currentState$needtoa.email,
+      empCode = _currentState$needtoa.empCode,
+      mobile_number = _currentState$needtoa.mobile_number,
+      name = _currentState$needtoa.name,
+      customer_id = _currentState$needtoa.customer_id;
+
+
+  var description = "Issue is on screen " + clientData.screen_name + " having issue details as :- \n" + "issueType - " + clientData.issue_type + "\n" + "issueDetails - " + clientData.description + "\n" + "and having other user details as \n" + "EmpCode - " + empCode + "\n" + "and having other details as :- \n" + "Brand - " + DeviceInfo.getBrand() + "\n" + "Model - " + DeviceInfo.getModel() + "\n" + "isTablet - " + DeviceInfo.isTablet() + "\n" + "Ram - " + DeviceInfo.getTotalMemory() + "\n" + "Internal Storage - " + DeviceInfo.getTotalDiskCapacity() + "\n" + "Carrier - " + DeviceInfo.getCarrier() + "\n" + "is24Hour - " + DeviceInfo.is24Hour() + "\n";
+
+  var data = new FormData();
+
+  if (clientData.imageArray.length != 0) {
+
+    for (var _iterator = clientData.imageArray, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+      var _ref;
+
+      if (_isArray) {
+        if (_i >= _iterator.length) break;
+        _ref = _iterator[_i++];
+      } else {
+        _i = _iterator.next();
+        if (_i.done) break;
+        _ref = _i.value;
+      }
+
+      var image = _ref;
+
+      data.append('attachments[]', { uri: image.imagePath, name: 'issueImage', type: image.imageType });
+    }
+  }
+
+  data.append('priority', clientData.priority);
+  data.append('source', 8);
+  data.append('name', name);
+  data.append('phone', mobile_number.toString());
+
+
+  data.append('subject', clientData.issue_type + " - Mobile ");
+  data.append('status', 2);
+  data.append('email', email);
+  data.append('group_id', 1000005297);
+  data.append('responder_id', 1026426933);
+  data.append('custom_fields[problem_area]', getProblemArea(clientData.moduleId));
+  data.append('custom_fields[cf_os]', (0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID ? "Android" : "iOS");
+  data.append('custom_fields[cf_os_version]', DeviceInfo.getSystemVersion());
+  data.append('custom_fields[cf_app_version]', _utils.DEVICE_APP_VERSION.toString());
+
+  data.append('description', description);
+
+
+  return data;
+}
+
+function getProblemArea(moduleId) {
+
+  console.log("moduleID is ", moduleId, modules.TRAVEL_AND_EXPENSE, moduleId == modules.TRAVEL_AND_EXPENSE);
+
+  serverModuleId = "";
+
+  if (moduleId == modules.LEAVE_AND_ATTENDANCE) serverModuleId = "L&amp;A";else if (moduleId == modules.PAYROLL) serverModuleId = "P&amp;T";else if (moduleId == modules.COMPENSATION_AND_BENEFITS) serverModuleId = "C&amp;B";else if (moduleId == modules.TRAVEL_AND_EXPENSE) serverModuleId = "T&amp;E";else serverModuleId = "EIP";
+
+  console.log("moduleID is", serverModuleId);
+
+  return serverModuleId;
+}
+
+function getAppUpdateServerModel(clientData, currentState) {
+
+  var serverModel = {
+
+    "mobile_os": (0, _utils.getMobileOS)(),
+    "current_app_version": _utils.DEVICE_APP_VERSION,
+
+    "last_prompt_time": currentState.common.lastPromptTime,
+    "allowed_modules": clientData.modulesSubscribed
+
+  };
+
+  return serverModel;
+}
+
+function getUpdateAppReveiwModel(clientData, currentState) {
+
+  var serverModel;
+
+  if (clientData.action == dashboardConstants.SKIP_RATING) {
+
+    serverModel = {
+
+      app_review_document: {
+
+        last_skipped_transaction_value: clientData.skipTransactionValue,
+        last_skipped_date: clientData.skipDate
+
+      }
+    };
+  }
+
+  if (clientData.action == dashboardConstants.RATING_SUBMIT) {
+
+    serverModel = {
+
+      app_review_document: {
+
+        rating: clientData.rating,
+        review: clientData.review,
+        npsRating: clientData.npsRating,
+        review_Date: clientData.reveiwDateTime
+      }
+
+    };
+  }
+
+  if (clientData.action == dashboardConstants.RATING_LOGOUT_ACTION) {
+
+    serverModel = {
+
+      app_review_document: {
+        total_activity_count: currentState.common.totalActivityCount
+      }
+
+    };
+  }
+
+  if (clientData.action == dashboardConstants.UPDATE_IS_APP_REDIRECTED_FLAG) {
+
+    serverModel = {
+
+      app_review_document: {
+        app_store_redirected: true
+      }
+
+    };
+  }
+
+  serverModel.token = currentState.auth.sessionToken;
+  serverModel.device_id = _utils.DEVICE_ID;
+
+  return serverModel;
+}

@@ -1,0 +1,530 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DrawerSiderBarView = undefined;
+
+var _react = require("react");
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require("react-native");
+
+var _nativeBase = require("native-base");
+
+var _reactNativeRouterFlux = require("react-native-router-flux");
+
+var _reactRedux = require("react-redux");
+
+var _drawersidebarviewstyle = require("./styles/drawersidebarviewstyle");
+
+var _drawersidebarviewstyle2 = babelHelpers.interopRequireDefault(_drawersidebarviewstyle);
+
+var _GoogleAnalyticController = require("../../GoogleAnalyticController");
+
+var _ewnetworkimage = require("../../components/ewnetworkimage/ewnetworkimage");
+
+var _ewnetworkimage2 = babelHelpers.interopRequireDefault(_ewnetworkimage);
+
+var _ewh1text = require("../../components/ewh1text/ewh1text");
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require("../../components/ewh2text/ewh2text");
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewlistview = require("../../components/ewlistview/ewlistview");
+
+var _ewlistview2 = babelHelpers.interopRequireDefault(_ewlistview);
+
+var _ewh3text = require("../../components/ewh3text/ewh3text");
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _utils = require("../../utils");
+
+var _ewimages = require("../../utils/ewimages");
+
+var _modulelist = require("../../utils/modulelist");
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _appstyleguide = require("../../../appstyleguide/appstyleguide");
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _dashboardutils = require("./dashboardutils");
+
+var drawerUtils = babelHelpers.interopRequireWildcard(_dashboardutils);
+
+var FILE_NAME = "drawersidebarview.js : ";
+
+var SCREEN_NAME = "Drawer Sidebar Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var drawerImage = require('../../../img/ewlogo.png');
+var attendanceIcon = require('../../../img/elementicons/attendance.png');
+var homeIcon = require('../../../img/elementicons/home.png');
+var leaveIcon = require('../../../img/elementicons/leave.png');
+var calendarIcon = require('../../../img/elementicons/calendar.png');
+var settingIcon = require('../../../img/elementicons/setting.png');
+var logoutIcon = require('../../../img/elementicons/logout.png');
+var holidayIcon = require('../../../img/elementicons/holiday.png');
+var companyDirectoryIcon = require('../../../img/elementicons/companydirectory.png');
+var payViewIcon = require('../../../img/elementicons/payview.png');
+var onDutyIcon = require('../../../img/elementicons/onduty.png');
+var myRequestIcon = require('../../../img/elementicons/myrequesticon.png');
+var issueIcon = require('../../../img/elementicons/reportIssueIcon.png');
+
+var sidebarItems = [{
+  name: 'My Requests',
+  route: 'ewmyrequestscreen',
+  icon: myRequestIcon,
+  bg: '#477EEA',
+  id: drawerUtils.MY_REQUEST_ID,
+  moduleIds: [modules.LEAVE_AND_ATTENDANCE, modules.TRAVEL_AND_EXPENSE],
+  subItemsArray: [{
+    name: 'Leave',
+    id: drawerUtils.MY_LEAVES_SUBITEM_ID,
+    route: 'ewmyappliedleavesscreen',
+    icon: leaveIcon,
+    bg: '#477EEA',
+    moduleIds: [modules.LEAVE_AND_ATTENDANCE],
+    subItemsArray: []
+  }, {
+    name: 'Travel Request',
+    route: 'ewmyappliedtravelscreen',
+    id: drawerUtils.MY_TRAVEL_SUBITEM_ID,
+    icon: attendanceIcon,
+    bg: '#477EEA',
+    moduleIds: [modules.TRAVEL_AND_EXPENSE],
+    subItemsArray: []
+  }, {
+    name: 'Out On Work',
+    id: drawerUtils.MY_OD_SUBITEM_ID,
+    route: 'ewmyappliedodscreen',
+    icon: onDutyIcon,
+    bg: '#477EEA',
+    moduleIds: [modules.LEAVE_AND_ATTENDANCE],
+    subItemsArray: []
+  }, {
+    name: 'Past Attendance',
+    route: 'ewmyappliedpastattendancescreen',
+    id: drawerUtils.MY_PAST_ATTENDANCE_SUBITEM_ID,
+    icon: attendanceIcon,
+    bg: '#477EEA',
+    moduleIds: [modules.LEAVE_AND_ATTENDANCE],
+    subItemsArray: []
+  }]
+}, {
+  name: 'Holidays',
+  route: 'ewholidayscreen',
+  id: drawerUtils.MY_HOLIDAYS_ID,
+  icon: holidayIcon,
+  bg: '#477EEA',
+  moduleIds: [modules.LEAVE_AND_ATTENDANCE],
+  subItemsArray: []
+}, {
+  name: 'My Calendar',
+  route: 'ewmycalendarscreen',
+  id: drawerUtils.MY_CALENDAR_ID,
+  icon: calendarIcon,
+  bg: '#477EEA',
+  moduleIds: [modules.LEAVE_AND_ATTENDANCE],
+  subItemsArray: []
+}, {
+  name: 'Company Directory',
+  route: 'ewemployeedirectoryscreen',
+  id: drawerUtils.EMPLOYEE_DIRECTORY_ID,
+  icon: companyDirectoryIcon,
+  bg: '#477EEA',
+  moduleIds: [modules.EMPLOYEE_INFORMATION_PORTAL],
+  subItemsArray: []
+}, {
+  name: 'Payslip',
+  route: 'ewpayslipscreen',
+  id: drawerUtils.PAYSLIP_ID,
+  icon: payViewIcon,
+  bg: '#477EEA',
+  moduleIds: [modules.PAYROLL],
+  subItemsArray: []
+}, {
+  name: 'My Compensation',
+  route: 'ewmycompensationscreen',
+  id: drawerUtils.MY_COMPENSATION_ID,
+  icon: _ewimages.COMPENSATION_ICON,
+  bg: '#477EEA',
+  moduleIds: [modules.COMPENSATION_AND_BENEFITS],
+  subItemsArray: []
+}, {
+  name: 'Report an Issue',
+  route: 'ewfeedbackscreen',
+  icon: issueIcon,
+  bg: '#477EEA',
+  moduleIds: null,
+  subItemsArray: []
+}, {
+  name: 'Logout',
+  route: 'ewlogout',
+  icon: logoutIcon,
+  id: drawerUtils.LOGOUT_ID,
+  bg: '#477EEA',
+  moduleIds: null,
+  subItemsArray: []
+}];
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var DrawerSiderBarView = exports.DrawerSiderBarView = function (_Component) {
+  babelHelpers.inherits(DrawerSiderBarView, _Component);
+
+  function DrawerSiderBarView(props, context) {
+    babelHelpers.classCallCheck(this, DrawerSiderBarView);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (DrawerSiderBarView.__proto__ || Object.getPrototypeOf(DrawerSiderBarView)).call(this, props, context));
+
+    _this.onImageClick = function () {
+
+      console.log("Inside onImageClick");
+
+      userImage = null;
+
+      if (_this.props.pendingNeedToActData != null) {
+        userImage = _this.props.pendingNeedToActData.employeeInfo.empCode;
+      }
+
+      image = {
+        uri: (0, _utils.getImageUrl)(_this.props.sessionToken, userImage, 'sidebar', _this.props.currentImageTimestamp)
+      };
+
+      drawer.close();
+
+      _reactNativeRouterFlux.Actions.ewimageuploadscreen(image);
+    };
+
+    _this.getModuleSubscribed = function (moduleList) {
+
+      updatedModuleList = [];
+
+      for (var _iterator = moduleList, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === "function" ? typeof Symbol === "function" ? Symbol.iterator : "@@iterator" : "@@iterator"]();;) {
+        var _ref;
+
+        if (_isArray) {
+          if (_i >= _iterator.length) break;
+          _ref = _iterator[_i++];
+        } else {
+          _i = _iterator.next();
+          if (_i.done) break;
+          _ref = _i.value;
+        }
+
+        var module = _ref;
+
+        if (module.moduleIds == null) {
+
+          if (module.route == "ewfeedbackscreen") {
+
+            if (_this.props.isReportErrorFlagVisible) updatedModuleList.push(module);
+          } else updatedModuleList.push(module);
+        } else {
+
+          for (var _iterator2 = module.moduleIds, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[typeof Symbol === "function" ? typeof Symbol === "function" ? Symbol.iterator : "@@iterator" : "@@iterator"]();;) {
+            var _ref2;
+
+            if (_isArray2) {
+              if (_i2 >= _iterator2.length) break;
+              _ref2 = _iterator2[_i2++];
+            } else {
+              _i2 = _iterator2.next();
+              if (_i2.done) break;
+              _ref2 = _i2.value;
+            }
+
+            var moduleId = _ref2;
+
+
+            console.log("module list is ", moduleId);
+
+            if (_this.props.pendingNeedToActData.moduleSubscribed.moduleId.includes(moduleId)) {
+              updatedModuleList.push(module);
+              break;
+            }
+          }
+        }
+      }
+
+      console.log("module list is ", updatedModuleList);
+
+      return updatedModuleList;
+    };
+
+    _this.onPressListItem = function (data) {
+
+      console.log(FILE_NAME + "In onPressListItem method");
+
+      if (data.subItemsArray.length > 0) {
+
+        if (_this.isActiveToggle(data)) {
+
+          _this.setState({
+
+            activeToggleItem: null
+          });
+        } else {
+
+          _this.setState({
+
+            activeToggleItem: data.id
+          });
+        }
+      } else {
+
+        scene = data.route;
+        console.log("Scene is - " + scene);
+
+        drawer.close();
+        _reactNativeRouterFlux.Actions[scene]();
+
+        _this.setState({
+
+          activeToggleItem: null
+        });
+      }
+    };
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    _this.initialState = {
+
+      componentInitializeTime: new Date().getTime(),
+      activeToggleItem: null
+
+    };
+
+    _this.state = _this.initialState;
+
+    console.log(FILE_NAME + "In constructor");
+
+    drawer = context.drawer;
+    return _this;
+  }
+
+  babelHelpers.createClass(DrawerSiderBarView, [{
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In render method of drawersidebarview");
+
+      var userName = "",
+          userDesignation = "",
+          userImage = "",
+          modulesSubscribed = [];
+      var updatedModuleList = [];
+
+      if (this.props.pendingNeedToActData != null) {
+        var pendingNeedToActData = this.props.pendingNeedToActData;
+
+
+        userName = pendingNeedToActData.employeeInfo.name;
+        userImage = pendingNeedToActData.employeeInfo.empCode;
+        userDesignation = pendingNeedToActData.employeeInfo.designation;
+        updatedModuleList = this.getModuleSubscribed(sidebarItems);
+      }
+
+      console.log("datas", modulesSubscribed);
+      console.log("userImage", userImage);
+      console.log(" user state is -", this.state);
+      console.log("updatedModuleList", updatedModuleList);
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        { style: _drawersidebarviewstyle2.default.containerStyle },
+        _react2.default.createElement(
+          _nativeBase.Content,
+          {
+            bounces: false,
+            style: _drawersidebarviewstyle2.default.contentStyle
+          },
+          _react2.default.createElement(
+            _nativeBase.View,
+            { style: _drawersidebarviewstyle2.default.userInfoContainer },
+            _react2.default.createElement(
+              _nativeBase.View,
+              { style: _drawersidebarviewstyle2.default.networkImagePrimaryContainer },
+              _react2.default.createElement(
+                _nativeBase.View,
+                { style: _drawersidebarviewstyle2.default.networkImageSecondaryContainer },
+                _react2.default.createElement(_ewnetworkimage2.default, { isClickable: true, onPress: function onPress() {
+                    return _this2.onImageClick();
+                  }, networkUrl: (0, _utils.getImageUrl)(this.props.sessionToken, userImage, 'sidebar', this.props.currentImageTimestamp) }),
+                _react2.default.createElement(_nativeBase.Icon, { name: "camera", style: { marginTop: 40, marginLeft: -15, color: 'white', fontSize: 20 } })
+              )
+            ),
+            _react2.default.createElement(_ewh1text2.default, {
+              text: userName,
+              customStyle: _drawersidebarviewstyle2.default.userNameStyle
+            }),
+            _react2.default.createElement(_ewh2text2.default, {
+              text: userDesignation,
+              customStyle: _drawersidebarviewstyle2.default.userDesignationStyle
+            })
+          ),
+          _react2.default.createElement(_ewlistview2.default, {
+            listData: updatedModuleList,
+            extraData: this.state.activeToggleItem,
+            listKey: function listKey(data, index) {
+              return index;
+            },
+            renderListItem: function renderListItem(data) {
+              return _this2.renderListView(data);
+            }
+          })
+        )
+      );
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }, {
+    key: "renderListView",
+    value: function renderListView(_ref3) {
+      var item = _ref3.item;
+
+
+      console.log("item receive is ", item);
+
+      return _react2.default.createElement(
+        _nativeBase.View,
+        null,
+        this.renderListItemView(item),
+        this.renderSubItems(item)
+      );
+    }
+  }, {
+    key: "renderListItemView",
+    value: function renderListItemView(data) {
+      var _this3 = this;
+
+      console.log("item receive is ", data);
+
+      return _react2.default.createElement(
+        _nativeBase.ListItem,
+        { button: true, noBorder: true, onPress: function onPress() {
+            return _this3.onPressListItem(data);
+          } },
+        _react2.default.createElement(
+          _nativeBase.Left,
+          null,
+          _react2.default.createElement(_reactNative.Image, { style: {}, source: data.icon }),
+          _react2.default.createElement(_ewh2text2.default, {
+            text: data.name,
+            customStyle: _drawersidebarviewstyle2.default.text
+          })
+        ),
+        data.subItemsArray.length > 0 ? this.renderToggleIcon(data) : null
+      );
+    }
+  }, {
+    key: "isActiveToggle",
+    value: function isActiveToggle(data) {
+
+      if (this.state.activeToggleItem == data.id) return true;
+
+      return false;
+    }
+  }, {
+    key: "renderToggleIcon",
+    value: function renderToggleIcon(data) {
+
+      if (this.isActiveToggle(data)) {
+
+        return _react2.default.createElement(_nativeBase.Icon, { name: "arrow-dropup", style: { color: appstyleguide.APP_BLACK } });
+      }
+
+      return _react2.default.createElement(_nativeBase.Icon, { name: "arrow-dropdown", style: { color: appstyleguide.APP_BLACK } });
+    }
+  }, {
+    key: "renderSubItems",
+    value: function renderSubItems(data) {
+      var _this4 = this;
+
+      subItemsArray = data.subItemsArray;
+
+      console.log("renderSubItems", subItemsArray, this.isActiveToggle(data));
+
+      if (subItemsArray.length > 0 && this.isActiveToggle(data)) {
+
+        updatedModuleList = this.getModuleSubscribed(subItemsArray);
+
+        return Object.keys(updatedModuleList).map(function (key) {
+          return _this4.renderSubItemView(updatedModuleList[key]);
+        });
+      }
+    }
+  }, {
+    key: "renderSubListItem",
+    value: function renderSubListItem(data) {
+      var _this5 = this;
+
+      return _react2.default.createElement(
+        _nativeBase.ListItem,
+        { button: true, noBorder: true, onPress: function onPress() {
+            return _this5.onPressListItem(data);
+          } },
+        _react2.default.createElement(
+          _nativeBase.Left,
+          null,
+          _react2.default.createElement(_ewh2text2.default, {
+            text: data.name,
+            customStyle: _drawersidebarviewstyle2.default.text
+          })
+        )
+      );
+    }
+  }, {
+    key: "renderSubItemView",
+    value: function renderSubItemView(subItem) {
+
+      return _react2.default.createElement(
+        _nativeBase.View,
+        { style: { marginLeft: 20 } },
+        this.renderSubListItem(subItem)
+      );
+    }
+  }]);
+  return DrawerSiderBarView;
+}(_react.Component);
+
+DrawerSiderBarView.propTypes = {
+  name: _react.PropTypes.string,
+  sceneStyle: _nativeBase.View.propTypes.style,
+  title: _react.PropTypes.string
+};
+DrawerSiderBarView.contextTypes = {
+  drawer: _react2.default.PropTypes.object
+};
+
+
+function mapStateToProps(state) {
+
+  console.log(FILE_NAME + "In mapStateToProps method");
+  console.log("State Updated state is -");
+  console.log(state);
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    pendingNeedToActData: state.needtoact.needToActData,
+    isReportErrorFlagVisible: state.needtoact.isReportErrorFlagVisible,
+
+    currentImageTimestamp: state.common.currentImageTimestamp
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(DrawerSiderBarView);

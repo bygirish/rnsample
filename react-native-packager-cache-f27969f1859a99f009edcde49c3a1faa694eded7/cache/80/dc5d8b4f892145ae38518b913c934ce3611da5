@@ -1,0 +1,404 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getTravelClaimInformation = getTravelClaimInformation;
+exports.clearTravelExpenseClaimError = clearTravelExpenseClaimError;
+exports.saveTravelMasterItem = saveTravelMasterItem;
+exports.saveMileageLineItem = saveMileageLineItem;
+exports.deleteMileageLineItem = deleteMileageLineItem;
+exports.submitMileageExpenseClaim = submitMileageExpenseClaim;
+exports.clearExpenseClaimStateData = clearExpenseClaimStateData;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _travelclaimprocessing = require('./travelclaimprocessing');
+
+var expenseClaimProcessing = babelHelpers.interopRequireWildcard(_travelclaimprocessing);
+
+var _travelclaimactiontypes = require('./travelclaimactiontypes');
+
+var expenseClaimActionTypes = babelHelpers.interopRequireWildcard(_travelclaimactiontypes);
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../../utils');
+
+var _modulelist = require('../../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _travelobjectmapping = require('./travelobjectmapping');
+
+var FILE_NAME = "expenseclaimactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_TRAVEL_AND_EXPENSE;
+
+function getTravelClaimInformation(params) {
+
+  var functionName = "getTravelClaimInformation";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getTravelClaimInformationRequest = expenseClaimProcessing.buildGetTravelClaimInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getTravelClaimInformationRequest.url, getTravelClaimInformationRequest.data, getTravelClaimInformationRequest.config).then(function (result) {
+
+      console.log("getTravelClaimInformationRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: expenseClaimActionTypes.SUCCESS_GET_TRAVEL_CLAIM_INFORMATION,
+          response: expenseClaimProcessing.buildSuccesGetTravelClaimInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: expenseClaimActionTypes.FAILURE_GET_TRAVEL_CLAIM_INFORMATION,
+          response: expenseClaimProcessing.buildFailedGetTravelClaimInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getTravelClaimInformationRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: expenseClaimActionTypes.FAILURE_GET_TRAVEL_CLAIM_INFORMATION,
+        response: expenseClaimProcessing.buildServerErrorGetTravelClaimInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearTravelExpenseClaimError(params) {
+
+  return {
+    type: expenseClaimActionTypes.CLEAR_EXPENSE_TRAVEL_CLAIM_ERROR,
+    response: null
+  };
+}
+
+function saveTravelMasterItem(params) {
+
+  var functionName = "saveTravelMasterItem";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var saveMileageMasterItemRequest = expenseClaimProcessing.buildSaveMileageMasterItemRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(saveMileageMasterItemRequest.url, saveMileageMasterItemRequest.data, saveMileageMasterItemRequest.config).then(function (result) {
+
+      console.log("saveMileageMasterItemRequest Result - ", result);
+
+      if (result.data.success != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: expenseClaimActionTypes.SUCCESS_SAVE_MILEAGE_MASTER_ITEM_INFORMATION,
+          response: expenseClaimProcessing.buildSuccesSaveMileageMasterItemResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: expenseClaimActionTypes.FAILURE_SAVE_MILEAGE_MASTER_ITEM_INFORMATION,
+          response: expenseClaimProcessing.buildFailedSaveMileageMasterItemResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("saveMileageMasterItemRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: expenseClaimActionTypes.FAILURE_SAVE_MILEAGE_MASTER_ITEM_INFORMATION,
+        response: expenseClaimProcessing.buildServerErrorSaveMileageMasterItemResponse(err, params)
+      });
+    });
+  };
+}
+
+function saveMileageLineItem(params) {
+
+  var functionName = "saveMileageLineItem";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var serverParams = (0, _travelobjectmapping.getServerMileageLineItemModel)(params, getState());
+
+    var saveMileageLineItemRequest = expenseClaimProcessing.buildSaveMileageLineItemRequest(serverParams, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.put(saveMileageLineItemRequest.url, saveMileageLineItemRequest.data, saveMileageLineItemRequest.config).then(function (result) {
+
+      console.log("saveMileageLineItemRequest Result - ", result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: expenseClaimActionTypes.SUCCESS_SAVE_MILEAGE_LINE_ITEM_INFORMATION,
+          response: expenseClaimProcessing.buildSuccesSaveMileageLineItemResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: expenseClaimActionTypes.FAILURE_SAVE_MILEAGE_LINE_ITEM_INFORMATION,
+          response: expenseClaimProcessing.buildFailedSaveMileageLineItemResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("saveMileageLineItemRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: expenseClaimActionTypes.FAILURE_SAVE_MILEAGE_LINE_ITEM_INFORMATION,
+        response: expenseClaimProcessing.buildServerErrorSaveMileageLineItemResponse(err, params)
+      });
+    });
+  };
+}
+
+function deleteMileageLineItem(params) {
+  var _this = this;
+
+  var functionName = "deleteMileageLineItem";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function _callee(dispatch, getState) {
+    var deleteMileageLineItemRequest, onSuccess, onFailure, onError, result;
+    return regeneratorRuntime.async(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            onError = function onError(error) {
+              dispatch({
+                type: expenseClaimActionTypes.FAILURE_DELETE_MILEAGE_LINE_ITEM_INFORMATION,
+                response: expenseClaimProcessing.buildServerErrorDeleteMileageLineItemResponse(error, params)
+              });
+              return error;
+            };
+
+            onFailure = function onFailure(result) {
+              dispatch({
+                type: expenseClaimActionTypes.FAILURE_DELETE_MILEAGE_LINE_ITEM_INFORMATION,
+                response: expenseClaimProcessing.buildFailedDeleteMileageLineItemResponse(result, params)
+              });
+              return result.data;
+            };
+
+            onSuccess = function onSuccess(result) {
+              dispatch({
+                type: expenseClaimActionTypes.SUCCESS_DELETE_MILEAGE_LINE_ITEM_INFORMATION,
+                response: expenseClaimProcessing.buildSuccesDeleteMileageLineItemResponse(result, params)
+              });
+              return result.data;
+            };
+
+            deleteMileageLineItemRequest = expenseClaimProcessing.buildDeleteMileageLineItemRequest(params, getState());
+
+
+            console.log("Current GetState Value is - ", getState);
+
+            requestStartTime = (0, _utils.getCurrentTime)();
+
+            _context.prev = 6;
+            _context.next = 9;
+            return regeneratorRuntime.awrap(_axios2.default.delete(deleteMileageLineItemRequest.url, deleteMileageLineItemRequest.config));
+
+          case 9:
+            result = _context.sent;
+
+            if (!(result.data.update_Flag == 1)) {
+              _context.next = 14;
+              break;
+            }
+
+            return _context.abrupt('return', onSuccess(result));
+
+          case 14:
+            return _context.abrupt('return', onFailure(result));
+
+          case 15:
+            _context.next = 20;
+            break;
+
+          case 17:
+            _context.prev = 17;
+            _context.t0 = _context['catch'](6);
+            return _context.abrupt('return', onError(_context.t0));
+
+          case 20:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, null, _this, [[6, 17]]);
+  };
+}
+
+function submitMileageExpenseClaim(params) {
+
+  var functionName = "submitMileageExpenseClaim";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  var serverParams = (0, _travelobjectmapping.getSubmitMileageExpenseClaimModel)(params);
+
+  return function (dispatch, getState) {
+
+    var submitMileageExpenseClaimRequest = expenseClaimProcessing.buildSubmitMileageExpenseClaimRequest(serverParams, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.put(submitMileageExpenseClaimRequest.url, submitMileageExpenseClaimRequest.data, submitMileageExpenseClaimRequest.config).then(function (result) {
+
+      console.log("submitMileageExpenseClaimRequest Result - ", result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: expenseClaimActionTypes.SUCCESS_SUBMIT_MILEAGE_EXPENSE_CLAIM_INFORMATION,
+          response: expenseClaimProcessing.buildSuccessSubmitMileageExpenseClaimResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: expenseClaimActionTypes.FAILURE_SUBMIT_MILEAGE_EXPENSE_CLAIM_INFORMATION,
+          response: expenseClaimProcessing.buildFailedSubmitMileageExpenseClaimResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("submitMileageExpenseClaimRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: expenseClaimActionTypes.FAILURE_SUBMIT_MILEAGE_EXPENSE_CLAIM_INFORMATION,
+        response: expenseClaimProcessing.buildServerErrorSubmitMileageExpenseClaimResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearExpenseClaimStateData(params) {
+
+  console.log(FILE_NAME + "In clearExpenseClaimStateData - ");
+  console.log("Type of Data to be cleared - ", params);
+
+  CLEAR_STATE_DATA_ALL = 'CLEAR_STATE_DATA_ALL';
+  CLEAR_STATE_DATA_ALLOCATION_PROJECT_INFORMATION = 'CLEAR_STATE_DATA_ALLOCATION_PROJECT_INFORMATION';
+
+  CLEAR_STATE_ERROR_COUNTER = 'CLEAR_STATE_ERROR_COUNTER';
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var errorCounter = getState().expenseClaim.errorCounter;
+
+    var appliedExpenseClaimData = getState().expenseClaim.appliedExpenseClaimData;
+    var appliedExpenseClaimError = getState().expenseClaim.appliedExpenseClaimError;
+
+    var allocationProjectInformationData = getState().expenseClaim.allocationProjectInformationData;
+    var allocationProjectInformationError = getState().expenseClaim.allocationProjectInformationError;
+
+    Object.keys(params).map(function (key) {
+      console.log("params attribute " + key + " value is - " + params[key]);
+
+      switch (params[key]) {
+        case CLEAR_STATE_DATA_ALL:
+
+          errorCounter = null;
+          appliedExpenseClaimData = null;
+          appliedExpenseClaimError = null;
+          allocationProjectInformationData = null;
+          allocationProjectInformationError = null;
+          break;
+
+        case CLEAR_STATE_DATA_ALLOCATION_PROJECT_INFORMATION:
+
+          allocationProjectInformationData = null;
+          allocationProjectInformationError = null;
+          break;
+
+        case CLEAR_STATE_ERROR_COUNTER:
+
+          errorCounter = null;
+          break;
+
+        default:
+
+      }
+    });
+
+    var response = {
+      errorCounter: errorCounter,
+      appliedExpenseClaimData: appliedExpenseClaimData,
+      appliedExpenseClaimError: appliedExpenseClaimError,
+      allocationProjectInformationData: allocationProjectInformationData,
+      allocationProjectInformationError: allocationProjectInformationError
+    };
+
+    dispatch({
+      type: expenseClaimActionTypes.CLEAR_EXPENSE_CLAIM_STATE_DATA,
+      response: response
+    });
+  };
+}

@@ -1,0 +1,1187 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EwPaySlip = undefined;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _reactNativeCollapsible = require('react-native-collapsible');
+
+var _reactNativeCollapsible2 = babelHelpers.interopRequireDefault(_reactNativeCollapsible);
+
+var _ewbar = require('../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewscreentitle = require('../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _ewreportissue = require('../../components/ewreportissue/ewreportissue');
+
+var _ewreportissue2 = babelHelpers.interopRequireDefault(_ewreportissue);
+
+var _ewaccordion = require('../../components/ewaccordion/ewaccordion');
+
+var _ewaccordion2 = babelHelpers.interopRequireDefault(_ewaccordion);
+
+var _payrollactions = require('../../services/payroll/payrollactions');
+
+var _ewloadingindicator = require('../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _reactNativeFetchBlob = require('react-native-fetch-blob');
+
+var _reactNativeFetchBlob2 = babelHelpers.interopRequireDefault(_reactNativeFetchBlob);
+
+var _reactNativeFcm = require('react-native-fcm');
+
+var _reactNativeFcm2 = babelHelpers.interopRequireDefault(_reactNativeFcm);
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _payrollerrorhandling = require('../../services/payroll/payrollerrorhandling');
+
+var payrollError = babelHelpers.interopRequireWildcard(_payrollerrorhandling);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _payrollutils = require('./payrollutils');
+
+var payrollConstants = babelHelpers.interopRequireWildcard(_payrollutils);
+
+var _animationutils = require('../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _screennameidentifiers = require('../../utils/screennameidentifiers');
+
+var FILE_NAME = "ewpayslipscreen.js : ";
+
+var SCREEN_NAME = "Payslip Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_PAYROLL;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwPaySlip = exports.EwPaySlip = function (_Component) {
+  babelHelpers.inherits(EwPaySlip, _Component);
+
+  function EwPaySlip(props, context) {
+    babelHelpers.classCallCheck(this, EwPaySlip);
+
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwPaySlip.__proto__ || Object.getPrototypeOf(EwPaySlip)).call(this, props, context));
+
+    _this.handleElementsValues = function (availablePayslipsData) {
+
+      yearSelected = 0;
+      monthSelected = 0;
+
+      var currentPaySlipYear = Object.keys(availablePayslipsData).sort().reverse()[0];
+
+      var currentPaySlipMonth = availablePayslipsData[currentPaySlipYear][availablePayslipsData[currentPaySlipYear].length - 1];
+
+      elementValues = {
+        yearSelected: currentPaySlipYear,
+        monthSelected: currentPaySlipMonth.monthno
+      };
+
+      return elementValues;
+    };
+
+    _this.onMonthValueChange = function (month) {
+
+      console.log(FILE_NAME + "In onMonthValueChange");
+
+      if (month == 0) {
+
+        _this.showAlertMessage("Please select  month");
+      } else {
+
+        _this.getPaySlipInformation(month, _this.state.yearSelected);
+
+        _this.setState({
+          monthSelected: month,
+          paySlipInformationData: null
+        });
+      }
+
+      console.log("month is ", month);
+    };
+
+    _this.onYearValueChange = function (year) {
+
+      console.log(FILE_NAME + "In onYearValueChange");
+
+      if (year == 0) {
+
+        _this.showAlertMessage("Please select  year");
+      } else {
+
+        _this.getPaySlipInformation(_this.state.monthSelected, year);
+
+        _this.setState({
+          yearSelected: year,
+          paySlipInformationData: null
+        });
+      }
+
+      console.log("year is ", year);
+    };
+
+    _this.getPaySlipInformation = function (monthSelected, yearSelected) {
+
+      if (monthSelected != 0 && yearSelected != 0) {
+
+        var params = {
+
+          month: monthSelected,
+          year: yearSelected,
+          mode: 0
+
+        };
+
+        _this.props.getPaySlipInformation(params);
+      }
+    };
+
+    _this.downloadPaySlip = function () {
+
+      console.log(FILE_NAME + "In downloadPaySlip");
+
+      var _this$state = _this.state,
+          yearSelected = _this$state.yearSelected,
+          monthSelected = _this$state.monthSelected;
+
+
+      console.log("yearSelected", yearSelected);
+      console.log("monthSelected", monthSelected);
+
+      if (yearSelected != 0 && monthSelected != 0) {
+
+        dirs = _reactNativeFetchBlob2.default.fs.dirs;
+
+        console.log("dirs is ", dirs);
+
+        _this.setState({
+          isLoading: true
+        });
+
+        _reactNativeFetchBlob2.default.config({
+          path: _reactNative.Platform.OS === 'ios' ? dirs.DocumentDir + '/payslip' + yearSelected + monthSelected + '.pdf' : dirs.DownloadDir + '/payslip' + yearSelected + monthSelected + '.pdf'
+        }).fetch('POST', _utils.PAYSLIP_DOWNLOAD_URL + '?year=' + yearSelected + '&month=' + monthSelected, {
+          'Auth-Token': _this.props.sessionToken,
+          'Device-ID': _utils.DEVICE_ID,
+          'Content-Type': 'application/pdf'
+        }).progress(function (received, total) {
+          console.log('progress', received);
+
+          console.log('progress', total);
+          console.log('progress', received / total);
+        }).then(function (res) {
+
+          console.log('res', res);
+
+          tracker.trackEvent(SCREEN_CATEGORY, 'Payslip downloaded');
+
+          if (res.respInfo.status == globalErrors.STATUS_UNAUTHORIZED) {
+            res.flush();
+          }
+
+          if (res.respInfo.status == globalErrors.STATUS_AUTHORIZED) {
+
+            _reactNativeFcm2.default.presentLocalNotification({
+              payslipData: {
+                'filePath': res.path()
+              },
+              title: 'Payslip',
+              body: 'Payslip downloaded successfully',
+              priority: "high",
+              large_icon: "ic_launcher",
+              icon: "ic_launcher",
+              show_in_foreground: true,
+              local: true
+            });
+
+            _this.setState({
+              isLoading: false
+            });
+          }
+        }).catch(function (errorMessage, statusCode) {
+
+          _this.setState({
+            isLoading: false
+          });
+
+          tracker.trackEvent(SCREEN_CATEGORY, 'Payslip download error - ' + errorMessage);
+
+          console.log("ERROR MESSAGE", errorMessage);
+          console.log("ERROR MESSAGE", statusCode);
+        });
+      } else {
+
+        if (yearSelected == 0) _this.showAlertMessage("Please select  year");else _this.showAlertMessage("Please select  month");
+      }
+    };
+
+    _this.renderPaySlipScreen = function (payslipDataState, payslipErrorState, payslipRenderView, payslipLoadAgainAction) {
+
+      console.log(FILE_NAME + "In renderPaySlipScreen");
+
+      if (payslipDataState != null && payslipErrorState == null) {
+
+        console.log("1st Case");
+
+        return payslipRenderView;
+      } else if (payslipDataState == null && payslipErrorState == null) {
+
+        console.log("2nd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _styles2.default.spinnerContainer },
+          _react2.default.createElement(_nativeBase.Spinner, { size: 'small' }),
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: _styles2.default.spinnerElement },
+            'Loading...'
+          )
+        );
+      } else if (payslipDataState == null && payslipErrorState != null) {
+
+        console.log("3rd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _styles2.default.loadAgainButtonContainer },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { onPress: function onPress() {
+                return payslipLoadAgainAction;
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Load Again'
+            )
+          )
+        );
+      } else {
+
+        console.log("4th Case");
+        console.log("payslipDataState, ", payslipDataState);
+        console.log("payslipErrorState, ", payslipErrorState);
+      }
+    };
+
+    _this.renderPaySlipInformation = function () {
+
+      console.log(FILE_NAME + "In renderPaySlipInformation");
+
+      var paySlipInformationData = _this.state.paySlipInformationData;
+      var _this$props = _this.props,
+          paySlipInformationError = _this$props.paySlipInformationError,
+          getPaySlipInformation = _this$props.getPaySlipInformation;
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 20 } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _styles2.default.dropdownContainer },
+            _react2.default.createElement(
+              _nativeBase.Picker,
+              {
+                iosHeader: 'Select one',
+                mode: 'dropdown',
+                selectedValue: _this.state.yearSelected,
+                onValueChange: _this.onYearValueChange.bind(_this),
+                style: _styles2.default.dropdownElement
+              },
+              _this.getYearValues()
+            )
+          ),
+          _this.showMonthDropDown()
+        ),
+        _this.renderPaySlipScreen(paySlipInformationData, paySlipInformationError, _this.renderPaySlipBreakUp(), getPaySlipInformation),
+        _react2.default.createElement(
+          _nativeBase.Button,
+          { style: { alignSelf: 'center', marginTop: 20, marginBottom: 20 }, onPress: function onPress() {
+              return _this.requestStoragePermission();
+            } },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            null,
+            'Download Payslip'
+          )
+        )
+      );
+    };
+
+    _this.renderPaySlipBreakUp = function () {
+      var paySlipInformationData = _this.state.paySlipInformationData;
+
+
+      if (paySlipInformationData != null) {
+
+        console.log("paySlipInformationData", paySlipInformationData);
+
+        currency = paySlipInformationData.emppay.currency_code;
+
+        payHeads = _this.calculatePayHeads(paySlipInformationData.emppay.emppay_dtl);
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { margin: 10 } },
+          _react2.default.createElement(_ewbar2.default, null),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', margin: 5, marginTop: 20 } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 1, marginLeft: 40 } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                'Standard Days'
+              )
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 1, alignItems: 'center' } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                paySlipInformationData.emppay.std_days
+              )
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', margin: 5 } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 1, marginLeft: 40 } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                'Paid Days'
+              )
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 1, alignItems: 'center' } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                paySlipInformationData.emppay.paid_days
+              )
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { justifyContent: 'center', alignItems: 'center', margin: 10, marginTop: 20 } },
+            _react2.default.createElement(_ewbar2.default, null),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { margin: 5, fontSize: 16, fontWeight: '600' } },
+              'Salary Details'
+            ),
+            _react2.default.createElement(_ewbar2.default, null)
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', margin: 10 } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 1, marginLeft: 5 } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                'Net Paid Amount'
+              )
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 1, alignItems: 'flex-end', marginRight: 50 } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                _this.getCurrencySymbol(currency),
+                ' ',
+                _this.formatCurrencyIndianFormat(paySlipInformationData.emppay.netpay)
+              )
+            )
+          ),
+          _this.renderPayHeadDetails(payrollConstants.PAY_SLIP_EARNINGS, payHeads.earnings, currency),
+          _this.renderPayHeadDetails(payrollConstants.PAY_SLIP_DEDUCTIONS, payHeads.deductions, currency),
+          _this.renderPayHeadDetails(payrollConstants.PAY_SLIP_CHARGES, payHeads.charges, currency)
+        );
+      }
+    };
+
+    _this.setActiveAccordian = function (payhead) {
+
+      newPayhead = payhead;
+
+      if (_this.state.activeAccordian == payhead) newPayhead = null;
+
+      _this.setState({
+        activeAccordian: newPayhead
+      });
+    };
+
+    _this.isActiveAccordian = function (payhead) {
+
+      if (payhead == _this.state.activeAccordian) return false;
+      return true;
+    };
+
+    _this.getPayheadTitle = function (payhead, currency) {
+      var paySlipInformationData = _this.state.paySlipInformationData;
+
+
+      payHeadTitle = "";
+      payHeadValue = "";
+
+      switch (payhead) {
+        case payrollConstants.PAY_SLIP_EARNINGS:
+
+          payHeadTitle = "Total Earnings ";
+          payHeadValue = _this.getCurrencySymbol(currency) + ' ' + _this.formatCurrencyIndianFormat(paySlipInformationData.emppay.total_earn);
+          break;
+        case payrollConstants.PAY_SLIP_DEDUCTIONS:
+
+          payHeadTitle = "Total Deductions ";
+          payHeadValue = _this.getCurrencySymbol(currency) + ' ' + _this.formatCurrencyIndianFormat(paySlipInformationData.emppay.total_ded);
+
+          break;
+        case payrollConstants.PAY_SLIP_CHARGES:
+
+          payHeadTitle = "Charges";
+          break;
+        default:
+
+      }
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { flexDirection: 'row' } },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 1, marginLeft: 5 } },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: { color: appstyleguide.APP_BLACK, fontSize: 16 } },
+            payHeadTitle
+          )
+        ),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 1, alignItems: 'flex-end', marginRight: 50 } },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: { color: appstyleguide.APP_BLACK, fontSize: 16 } },
+            payHeadValue
+          )
+        )
+      );
+    };
+
+    _this.calculatePayHeads = function (paySlipInformationData) {
+
+      earnings = [];
+      deductions = [];
+      charges = [];
+
+      console.log("payheads", paySlipInformationData);
+
+      for (var _iterator = paySlipInformationData, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? typeof Symbol === 'function' ? Symbol.iterator : '@@iterator' : '@@iterator']();;) {
+        var _ref;
+
+        if (_isArray) {
+          if (_i >= _iterator.length) break;
+          _ref = _iterator[_i++];
+        } else {
+          _i = _iterator.next();
+          if (_i.done) break;
+          _ref = _i.value;
+        }
+
+        var payhead = _ref;
+
+
+        switch (payhead.pay_nature) {
+          case payrollConstants.PAY_SLIP_EARNINGS:
+
+            earnings.push(payhead);
+            break;
+          case payrollConstants.PAY_SLIP_DEDUCTIONS:
+
+            deductions.push(payhead);
+            break;
+          case payrollConstants.PAY_SLIP_CHARGES:
+
+            charges.push(payhead);
+            break;
+          default:
+
+        }
+      }
+
+      payHeadData = {
+        earnings: earnings,
+        deductions: deductions,
+        charges: charges
+      };
+
+      console.log("payheads", earnings, deductions, charges);
+
+      return payHeadData;
+    };
+
+    _this.showMonthDropDown = function () {
+
+      console.log(FILE_NAME + "In showMonthDropDown");
+
+      if (_this.state.yearSelected != 0) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _styles2.default.dropdownContainer },
+          _react2.default.createElement(
+            _nativeBase.Picker,
+            {
+              iosHeader: 'Select Month',
+              mode: 'dropdown',
+              selectedValue: _this.state.monthSelected,
+              onValueChange: _this.onMonthValueChange.bind(_this),
+              style: _styles2.default.dropdownElement
+            },
+            _this.getMonthValues(_this.state.yearSelected)
+          )
+        );
+      } else {
+        return _react2.default.createElement(_reactNative.View, { style: babelHelpers.extends({}, _styles2.default.dropdownContainer, { borderColor: 'transparent' }) });
+      }
+    };
+
+    _this.getYearValues = function () {
+
+      console.log(FILE_NAME + "In getYearValues");
+
+      yearValues = [];
+
+      var availablePayslipsData = _this.state.availablePayslipsData;
+
+
+      if (availablePayslipsData != null) {
+
+        yearValues.push(_react2.default.createElement(_nativeBase.Item, { label: 'Select year', key: 0, value: 0 }));
+
+        Object.keys(availablePayslipsData).map(function (key, index) {
+
+          yearValues.push(_react2.default.createElement(_nativeBase.Item, { label: key, key: index, value: key }));
+        });
+
+        console.log("yearValues", yearValues);
+      }
+
+      return yearValues;
+    };
+
+    _this.getMonthValues = function (year) {
+
+      console.log(FILE_NAME + "In getMonthValues");
+
+      var availablePayslipsData = _this.state.availablePayslipsData;
+
+
+      monthValues = [];
+
+      if (year != 0) {
+
+        monthsList = availablePayslipsData[year];
+
+        monthValues.push(_react2.default.createElement(_nativeBase.Item, { label: 'Select month', key: 0, value: 0 }));
+
+        for (var _iterator2 = monthsList, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[typeof Symbol === 'function' ? typeof Symbol === 'function' ? Symbol.iterator : '@@iterator' : '@@iterator']();;) {
+          var _ref2;
+
+          if (_isArray2) {
+            if (_i2 >= _iterator2.length) break;
+            _ref2 = _iterator2[_i2++];
+          } else {
+            _i2 = _iterator2.next();
+            if (_i2.done) break;
+            _ref2 = _i2.value;
+          }
+
+          var month = _ref2;
+
+
+          monthValues.push(_react2.default.createElement(_nativeBase.Item, { label: month['month'], key: month['monthno'], value: month['monthno'] }));
+        }
+      }
+
+      return monthValues;
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+    };
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      availablePayslipsData: null,
+      paySlipInformationData: null,
+
+      activeAccordian: null,
+
+      monthSelected: 0,
+      yearSelected: 0,
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwPaySlip, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.availablePayslipsData != null && nextProps.availablePayslipsError == null) {
+
+        elementValues = this.handleElementsValues(nextProps.availablePayslipsData);
+
+        (0, _utils.showAnimation)(animationUtils.DEFAULT_SCREEN_ANIMATION);
+
+        monthSelected = elementValues.monthSelected;
+        yearSelected = elementValues.yearSelected;
+
+        if (this.props.payslipdata != null && this.props.payslipdata.month != null) {
+          var _props$payslipdata = this.props.payslipdata,
+              month = _props$payslipdata.month,
+              year = _props$payslipdata.year;
+
+
+          monthSelected = month;
+          yearSelected = year;
+        }
+
+        console.log("monthSelected", monthSelected, yearSelected);
+
+        this.setState({
+          isLoading: false,
+          isDataPreLoaded: true,
+          availablePayslipsData: nextProps.availablePayslipsData,
+          monthSelected: monthSelected,
+          yearSelected: yearSelected
+
+        });
+
+        this.getPaySlipInformation(monthSelected, yearSelected);
+      }
+
+      if (nextProps.availablePayslipsData == null && nextProps.availablePayslipsError != null) {
+
+        this.setState({
+          isLoading: false,
+          isDataPreLoaded: false,
+          currentError: nextProps.availablePayslipsError
+        });
+      }
+
+      if (nextProps.paySlipInformationData != null && nextProps.paySlipInformationError == null) {
+
+        this.setState({
+          isLoading: false,
+          paySlipInformationData: nextProps.paySlipInformationData
+
+        });
+      }
+
+      if (nextProps.paySlipInformationData == null && nextProps.paySlipInformationError != null) {
+
+        this.setState({
+          isLoading: false,
+          currentError: nextProps.paySlipInformationError
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          if (this.state.isDataPreLoaded) return _react2.default.createElement(_ewloadingindicator2.default, { loadingText: 'Downloading Payslip...' });else return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage();
+              }
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      this.props.getAvailablePayslips();
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_ALL'
+      };
+
+      this.props.clearPayrollStateData(params);
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+
+      console.log(FILE_NAME + "In renderScreen");
+
+      var availablePayslipsData = this.state.availablePayslipsData;
+      var _props = this.props,
+          availablePayslipsError = _props.availablePayslipsError,
+          getAvailablePayslips = _props.getAvailablePayslips;
+
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: 'PaySlip Download'
+            })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Right,
+            null,
+            _react2.default.createElement(_ewreportissue2.default, {
+              screenId: _screennameidentifiers.PAYSLIP_DOWNLOAD_ID
+            })
+          )
+        ),
+        _react2.default.createElement(
+          _nativeBase.Content,
+          null,
+          this.renderPaySlipScreen(availablePayslipsData, availablePayslipsError, this.renderPaySlipInformation(), getAvailablePayslips)
+        )
+      );
+    }
+  }, {
+    key: 'formatCurrencyIndianFormat',
+    value: function formatCurrencyIndianFormat(num) {
+      var n1, n2;
+      num = num + '' || '';
+
+      n1 = num.split('.');
+      n2 = n1[1] || null;
+      n1 = n1[0].replace(/(\d)(?=(\d\d)+\d$)/g, "$1,");
+      num = n2 ? n1 + '.' + n2 : n1;
+      return num;
+    }
+  }, {
+    key: 'getCurrencySymbol',
+    value: function getCurrencySymbol(currency) {
+      switch (currency) {
+        case 'INR':
+          return '\u20B9';
+        case 'USD':
+          return '$';
+      }
+    }
+  }, {
+    key: 'renderPayHeadDetails',
+    value: function renderPayHeadDetails(payhead, payHeadInformation, currency) {
+      var _this2 = this;
+
+      if (payHeadInformation != null && payHeadInformation.length != 0) {
+
+        return _react2.default.createElement(
+          _ewaccordion2.default,
+          {
+            renderAccordionLabel: function renderAccordionLabel() {
+              return _this2.getPayheadTitle(payhead, currency);
+            },
+            isActive: this.isActiveAccordian(payhead),
+            onAccordionPress: function onAccordionPress() {
+              return _this2.setActiveAccordian(payhead);
+            }
+          },
+          Object.keys(payHeadInformation).map(function (key) {
+            return _react2.default.createElement(
+              _reactNative.View,
+              { style: { flexDirection: 'row', margin: 5 } },
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { flex: 1 } },
+                _react2.default.createElement(
+                  _nativeBase.Text,
+                  null,
+                  payHeadInformation[key].pay_name
+                )
+              ),
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { flex: 1, alignItems: 'flex-end' } },
+                _react2.default.createElement(
+                  _nativeBase.Text,
+                  null,
+                  _this2.getCurrencySymbol(currency),
+                  ' ',
+                  _this2.formatCurrencyIndianFormat(payHeadInformation[key].pay_value)
+                )
+              )
+            );
+          })
+        );
+      }
+    }
+  }, {
+    key: 'requestStoragePermission',
+    value: function requestStoragePermission() {
+      var granted;
+      return regeneratorRuntime.async(function requestStoragePermission$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (!(_reactNative.Platform.OS == 'android')) {
+                _context.next = 18;
+                break;
+              }
+
+              if (!(_reactNative.Platform.Version >= 23)) {
+                _context.next = 15;
+                break;
+              }
+
+              _context.prev = 2;
+              _context.next = 5;
+              return regeneratorRuntime.awrap(_reactNative.PermissionsAndroid.request(_reactNative.PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE));
+
+            case 5:
+              granted = _context.sent;
+
+              console.log("Granted Value is - ", granted);
+              if (granted === _reactNative.PermissionsAndroid.RESULTS.GRANTED) {
+
+                console.log("Storage permission granted");
+                this.downloadPaySlip();
+              } else {
+
+                console.log("Storage permission denied");
+              }
+              _context.next = 13;
+              break;
+
+            case 10:
+              _context.prev = 10;
+              _context.t0 = _context['catch'](2);
+
+              console.warn(_context.t0);
+
+            case 13:
+              _context.next = 16;
+              break;
+
+            case 15:
+
+              this.downloadPaySlip();
+
+            case 16:
+              _context.next = 19;
+              break;
+
+            case 18:
+              this.downloadPaySlip();
+
+            case 19:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, null, this, [[2, 10]]);
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError(errorMessage) {
+
+      console.log(FILE_NAME + "In handleError");
+      console.log("this.state.currentError", this.state.currentError);
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+
+          break;
+
+        case payrollError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (errorMessage) {
+
+          case payrollError.SERVER_EXCEPTION:
+            this.showAlertMessage(payrollError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          default:
+            this.showAlertMessage();
+            return this.renderScreen();}
+      }
+    }
+  }]);
+  return EwPaySlip;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction");
+
+  return {
+    getAvailablePayslips: function getAvailablePayslips(params) {
+      return dispatch((0, _payrollactions.getAvailablePayslips)(params));
+    },
+    getPaySlipInformation: function getPaySlipInformation(params) {
+      return dispatch((0, _payrollactions.getPaySlipInformation)(params));
+    },
+    clearPayrollError: function clearPayrollError(params) {
+      return dispatch((0, _payrollactions.clearPayrollError)(params));
+    },
+
+    clearPayrollStateData: function clearPayrollStateData(params) {
+      return dispatch((0, _payrollactions.clearPayrollStateData)(params));
+    },
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    }
+
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.auth.isLoggedIn,
+    sessionToken: state.auth.sessionToken,
+
+    paySlipInformationData: state.payroll.paySlipInformationData,
+    paySlipInformationError: state.payroll.paySlipInformationError,
+
+    availablePayslipsData: state.payroll.availablePayslipsData,
+    availablePayslipsError: state.payroll.availablePayslipsError,
+
+    errorCounter: state.payroll.errorCounter
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwPaySlip);

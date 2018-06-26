@@ -1,0 +1,821 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _GoogleAnalyticController = require('../../../GoogleAnalyticController');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _utils = require('../../../utils');
+
+var _ewuserinfo = require('../../../components/ewuser/ewuserinfo');
+
+var _ewuserinfo2 = babelHelpers.interopRequireDefault(_ewuserinfo);
+
+var _ewloadingindicator = require('../../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewfloatinglabel = require('../../../components/ewfloatinglabel/ewfloatinglabel');
+
+var _ewfloatinglabel2 = babelHelpers.interopRequireDefault(_ewfloatinglabel);
+
+var _ewscreentitle = require('../../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _ewreportissue = require('../../../components/ewreportissue/ewreportissue');
+
+var _ewreportissue2 = babelHelpers.interopRequireDefault(_ewreportissue);
+
+var _ewbar = require('../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewicon = require('../../../components/ewicon/ewicon');
+
+var _ewicon2 = babelHelpers.interopRequireDefault(_ewicon);
+
+var _needtoactactions = require('../../../services/needtoact/needtoactactions');
+
+var _odrequestactions = require('../../../services/odrequest/odrequestactions');
+
+var _odrequesterrorhandling = require('../../../services/odrequest/odrequesterrorhandling');
+
+var odError = babelHelpers.interopRequireWildcard(_odrequesterrorhandling);
+
+var _modulelist = require('../../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _commonactions = require('../../../services/common/commonactions');
+
+var _animationutils = require('../../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _odutils = require('./odutils');
+
+var odConstants = babelHelpers.interopRequireWildcard(_odutils);
+
+var _ewimages = require('../../../utils/ewimages');
+
+var _screennameidentifiers = require('../../../utils/screennameidentifiers');
+
+var _ewodactionscreenstyle = require('./styles/ewodactionscreenstyle');
+
+var _ewodactionscreenstyle2 = babelHelpers.interopRequireDefault(_ewodactionscreenstyle);
+
+var FILE_NAME = "ewodactionscreen.js : ";
+
+var SCREEN_NAME = "OD Action Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwOdActionScreen = function (_Component) {
+  babelHelpers.inherits(EwOdActionScreen, _Component);
+
+  function EwOdActionScreen(props, context) {
+    babelHelpers.classCallCheck(this, EwOdActionScreen);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwOdActionScreen.__proto__ || Object.getPrototypeOf(EwOdActionScreen)).call(this, props, context));
+
+    _this._keyboardDidShow = function (event) {
+
+      scrollView._root.scrollToEnd({ animated: true });
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+
+      _this.props.clearOdError(null);
+    };
+
+    _this.getOdActionText = function (odAction) {
+
+      actionText = '';
+
+      if (odAction == 1) actionText = 'Approve';
+      if (odAction == 2) actionText = 'Reject';
+
+      return actionText;
+    };
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      isOdRejected: false,
+      pendingOdInformation: [],
+
+      rejectOrReconsiderReason: null,
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwOdActionScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      if (this.props.isPendingOdDataAvailable) {
+
+        this.setState({
+          isDataPreLoaded: true,
+          isLoading: false,
+          pendingOdInformation: this.props.isPendingOdDataAvailable
+        });
+      } else {
+        var params = {
+          odId: this.props.odData.pi_Txn_Id
+        };
+
+        this.props.getPendingOdRequestInformation(params);
+
+        this.setState({
+          isDataPreLoaded: false,
+          isLoading: true
+        });
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ");
+      console.log(nextProps);
+
+      if (nextProps.odRequestActionData != null && nextProps.odRequestActionError == null) {
+
+        console.log(FILE_NAME + "Action Successfull");
+
+        this.setState({
+          isDone: true,
+          isLoading: false,
+          currentError: ''
+        });
+
+        this.props.updateTotalActivityCount(null);
+      }
+
+      if (nextProps.odRequestActionData == null && nextProps.odRequestActionError != null) {
+
+        console.log(FILE_NAME + "Action Not Successfull");
+
+        this.setState({
+          isDone: false,
+          isLoading: false,
+          currentError: nextProps.odRequestActionError
+        });
+      }
+
+      if (nextProps.pendingOdInformation != null && nextProps.pendingOdInformationError == null) {
+
+        (0, _utils.showAnimation)(animationUtils.DEFAULT_SCREEN_ANIMATION);
+
+        this.setState({
+          isLoading: false,
+          isDataPreLoaded: true,
+          pendingOdInformation: nextProps.pendingOdInformation
+        });
+      }
+
+      if (nextProps.pendingOdInformation == null && nextProps.pendingOdInformationError != null) {
+
+        this.setState({
+          isLoading: false,
+          isDataPreLoaded: false
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+            console.log("Date Pre-loading was successful");
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage('Successfully Done', 'Out On Work Approval', 'success');
+              }
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+
+              return null;
+            } else {
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      this.keyboardDidShowListener = _reactNative.Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      this.keyboardDidShowListener.remove();
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      var params = {
+
+        "0": 'CLEAR_STATE_DATA_ALL'
+
+      };
+
+      this.props.clearOdRequestStateData(params);
+
+      if (this.state.isDone && this.state.currentError == '') {
+
+        console.log(FILE_NAME + "Action Successfull");
+
+        var params = {
+          "0": 'CLEAR_STATE_DATA_ALL'
+        };
+
+        this.props.clearNeedToActStateData(params);
+      }
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+
+      console.log(FILE_NAME + "In renderScreen method");
+
+      var outerViewStyle = _ewodactionscreenstyle2.default.outerViewStyle,
+          innerViewStyle = _ewodactionscreenstyle2.default.innerViewStyle,
+          headingTextStyle = _ewodactionscreenstyle2.default.headingTextStyle,
+          contentContainerStyle = _ewodactionscreenstyle2.default.contentContainerStyle,
+          ewbarTextStyle = _ewodactionscreenstyle2.default.ewbarTextStyle,
+          ewbarContainerStyle = _ewodactionscreenstyle2.default.ewbarContainerStyle,
+          headingContainerStyle = _ewodactionscreenstyle2.default.headingContainerStyle;
+      var pendingOdInformation = this.state.pendingOdInformation;
+
+
+      var info = {
+        name: pendingOdInformation.name,
+        designation: pendingOdInformation.designation,
+        imageUrl: (0, _utils.getImageUrl)(this.props.sessionToken, pendingOdInformation.empCode, 'Od Action', this.props.currentImageTimestamp),
+        datetime: pendingOdInformation.applied_On_Timestamp
+      };
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 2 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: 'Approve Out-on-Work'
+            })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Right,
+            null,
+            _react2.default.createElement(_ewreportissue2.default, {
+              screenId: _screennameidentifiers.PENDING_OD_ACTION_ID
+            })
+          )
+        ),
+        _react2.default.createElement(
+          _nativeBase.Content,
+          {
+            ref: function ref(_ref) {
+              return scrollView = _ref;
+            },
+            contentContainerStyle: contentContainerStyle,
+            keyboardShouldPersistTaps: 'always'
+          },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: ewbarContainerStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: ewbarTextStyle },
+              'Request From'
+            ),
+            _react2.default.createElement(_ewbar2.default, null)
+          ),
+          _react2.default.createElement(_ewuserinfo2.default, { info: info }),
+          this.getOdDate(pendingOdInformation),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: headingContainerStyle },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flexDirection: 'row' } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: headingTextStyle },
+                'Out-on-Work Type'
+              ),
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: { flex: 3 } },
+                pendingOdInformation.od_Type
+              )
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flexDirection: 'row', marginTop: 10 } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: headingTextStyle },
+                'Nature Of Work'
+              ),
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: { flex: 3 } },
+                pendingOdInformation.reason
+              )
+            ),
+            pendingOdInformation.remarks != null ? _react2.default.createElement(
+              _reactNative.View,
+              { style: { flexDirection: 'row', marginTop: 10, marginBottom: 10 } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: headingTextStyle },
+                'Remarks'
+              ),
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: { flex: 3 } },
+                pendingOdInformation.remarks
+              )
+            ) : null
+          ),
+          this.showReason(),
+          this.showFooterTab(pendingOdInformation)
+        )
+      );
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME + "In handleError method");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case odError.AUTHENTICATION_FAILURE:
+          _reactNativeRouterFlux.Actions.ewlogin();
+          break;
+
+        case odError.SERVER_EXCEPTION:
+          this.showAlertMessage(odError.SERVER_ERROR);
+          return this.renderScreen();
+          break;
+
+        case odError.OD_INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          break;
+
+        default:
+          this.showAlertMessage();
+          return this.renderScreen();
+      }
+    }
+  }, {
+    key: 'showFooterTab',
+    value: function showFooterTab(pendingOdInformation) {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In showFooterTab method");
+
+      var approver_Id = pendingOdInformation.approver_Id;
+      var user_id = this.props.pendingNeedToActData.employeeInfo.user_id;
+      var isOdRejected = this.state.isOdRejected;
+
+      if (user_id == approver_Id) {
+
+        if (!isOdRejected) {
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 10 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { style: { marginRight: 10 }, onPress: function onPress() {
+                  return _this2.onPressAction(odConstants.APPROVE_OD_ACTION);
+                } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                odConstants.APPROVE_OD_ACTION_LABEL
+              )
+            ),
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { style: { marginLeft: 10 }, onPress: function onPress() {
+                  return _this2.changeActionButtonState(odConstants.REJECT_OD_ACTION);
+                } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                odConstants.REJECT_OD_ACTION_LABEL
+              )
+            )
+          );
+        }
+
+        if (isOdRejected) {
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 10 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { style: { marginRight: 10 }, onPress: function onPress() {
+                  return _this2.changeActionButtonState(odConstants.REJECT_OD_ACTION);
+                } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                odConstants.CANCEL_OD_LABEL
+              )
+            ),
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { style: { marginRight: 10 }, onPress: function onPress() {
+                  return _this2.onPressAction(odConstants.REJECT_OD_ACTION);
+                } },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                odConstants.REJECT_OD_ACTION_LABEL
+              )
+            )
+          );
+        }
+      }
+    }
+  }, {
+    key: 'changeActionButtonState',
+    value: function changeActionButtonState(odAction) {
+
+      console.log(FILE_NAME + "In changeActionButtonState method");
+
+      switch (odAction) {
+
+        case odConstants.REJECT_OD_ACTION:
+
+          this.setState({
+            isOdRejected: !this.state.isOdRejected
+          });
+          break;
+
+        default:
+
+      }
+    }
+  }, {
+    key: 'showReason',
+    value: function showReason() {
+      var _this3 = this;
+
+      console.log(FILE_NAME + "In showReason method");
+
+      var isOdRejected = this.state.isOdRejected;
+
+
+      if (isOdRejected) {
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewfloatinglabel2.default, {
+
+            label: 'Reason',
+            autoFocus: true,
+            autoCorrect: false,
+            onChangeText: function onChangeText(rejectOrReconsiderReason) {
+              return _this3.setState({ rejectOrReconsiderReason: rejectOrReconsiderReason });
+            },
+            value: this.state.rejectOrReconsiderReason
+          })
+        );
+      }
+    }
+  }, {
+    key: 'localValidation',
+    value: function localValidation() {
+
+      console.log(FILE_NAME + "In localValidation method");
+
+      var _state = this.state,
+          isOdRejected = _state.isOdRejected,
+          rejectOrReconsiderReason = _state.rejectOrReconsiderReason;
+
+
+      if (!isOdRejected) return true;else {
+
+        if (rejectOrReconsiderReason == null || rejectOrReconsiderReason == '') {
+
+          this.showAlertMessage("Please enter reason");
+          return false;
+        } else {
+          return true;
+        }
+      }
+    }
+  }, {
+    key: 'onPressAction',
+    value: function onPressAction(action) {
+
+      console.log(FILE_NAME + "In onPressAction method");
+
+      if (this.localValidation()) {
+
+        tracker.trackEvent(SCREEN_CATEGORY, 'od action taken - ' + this.getOdActionText(action));
+
+        console.log('od action taken - ' + this.getOdActionText(action));
+
+        var pendingOdInformation = this.state.pendingOdInformation;
+
+
+        var params = {
+          "action": action,
+          "applied_On": pendingOdInformation.applied_On,
+          "apply_InDate": pendingOdInformation.apply_InDate,
+          "apply_OutDate": pendingOdInformation.apply_OutDate,
+          "approver_Id": 0,
+          "designation": pendingOdInformation.designation,
+          "empCode": pendingOdInformation.empCode,
+          "error_Flag": pendingOdInformation.error_Flag,
+          "httpStatus": 200,
+          "name": pendingOdInformation.name,
+          "od_Type": pendingOdInformation.od_Type,
+          "odrequest_Id": 0,
+          "pi_txn_id": pendingOdInformation.pi_txn_id,
+          "pi_txn_type": odConstants.PENDING_OD_TYPE,
+          "reason": this.state.rejectOrReconsiderReason,
+          "reason_Type_Id": pendingOdInformation.reason_Type_Id
+        };
+
+        this.props.odAction(params);
+
+        this.setState({
+          isLoading: true,
+          isDone: false
+
+        });
+      }
+    }
+  }, {
+    key: 'getOdDate',
+    value: function getOdDate(info) {
+
+      console.log(FILE_NAME + "In getOdDate method");
+
+      if (info.apply_InDate === info.apply_OutDate) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewodactionscreenstyle2.default.dateHeadingStyle },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: _ewodactionscreenstyle2.default.headingTextStyle },
+            'For'
+          ),
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: { flex: 3 } },
+            info.apply_InDate
+          )
+        );
+      } else {
+
+        console.log("Inside else method");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewodactionscreenstyle2.default.dateHeadingStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewodactionscreenstyle2.default.headingTextStyle },
+              'From'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 3 } },
+              info.apply_InDate
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewodactionscreenstyle2.default.dateHeadingStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewodactionscreenstyle2.default.headingTextStyle },
+              'To'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 3 } },
+              info.apply_OutDate
+            )
+          )
+        );
+      }
+    }
+  }]);
+  return EwOdActionScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction method");
+
+  return {
+    getPendingOdRequestInformation: function getPendingOdRequestInformation(params) {
+      return dispatch((0, _odrequestactions.getPendingOdRequestInformation)(params));
+    },
+    odAction: function odAction(params) {
+      return dispatch((0, _odrequestactions.odAction)(params));
+    },
+
+    clearOdError: function clearOdError(params) {
+      return dispatch((0, _odrequestactions.clearOdError)(params));
+    },
+    clearOdRequestStateData: function clearOdRequestStateData(params) {
+      return dispatch((0, _odrequestactions.clearOdRequestStateData)(params));
+    },
+
+    clearNeedToActStateData: function clearNeedToActStateData(params) {
+      return dispatch((0, _needtoactactions.clearNeedToActStateData)(params));
+    },
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    },
+    updateTotalActivityCount: function updateTotalActivityCount(params) {
+      return dispatch((0, _commonactions.updateTotalActivityCount)(params));
+    }
+
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    errorWebService: state.auth.errorWebService,
+
+    pendingNeedToActData: state.needtoact.needToActData,
+
+    pendingOdInformation: state.odrequest.pendingOdRequestInformationData,
+    pendingOdInformationError: state.odrequest.pendingOdRequestInformationError,
+
+    odRequestActionData: state.odrequest.odRequestActionData,
+    odRequestActionError: state.odrequest.odRequestActionError,
+
+    currentImageTimestamp: state.common.currentImageTimestamp,
+
+    odRequestErrorCounter: state.odrequest.errorCounter
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwOdActionScreen);

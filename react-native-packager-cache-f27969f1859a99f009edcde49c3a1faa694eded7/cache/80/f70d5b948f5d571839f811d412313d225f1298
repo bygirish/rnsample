@@ -1,0 +1,43 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var isString = function isString(str) {
+  return Object.prototype.toString.call(str) === '[object String]';
+};
+var isBool = function isBool(bool) {
+  return Object.prototype.toString.call(bool) === '[object Boolean]';
+};
+
+var openLink = function openLink(url, cb) {
+  return _reactNative.Linking.canOpenURL(url).then(function (canOpen) {
+    if (!canOpen) {
+      return Promise.reject(new Error('The URL is invalid: ' + url));
+    } else {
+      return _reactNative.Linking.openURL(url).catch(function (err) {
+        return Promise.reject(err);
+      });
+    }
+  });
+};
+
+var call = function call(args) {
+  var settings = babelHelpers.extends({
+    prompt: true
+  }, args);
+
+  if (!settings.number) {
+    return Promise.reject(new Error('Please provide a number to call'));
+  }
+  if (!isString(settings.number) || !isBool(settings.prompt)) {
+    return Promise.reject(new Error('The provided arguments are not valid types'));
+  }
+
+  var url = '' + (_reactNative.Platform.OS === 'ios' && settings.prompt ? 'telprompt:' : 'tel:') + settings.number;
+
+  return openLink(url);
+};
+
+exports.default = call;

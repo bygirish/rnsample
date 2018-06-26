@@ -1,0 +1,35 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = require('react-native');
+
+var StyleSheet = React.StyleSheet,
+    Platform = React.Platform;
+exports.default = {
+
+  spinnerElement: {
+    marginLeft: 5,
+    marginRight: 5
+  },
+
+  spinnerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  loadAgainButtonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 50
+  },
+
+  arrowIconStyle: {
+
+    height: 30,
+    width: 30
+  }
+
+};

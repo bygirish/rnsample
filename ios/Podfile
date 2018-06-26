@@ -1,0 +1,32 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'EmployWise' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for EmployWise
+
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Core'
+
+  target 'EmployWise-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'EmployWiseTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
+
+target 'EmployWise-tvOS' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for EmployWise-tvOS
+
+
+end

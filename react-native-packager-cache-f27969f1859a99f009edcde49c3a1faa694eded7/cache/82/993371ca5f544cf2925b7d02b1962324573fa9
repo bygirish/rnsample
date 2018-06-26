@@ -1,0 +1,185 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNativeDrawer = require('react-native-drawer');
+
+var _reactNativeDrawer2 = babelHelpers.interopRequireDefault(_reactNativeDrawer);
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _drawersidebarview = require('./drawersidebarview');
+
+var _drawersidebarview2 = babelHelpers.interopRequireDefault(_drawersidebarview);
+
+var _ewdashboard = require('./ewdashboard');
+
+var _ewdashboard2 = babelHelpers.interopRequireDefault(_ewdashboard);
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var propTypes = {
+  navigationState: _react.PropTypes.object
+};
+
+var drawerStyles = {
+  drawer: {
+    shadowColor: "#000000",
+    shadowOpacity: 0.8,
+    shadowRadius: 0
+  }
+};
+
+var FILE_NAME = "ewdashboarddrawer.js : ";
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwDashboardDrawer = function (_React$Component) {
+  babelHelpers.inherits(EwDashboardDrawer, _React$Component);
+
+  function EwDashboardDrawer(props, context) {
+    babelHelpers.classCallCheck(this, EwDashboardDrawer);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwDashboardDrawer.__proto__ || Object.getPrototypeOf(EwDashboardDrawer)).call(this, props, context));
+
+    _this.state = {
+      drawerType: 'overlay',
+      openDrawerOffset: 100,
+      closedDrawerOffset: 0,
+      panOpenMask: .1,
+      panCloseMask: null,
+      relativeDrag: false,
+      panThreshold: .25,
+      disabled: false,
+      acceptDoubleTap: false,
+      acceptTap: false,
+      acceptPan: true,
+      tapToClose: true,
+      negotiatePan: false,
+      rightSide: false,
+      currenMessage: null
+    };
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwDashboardDrawer, [{
+    key: 'setDrawerType',
+    value: function setDrawerType(type) {
+      this.setState({
+        drawerType: type
+      });
+    }
+  }, {
+    key: 'tweenHandler',
+    value: function tweenHandler(ratio) {
+      if (!this.state.tweenHandlerPreset) {
+        return {};
+      }
+      return tweens[this.state.tweenHandlerPreset](ratio);
+    }
+  }, {
+    key: 'noopChange',
+    value: function noopChange() {
+      this.sertState({
+        changeVal: Math.random()
+      });
+    }
+  }, {
+    key: 'openDrawer',
+    value: function openDrawer() {
+      this.drawer.open();
+    }
+  }, {
+    key: 'setStateFrag',
+    value: function setStateFrag(frag) {
+      this.setState(frag);
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.messageDetails != null) this.setState({
+
+        currenMessage: nextProps.messageDetails
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      tracker.trackScreenView('Dashboard Drawer Screen');
+      var controlPanel = _react2.default.createElement(_drawersidebarview2.default, { closeDrawer: function closeDrawer() {
+          _this2.drawer.close();
+        } });
+
+      console.log("Inside ewdashboard drawer");
+      console.log("Inside ewdashboard drawer", this.props.refreshToggle);
+
+      return _react2.default.createElement(
+        _reactNativeDrawer2.default,
+        {
+          ref: function ref(c) {
+            return _this2.drawer = c;
+          },
+          type: this.state.drawerType,
+          animation: this.state.animation,
+          openDrawerOffset: this.state.openDrawerOffset,
+          closedDrawerOffset: this.state.closedDrawerOffset,
+          panOpenMask: this.state.panOpenMask,
+          panCloseMask: this.state.panCloseMask,
+          relativeDrag: this.state.relativeDrag,
+          panThreshold: this.state.panThreshold,
+          content: controlPanel,
+          styles: drawerStyles,
+          disabled: this.state.disabled,
+          acceptDoubleTap: this.state.acceptDoubleTap,
+          acceptTap: this.state.acceptTap,
+          acceptPan: this.state.acceptPan,
+          tapToClose: this.state.tapToClose,
+          negotiatePan: this.state.negotiatePan,
+          changeVal: this.state.changeVal,
+          side: this.state.rightSide ? 'right' : 'left'
+        },
+        _react2.default.createElement(_ewdashboard2.default, {
+          drawerType: this.state.drawerType,
+          setParentState: this.setStateFrag.bind(this),
+          openDrawer: this.openDrawer.bind(this),
+          openDrawerOffset: this.state.openDrawerOffset,
+          closedDrawerOffset: this.state.closedDrawerOffset,
+          panOpenMask: this.state.panOpenMask,
+          panCloseMask: this.state.panCloseMask,
+          relativeDrag: this.state.relativeDrag,
+          panStartCompensation: this.state.panStartCompensation,
+          disabled: this.state.disabled,
+          panThreshold: this.state.panThreshold,
+          animation: this.state.animation,
+          noopChange: this.noopChange.bind(this),
+          acceptTap: this.state.acceptTap,
+          acceptDoubleTap: this.state.acceptDoubleTap,
+          acceptPan: this.state.acceptPan,
+          tapToClose: this.state.tapToClose,
+          negotiatePan: this.state.negotiatePan,
+          rightSide: this.state.rightSide
+        })
+      );
+    }
+  }]);
+  return EwDashboardDrawer;
+}(_react2.default.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {};
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(EwDashboardDrawer);

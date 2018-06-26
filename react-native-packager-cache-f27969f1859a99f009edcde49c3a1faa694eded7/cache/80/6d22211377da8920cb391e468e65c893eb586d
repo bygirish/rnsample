@@ -1,0 +1,84 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _ewh3text = require('../ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var EwRadioButton = function (_Component) {
+  babelHelpers.inherits(EwRadioButton, _Component);
+
+  function EwRadioButton(props, context) {
+    babelHelpers.classCallCheck(this, EwRadioButton);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwRadioButton.__proto__ || Object.getPrototypeOf(EwRadioButton)).call(this, props, context));
+
+    _this.initialState = {};
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwRadioButton, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      console.log("Inside componentDidUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log("Inside render");
+
+      var _props = this.props,
+          label = _props.label,
+          customViewStyle = _props.customViewStyle,
+          customTextStyle = _props.customTextStyle,
+          props = babelHelpers.objectWithoutProperties(_props, ['label', 'customViewStyle', 'customTextStyle']);
+
+
+      textStyle = _styles2.default.textStyle;
+
+      if (this.props.textStyle) textStyle = this.props.textStyle;
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: [_styles2.default.radioButtonViewstyle, customViewStyle] },
+        _react2.default.createElement(_nativeBase.Radio, babelHelpers.extends({}, props, {
+          selected: this.props.isSelected,
+          onPress: this.props.onRadioButtonClick
+        })),
+        _react2.default.createElement(_ewh3text2.default, {
+          text: this.props.label,
+          customStyle: [textStyle, customTextStyle]
+        })
+      );
+    }
+  }]);
+  return EwRadioButton;
+}(_react.Component);
+
+exports.default = EwRadioButton;

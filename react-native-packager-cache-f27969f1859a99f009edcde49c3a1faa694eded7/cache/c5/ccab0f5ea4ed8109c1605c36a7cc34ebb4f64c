@@ -1,0 +1,93 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _utils = require('../../utils');
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var EwListView = function (_Component) {
+  babelHelpers.inherits(EwListView, _Component);
+
+  function EwListView(props, context) {
+    babelHelpers.classCallCheck(this, EwListView);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwListView.__proto__ || Object.getPrototypeOf(EwListView)).call(this, props, context));
+
+    _this.initialState = {};
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwListView, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props = this.props,
+          listData = _props.listData,
+          listKey = _props.listKey,
+          renderListItem = _props.renderListItem,
+          isAllDataLoaded = _props.isAllDataLoaded,
+          props = babelHelpers.objectWithoutProperties(_props, ['listData', 'listKey', 'renderListItem', 'isAllDataLoaded']);
+
+
+      isDataLoaded = true;
+
+      if (isAllDataLoaded != null) isDataLoaded = isAllDataLoaded;
+
+      return _react2.default.createElement(_reactNative.FlatList, babelHelpers.extends({}, props, {
+        data: listData,
+        renderItem: renderListItem,
+        keyExtractor: listKey,
+        ListFooterComponent: function ListFooterComponent() {
+          return _this2.renderListFooter(isDataLoaded);
+        },
+        ItemSeparatorComponent: function ItemSeparatorComponent(sectionId, rowId) {
+          return _react2.default.createElement(_reactNative.View, { key: rowId, style: { flex: 1, height: 1, backgroundColor: appstyleguide.APP_LIGHT_GRAY } });
+        }
+      }));
+    }
+  }, {
+    key: 'renderListFooter',
+    value: function renderListFooter(isDataLoaded) {
+
+      if (!isDataLoaded) {
+
+        return _react2.default.createElement(_nativeBase.Spinner, { size: 'small' });
+      }
+
+      return null;
+    }
+  }]);
+  return EwListView;
+}(_react.Component);
+
+exports.default = EwListView;

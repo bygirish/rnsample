@@ -1,0 +1,26 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../utils');
+
+exports.default = {
+  spinnerElement: {
+    alignSelf: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 'stretch' : 'stretch',
+    alignItems: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 'center' : 'center',
+    height: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 40 : 40,
+    marginLeft: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 10 : 10
+  },
+
+  spinnerContainer: {
+
+    borderColor: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? appstyleguide.APP_LIGHT_GRAY : appstyleguide.APP_LIGHT_GRAY,
+    borderWidth: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 0.5 : 0.5
+  },
+
+  outerViewStyle: {}
+};

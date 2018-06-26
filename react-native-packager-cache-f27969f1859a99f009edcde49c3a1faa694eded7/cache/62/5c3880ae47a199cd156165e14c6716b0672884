@@ -1,0 +1,1472 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _reactNativeModalDatetimePicker = require('react-native-modal-datetime-picker');
+
+var _reactNativeModalDatetimePicker2 = babelHelpers.interopRequireDefault(_reactNativeModalDatetimePicker);
+
+var _ewapplyodscreenstyle = require('./styles/ewapplyodscreenstyle');
+
+var _ewapplyodscreenstyle2 = babelHelpers.interopRequireDefault(_ewapplyodscreenstyle);
+
+var _GoogleAnalyticController = require('../../../GoogleAnalyticController');
+
+var _utils = require('../../../utils');
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _modulelist = require('../../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _ewcomponents = require('../../../utils/ewcomponents');
+
+var _commonactions = require('../../../services/common/commonactions');
+
+var _authactions = require('../../../services/auth/authactions');
+
+var _odrequestactions = require('../../../services/odrequest/odrequestactions');
+
+var _odrequesterrorhandling = require('../../../services/odrequest/odrequesterrorhandling');
+
+var odError = babelHelpers.interopRequireWildcard(_odrequesterrorhandling);
+
+var _animationutils = require('../../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _odutils = require('./odutils');
+
+var odConstants = babelHelpers.interopRequireWildcard(_odutils);
+
+var _screennameidentifiers = require('../../../utils/screennameidentifiers');
+
+var FILE_NAME = "ewapplyodscreen.js : ";
+
+var SCREEN_NAME = "Apply Od Screen ";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var odType = [{
+  label: odConstants.WHOLE_DAY_LABEL,
+  value: odConstants.WHOLE_DAY
+}, {
+  label: odConstants.IN_LATE_LABEL,
+  value: odConstants.IN_LATE
+}, {
+  label: odConstants.OUT_EARLY_LABEL,
+  value: odConstants.OUT_EARLY
+}, {
+  label: odConstants.IN_LATE_OUT_EARLY_LABEL,
+  value: odConstants.IN_LATE_OUT_EARLY
+}];
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwApplyODScreen = function (_Component) {
+  babelHelpers.inherits(EwApplyODScreen, _Component);
+
+  function EwApplyODScreen(props) {
+    babelHelpers.classCallCheck(this, EwApplyODScreen);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwApplyODScreen.__proto__ || Object.getPrototypeOf(EwApplyODScreen)).call(this, props));
+
+    _this._keyboardDidShow = function (event) {
+
+      scrollView._root.scrollToEnd({ animated: true });
+    };
+
+    _this.handleElementsValues = function (odRenderingData) {
+
+      var odType = odConstants.WHOLE_DAY;
+
+      inTimeValue = (0, _utils.changeTimeDateAndConvertToMilliseconds)(new Date().getTime(), _this.state.startDate.value);
+
+      outTimeValue = (0, _utils.changeTimeDateAndConvertToMilliseconds)(new Date().getTime(), _this.state.startDate.value);
+
+      if (odRenderingData.apply_InDate == null) {
+        odType = odConstants.IN_LATE_OUT_EARLY;
+      }
+
+      if (odRenderingData.in_Time != null) {
+
+        inTimeValue = (0, _utils.convertServerDateTimeToMilliseconds)(odRenderingData.in_Time);
+      } else {
+        if (odRenderingData.apply_InDate != null) {
+
+          inTimeValue = (0, _utils.convertServerDateTimeToMilliseconds)(odRenderingData.apply_InDate);
+        }
+      }
+
+      if (odRenderingData.out_Time != null) {
+
+        outTimeValue = (0, _utils.convertServerDateTimeToMilliseconds)(odRenderingData.out_Time);
+      } else {
+
+        if (odRenderingData.apply_OutDate != null) {
+
+          outTimeValue = (0, _utils.convertServerDateTimeToMilliseconds)(odRenderingData.apply_OutDate);
+        }
+      }
+
+      elementValues = {
+        odType: odType,
+
+        inTimeValue: inTimeValue,
+        outTimeValue: outTimeValue
+      };
+
+      return elementValues;
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      console.log(FILE_NAME + "In clearCurrentMessage method");
+
+      _this.setState({
+        currentError: ''
+      });
+
+      _this.props.clearOdError(null);
+    };
+
+    _this.addEwDateTimePicker = function () {
+
+      console.log(FILE_NAME + "In addEwDateTimePicker method");
+
+      return _react2.default.createElement(_ewcomponents.EwDateTimePicker, {
+        isEwDateTimePickerVisible: _this.state.isEwDateTimePickerVisible,
+        modeEwDateTimePicker: _this.state.modeEwDateTimePicker,
+        _handleEwDateTimePicked: function _handleEwDateTimePicked(date, mode, elementKey) {
+          return _this._handleEwDateTimePicked(date, mode, elementKey);
+        },
+        _hideEwDateTimePicker: function _hideEwDateTimePicker(elementKey) {
+          return _this._hideEwDateTimePicker(elementKey);
+        },
+        elementKey: _this.state.activeEwDateTimePickerElementKey,
+        minDateTimePicker: _this.state.minDateTimePicker,
+        maxDateTimePicker: _this.state.maxDateTimePicker,
+        setDateTimePicker: _this.state.setDateTimePicker,
+        set24TimeFormat: false
+
+      });
+    };
+
+    _this._showEwDateTimePicker = function (elementKey, mode) {
+
+      console.log(FILE_NAME + "In _showEwDateTimePicker method");
+
+      _this.setState({
+        isEwDateTimePickerVisible: true,
+        activeEwDateTimePickerElementKey: elementKey,
+        modeEwDateTimePicker: mode,
+        setDateTimePicker: new Date()
+      });
+    };
+
+    _this._showEwDateTimePicker = function (elementKey, mode, date) {
+
+      console.log(FILE_NAME + "In _showEwDateTimePicker method");
+
+      _this.setState({
+        isEwDateTimePickerVisible: true,
+        activeEwDateTimePickerElementKey: elementKey,
+        modeEwDateTimePicker: mode,
+        setDateTimePicker: date
+      });
+    };
+
+    _this._hideEwDateTimePicker = function (elementKey) {
+
+      console.log(FILE_NAME + "In _hideEwDateTimePicker");
+
+      _this.setState({
+        isEwDateTimePickerVisible: false,
+        activeEwDateTimePickerElementKey: '',
+        modeEwDateTimePicker: ''
+      });
+    };
+
+    _this._handleEwDateTimePicked = function (date, mode, elementKey) {
+
+      console.log(FILE_NAME + "In _handleEwDateTimePicked");
+
+      console.log("Returned value is - ", date);
+      console.log("Mod is - ", mode);
+      console.log("For Element is - ", elementKey);
+
+      var valueDateTimePicker;
+      var d = new Date(date);
+
+      if (mode == 'date') {
+        valueDateTimePicker = d.getTime();
+      }
+      if (mode == 'time') {
+        valueDateTimePicker = (0, _utils.changeTimeDateAndConvertToMilliseconds)(d.getTime(), _this.state.startDate.value);
+      }
+      switch (elementKey) {
+
+        case _this.state.startDate.key:
+
+          _this.getRosterDate(valueDateTimePicker);
+
+          _this.setState({
+            startDate: {
+              mode: mode,
+              key: elementKey,
+              value: valueDateTimePicker
+            }
+          });
+          break;
+
+        case _this.state.endDate.key:
+
+          if (date.getTime() - _this.state.startDate.value > 0) {
+            console.log("Changing State", _this.state.endDate.value - _this.state.startDate.value);
+
+            _this.setState({
+              endDate: {
+                mode: mode,
+                key: elementKey,
+                value: valueDateTimePicker
+              }
+            });
+          } else {
+
+            _this.showAlertMessage("End Date can't be behind Start Date");
+          }
+          break;
+
+        case _this.state.inLateTime.key:
+
+          _this.setState({
+            inLateTime: {
+              mode: mode,
+              key: elementKey,
+              value: valueDateTimePicker
+            }
+          });
+          break;
+
+        case _this.state.outEarlyTime.key:
+
+          _this.setState({
+            outEarlyTime: {
+              mode: mode,
+              key: elementKey,
+              value: valueDateTimePicker
+            }
+          });
+          break;
+
+        default:
+
+      }
+    };
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+      isEwDateTimePickerVisible: false,
+      modeEwDateTimePicker: 'date',
+      activeEwDateTimePickerElementKey: '',
+      minDateTimePicker: undefined,
+      maxDateTimePicker: undefined,
+      setDateTimePicker: new Date(),
+
+      excludeWeeklyOff: false,
+      excludeLeaveDay: false,
+
+      odInformationData: null,
+      odRosterData: null,
+
+      odType: odConstants.WHOLE_DAY,
+      odReasonId: '0',
+      odRemarks: '',
+      isMultipleDays: false,
+
+      componentInitializeTime: new Date().getTime(),
+
+      startDate: {
+        key: "startDate",
+        value: new Date().getTime(),
+        mode: 'date'
+      },
+
+      endDate: {
+        key: "endDate",
+        value: new Date().getTime(),
+        mode: 'date'
+      },
+
+      inLateTime: {
+        key: "inLate",
+        value: new Date().getTime(),
+        mode: 'time'
+      },
+
+      outEarlyTime: {
+        key: "outEarly",
+        value: new Date().getTime(),
+        mode: 'time'
+      }
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwApplyODScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      var params = {};
+
+      this.props.getOdRequestInformation(params);
+
+      this.setState({
+
+        isDataPreLoaded: false,
+        isLoading: true
+
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.odRequestAppliedData != null && nextProps.odRequestAppliedError == null) {
+
+        console.log(FILE_NAME + "Apply od request Successfull");
+
+        this.setState({
+
+          isDone: true,
+          isLoading: false,
+          currentError: ''
+
+        });
+
+        this.props.updateTotalActivityCount(null);
+      }
+
+      if (nextProps.odRequestAppliedData == null && nextProps.odRequestAppliedError != null) {
+
+        console.log(FILE_NAME + "Apply od request failed");
+
+        this.setState({
+
+          isDone: false,
+          isLoading: false,
+          currentError: nextProps.odRequestAppliedError
+
+        });
+      }
+
+      if (nextProps.odRequestInformationData != null && !this.state.isDataPreLoaded && nextProps.odRequestInformationError == null) {
+
+        var attendanceReasonId = "0";
+
+        for (var key in nextProps.odRequestInformationData.attendanceReason) {
+
+          attendanceReasonId = key;
+          break;
+        }
+
+        elementValues = this.handleElementsValues(nextProps.odRequestInformationData);
+
+        (0, _utils.showAnimation)(animationUtils.DEFAULT_SCREEN_ANIMATION);
+
+        this.setState({
+
+          isLoading: false,
+          isDataPreLoaded: true,
+          odType: elementValues.odType,
+          odReasonId: attendanceReasonId,
+          odInformationData: nextProps.odRequestInformationData,
+
+          inLateTime: {
+            key: "inLate",
+            value: elementValues.inTimeValue,
+            mode: 'time'
+          },
+
+          outEarlyTime: {
+            key: "outEarly",
+            value: elementValues.outTimeValue,
+            mode: 'time'
+          }
+
+        });
+      }
+
+      if (nextProps.odRequestInformationData == null && nextProps.odRequestInformationError != null) {
+
+        this.setState({
+          isLoading: false,
+          isDataPreLoaded: false,
+          currentError: nextProps.odRequestInformationError
+        });
+      }
+
+      if (nextProps.odRosterInformationData != null && nextProps.odRosterInformationError == null) {
+
+        elementValues = this.handleElementsValues(nextProps.odRosterInformationData);
+
+        this.setState({
+          isLoading: false,
+          odType: elementValues.odType,
+          odRosterData: nextProps.odRosterInformationData,
+
+          inLateTime: {
+            key: "inLate",
+            value: elementValues.inTimeValue,
+            mode: 'time'
+          },
+
+          outEarlyTime: {
+            key: "outEarly",
+            value: elementValues.outTimeValue,
+            mode: 'time'
+          }
+
+        });
+      }
+
+      if (nextProps.odRosterInformationData == null && nextProps.odRosterInformationError != null) {
+
+        this.setState({
+
+          isLoading: false,
+          currentError: nextProps.odRequestAppliedError
+
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewcomponents.EwLoadingIndicator, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage('Successfully', 'Out On Work Applied', 'success');
+              }
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      this.keyboardDidShowListener = _reactNative.Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      this.keyboardDidShowListener.remove();
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      if (this.state.isDone && this.state.currentError == '') {
+
+        var params = {
+          "0": 'CLEAR_STATE_DATA_ALL'
+        };
+
+        this.props.clearOdRequestStateData(params);
+      }
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In renderScreen method");
+
+      var _state = this.state,
+          odInformationData = _state.odInformationData,
+          odRosterData = _state.odRosterData;
+
+
+      var shiftInTime, shiftOutTime;
+
+      if (odInformationData != null) {
+
+        shiftTiming = this.getShiftTimings(odInformationData, odRosterData);
+
+        shiftInTime = shiftTiming.shiftInTime;
+        shiftOutTime = shiftTiming.shiftOutTime;
+
+        var supervisorInfo = {
+          name: odInformationData.approver_Name,
+          designation: odInformationData.approver_Designation,
+          imageUrl: (0, _utils.getImageUrl)(this.props.sessionToken, odInformationData.approver_EmpCode, 'Apply Od', this.props.currentImageTimestamp)
+        };
+
+        return _react2.default.createElement(
+          _nativeBase.Container,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Header,
+            null,
+            _react2.default.createElement(
+              _nativeBase.Left,
+              { style: { flex: 0.5 } },
+              _react2.default.createElement(
+                _nativeBase.Button,
+                { transparent: true, onPress: function onPress() {
+                    return _reactNativeRouterFlux.Actions.pop();
+                  } },
+                _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+              )
+            ),
+            _react2.default.createElement(
+              _nativeBase.Body,
+              { style: { flex: 3 } },
+              _react2.default.createElement(_ewcomponents.EwScreenTitle, {
+                text: 'Apply Out-on-work'
+              })
+            ),
+            _react2.default.createElement(
+              _nativeBase.Right,
+              null,
+              _react2.default.createElement(_ewcomponents.EwReportIssue, {
+                screenId: _screennameidentifiers.APPLY_OUT_ON_WORK_ID
+              })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Content,
+            {
+              ref: function ref(_ref) {
+                return scrollView = _ref;
+              },
+              contentContainerStyle: _ewapplyodscreenstyle2.default.contentContainerStyle,
+              keyboardShouldPersistTaps: 'always'
+            },
+            _react2.default.createElement(_ewcomponents.SupervisorInfo, { info: supervisorInfo }),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: _ewapplyodscreenstyle2.default.contentStyle },
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: _ewapplyodscreenstyle2.default.labelAndTimeContainer },
+                _react2.default.createElement(
+                  _reactNative.View,
+                  { style: _ewapplyodscreenstyle2.default.labelContainer },
+                  _react2.default.createElement(
+                    _nativeBase.Text,
+                    { style: _ewapplyodscreenstyle2.default.labelElement },
+                    ' ',
+                    this.state.isMultipleDays ? 'From' : 'For',
+                    ' '
+                  ),
+                  this.showStartDate()
+                ),
+                _react2.default.createElement(
+                  _reactNative.View,
+                  { style: _ewapplyodscreenstyle2.default.labelContainer },
+                  this.state.isMultipleDays ? _react2.default.createElement(
+                    _nativeBase.Text,
+                    { style: _ewapplyodscreenstyle2.default.labelElement },
+                    'To '
+                  ) : null,
+                  this.showEndDate()
+                )
+              ),
+              _react2.default.createElement(_ewcomponents.EwCheckbox, {
+                isChecked: this.state.isMultipleDays,
+                onCheckboxClick: function onCheckboxClick() {
+                  return _this2.setState({ isMultipleDays: !_this2.state.isMultipleDays });
+                },
+                customViewStyle: { marginTop: 10, marginLeft: -10 },
+                label: odConstants.MULTIPLE_DAYS_LABEL
+              }),
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: _ewapplyodscreenstyle2.default.labelElement },
+                'On Duty For'
+              ),
+              this.showOdType(shiftInTime, shiftOutTime),
+              this.showTimings(),
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: _ewapplyodscreenstyle2.default.labelElement },
+                'Reason'
+              ),
+              this.showOdReason(odInformationData),
+              _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+
+                label: 'Remarks',
+                autoCorrect: false,
+                onChangeText: function onChangeText(remarks) {
+                  return _this2.setState({ odRemarks: remarks });
+                },
+                value: this.state.odRemarks
+              }),
+              this.showExcludeCheckBox()
+            ),
+            this.addEwDateTimePicker(),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 10 } },
+              _react2.default.createElement(_ewcomponents.EwButton, {
+                label: 'Cancel',
+                onButonClicked: function onButonClicked() {
+                  return _this2.onPressCancel();
+                },
+                customStyle: { marginRight: 10 }
+              }),
+              _react2.default.createElement(_ewcomponents.EwButton, {
+                label: 'Apply',
+                onButonClicked: function onButonClicked() {
+                  return _this2.onPressApply(odInformationData);
+                },
+                customStyle: { marginLeft: 10 }
+              })
+            )
+          )
+        );
+      }
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME + "In handleError method");
+      console.log("this.state.currentError", this.state.currentError);
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+          console.log("isNetworkAvailable ", (0, _utils.isNetworkAvailable)());
+
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+        case odError.OD_INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        console.log("Handling Post Rendering Error");
+
+        switch (this.state.currentError) {
+
+          case odError.SERVER_EXCEPTION:
+
+            this.showAlertMessage(odError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          case odError.OD_APPROVER_NOT_FOUND:
+          case odError.OD_ROSTER_NOT_DEFINED:
+          case odError.OD_DATE_OUT_SIDE_PLAN_TIMINGS:
+          case odError.OD_REQUEST_BEFORE_DOJ:
+          case odError.OD_ALREADY_EXISTS:
+          case odError.OD_OUT_TIME_CAN_NOT_BEFORE_IN_TIME:
+          case odError.OD_IN_TIME_CAN_NOT_BE_EMPTY:
+          case odError.OD_OUT_TIME_CAN_NOT_BE_EMPTY:
+          case odError.OD_TIME_CAN_NOT_BE_EMPTY:
+          case odError.DATE_CANNOT_BE_BEFORE_ABSENCE_PERIOD:
+          case odError.REQUEST_BEFORE_DOJ:
+          case odError.APPLY_IN_DATE_CAN_NOT_BE_FUTURE:
+          case odError.APPLY_OUT_DATE_CAN_NOT_BE_FUTURE:
+          case odError.IN_TIME_CAN_NOT_BE_FUTURE:
+          case odError.OUT_TIME_CAN_NOT_BE_FUTURE:
+          case odError.IN_TIME_CAN_NOT_BE_AFTER_OUT_TIME:
+
+            this.showAlertMessage();
+            return this.renderScreen();
+            break;
+
+          default:
+
+            this.showAlertMessage();
+            return this.renderScreen();
+
+        }
+      }
+    }
+  }, {
+    key: 'showOdType',
+    value: function showOdType(shiftInTime, shiftOutTime) {
+      var _this3 = this;
+
+      console.log(FILE_NAME + "In showOdType method");
+
+      var filteredItems = odType.filter(function (item) {
+
+        return true;
+      });
+
+      if (shiftInTime == null) {
+
+        filteredItems = odType.filter(function (item) {
+
+          if (item.value != odConstants.IN_LATE_OUT_EARLY) {
+            return false;
+          }
+
+          return true;
+        });
+      }
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: _ewapplyodscreenstyle2.default.spinnerContainer },
+        _react2.default.createElement(
+          _nativeBase.Picker,
+          {
+            style: _ewapplyodscreenstyle2.default.spinnerElement,
+            supportedOrientations: ['portrait', 'landscape'],
+            iosHeader: 'Select one',
+            mode: 'dropdown',
+            selectedValue: this.state.odType,
+            onValueChange: function onValueChange(value) {
+              return _this3.onOdtypePickerValueChanged(value);
+            }
+          },
+          filteredItems.map(function (item, key) {
+            return _react2.default.createElement(_nativeBase.Item, { key: key, label: item.label, value: item.value });
+          })
+        )
+      );
+    }
+  }, {
+    key: 'onOdtypePickerValueChanged',
+    value: function onOdtypePickerValueChanged(value) {
+
+      (0, _utils.showAnimation)(animationUtils.ANIMATION_SPRING);
+
+      this.setState({
+        odType: value
+      });
+    }
+  }, {
+    key: 'showOdReason',
+    value: function showOdReason(odInformationData) {
+      var _this4 = this;
+
+      console.log(FILE_NAME + "In showOdReason method");
+
+      odReasonList = odInformationData.attendanceReason;
+
+      contents = Object.keys(odReasonList).map(function (key) {
+        return _react2.default.createElement(_nativeBase.Item, { label: odReasonList[key], value: key });
+      });
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: _ewapplyodscreenstyle2.default.spinnerContainer },
+        _react2.default.createElement(
+          _nativeBase.Picker,
+          {
+            style: _ewapplyodscreenstyle2.default.spinnerElement,
+            supportedOrientations: ['portrait', 'landscape'],
+            iosHeader: 'Select one',
+            mode: 'dropdown',
+            selectedValue: this.state.odReasonId,
+            onValueChange: function onValueChange(value) {
+              return _this4.setState({ odReasonId: value });
+            }
+          },
+          contents
+        )
+      );
+    }
+  }, {
+    key: 'showExcludeCheckBox',
+    value: function showExcludeCheckBox() {
+      var _this5 = this;
+
+      console.log(FILE_NAME + "In showExcludeCheckBox method");
+
+      if (this.state.isMultipleDays) {
+        var _state2 = this.state,
+            excludeWeeklyOff = _state2.excludeWeeklyOff,
+            excludeLeaveDay = _state2.excludeLeaveDay;
+
+
+        excludeWeeklyOffDisable = true;
+
+        if (this.state.odType == odConstants.IN_LATE_OUT_EARLY) excludeWeeklyOffDisable = false;
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewcomponents.EwCheckbox, {
+            isChecked: excludeWeeklyOff,
+            disabled: excludeWeeklyOffDisable,
+            onCheckboxClick: function onCheckboxClick() {
+              return _this5.setState({ excludeWeeklyOff: !excludeWeeklyOff });
+            },
+            customViewStyle: { marginTop: 15, marginLeft: -10 },
+            label: odConstants.EXCLUDE_WEEKLY_OFF_AND_HOLIDAYS_LABEL
+          }),
+          _react2.default.createElement(_ewcomponents.EwCheckbox, {
+            isChecked: excludeLeaveDay,
+            onCheckboxClick: function onCheckboxClick() {
+              return _this5.setState({ excludeLeaveDay: !excludeLeaveDay });
+            },
+            customViewStyle: { marginTop: 10, marginLeft: -10 },
+            label: odConstants.EXCLUDE_LEAVE_DAYS_LABEL
+          })
+        );
+      }
+    }
+  }, {
+    key: 'getRosterDate',
+    value: function getRosterDate(milliseconds) {
+
+      console.log(FILE_NAME + "In getRosterDate method");
+
+      console.log("getRosterDate", milliseconds);
+      console.log("getRosterDate", (0, _utils.convertMillisecondsToServerDate)(milliseconds));
+
+      var params = {
+        applyDate: (0, _utils.convertMillisecondsToServerDate)(milliseconds)
+      };
+
+      this.props.getRosterInformation(params);
+
+      this.setState({
+
+        isLoading: true
+
+      });
+    }
+  }, {
+    key: 'showStartDate',
+    value: function showStartDate() {
+      var _this6 = this;
+
+      console.log(FILE_NAME + "In showStartDate method");
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: _ewapplyodscreenstyle2.default.dateButtonContainerStyle },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewapplyodscreenstyle2.default.dateButtonElementStyle },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            {
+              onPress: function onPress() {
+                return _this6._showEwDateTimePicker(_this6.state.startDate.key, _this6.state.startDate.mode, new Date(_this6.state.startDate.value));
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              (0, _utils.showDeviceDateFormat)(this.state.startDate.value)
+            )
+          )
+        )
+      );
+    }
+  }, {
+    key: 'showEndDate',
+    value: function showEndDate() {
+      var _this7 = this;
+
+      console.log(FILE_NAME + "In showEndDate method");
+
+      if (this.state.isMultipleDays) {
+
+        if (this.state.endDate.value - this.state.startDate.value < 0) {
+
+          console.log("Changing State", this.state.endDate.value - this.state.startDate.value);
+
+          this.setState({
+            endDate: {
+              value: this.state.startDate.value,
+              key: "endDate",
+              mode: 'date'
+            }
+          });
+        }
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewapplyodscreenstyle2.default.dateButtonContainerStyle },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewapplyodscreenstyle2.default.dateButtonElementStyle },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              {
+                onPress: function onPress() {
+                  return _this7._showEwDateTimePicker(_this7.state.endDate.key, _this7.state.endDate.mode, new Date(_this7.state.endDate.value));
+                }
+              },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                null,
+                (0, _utils.showDeviceDateFormat)(this.state.endDate.value)
+              )
+            )
+          )
+        );
+      }
+    }
+  }, {
+    key: 'showTimings',
+    value: function showTimings() {
+
+      console.log(FILE_NAME + "In showTimings method");
+
+      switch (this.state.odType) {
+
+        case odConstants.IN_LATE:
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewapplyodscreenstyle2.default.showTimingsStyle },
+            this.showInLateTimePicker()
+          );
+          break;
+
+        case odConstants.OUT_EARLY:
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewapplyodscreenstyle2.default.showTimingsStyle },
+            this.showOutEarlyTimePicker()
+          );
+          break;
+
+        case odConstants.IN_LATE_OUT_EARLY:
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewapplyodscreenstyle2.default.showTimingsStyle },
+            this.showInLateTimePicker(),
+            this.showOutEarlyTimePicker()
+          );
+          break;
+
+        default:
+      }
+    }
+  }, {
+    key: 'showInLateTimePicker',
+    value: function showInLateTimePicker() {
+      var _this8 = this;
+
+      console.log(FILE_NAME + "In showInLateTimePicker method");
+      console.log("In showInLateTimePicker method", new Date(this.state.inLateTime.value));
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: _ewapplyodscreenstyle2.default.timePickerStyle },
+        _react2.default.createElement(
+          _nativeBase.Text,
+          { style: { marginBottom: 5 } },
+          'In Late Time'
+        ),
+        _react2.default.createElement(
+          _nativeBase.Button,
+          {
+            style: { alignSelf: 'center' },
+            onPress: function onPress() {
+              return _this8._showEwDateTimePicker(_this8.state.inLateTime.key, _this8.state.inLateTime.mode, new Date(_this8.state.inLateTime.value));
+            }
+          },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            null,
+            (0, _utils.showDeviceTimeFormat)(this.state.inLateTime.value)
+          )
+        )
+      );
+    }
+  }, {
+    key: 'showOutEarlyTimePicker',
+    value: function showOutEarlyTimePicker() {
+      var _this9 = this;
+
+      console.log(FILE_NAME + "In showOutEarlyTimePicker method");
+      console.log("In showOutEarlyTimePicker method", new Date(this.state.outEarlyTime.value));
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: _ewapplyodscreenstyle2.default.timePickerStyle },
+        _react2.default.createElement(
+          _nativeBase.Text,
+          { style: { marginBottom: 5 } },
+          'Out Early Time'
+        ),
+        _react2.default.createElement(
+          _nativeBase.Button,
+          {
+            style: { alignSelf: 'center' },
+            onPress: function onPress() {
+              return _this9._showEwDateTimePicker(_this9.state.outEarlyTime.key, _this9.state.outEarlyTime.mode, new Date(_this9.state.outEarlyTime.value));
+            }
+          },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            null,
+            (0, _utils.showDeviceTimeFormat)(this.state.outEarlyTime.value)
+          )
+        )
+      );
+    }
+  }, {
+    key: 'getServerOdType',
+    value: function getServerOdType() {
+
+      console.log(FILE_NAME + "In getServerOdType method");
+
+      var odType = this.state.odType;
+
+
+      console.log("OD Request Params are - ", odType);
+
+      odServerType = "";
+
+      switch (odType) {
+        case odConstants.WHOLE_DAY:
+
+          odServerType = odConstants.WHOLE_DAY_SERVER_LABEL;
+          break;
+
+        case odConstants.IN_LATE:
+
+          odServerType = odConstants.IN_LATE_SERVER_LABEL;
+          break;
+
+        case odConstants.OUT_EARLY:
+
+          odServerType = odConstants.OUT_EARLY_SERVER_LABEL;
+          break;
+
+        case odConstants.IN_LATE_OUT_EARLY:
+
+          odServerType = odConstants.IN_LATE_OUT_EARLY_SERVER_LABEL;
+          break;
+
+        default:
+
+      }
+
+      return odServerType;
+    }
+  }, {
+    key: 'getShiftTimings',
+    value: function getShiftTimings(odInformationData, odRosterData) {
+
+      shiftInTime = null;
+      shiftOutTime = null;
+
+      if (odRosterData == null) {
+
+        shiftInDate = odInformationData.apply_InDate;
+        shiftOutDate = odInformationData.apply_OutDate;
+      } else {
+
+        shiftInDate = odRosterData.apply_InDate;
+        shiftOutDate = odRosterData.apply_OutDate;
+      }
+
+      if (shiftInDate != null) shiftInTime = (0, _utils.convertServerDateTimeToMilliseconds)(shiftInDate);
+      if (shiftOutDate != null) shiftOutTime = (0, _utils.convertServerDateTimeToMilliseconds)(shiftOutDate);
+
+      shiftTiming = {
+
+        shiftInTime: shiftInTime,
+        shiftOutTime: shiftOutTime
+      };
+
+      return shiftTiming;
+    }
+  }, {
+    key: 'localValidation',
+    value: function localValidation() {
+
+      console.log(FILE_NAME + "In localValidation method");
+
+      var _state3 = this.state,
+          odType = _state3.odType,
+          inLateTime = _state3.inLateTime,
+          outEarlyTime = _state3.outEarlyTime,
+          odInformationData = _state3.odInformationData,
+          odRosterData = _state3.odRosterData;
+
+
+      var shiftInDate, shiftOutdate, shiftInTime, shiftOutTime;
+
+      shiftTiming = this.getShiftTimings(odInformationData, odRosterData);
+
+      shiftInTime = shiftTiming.shiftInTime;
+
+      shiftOutTime = shiftTiming.shiftOutTime;
+
+      console.log("inLateTime", inLateTime.value);
+      console.log("shiftInTime", shiftInTime);
+
+      if (odType != odConstants.WHOLE_DAY) {
+
+        if (inLateTime.value == "00:00" && (odType == odConstants.IN_LATE_OUT_EARLY || odType == odConstants.IN_LATE)) {
+
+          this.showAlertMessage("Please select in time");
+
+          return false;
+        }
+
+        if (outEarlyTime.value == "00:00" && (odType == odConstants.IN_LATE_OUT_EARLY || odType == odConstants.OUT_EARLY)) {
+
+          this.showAlertMessage("Please select out time");
+
+          return false;
+        }
+
+        if (inLateTime.value != "00:00" && shiftInTime != null && (odType == odConstants.IN_LATE_OUT_EARLY || odType == odConstants.IN_LATE)) {
+
+          if (inLateTime.value < shiftInTime) {
+
+            this.showAlertMessage("In time is before shift in time");
+
+            return false;
+          }
+        }
+
+        if (outEarlyTime.value != "00:00" && shiftOutTime != null && (odType == odConstants.IN_LATE_OUT_EARLY || odType == odConstants.OUT_EARLY)) {
+
+          if (outEarlyTime.value > shiftOutTime) {
+
+            this.showAlertMessage("Out time is after shift out time");
+
+            return false;
+          }
+        }
+      }
+
+      return true;
+    }
+  }, {
+    key: 'onPressApply',
+    value: function onPressApply(odInformationData) {
+
+      console.log(FILE_NAME + "In onPressApply method");
+
+      in_Time = (0, _utils.convertMillisecondsToServerTime)(this.state.inLateTime.value);
+      out_Time = (0, _utils.convertMillisecondsToServerTime)(this.state.outEarlyTime.value);
+
+      if (this.localValidation()) {
+
+        tracker.trackEvent(SCREEN_CATEGORY, 'od applied');
+
+        var _state4 = this.state,
+            excludeWeeklyOff = _state4.excludeWeeklyOff,
+            excludeLeaveDay = _state4.excludeLeaveDay,
+            odRemarks = _state4.odRemarks,
+            odReasonId = _state4.odReasonId,
+            inLateTime = _state4.inLateTime,
+            outEarlyTime = _state4.outEarlyTime,
+            isMultipleDays = _state4.isMultipleDays;
+
+
+        console.log("ewleavescreen.js : Apply Button Pressed ", odReasonId);
+
+        start_date = (0, _utils.convertMillisecondsToServerDate)(this.state.startDate.value);
+        end_date = (0, _utils.convertMillisecondsToServerDate)(this.state.endDate.value);
+
+        in_Time = (0, _utils.convertMillisecondsToServerTime)(inLateTime.value);
+        out_Time = (0, _utils.convertMillisecondsToServerTime)(outEarlyTime.value);
+
+        console.log("in_time", in_Time, out_Time);
+
+        attendanceReason = odInformationData.attendanceReason;
+
+        if (!isMultipleDays) end_date = start_date;
+
+        var ExcludeWeeklyOff = 'N',
+            ExcludeLeaveDay = 'N';
+
+        if (excludeWeeklyOff) ExcludeWeeklyOff = 'Y';
+
+        if (excludeLeaveDay) ExcludeLeaveDay = 'Y';
+
+        var params = {
+          sessionToken: this.props.sessionToken,
+          action: 0,
+          applied_On: "",
+          out_Time: out_Time,
+          in_Time: in_Time,
+          apply_InDate: start_date,
+          apply_OutDate: end_date,
+          approver_Designation: "AssssBCD23232",
+          approver_EmpCode: "CHAKRRAN",
+          approver_Id: 1,
+          approver_Name: "David Dole",
+          attendanceReason: attendanceReason,
+          error_Flag: 0,
+          exclude_leave_day: ExcludeLeaveDay,
+          exclude_weekly_off_holiday: ExcludeWeeklyOff,
+          httpStatus: 0,
+          od_Type: this.getServerOdType(),
+          odrequest_Id: 0,
+          pi_txn_id: 0,
+          pi_txn_type: 0,
+          reason_Type_Id: odReasonId,
+          remarks: odRemarks,
+          authToken: this.props.sessionToken,
+          deviceId: _utils.DEVICE_ID,
+          scope: "I",
+          versionCode: "28",
+          versionName: "1.1.27"
+        };
+
+        console.log("OD Request Params are - ", params);
+
+        this.props.applyOdRequest(params);
+
+        this.setState({
+          isLoading: true,
+          isDone: false
+
+        });
+      }
+    }
+  }, {
+    key: 'onPressCancel',
+    value: function onPressCancel() {
+
+      console.log(FILE_NAME + "In onPressCancel method");
+
+      _reactNativeRouterFlux.Actions.pop();
+    }
+  }, {
+    key: 'shouldActionButtonActive',
+    value: function shouldActionButtonActive() {
+
+      console.log(FILE_NAME + "In shouldActionButtonActive method");
+
+      return true;
+    }
+  }]);
+  return EwApplyODScreen;
+}(_react.Component);
+
+EwApplyODScreen.propTypes = {
+
+  isLoggedIn: _react2.default.PropTypes.bool,
+  emailId: _react2.default.PropTypes.string,
+  userId: _react2.default.PropTypes.string,
+  errorWebService: _react2.default.PropTypes.string };
+
+
+function bindActions(dispatch) {
+
+  console.log(FILE_NAME + "In bindActions method");
+
+  return {
+    getOdRequestInformation: function getOdRequestInformation(params) {
+      return dispatch((0, _odrequestactions.getOdRequestInformation)(params));
+    },
+    applyOdRequest: function applyOdRequest(params) {
+      return dispatch((0, _odrequestactions.applyOdRequest)(params));
+    },
+    getRosterInformation: function getRosterInformation(params) {
+      return dispatch((0, _odrequestactions.getRosterInformation)(params));
+    },
+    clearOdRequestStateData: function clearOdRequestStateData(params) {
+      return dispatch((0, _odrequestactions.clearOdRequestStateData)(params));
+    },
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    },
+    updateTotalActivityCount: function updateTotalActivityCount(params) {
+      return dispatch((0, _commonactions.updateTotalActivityCount)(params));
+    },
+
+    clearOdError: function clearOdError(params) {
+      return dispatch((0, _odrequestactions.clearOdError)(params));
+    }
+  };
+}
+
+function mapStateToProps(state) {
+  console.log(FILE_NAME + "In mapStateToProps method");
+
+  console.log("State Updated state is -", state);
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+    errorWebService: state.auth.errorWebService,
+
+    odRequestInformationData: state.odrequest.odRequestInformationData,
+    odRequestInformationError: state.odrequest.odRequestInformationError,
+
+    odRequestAppliedData: state.odrequest.odRequestAppliedData,
+    odRequestAppliedError: state.odrequest.odRequestAppliedError,
+
+    odRosterInformationData: state.odrequest.odRosterInformationData,
+    odRosterInformationError: state.odrequest.odRosterInformationError,
+
+    currentImageTimestamp: state.common.currentImageTimestamp,
+
+    odErrorCounter: state.odrequest.errorCounter
+
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(EwApplyODScreen);

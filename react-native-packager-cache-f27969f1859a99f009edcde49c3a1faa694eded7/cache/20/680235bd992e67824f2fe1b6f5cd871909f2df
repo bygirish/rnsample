@@ -1,0 +1,332 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getMileageClaimModel = getMileageClaimModel;
+exports.getServerMileageLineItemModel = getServerMileageLineItemModel;
+exports.getServerMileageLineItemDeleteModel = getServerMileageLineItemDeleteModel;
+exports.getSubmitMileageExpenseClaimModel = getSubmitMileageExpenseClaimModel;
+
+var _utils = require("../../../utils");
+
+function getMileageClaimModel(serverData) {
+
+  defaultMode = {
+
+    "label": "Select Mode",
+    "value": -1
+  };
+
+  defaultApprover = {
+
+    "label": "Select First Approver",
+    "value": -1
+
+  };
+
+  defaultSecondApprover = {
+
+    "label": "Select Second Approver",
+    "value": -1
+
+  };
+
+  if (serverData.firstDomesticexpenseapprovalinfo != null && serverData.firstDomesticexpenseapprovalinfo.approvalinfo != null) {
+
+    serverData.firstDomesticexpenseapprovalinfo.approvalinfo = [defaultApprover].concat(babelHelpers.toConsumableArray(serverData.firstDomesticexpenseapprovalinfo.approvalinfo));
+
+    for (var _iterator = serverData.firstDomesticexpenseapprovalinfo.approvalinfo, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === "function" ? Symbol.iterator : "@@iterator"]();;) {
+      var _ref;
+
+      if (_isArray) {
+        if (_i >= _iterator.length) break;
+        _ref = _iterator[_i++];
+      } else {
+        _i = _iterator.next();
+        if (_i.done) break;
+        _ref = _i.value;
+      }
+
+      var approver = _ref;
+
+
+      if (approver.value == null) {
+
+        approver.label = approver.userName;
+        approver.value = approver.userId;
+      }
+    }
+  }
+
+  if (serverData.secondDomesticexpenseapprovalinfo != null && serverData.secondDomesticexpenseapprovalinfo.approvalinfo != null) {
+
+    serverData.secondDomesticexpenseapprovalinfo.approvalinfo = [defaultSecondApprover].concat(babelHelpers.toConsumableArray(serverData.secondDomesticexpenseapprovalinfo.approvalinfo));
+
+    for (var _iterator2 = serverData.secondDomesticexpenseapprovalinfo.approvalinfo, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[typeof Symbol === "function" ? Symbol.iterator : "@@iterator"]();;) {
+      var _ref2;
+
+      if (_isArray2) {
+        if (_i2 >= _iterator2.length) break;
+        _ref2 = _iterator2[_i2++];
+      } else {
+        _i2 = _iterator2.next();
+        if (_i2.done) break;
+        _ref2 = _i2.value;
+      }
+
+      var approver = _ref2;
+
+
+      if (approver.value == null) {
+
+        approver.label = approver.userName;
+        approver.value = approver.userId;
+      }
+    }
+  }
+
+  serverData.expenseHeadsList = [defaultMode].concat(babelHelpers.toConsumableArray(serverData.expenseHeadsList));
+
+  expenseHeadCounter = 1;
+
+  for (var _iterator3 = serverData.expenseHeadsList, _isArray3 = Array.isArray(_iterator3), _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[typeof Symbol === "function" ? Symbol.iterator : "@@iterator"]();;) {
+    var _ref3;
+
+    if (_isArray3) {
+      if (_i3 >= _iterator3.length) break;
+      _ref3 = _iterator3[_i3++];
+    } else {
+      _i3 = _iterator3.next();
+      if (_i3.done) break;
+      _ref3 = _i3.value;
+    }
+
+    var expenseHead = _ref3;
+
+
+    if (expenseHead.value == null) {
+
+      expenseHead.label = expenseHead.expenseType_Name;
+      expenseHead.value = expenseHeadCounter;
+
+      expenseHeadCounter += 1;
+    }
+  }
+
+  serverData.baseCurrency = (0, _utils.getJsonArray)(serverData.baseCurrency);
+
+  return serverData;
+}
+
+function getServerMileageLineItemModel(serverData, getState) {
+
+  var params = {
+    "expenses": {
+      "exp_data": {
+        "exp_details": {
+          "lineitem": {
+
+            "li_invoice_date": serverData.invoiceDate,
+            "li_claim_amt": serverData.postTaxAmount,
+            "li_claimed_sgst_rate": serverData.sgstRate,
+            "li_claimed_sgst_amount": serverData.sgstAmount,
+
+            "li_claimed_cgst_rate": serverData.cgstRate,
+            "li_claimed_cgst_amount": serverData.cgstAmount,
+
+            "li_claimed_igst_rate": serverData.igstRate,
+            "li_claimed_igst_amount": serverData.igstAmount,
+
+            "li_tax_amt": serverData.taxAmount,
+            "li_gstin_number": serverData.gstNumber,
+            "li_from_to": serverData.source + " - " + serverData.destination,
+            "li_inv_no": serverData.invoiceNumber,
+            "li_pre_tax_amt": serverData.preTaxAmount,
+            "li_purpose": serverData.purpose,
+            "li_exp_id": serverData.expenseid,
+            "li_date": serverData.expenseDate,
+            "li_mode_id": serverData.travelMode,
+            "li_grade_id": serverData.gradeId,
+            "li_company_id": serverData.companyId,
+            "li_function_id": serverData.functionId,
+            "li_business_unit_id": serverData.businessUnitId,
+            "li_location_id": serverData.locationId,
+            "li_costcenter_id": serverData.costCenterId,
+            "li_gst_applicable": serverData.isGstCharged
+
+          }
+        },
+        "token": getState.auth.sessionToken,
+        "device_id": serverData.device_id,
+        "scope": "I"
+      }
+    },
+    "expenseApiMode": "saveConveyanceLineItem"
+  };
+
+  if (serverData.deviationComment != null) params.expenses.exp_data.exp_details.lineitem.li_deviation_comment = serverData.deviationComment;
+
+  if (serverData.logId != null) {
+
+    params.expenses.exp_data.exp_details.lineitem.li_log_id = serverData.logId;
+    params.expenseApiMode = "updateConveyanceLineItem";
+  }
+
+  if (serverData.comments != null) {
+
+    commentArray = [];
+
+    for (var _iterator4 = serverData.comments, _isArray4 = Array.isArray(_iterator4), _i4 = 0, _iterator4 = _isArray4 ? _iterator4 : _iterator4[typeof Symbol === "function" ? Symbol.iterator : "@@iterator"]();;) {
+      var _ref4;
+
+      if (_isArray4) {
+        if (_i4 >= _iterator4.length) break;
+        _ref4 = _iterator4[_i4++];
+      } else {
+        _i4 = _iterator4.next();
+        if (_i4.done) break;
+        _ref4 = _i4.value;
+      }
+
+      var commentData = _ref4;
+
+
+      var commentModel = {
+
+        "comment": commentData,
+        "comment_by": getState.auth.userId
+      };
+
+      commentArray.push(commentModel);
+    }
+
+    params.expenses.exp_data.exp_details.lineitem.Comment_details = {};
+    params.expenses.exp_data.exp_details.lineitem.Comment_details.Comment_details_line_item = commentArray;
+  }
+
+  if (serverData.invoiceImage != null) params.expenses.exp_data.exp_details.lineitem.file = serverData.invoiceImage.imageData;
+
+  if (serverData.workType != undefined) params.expenses.exp_data.exp_details.lineitem.li_type_of_work = serverData.workType;
+
+  if (serverData.accountDetails != undefined) {
+
+    clientAccountDetails = {
+
+      "Account_details_line_item": serverData.accountDetails
+
+    };
+
+    params.expenses.exp_data.exp_details.lineitem.Account_details = clientAccountDetails;
+  }
+
+  if (serverData.distanceCovered != undefined) {
+
+    params.expenses.exp_data.exp_details.lineitem.li_distance = serverData.distanceCovered;
+    params.expenses.exp_data.exp_details.lineitem.li_unit = serverData.rate;
+  }
+
+  if (serverData.projectDetails != null) {
+
+    projectArray = [];
+
+    for (var _iterator5 = projectDetails, _isArray5 = Array.isArray(_iterator5), _i5 = 0, _iterator5 = _isArray5 ? _iterator5 : _iterator5[typeof Symbol === "function" ? Symbol.iterator : "@@iterator"]();;) {
+      var _ref5;
+
+      if (_isArray5) {
+        if (_i5 >= _iterator5.length) break;
+        _ref5 = _iterator5[_i5++];
+      } else {
+        _i5 = _iterator5.next();
+        if (_i5.done) break;
+        _ref5 = _i5.value;
+      }
+
+      var project = _ref5;
+
+
+      if (project.selectedProjectData != null) {
+
+        var projectModel = {
+
+          "project_id": project.selectedProjectData.projectId,
+          "project_code": project.selectedProjectData.projectCode,
+          "assigned": project.selectedProjectData.assigned,
+          "amount": project.projectAmount
+
+        };
+
+        projectArray.push(projectModel);
+      }
+    }
+
+    serverProjectModel = {
+
+      "Allocation_project_details": projectArray
+    };
+
+    params.expenses.exp_data.exp_details.lineitem.Allocation_project = serverProjectModel;
+  }
+
+  return params;
+}
+
+function getServerMileageLineItemDeleteModel(clientData) {
+
+  var params = {
+
+    "expenses": {
+      "exp_data": {
+        "exp_details": {
+          "lineitem": {
+
+            "li_exp_id": clientData.expenseId,
+            "li_log_id": clientData.lineitemId
+
+          }
+
+        },
+
+        "token": clientData.token,
+        "device_id": clientData.deviceId,
+        "scope": "I"
+
+      }
+
+    }
+
+  };
+
+  return params;
+}
+
+function getSubmitMileageExpenseClaimModel(clientData) {
+
+  var params = {
+
+    "expenses": {
+      "exp_data": {
+
+        "exp_id": clientData.expenseId,
+        "conveyance_start_date": clientData.startDate,
+        "conveyance_end_date": clientData.endDate,
+        "exp_approver_id": clientData.approverId,
+        "preorpost_tax": clientData.preorposttax,
+        "token": clientData.token,
+        "device_id": clientData.deviceId,
+        "scope": "I",
+        "status": "Pending Approval"
+
+      }
+
+    }
+
+  };
+
+  if (clientData.approverId2 != null) {
+
+    params.expenses.exp_data.approver_id2 = clientData.approverId2;
+  }
+
+  if (clientData.deviationComment != null) params.expenses.exp_data.time_based_deviation_comment = clientData.deviationComment;
+
+  return params;
+}

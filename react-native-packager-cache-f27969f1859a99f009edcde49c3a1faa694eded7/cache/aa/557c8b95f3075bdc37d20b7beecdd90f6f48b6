@@ -1,0 +1,192 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _utils = require('../../utils');
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+
+var defaultHeight = 40;
+
+var EwFloatingLabel = function (_Component) {
+  babelHelpers.inherits(EwFloatingLabel, _Component);
+
+  function EwFloatingLabel(props, context) {
+    babelHelpers.classCallCheck(this, EwFloatingLabel);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwFloatingLabel.__proto__ || Object.getPrototypeOf(EwFloatingLabel)).call(this, props, context));
+
+    _this.handleFocus = function () {
+
+      _this.setState({ isFocused: true });
+
+      if (_this.props.callParentFocusMethod) _this.props.callParentFocusMethod();
+    };
+
+    _this.handleBlur = function () {
+
+      _this.setState({ isFocused: false });
+
+      console.log(" On blur called");
+    };
+
+    _this.initialState = {
+      isFocused: false,
+      height: defaultHeight,
+
+      androidFirstContentSizeChange: true };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwFloatingLabel, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+
+      this._animatedIsFocused = new _reactNative.Animated.Value(0);
+
+      if (!this.isTextInputEmpty()) {
+
+        this.animateTextLabel();
+      }
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      console.log("Inside componentDidUpdate");
+
+      this.animateTextLabel();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var isFocused = this.state.isFocused;
+      var _props = this.props,
+          label = _props.label,
+          placeholderlabel = _props.placeholderlabel,
+          customViewStyle = _props.customViewStyle,
+          props = babelHelpers.objectWithoutProperties(_props, ['label', 'placeholderlabel', 'customViewStyle']);
+
+
+      displayLabel = label;
+
+      var labelStyle = {
+        position: 'absolute',
+        left: 0,
+        top: this._animatedIsFocused.interpolate({
+          inputRange: [0, 1],
+          outputRange: [25, 8]
+        }),
+        fontSize: this._animatedIsFocused.interpolate({
+          inputRange: [0, 1],
+          outputRange: [17, 13]
+        }),
+        color: this._animatedIsFocused.interpolate({
+          inputRange: [0, 1],
+          outputRange: [appstyleguide.APP_GRAY, appstyleguide.APP_GRAY]
+        })
+      };
+
+      console.log("this.refs.textinput", this.refs.textInput);
+
+      if (!isFocused && this.isTextInputEmpty()) {
+        if (placeholderlabel != null) displayLabel = placeholderlabel;
+      }
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: [_styles2.default.outerViewStyle, customViewStyle, { borderBottomColor: this.getBottomBorderColor() }] },
+        _react2.default.createElement(
+          _reactNative.Animated.Text,
+          { style: labelStyle },
+          displayLabel
+        ),
+        _react2.default.createElement(_reactNative.TextInput, babelHelpers.extends({}, props, {
+          style: [_styles2.default.textinputStyle, { height: this.state.height }],
+          multiline: false,
+          ref: 'textInput',
+          onFocus: this.handleFocus,
+          onBlur: this.handleBlur,
+          underlineColorAndroid: 'transparent'
+        }))
+      );
+    }
+  }, {
+    key: 'focus',
+    value: function focus() {
+      this.refs.textInput.focus();
+    }
+  }, {
+    key: 'getBottomBorderColor',
+    value: function getBottomBorderColor() {
+      return appstyleguide.APP_LIGHT_BLUE;
+    }
+  }, {
+    key: 'isTextInputEmpty',
+    value: function isTextInputEmpty() {
+
+      if (this.props.value == '') return true;
+
+      return false;
+    }
+  }, {
+    key: 'updateSize',
+    value: function updateSize(height) {
+
+      console.log("Inside updateSize", height);
+
+      var androidFirstContentSizeChange = this.state.androidFirstContentSizeChange;
+
+
+      if (androidFirstContentSizeChange && (0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID) {
+
+        this.setState({
+
+          androidFirstContentSizeChange: false
+
+        });
+      } else {
+
+        if (height > this.state.height) {
+
+          newHeight = this.state.height + defaultHeight;
+
+          this.setState({
+
+            height: newHeight
+          });
+        }
+      }
+    }
+  }, {
+    key: 'animateTextLabel',
+    value: function animateTextLabel() {
+
+      _reactNative.Animated.timing(this._animatedIsFocused, {
+        toValue: this.state.isFocused || this.props.value != '' ? 1 : 0,
+        duration: 200
+      }).start();
+    }
+  }]);
+  return EwFloatingLabel;
+}(_react.Component);
+
+exports.default = EwFloatingLabel;

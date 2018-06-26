@@ -1,0 +1,157 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetChatbotResponseRequest = buildGetChatbotResponseRequest;
+exports.buildSuccessGetChatbotResponse = buildSuccessGetChatbotResponse;
+exports.buildFailedGetChatbotResponse = buildFailedGetChatbotResponse;
+exports.buildServerErrorGetChatbotResponse = buildServerErrorGetChatbotResponse;
+exports.buildGetCreateChatbotIssueResponseRequest = buildGetCreateChatbotIssueResponseRequest;
+exports.buildSuccessCreateChatbotIssueResponse = buildSuccessCreateChatbotIssueResponse;
+exports.buildFailedCreateChatbotIssueResponse = buildFailedCreateChatbotIssueResponse;
+exports.buildServerErrorCreateChatbotIssueResponse = buildServerErrorCreateChatbotIssueResponse;
+
+var _chatbotapiendpoints = require('./chatbotapiendpoints');
+
+var chatbotApiEndPoints = babelHelpers.interopRequireWildcard(_chatbotapiendpoints);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var FILE_NAME = "chatbotprocessing.js : ";
+
+function buildGetChatbotResponseRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetChatbotResponseRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.NODE_JS_BASIC_URL + chatbotApiEndPoints.GET_CHATBOT_RESPONSE + "&currentTimeStamp=" + new Date().getTime();
+
+  params["email_id"] = 'test@gmail.com';
+
+  params["user_name"] = 'testuser';
+
+  var data = {
+    "token": getState.auth.sessionToken,
+    "device_id": _utils.DEVICE_ID,
+    "input": {
+      "text": params.text
+    }
+
+  };
+
+  if (params.context != "") data["context"] = params.context;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var getChatbotResponseRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", getChatbotResponseRequest);
+
+  return getChatbotResponseRequest;
+}
+
+function buildSuccessGetChatbotResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetChatbotResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetChatbotResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetChatbotResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetChatbotResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetChatbotResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetCreateChatbotIssueResponseRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetCreateChatbotIssueResponseRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.NODE_JS_BASIC_URL + chatbotApiEndPoints.CREATE_CHATBOT_ISSUE + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var getCreateChatbotIssueRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", getCreateChatbotIssueRequest);
+
+  return getCreateChatbotIssueRequest;
+}
+
+function buildSuccessCreateChatbotIssueResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessCreateChatbotIssueResponse Method - ");
+
+  result.data.issueReportingKey = params.issueReportingKey;
+  result.data.messageId = params.messageId;
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedCreateChatbotIssueResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedCreateChatbotIssueResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorCreateChatbotIssueResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorCreateChatbotIssueResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

@@ -1,0 +1,1431 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _ewbar = require('../../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewdropdownpicker = require('../../../../components/ewdropdownpicker/ewdropdownpicker');
+
+var _ewdropdownpicker2 = babelHelpers.interopRequireDefault(_ewdropdownpicker);
+
+var _ewradiobutton = require('../../../../components/ewradiobutton/ewradiobutton');
+
+var _ewradiobutton2 = babelHelpers.interopRequireDefault(_ewradiobutton);
+
+var _ewbutton = require('../../../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _ewh1text = require('../../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewh4text = require('../../../../components/ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewcheckbox = require('../../../../components/ewcheckbox/ewcheckbox');
+
+var _ewcheckbox2 = babelHelpers.interopRequireDefault(_ewcheckbox);
+
+var _ewicon = require('../../../../components/ewicon/ewicon');
+
+var _ewicon2 = babelHelpers.interopRequireDefault(_ewicon);
+
+var _appstyleguide = require('./../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewcreatetravelstyles = require('../../styles/ewcreatetravelstyles');
+
+var _ewcreatetravelstyles2 = babelHelpers.interopRequireDefault(_ewcreatetravelstyles);
+
+var _ewtravelcostscreenstyles = require('../../styles/ewtravelcostscreenstyles');
+
+var _ewtravelcostscreenstyles2 = babelHelpers.interopRequireDefault(_ewtravelcostscreenstyles);
+
+var _travelutils = require('../../travelutils');
+
+var travelConstants = babelHelpers.interopRequireWildcard(_travelutils);
+
+var _ewfloatinglabel = require('../../../../components/ewfloatinglabel/ewfloatinglabel');
+
+var _ewfloatinglabel2 = babelHelpers.interopRequireDefault(_ewfloatinglabel);
+
+var _travelactions = require('../../../../services/travel/travelactions');
+
+var _utils = require('../../../../utils');
+
+var _animationutils = require('../../../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var FILE_NAME = "EwTravelCost.js : ";
+
+var deleteIcon = require('../../../../../img/travelicons/cancel.png');
+
+currencyTypePicker = [{
+  "value": travelConstants.ADVANCE_AMOUNT_IN_SINGLE_CURRENCY,
+  "label": travelConstants.TRAVEL_SINGLE_CURRENCY_LABEL
+}, {
+  "value": travelConstants.ADVANCE_AMOUNT_IN_MULTIPLE_CURRENCY,
+  "label": travelConstants.TRAVEL_MULTIPLE_CURRENCY_LABEL
+}];
+
+var EwTravelCost = function (_Component) {
+  babelHelpers.inherits(EwTravelCost, _Component);
+
+  function EwTravelCost(props) {
+    babelHelpers.classCallCheck(this, EwTravelCost);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwTravelCost.__proto__ || Object.getPrototypeOf(EwTravelCost)).call(this, props));
+
+    _this.renderCancelView = function (advanceAmountModel, advanceAmountIndex) {
+
+      console.log(FILE_NAME + "In renderCancelView");
+
+      if (advanceAmountModel.length > 1) {
+
+        return _react2.default.createElement(_ewicon2.default, {
+          iconSource: deleteIcon,
+          onIconPressed: function onIconPressed() {
+            return _this.renderAdvanceRemoveAlert(advanceAmountModel, advanceAmountIndex);
+          }
+        });
+      }
+    };
+
+    _this.renderTravelCostLabelView = function (costLabel, totalCost) {
+
+      console.log(FILE_NAME + "In renderTravelCostLabelView");
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { flex: 1, flexDirection: "row" } },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.7, alignItems: "center" } },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            null,
+            costLabel
+          )
+        ),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.3, alignItems: "center" } },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            null,
+            totalCost["0"]
+          )
+        )
+      );
+    };
+
+    _this.renderAdvanceAmountView = function (advanceAmountModel, reveiwMode) {
+
+      console.log(FILE_NAME + "In renderAdvanceAmountView");
+
+      showCurrencyRadioButton = false;
+
+      if (_this.getTravelType() == travelConstants.TRAVEL_TYPE_OVERSEAS_SERVER_LABEL) showCurrencyRadioButton = true;
+
+      if (_this.state.isAdvanceRequired) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          showCurrencyRadioButton ? _this.renderCurrencyRadioButton(advanceAmountModel, reveiwMode) : null,
+          _this.renderAdvanceCurrencyView(advanceAmountModel, reveiwMode)
+        );
+      }
+    };
+
+    _this.renderAdvanceCurrencyView = function (advanceAmountModel, reveiwMode) {
+
+      console.log(FILE_NAME + "In renderAdvanceCurrencyView");
+
+      if (_this.state.isAdvanceInSingleCurrency) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _this.renderRequestedAmountView(advanceAmountModel, 0, reveiwMode)
+        );
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          Object.keys(advanceAmountModel).map(function (key, advanceModelIndex) {
+            return _react2.default.createElement(
+              _reactNative.View,
+              null,
+              _this.renderRequestedAmountView(advanceAmountModel, advanceModelIndex, reveiwMode)
+            );
+          }),
+          _this.renderAddMoreButton(reveiwMode)
+        );
+      }
+    };
+
+    _this.renderRequestedAmountView = function (advanceAmountModel, advanceModelIndex, reveiwMode) {
+
+      console.log(FILE_NAME + "In renderRequestedAmountView");
+
+      isDropdownVisible = false;
+
+      if (_this.getTravelType() == travelConstants.TRAVEL_TYPE_OVERSEAS_SERVER_LABEL) isDropdownVisible = true;
+
+      var baseCurrency = _this.getBaseCurrency();
+
+      if (reveiwMode) {
+
+        advanceAmount = advanceAmountModel[advanceModelIndex].advanceAmount + "  " + _this.getCurrencyText(advanceAmountModel[advanceModelIndex].advanceCurrency);
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _this.renderReveiwView(travelConstants.REQUESTED_AMOUNT, advanceAmount)
+        );
+      } else {
+        var currencyData = _this.state.currencyData;
+
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { flexDirection: 'row' } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flex: 0.6 } },
+            _react2.default.createElement(_ewfloatinglabel2.default, {
+              label: travelConstants.REQUESTED_AMOUNT,
+              placeholderlabel: travelConstants.REQUESTED_AMOUNT_PLACEHOLDER,
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              onChangeText: function onChangeText(advanceAmount) {
+                return _this.onAdvanceTextChange(advanceAmount, advanceAmountModel, advanceModelIndex);
+              },
+              value: advanceAmountModel[advanceModelIndex].advanceAmount,
+              keyboardType: 'numeric'
+            })
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flex: 0.3, marginLeft: 10, marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+            isDropdownVisible ? _react2.default.createElement(_ewdropdownpicker2.default, {
+
+              dataArray: currencyData,
+              selectedValue: advanceAmountModel[advanceModelIndex].advanceCurrency,
+              onPickerValueChange: function onPickerValueChange(selectedCurrency) {
+                return _this.onAdvanceAmountPickerStateChange(selectedCurrency, advanceAmountModel, advanceModelIndex);
+              }
+            }) : _react2.default.createElement(
+              _reactNative.View,
+              { style: { justifyContent: "flex-end", flex: 1 } },
+              _react2.default.createElement(_ewh2text2.default, {
+                text: baseCurrency.currency_Symbol
+              })
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { alignItems: "center", flex: 0.1, justifyContent: "center" } },
+            _this.renderCancelView(advanceAmountModel, advanceModelIndex)
+          )
+        );
+      }
+    };
+
+    _this.onAdvanceTextChange = function (newAdvanceAmount, advanceAmountModel, advanceModelIndex) {
+
+      console.log(FILE_NAME + "In onAdvanceTextChange");
+
+      updatedAdvanceAmountModel = advanceAmountModel;
+
+      updatedAdvanceAmountModel[advanceModelIndex].advanceAmount = newAdvanceAmount;
+
+      _this.setState({
+        advanceAmountModel: updatedAdvanceAmountModel
+      });
+    };
+
+    _this.onAdvanceAmountPickerStateChange = function (selectedCurrency, advanceAmountModel, advanceModelIndex) {
+
+      console.log(FILE_NAME + "In onAdvanceAmountPickerStateChange");
+
+      updatedAdvanceAmountModel = advanceAmountModel;
+
+      updatedAdvanceAmountModel[advanceModelIndex].advanceCurrency = selectedCurrency;
+
+      _this.setState({
+        advanceAmountModel: updatedAdvanceAmountModel
+      });
+    };
+
+    _this.renderAddMoreButton = function (reveiwMode) {
+
+      console.log(FILE_NAME + "In renderAddMoreButton");
+
+      if (!reveiwMode) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { justifyContent: "flex-end", flexDirection: "row", margin: appstyleguide.DEFAULT_MARGIN } },
+          _react2.default.createElement(_ewbutton2.default, {
+            label: 'Add Currency',
+            customStyle: { backgroundColor: appstyleguide.APP_GRAY },
+            onButonClicked: function onButonClicked() {
+              return _this.addAdvanceAmountModel();
+            }
+
+          })
+        );
+      }
+    };
+
+    _this.getAdvanceAmountModel = function (advanceData) {
+
+      console.log(FILE_NAME + "In getAdvanceAmountModel");
+
+      var baseCurrency = _this.getBaseCurrency();
+
+      var currencyId = baseCurrency.currency_Id;
+      var advanceAmount = "";
+
+      if (advanceData != null) {
+
+        advanceAmount = advanceData.Requested_Amount.toString();
+        currencyId = advanceData.Currency_Id;
+      }
+
+      var advanceAmountModel = {
+
+        advanceAmount: advanceAmount,
+        advanceCurrency: currencyId
+      };
+
+      return advanceAmountModel;
+    };
+
+    _this.onRadioButtonSelected = function (radioButtonSelected) {
+
+      console.log(FILE_NAME + "In onRadioButtonSelected");
+
+      isAdvanceInSingleCurrency = false;
+      isAdvanceInMultipleCurrency = false;
+
+      switch (radioButtonSelected) {
+        case travelConstants.ADVANCE_AMOUNT_IN_SINGLE_CURRENCY:
+
+          isAdvanceInSingleCurrency = true;
+          break;
+
+        case travelConstants.ADVANCE_AMOUNT_IN_MULTIPLE_CURRENCY:
+
+          isAdvanceInMultipleCurrency = true;
+          break;
+        default:
+
+      }
+
+      _this.setState({
+        isAdvanceInSingleCurrency: isAdvanceInSingleCurrency,
+        isAdvanceInMultipleCurrency: isAdvanceInMultipleCurrency
+
+      });
+    };
+
+    _this.onCheckboxStateChange = function () {
+
+      console.log(FILE_NAME + "In onCheckboxStateChange");
+
+      (0, _utils.showAnimation)(animationUtils.ANIMATION_SPRING);
+
+      _this.setState({
+        isAdvanceRequired: !_this.state.isAdvanceRequired
+      });
+    };
+
+    _this.getSelectedPickerValue = function (totalTravelCostModel, travelCostLabel) {
+
+      console.log(FILE_NAME + "In getSelectedPickerValue");
+
+      pickerSelectedValue = "0";
+
+      switch (travelCostLabel) {
+        case travelConstants.TRAVEL_COST_LABEL:
+
+          pickerSelectedValue = totalTravelCostModel.travelcostcurrency;
+          break;
+
+        case travelConstants.STAY_COST_LABEL:
+
+          pickerSelectedValue = totalTravelCostModel.staycostcurrency;
+          break;
+
+        case travelConstants.LOCAL_TRAVEL_COST_LABEL:
+
+          pickerSelectedValue = totalTravelCostModel.localtravelcostcurrency;
+          break;
+
+        case travelConstants.TOTAL_TRAVEL_COST_LABEL:
+
+          pickerSelectedValue = totalTravelCostModel.totaltravelcostcurrency;
+          break;
+
+        default:
+
+      }
+
+      return pickerSelectedValue;
+    };
+
+    _this.onPickerStateChange = function (selectedCurrency, totalTravelCostModel, travelCostLabel) {
+
+      console.log(FILE_NAME + "In onPickerStateChange");
+
+      updatedTotaltravelCostModel = totalTravelCostModel;
+
+      console.log("updatedTotaltravelCostModel", updatedTotaltravelCostModel);
+
+      switch (travelCostLabel) {
+        case travelConstants.TRAVEL_COST_LABEL:
+
+          updatedTotaltravelCostModel.travelcostcurrency = selectedCurrency;
+          break;
+
+        case travelConstants.STAY_COST_LABEL:
+
+          updatedTotaltravelCostModel.staycostcurrency = selectedCurrency;
+          break;
+
+        case travelConstants.LOCAL_TRAVEL_COST_LABEL:
+
+          updatedTotaltravelCostModel.localtravelcostcurrency = selectedCurrency;
+          break;
+
+        case travelConstants.TOTAL_TRAVEL_COST_LABEL:
+
+          updatedTotaltravelCostModel.totaltravelcostcurrency = selectedCurrency;
+          break;
+
+        default:
+
+      }
+      console.log("totalTravelCostModel", updatedTotaltravelCostModel);
+
+      _this.setState({
+        totalTravelCostModel: updatedTotaltravelCostModel
+      });
+    };
+
+    _this.getCostTextValue = function (totalTravelCostModel, travelCostLabel) {
+
+      console.log(FILE_NAME + "In getCostTextValue");
+
+      costTextValue = 0;
+
+      switch (travelCostLabel) {
+        case travelConstants.TRAVEL_COST_LABEL:
+
+          costTextValue = totalTravelCostModel.travelcost;
+          break;
+
+        case travelConstants.STAY_COST_LABEL:
+
+          costTextValue = totalTravelCostModel.staycost;
+          break;
+
+        case travelConstants.LOCAL_TRAVEL_COST_LABEL:
+
+          costTextValue = totalTravelCostModel.localtravelcost;
+          break;
+
+        case travelConstants.TOTAL_TRAVEL_COST_LABEL:
+
+          costTextValue = totalTravelCostModel.totaltravelcost;
+          break;
+
+        default:
+
+      }
+
+      return costTextValue;
+    };
+
+    _this.onCostTextChanged = function (newCostText, totalTravelCostModel, travelCostLabel) {
+
+      console.log(FILE_NAME + "In onCostTextChanged");
+
+      if (newCostText.length && (0, _utils.isNumber)(newCostText)) {
+
+        updatedTotaltravelCostModel = totalTravelCostModel;
+
+        console.log("updatedTotaltravelCostModel", updatedTotaltravelCostModel);
+
+        switch (travelCostLabel) {
+          case travelConstants.TRAVEL_COST_LABEL:
+
+            updatedTotaltravelCostModel.travelcost = newCostText;
+            updatedTotaltravelCostModel.totaltravelcost = _this.getTotalCost();
+            break;
+
+          case travelConstants.STAY_COST_LABEL:
+
+            updatedTotaltravelCostModel.staycost = newCostText;
+            updatedTotaltravelCostModel.totaltravelcost = _this.getTotalCost();
+            break;
+
+          case travelConstants.LOCAL_TRAVEL_COST_LABEL:
+
+            updatedTotaltravelCostModel.localtravelcost = newCostText;
+            updatedTotaltravelCostModel.totaltravelcost = _this.getTotalCost();
+            break;
+
+          case travelConstants.TOTAL_TRAVEL_COST_LABEL:
+
+            updatedTotaltravelCostModel.totaltravelcost = newCostText;
+            break;
+          default:
+
+        }
+        console.log("totalTravelCostModel", updatedTotaltravelCostModel);
+
+        _this.setState({
+          totalTravelCostModel: updatedTotaltravelCostModel
+        });
+      }
+    };
+
+    if (_this.props.initialState == null) {
+
+      elementValues = _this.handleElementsValues(_this.props.customTravelData);
+
+      _this.state = {
+        totalTravelCostModel: elementValues.totalTravelCostModel,
+
+        advanceAmountModel: elementValues.advanceAmountModel,
+
+        isAdvanceRequired: elementValues.isAdvanceRequired,
+        userMobileNumber: elementValues.userMobileNumber,
+        userEmail: elementValues.userEmail,
+        description: elementValues.description,
+
+        currencyData: null,
+
+        isAdvanceInSingleCurrency: elementValues.isAdvanceInSingleCurrency,
+        isAdvanceInMultipleCurrency: elementValues.isAdvanceInMultipleCurrency
+
+      };
+
+      if (_this.props.customTravelData != null) {
+
+        _this.updateParentState(_this.state);
+      }
+    } else _this.state = _this.props.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwTravelCost, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      this.props.getValidationMethod(this.localValidation.bind(this));
+      this.props.getComponentState(this.getCurrentState.bind(this));
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.currencyInformationData != null && nextProps.currencyInformationError == null) {
+
+        this.setState({
+
+          currencyData: nextProps.currencyInformationData
+
+        });
+      }
+
+      if (nextProps.currencyInformationData == null && nextProps.currencyInformationError != null) {}
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log(FILE_NAME + "In componentWillUpdate Method");
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      this.props.getCurrencyInformation(null);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render");
+
+      console.log("Current component state is ", this.state);
+
+      var _state = this.state,
+          advanceAmountModel = _state.advanceAmountModel,
+          totalTravelCostModel = _state.totalTravelCostModel,
+          currencyData = _state.currencyData,
+          isAdvanceRequired = _state.isAdvanceRequired;
+
+
+      console.log("totalTravelCostModel is", totalTravelCostModel, isAdvanceRequired);
+
+      var _props = this.props,
+          currentTravelState = _props.currentTravelState,
+          currencyInformationError = _props.currencyInformationError,
+          getCurrencyInformation = _props.getCurrencyInformation,
+          reveiwMode = _props.reveiwMode;
+
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { flex: 1 } },
+        _react2.default.createElement(
+          _nativeBase.Content,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { margin: appstyleguide.DEFAULT_MARGIN } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: this.getReveiwModeStyles(reveiwMode) },
+              this.renderTravelCostView(currentTravelState, totalTravelCostModel, reveiwMode),
+              this.renderAdvanceRequiredView(currentTravelState, reveiwMode),
+              isAdvanceRequired ? this.renderCurrencyView(currencyData, currencyInformationError, this.renderAdvanceAmountView(advanceAmountModel, reveiwMode), getCurrencyInformation) : null,
+              _react2.default.createElement(_ewh2text2.default, {
+                text: 'Contact Details While Travelling',
+                customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, fontWeight: "bold" }
+              }),
+              _react2.default.createElement(
+                _reactNative.View,
+                { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+                this.renderContactDetails(reveiwMode)
+              )
+            )
+          ),
+          this.renderReveiwRequestButton()
+        )
+      );
+    }
+  }, {
+    key: 'handleElementsValues',
+    value: function handleElementsValues(customTravelData) {
+      var _props$currentTravelS = this.props.currentTravelState.travelInformation,
+          emailId = _props$currentTravelS.emailId,
+          mobileNo = _props$currentTravelS.mobileNo;
+
+
+      if (mobileNo == null) mobileNo = "";
+
+      var totalTravelCostModel = {
+        "travelcost": "",
+        "travelcostcurrency": "0",
+
+        "staycost": "",
+        "staycostcurrency": "0",
+
+        "localtravelcost": "",
+        "localtravelcostcurrency": "0",
+
+        "totaltravelcost": "",
+        "totaltravelcostcurrency": "0"
+      };
+
+      var advanceAmountModel = [];
+      var isAdvanceRequired = false;
+      var userMobileNumber = mobileNo;
+      var userEmail = emailId;
+      var description = "";
+      var isAdvanceInSingleCurrency = true;
+      var isAdvanceInMultipleCurrency = false;
+
+      advanceAmountModel.push(this.getAdvanceAmountModel());
+
+      if (customTravelData != null) {
+        var _customTravelData$tra = customTravelData.travelCost,
+            Total_Tour_Cost_Estimate_Raw = _customTravelData$tra.Total_Tour_Cost_Estimate_Raw,
+            Cost_Estimate_Travel_Raw = _customTravelData$tra.Cost_Estimate_Travel_Raw,
+            Cost_Estimate_Stay_Raw = _customTravelData$tra.Cost_Estimate_Stay_Raw,
+            Cost_Estimate_Conveyance_Raw = _customTravelData$tra.Cost_Estimate_Conveyance_Raw;
+        var _customTravelData$oth = customTravelData.otherDetails,
+            Advance_Required = _customTravelData$oth.Advance_Required,
+            Description = _customTravelData$oth.Description;
+        var advanceDetails = customTravelData.advanceDetails;
+        var _customTravelData$emp = customTravelData.employeeInfo,
+            Email_Id = _customTravelData$emp.Email_Id,
+            Mobile_No = _customTravelData$emp.Mobile_No;
+
+
+        if (Total_Tour_Cost_Estimate_Raw != null) totalTravelCostModel.totaltravelcost = Total_Tour_Cost_Estimate_Raw.toString();
+
+        if (Cost_Estimate_Travel_Raw != null) totalTravelCostModel.travelcost = Cost_Estimate_Travel_Raw.toString();
+
+        if (Cost_Estimate_Stay_Raw != null) totalTravelCostModel.staycost = Cost_Estimate_Stay_Raw.toString();
+
+        if (Cost_Estimate_Conveyance_Raw != null) totalTravelCostModel.localtravelcost = Cost_Estimate_Conveyance_Raw.toString();
+
+        if (Advance_Required == "Yes") {
+
+          isAdvanceRequired = true;
+
+          if (advanceDetails.length > 1) {
+
+            isAdvanceInSingleCurrency = false;
+            isAdvanceInMultipleCurrency = true;
+          }
+
+          advanceIndex = 0;
+
+          for (var _iterator = advanceDetails, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+            var _ref;
+
+            if (_isArray) {
+              if (_i >= _iterator.length) break;
+              _ref = _iterator[_i++];
+            } else {
+              _i = _iterator.next();
+              if (_i.done) break;
+              _ref = _i.value;
+            }
+
+            var advance = _ref;
+
+
+            if (advanceIndex == 0) {
+
+              advanceAmountModel[advanceIndex].advanceAmount = advance.Requested_Amount.toString();
+              advanceAmountModel[advanceIndex].advanceCurrency = advance.Currency_Id;
+            } else {
+
+              advanceAmountModel.push(this.getAdvanceAmountModel(advance));
+            }
+
+            advanceIndex += 1;
+          }
+        }
+
+        userEmail = Email_Id;
+
+        userMobileNumber = Mobile_No.toString();
+
+        if (userMobileNumber == null) userMobileNumber = "";
+
+        description = Description.toString();
+      }
+
+      elementValues = {
+
+        totalTravelCostModel: totalTravelCostModel,
+
+        advanceAmountModel: advanceAmountModel,
+
+        isAdvanceRequired: isAdvanceRequired,
+        userMobileNumber: userMobileNumber,
+        userEmail: userEmail,
+        description: description,
+
+        isAdvanceInSingleCurrency: isAdvanceInSingleCurrency,
+        isAdvanceInMultipleCurrency: isAdvanceInMultipleCurrency
+
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: 'renderReveiwRequestButton',
+    value: function renderReveiwRequestButton() {
+      var _this2 = this;
+
+      if (!this.props.reveiwMode && !this.props.currentTravelState.isAllTravelScreensVisited) {
+
+        return _react2.default.createElement(_ewbutton2.default, {
+          label: 'Reveiw Request',
+          onButonClicked: function onButonClicked() {
+            return _this2.updateParentState(_this2.props.currentTravelState);
+          },
+          customStyle: { margin: appstyleguide.DEFAULT_MARGIN, alignSelf: 'center' }
+        });
+      }
+    }
+  }, {
+    key: 'getReveiwModeStyles',
+    value: function getReveiwModeStyles(reveiwMode) {
+
+      var styles = {};
+
+      if (reveiwMode) {
+
+        styles = {
+
+          marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN
+
+        };
+      }
+
+      return styles;
+    }
+  }, {
+    key: 'getCurrentState',
+    value: function getCurrentState() {
+
+      return this.state;
+    }
+  }, {
+    key: 'renderReveiwView',
+    value: function renderReveiwView(headingText, value) {
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(_ewh4text2.default, {
+          text: headingText,
+          customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+        }),
+        _react2.default.createElement(_ewh3text2.default, {
+          text: value,
+          customStyle: _ewtravelcostscreenstyles2.default.textStyle
+        })
+      );
+    }
+  }, {
+    key: 'renderContactDetails',
+    value: function renderContactDetails(reveiwMode) {
+      var _this3 = this;
+
+      if (reveiwMode) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          this.renderReveiwView(travelConstants.MOBILE_NUMBER, this.state.userMobileNumber),
+          this.renderReveiwView(travelConstants.EMAIL_ID, this.state.userEmail),
+          this.renderReveiwView(travelConstants.REMARKS, this.state.description)
+        );
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewfloatinglabel2.default, {
+            label: travelConstants.MOBILE_NUMBER,
+            placeholderlabel: travelConstants.MOBILE_NUMBER_PLACEHOLDER,
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            onChangeText: function onChangeText(userMobileNumber) {
+              return _this3.setState({ userMobileNumber: userMobileNumber });
+            },
+            value: this.state.userMobileNumber
+          }),
+          _react2.default.createElement(_ewfloatinglabel2.default, {
+            label: travelConstants.EMAIL_ID,
+            placeholderlabel: travelConstants.EMAIL_ID_PLACEHOLDER,
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            onChangeText: function onChangeText(userEmail) {
+              return _this3.setState({ userEmail: userEmail });
+            },
+            value: this.state.userEmail
+          }),
+          _react2.default.createElement(_ewfloatinglabel2.default, {
+            label: travelConstants.REMARKS,
+            placeholderlabel: travelConstants.REMARKS_PLACEHOLDER,
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            onChangeText: function onChangeText(description) {
+              return _this3.setState({ description: description });
+            },
+            value: this.state.description
+          })
+        );
+      }
+    }
+  }, {
+    key: 'renderAdvanceRemoveAlert',
+    value: function renderAdvanceRemoveAlert(advanceAmountModel, advanceAmountIndex) {
+      var _this4 = this;
+
+      _reactNative.Alert.alert('Currency', 'Do you want to delete this ', [{ text: 'Ok', onPress: function onPress() {
+          return _this4.removeAdvanceModel(advanceAmountModel, advanceAmountIndex);
+        } }, { text: 'Cancel' }]);
+    }
+  }, {
+    key: 'removeAdvanceModel',
+    value: function removeAdvanceModel(advanceAmountModel, advanceAmountIndex) {
+
+      updatedAdvanceamountModel = advanceAmountModel;
+
+      updatedAdvanceamountModel.splice(advanceAmountIndex, 1);
+
+      this.setState({
+        advanceAmountModel: updatedAdvanceamountModel
+      });
+    }
+  }, {
+    key: 'renderCurrencyView',
+    value: function renderCurrencyView(advanceCurrencyDataState, advanceCurrencyErrorState, advanceCurrencyRenderView, advanceCurrencyLoadAgainAction) {
+
+      console.log(FILE_NAME + "In renderCurrencyView");
+
+      console.log("renderCurrencyView", advanceCurrencyDataState, advanceCurrencyErrorState, advanceCurrencyRenderView, advanceCurrencyLoadAgainAction);
+
+      if (advanceCurrencyDataState != null && advanceCurrencyErrorState == null) {
+
+        return advanceCurrencyRenderView;
+      } else if (advanceCurrencyDataState == null && advanceCurrencyErrorState == null) {
+
+        console.log("2nd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewcreatetravelstyles2.default.spinnerContainer },
+          _react2.default.createElement(_nativeBase.Spinner, { size: 'small' }),
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: _ewcreatetravelstyles2.default.spinnerElement },
+            'Loading...'
+          )
+        );
+      } else if (advanceCurrencyDataState == null && advanceCurrencyErrorState != null) {
+
+        console.log("3rd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewcreatetravelstyles2.default.loadAgainButtonContainer },
+          _react2.default.createElement(_ewbutton2.default, {
+            label: 'Load Again',
+            onButonClicked: function onButonClicked() {
+              return advanceCurrencyLoadAgainAction;
+            }
+
+          })
+        );
+      } else {
+        console.log("4th Case");
+        console.log("advanceCurrencyDataState, ", advanceCurrencyDataState);
+        console.log("advanceCurrencyErrorState ", advanceCurrencyErrorState);
+      }
+    }
+  }, {
+    key: 'renderAdvanceRequiredView',
+    value: function renderAdvanceRequiredView(currentTravelState, reveiwMode) {
+      var _this5 = this;
+
+      console.log(FILE_NAME + "In renderAdvanceRequiredView");
+
+      if (!this.isDataEmpty(currentTravelState) && !this.isDataEmpty(currentTravelState.travelInformation)) {
+        var advanceRequired = currentTravelState.travelInformation.advanceRequired;
+
+
+        if (advanceRequired == travelConstants.SERVER_ADVANCE_REQUIRED_LABEL) {
+
+          if (reveiwMode) {
+
+            advanceRequired = this.state.isAdvanceRequired ? "Yes" : "No";
+
+            return _react2.default.createElement(
+              _reactNative.View,
+              null,
+              _react2.default.createElement(_ewh4text2.default, {
+                text: travelConstants.ADVANCE_REQUIRED,
+                customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+              }),
+              _react2.default.createElement(_ewh3text2.default, {
+                text: advanceRequired,
+                custmStyle: _ewtravelcostscreenstyles2.default.textStyle
+              })
+            );
+          } else {
+
+            return _react2.default.createElement(_ewcheckbox2.default, {
+              label: travelConstants.ADVANCE_REQUIRED,
+              isChecked: this.state.isAdvanceRequired,
+              onCheckboxClick: function onCheckboxClick() {
+                return _this5.onCheckboxStateChange();
+              },
+              customViewStyle: { marginTop: 20, marginLeft: -5 }
+            });
+          }
+        }
+      }
+    }
+  }, {
+    key: 'renderTravelCostView',
+    value: function renderTravelCostView(currentTravelState, totalTravelCostModel, reveiwMode) {
+
+      console.log(FILE_NAME + "In renderTravelCostView", totalTravelCostModel);
+
+      if (!this.isDataEmpty(currentTravelState) && !this.isDataEmpty(currentTravelState.travelInformation)) {
+        var _currentTravelState$t = currentTravelState.travelInformation,
+            tourCostEstimateBreakupRequired = _currentTravelState$t.tourCostEstimateBreakupRequired,
+            travelCostEstimateRequired = _currentTravelState$t.travelCostEstimateRequired;
+
+
+        if (travelCostEstimateRequired == travelConstants.SERVER_TOUR_COST_ESTIMATE_REQUIRED_LABEL) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            _react2.default.createElement(_ewh2text2.default, {
+              text: 'Cost Estimations',
+              customStyle: { fontWeight: "bold", marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+            }),
+            tourCostEstimateBreakupRequired == travelConstants.SERVER_TOUR_COST_ESTIMATE_BREAKUP_REQUIRED_LABEL ? this.renderTravelCostDetails(totalTravelCostModel, travelConstants.TRAVEL_COST_LABEL, travelConstants.TRAVEL_COST_PLACEHOLDER, reveiwMode) : null,
+            tourCostEstimateBreakupRequired == travelConstants.SERVER_TOUR_COST_ESTIMATE_BREAKUP_REQUIRED_LABEL ? this.renderTravelCostDetails(totalTravelCostModel, travelConstants.STAY_COST_LABEL, travelConstants.ACCOMODATION_COST_PLACEHOLDER, reveiwMode) : null,
+            tourCostEstimateBreakupRequired == travelConstants.SERVER_TOUR_COST_ESTIMATE_BREAKUP_REQUIRED_LABEL ? this.renderTravelCostDetails(totalTravelCostModel, travelConstants.LOCAL_TRAVEL_COST_LABEL, travelConstants.LOCAL_COST_PLACEHOLDER, reveiwMode) : null,
+            this.renderTravelCostDetails(totalTravelCostModel, travelConstants.TOTAL_TRAVEL_COST_LABEL, travelConstants.TOTAL_TRAVEL_COST_PLACEHOLDER, reveiwMode)
+          );
+        }
+      }
+    }
+  }, {
+    key: 'isDataEmpty',
+    value: function isDataEmpty(data) {
+
+      console.log(FILE_NAME + "In isDataEmpty");
+
+      if (data == null || data == undefined) return true;
+
+      return false;
+    }
+  }, {
+    key: 'updateParentState',
+    value: function updateParentState(currentTravelState) {
+
+      console.log("Inside updateParentState");
+
+      if (this.localValidation(currentTravelState)) this.props.updateParentState(this.state);
+    }
+  }, {
+    key: 'localValidation',
+    value: function localValidation(currentTravelState) {
+
+      console.log(FILE_NAME + "In localValidation");
+
+      if (!this.isDataEmpty(currentTravelState) && !this.isDataEmpty(currentTravelState.travelInformation)) {
+        var _currentTravelState$t2 = currentTravelState.travelInformation,
+            emailMandatory = _currentTravelState$t2.emailMandatory,
+            mobileMandatory = _currentTravelState$t2.mobileMandatory,
+            travelCostEstimateMandatory = _currentTravelState$t2.travelCostEstimateMandatory,
+            tourCostEstimateBreakupRequired = _currentTravelState$t2.tourCostEstimateBreakupRequired,
+            advanceRequired = _currentTravelState$t2.advanceRequired;
+        var _state2 = this.state,
+            userEmail = _state2.userEmail,
+            userMobileNumber = _state2.userMobileNumber,
+            totalTravelCostModel = _state2.totalTravelCostModel,
+            isAdvanceRequired = _state2.isAdvanceRequired,
+            isAdvanceInSingleCurrency = _state2.isAdvanceInSingleCurrency,
+            advanceAmountModel = _state2.advanceAmountModel;
+
+
+        if (emailMandatory == travelConstants.SERVER_EMAIL_MANDATORY_LABEL && userEmail.trim() == "") {
+
+          this.props.showAlertMessage(travelConstants.EMAIL_ID_EMPTY_MESSAGE);
+
+          return false;
+        }
+
+        if (mobileMandatory == travelConstants.SERVER_MOBILE_NUMBER_MANDATORY_LABEL && userMobileNumber.trim() == "") {
+
+          this.props.showAlertMessage(travelConstants.MOBILE_NUMBER_EMPTY_MESSAGE);
+
+          return false;
+        }
+
+        if (travelCostEstimateMandatory == travelConstants.SERVER_TOUR_COST_ESTIMATE_MANDATORY_LABEL) {
+
+          if (tourCostEstimateBreakupRequired == travelConstants.SERVER_TOUR_COST_ESTIMATE_BREAKUP_REQUIRED_LABEL) {
+
+            if (totalTravelCostModel.travelcost.trim() == "") {
+
+              this.props.showAlertMessage(travelConstants.TRAVEL_COST_EMPTY_MESSAGE);
+
+              return false;
+            }
+
+            if (totalTravelCostModel.staycost.trim() == "") {
+
+              this.props.showAlertMessage(travelConstants.STAY_COST_EMPTY_MESSAGE);
+
+              return false;
+            }
+
+            if (totalTravelCostModel.localtravelcost.trim() == "") {
+
+              this.props.showAlertMessage(travelConstants.LOCAL_TRAVEL_COST_EMPTY_MESSAGE);
+
+              return false;
+            }
+          }
+
+          if (totalTravelCostModel.totaltravelcost.trim() == "") {
+
+            this.props.showAlertMessage(travelConstants.TOTAL_TRAVEL_COST_EMPTY_MESSAGE);
+
+            return false;
+          }
+        }
+      }
+
+      if (advanceRequired == travelConstants.SERVER_ADVANCE_REQUIRED_LABEL) {
+
+        if (isAdvanceRequired) {
+
+          if (isAdvanceInSingleCurrency) {
+
+            if (advanceAmountModel[0].advanceAmount.trim() == "") {
+
+              this.props.showAlertMessage(travelConstants.ADVANCE_AMOUNT_EMPTY_MESSAGE);
+
+              return false;
+            }
+          } else {
+
+            for (var _iterator2 = advanceAmountModel, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+              var _ref2;
+
+              if (_isArray2) {
+                if (_i2 >= _iterator2.length) break;
+                _ref2 = _iterator2[_i2++];
+              } else {
+                _i2 = _iterator2.next();
+                if (_i2.done) break;
+                _ref2 = _i2.value;
+              }
+
+              var advanceDetail = _ref2;
+
+
+              if (advanceDetail.advanceAmount.trim() == "") {
+
+                this.props.showAlertMessage(travelConstants.ADVANCE_AMOUNT_EMPTY_MESSAGE);
+
+                return false;
+              }
+            }
+          }
+        }
+      }
+
+      return true;
+    }
+  }, {
+    key: 'renderCurrencyRadioButton',
+    value: function renderCurrencyRadioButton(advanceAmountModel, reveiwMode) {
+      var _this6 = this;
+
+      if (reveiwMode) {
+
+        console.log("advanceAmountModel", advanceAmountModel, reveiwMode);
+
+        currencySelected = this.state.isAdvanceInSingleCurrency ? travelConstants.TRAVEL_SINGLE_CURRENCY_LABEL : travelConstants.TRAVEL_MULTIPLE_CURRENCY_LABEL;
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          this.renderReveiwView(travelConstants.TRAVEL_CURRENCY_LABEL, currencySelected)
+        );
+      } else {
+
+        if ((0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+            _react2.default.createElement(_ewh4text2.default, {
+              text: travelConstants.TRAVEL_CURRENCY_LABEL
+            }),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flexDirection: 'row', justifyContent: 'space-around' } },
+              _react2.default.createElement(_ewradiobutton2.default, {
+                label: travelConstants.TRAVEL_SINGLE_CURRENCY_LABEL,
+                isSelected: this.state.isAdvanceInSingleCurrency,
+                onRadioButtonClick: function onRadioButtonClick() {
+                  return _this6.onRadioButtonSelected(travelConstants.ADVANCE_AMOUNT_IN_SINGLE_CURRENCY);
+                }
+              }),
+              _react2.default.createElement(_ewradiobutton2.default, {
+                label: travelConstants.TRAVEL_MULTIPLE_CURRENCY_LABEL,
+                isSelected: this.state.isAdvanceInMultipleCurrency,
+                onRadioButtonClick: function onRadioButtonClick() {
+                  return _this6.onRadioButtonSelected(travelConstants.ADVANCE_AMOUNT_IN_MULTIPLE_CURRENCY);
+                }
+              })
+            )
+          );
+        } else {
+
+          return _react2.default.createElement(_ewdropdownpicker2.default, {
+            pickerLabel: travelConstants.TRAVEL_CURRENCY_LABEL,
+            customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+            dataArray: currencyTypePicker,
+            isDefaultPickerValueSelected: false,
+            selectedValue: this.getCurrencySelected(),
+            onPickerValueChange: function onPickerValueChange(newPickerValue) {
+              return _this6.onRadioButtonSelected(newPickerValue);
+            }
+          });
+        }
+      }
+    }
+  }, {
+    key: 'getCurrencySelected',
+    value: function getCurrencySelected() {
+
+      if (this.state.isAdvanceInSingleCurrency) return travelConstants.ADVANCE_AMOUNT_IN_SINGLE_CURRENCY;
+
+      return travelConstants.ADVANCE_AMOUNT_IN_MULTIPLE_CURRENCY;
+    }
+  }, {
+    key: 'getTravelType',
+    value: function getTravelType() {
+
+      console.log(FILE_NAME + "In getTravelType");
+
+      var currentTravelState = this.props.currentTravelState;
+
+
+      travelType = "";
+
+      if (currentTravelState.travelPurposeDetails != null) {
+
+        if (currentTravelState.travelPurposeDetails.isTravelTypeDomestic) travelType = travelConstants.TRAVEL_TYPE_DOMESTIC_SERVER_LABEL;else travelType = travelConstants.TRAVEL_TYPE_OVERSEAS_SERVER_LABEL;
+      }
+
+      return travelType;
+    }
+  }, {
+    key: 'getCurrencyText',
+    value: function getCurrencyText(currencyId) {
+      var currencyData = this.state.currencyData;
+
+
+      if (currencyData != null) {
+
+        for (var _iterator3 = currencyData, _isArray3 = Array.isArray(_iterator3), _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+          var _ref3;
+
+          if (_isArray3) {
+            if (_i3 >= _iterator3.length) break;
+            _ref3 = _iterator3[_i3++];
+          } else {
+            _i3 = _iterator3.next();
+            if (_i3.done) break;
+            _ref3 = _i3.value;
+          }
+
+          var currency = _ref3;
+
+
+          if (currency.currency_Id == currencyId) {
+
+            return currency.currency_Symbol;
+          }
+        }
+      }
+    }
+  }, {
+    key: 'addAdvanceAmountModel',
+    value: function addAdvanceAmountModel() {
+
+      console.log(FILE_NAME + "In addAdvanceAmountModel");
+
+      updatedAdvanceAmountModel = this.state.advanceAmountModel;
+
+      (0, _utils.showAnimation)(animationUtils.ANIMATION_LINEAR);
+
+      updatedAdvanceAmountModel.push(this.getAdvanceAmountModel());
+
+      this.setState({
+
+        advanceAmountModel: updatedAdvanceAmountModel
+      });
+    }
+  }, {
+    key: 'renderTravelCostDetails',
+    value: function renderTravelCostDetails(totalTravelCostModel, travelCostLabel, travelCostPlaceHolder, reveiwMode) {
+      var _this7 = this;
+
+      console.log(FILE_NAME + "In renderTravelCostDetails");
+
+      var baseCurrency = this.getBaseCurrency();
+
+      if (reveiwMode) {
+
+        costValue = this.getCostTextValue(totalTravelCostModel, travelCostLabel);
+
+        if (costValue != 0) {
+
+          console.log("travelcostvalues", this.getCostTextValue(totalTravelCostModel, travelCostLabel));
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            _react2.default.createElement(_ewh4text2.default, {
+              text: travelCostLabel,
+              customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+            }),
+            _react2.default.createElement(_ewh3text2.default, {
+              text: costValue + "  " + baseCurrency.currency_Symbol,
+              customStyle: _ewtravelcostscreenstyles2.default.textStyle
+            })
+          );
+        }
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { flexDirection: 'row', marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flex: 0.8 } },
+            _react2.default.createElement(_ewfloatinglabel2.default, {
+              label: travelCostLabel,
+              placeholderlabel: travelCostPlaceHolder,
+              autoCorrect: false,
+              autoCapitalize: 'none',
+              onChangeText: function onChangeText(newCostText) {
+                return _this7.onCostTextChanged(newCostText, totalTravelCostModel, travelCostLabel);
+              },
+              value: this.getCostTextValue(totalTravelCostModel, travelCostLabel),
+              keyboardType: 'numeric'
+            })
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flex: 0.2, alignItems: "center", justifyContent: "flex-end" } },
+            _react2.default.createElement(_ewh2text2.default, {
+              text: baseCurrency.currency_Symbol
+            })
+          )
+        );
+      }
+    }
+  }, {
+    key: 'getBaseCurrency',
+    value: function getBaseCurrency() {
+
+      console.log(FILE_NAME + "In getBaseCurrency");
+
+      var currentTravelState = this.props.currentTravelState;
+      var baseCurrency = currentTravelState.travelInformation.baseCurrency;
+
+
+      return baseCurrency;
+    }
+  }, {
+    key: 'getTotalCost',
+    value: function getTotalCost() {
+
+      console.log(FILE_NAME + "In getTotalCost");
+
+      var totalTravelCostModel = this.state.totalTravelCostModel;
+
+
+      totalTravelCost = 0;
+
+      if ((0, _utils.isNumber)(totalTravelCostModel.travelcost)) totalTravelCost += parseInt(totalTravelCostModel.travelcost);
+
+      if ((0, _utils.isNumber)(totalTravelCostModel.staycost)) totalTravelCost += parseInt(totalTravelCostModel.staycost);
+
+      if ((0, _utils.isNumber)(totalTravelCostModel.localtravelcost)) totalTravelCost += parseInt(totalTravelCostModel.localtravelcost);
+
+      if (totalTravelCost == 0) totalTravelCost = "";else totalTravelCost = totalTravelCost.toString();
+
+      return totalTravelCost;
+    }
+  }]);
+  return EwTravelCost;
+}(_react.Component);
+
+function bindActions(dispatch) {
+
+  console.log(FILE_NAME + "In bindActions");
+
+  return {
+
+    getCurrencyInformation: function getCurrencyInformation(params) {
+      return dispatch((0, _travelactions.getCurrencyInformation)(params));
+    }
+  };
+}
+
+function mapStateToProps(state) {
+
+  console.log("State Updated state is -");
+
+  console.log(state);
+
+  return {
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    currencyInformationData: state.travel.currencyInformationData,
+    currencyInformationError: state.travel.currencyInformationError
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindActions)(EwTravelCost);

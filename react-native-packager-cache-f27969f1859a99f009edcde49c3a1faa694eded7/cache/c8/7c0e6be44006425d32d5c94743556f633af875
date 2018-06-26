@@ -1,0 +1,339 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PushController = undefined;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _reactNative = require('react-native');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _reactNativeFcm = require('react-native-fcm');
+
+var _reactNativeFcm2 = babelHelpers.interopRequireDefault(_reactNativeFcm);
+
+var _pushclient = require('./pushclient');
+
+var _pushclient2 = babelHelpers.interopRequireDefault(_pushclient);
+
+var _appnotificationsactions = require('./services/appnotifications/appnotificationsactions');
+
+var _authactions = require('./services/auth/authactions');
+
+var _reactNativeFetchBlob = require('react-native-fetch-blob');
+
+var _reactNativeFetchBlob2 = babelHelpers.interopRequireDefault(_reactNativeFetchBlob);
+
+var _modulelist = require('./utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _deeplinkingidentifiers = require('./utils/deeplinkingidentifiers');
+
+var deeplinkConstants = babelHelpers.interopRequireWildcard(_deeplinkingidentifiers);
+
+var _dashboardutils = require('./ewscreens/dashboard/dashboardutils');
+
+var dashboardConstants = babelHelpers.interopRequireWildcard(_dashboardutils);
+
+var FILE_NAME = "pushcontroller.js : ";
+
+var PushController = exports.PushController = function (_Component) {
+  babelHelpers.inherits(PushController, _Component);
+
+  function PushController(props) {
+    babelHelpers.classCallCheck(this, PushController);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (PushController.__proto__ || Object.getPrototypeOf(PushController)).call(this, props));
+
+    console.log(FILE_NAME + "In Constructor");
+    _this.initialState = {};
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(PushController, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In componentDidMount method");
+
+      _reactNativeFcm2.default.requestPermissions();
+
+      _reactNativeFcm2.default.getFCMToken().then(function (token) {
+
+        console.log("TOKEN (getFCMToken)", token);
+
+        var param = {
+          fcmToken: token
+        };
+
+        if (_this2.props.isLoggedIn) {
+
+          if (token != _this2.props.fcmToken) {
+
+            var params = {
+              sessionToken: ''
+            };
+          }
+        } else {
+          _this2.props.setFCMToken(param);
+        }
+      });
+
+      _reactNativeFcm2.default.getInitialNotification().then(function (notif) {
+
+        console.log("INITIAL NOTIFICATION", notif);
+        if (_reactNative.Platform.OS === 'android') _this2.setDeepLinkUrl(notif);
+      });
+
+      this.notificationListner = _reactNativeFcm2.default.on(_reactNativeFcm.FCMEvent.Notification, function (notif) {
+
+        console.log("(react-native-fcm) Notification", notif);
+
+        if (notif.local_notification) {
+          console.log("Local Notification - ", notif.local_notification);
+
+          if (notif.opened_from_tray) {
+
+            if (notif.payslipData != null) {
+              if (_reactNative.Platform.OS == 'android') {
+
+                var android = _reactNativeFetchBlob2.default.android;
+
+                android.actionViewIntent(notif.payslipData.filePath, 'application/pdf');
+              }
+
+              if (_reactNative.Platform.OS == 'ios') {
+                _reactNativeFetchBlob2.default.ios.openDocument(notif.payslipData.filePath);
+              }
+            }
+
+            if (notif.notificationDeeplinkData != null) {
+
+              _this2.setDeepLinkUrl(notif.notificationDeeplinkData);
+            }
+          }
+          return;
+        }
+
+        if (notif.opened_from_tray) {
+
+          console.log("Notification Opened from tray- ", notif);
+
+          _this2.setDeepLinkUrl(notif);
+
+          console.log("Notification Opened from tray- ", notif.opened_from_tray);
+
+          return;
+        }
+
+        if (_reactNative.Platform.OS === 'ios') {
+          console.log("Platform is Ios");
+
+          switch (notif._notificationType) {
+
+            case _reactNativeFcm.NotificationType.Remote:
+              notif.finish(_reactNativeFcm.RemoteNotificationResult.NewData);
+              break;
+
+            case _reactNativeFcm.NotificationType.NotificationResponse:
+              notif.finish();
+              break;
+
+            case _reactNativeFcm.NotificationType.WillPresent:
+              notif.finish(_reactNativeFcm.WillPresentNotificationResult.All);
+              break;
+          }
+        }
+
+        if (_reactNative.Platform.OS == 'android' && _reactNative.AppState.currentState == 'active') {
+          _this2.showLocalNotification(notif);
+        }
+      });
+
+      this.refreshTokenListener = _reactNativeFcm2.default.on(_reactNativeFcm.FCMEvent.RefreshToken, function (token) {
+
+        console.log("TOKEN (refreshUnsubscribe)", token);
+
+        var params = {
+          fcmToken: token
+        };
+
+        if (_this2.props.isLoggedIn) {
+
+          if (token != _this2.props.fcmToken) {
+
+            var param = {
+              "registration_id": token
+            };
+            _this2.props.updateFCMToken(param);
+          }
+        } else {
+          _this2.props.setFCMToken(params);
+        }
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+    }
+  }, {
+    key: 'showLocalNotification',
+    value: function showLocalNotification(notif) {
+
+      console.log(FILE_NAME + "In showLocalNotification method");
+
+      var date = new Date(Date.now());
+
+      if (_reactNative.Platform.OS === 'ios') {
+        date = date.toISOString();
+      }
+
+      console.log("Date is ", date);
+
+      console.log("notif is - ", notif);
+
+      notificationDeeplinkData = null;
+
+
+      if (notif.pi_txn_id != null) {
+
+        notificationDeeplinkData = {
+
+          pi_module_id: parseInt(notif.pi_module_id),
+          pi_txn_id: parseInt(notif.pi_txn_id),
+          pi_txn_subtype: parseInt(notif.pi_txn_subtype),
+          pi_txn_type: parseInt(notif.pi_txn_type)
+
+        };
+      }
+
+      _reactNativeFcm2.default.presentLocalNotification({
+        title: notif.fcm.title,
+        body: notif.fcm.body,
+        priority: "high",
+        notificationDeeplinkData: notificationDeeplinkData,
+        large_icon: "ic_launcher",
+        icon: "ic_launcher",
+        click_action: notif.fcm.click_action,
+        show_in_foreground: true,
+        local: true
+      });
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render method");
+
+      return null;
+    }
+  }, {
+    key: 'setDeepLinkUrl',
+    value: function setDeepLinkUrl(deeplinkData) {
+
+      console.log(FILE_NAME + "In setDeepLinkUrl method", deeplinkData);
+
+      deeplinkUrl = null;
+
+      commonUrl = 'https://www.myemploywise.com/asperm/servlet/ggs.erm.servlet.setup3.LoginS?mode=doclink&url_doc=';
+
+      if (deeplinkData.pi_txn_id != null && deeplinkData.pi_txn_id != undefined) {
+
+        if (deeplinkData.pi_module_id == modules.LEAVE_AND_ATTENDANCE) {
+
+          if (deeplinkData.pi_txn_type == dashboardConstants.PENDING_LEAVE) {
+
+            deeplinkUrl = commonUrl + deeplinkConstants.SERVER_LEAVE_DEEP_LINK + '?mode=edit~~leave_id=' + deeplinkData.pi_txn_id;
+          }
+
+          if (deeplinkData.pi_txn_type == dashboardConstants.PENDING_OD_REQUEST) {
+
+            deeplinkUrl = commonUrl + deeplinkConstants.SERVER_OD_PAST_ATTENDANCE_DEEP_LINK + '?mode=edit~~form=odrequest~~odrequest_id=' + deeplinkData.pi_txn_id;
+          }
+
+          if (deeplinkData.pi_txn_type == dashboardConstants.PENDING_PAST_ATTENANCE) {
+
+            deeplinkUrl = commonUrl + deeplinkConstants.SERVER_OD_PAST_ATTENDANCE_DEEP_LINK + '?mode=pastedit~~form=past~~odrequest_id=' + deeplinkData.pi_txn_id;
+          }
+        }
+
+        if (deeplinkData.pi_module_id == modules.TRAVEL_AND_EXPENSE) {
+
+          if (deeplinkData.pi_txn_type == dashboardConstants.PENDING_TRAVEL) {
+
+            deeplinkUrl = commonUrl + deeplinkConstants.SERVER_TRAVEL_DEEP_LINK + '?mode=editrequest~~request_id=' + deeplinkData.pi_txn_id;
+          }
+        }
+      }
+
+      if (deeplinkUrl != null) {
+
+        console.log("deeplinkUrl is -", deeplinkUrl, this);
+
+        this.props.setLoginRedirectState(deeplinkUrl);
+      }
+    }
+  }]);
+  return PushController;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction method");
+
+  return {
+
+    setFCMToken: function setFCMToken(param) {
+      return dispatch((0, _appnotificationsactions.setFCMToken)(param));
+    },
+    updateFCMToken: function updateFCMToken(param) {
+      return dispatch((0, _appnotificationsactions.updateFCMToken)(param));
+    },
+    setLastNotificationId: function setLastNotificationId(param) {
+      return dispatch((0, _appnotificationsactions.setLastNotificationId)(param));
+    },
+    clearAppNotificationData: function clearAppNotificationData(param) {
+      return dispatch((0, _appnotificationsactions.clearAppNotificationData)(param));
+    },
+    performLogout: function performLogout(params) {
+      return dispatch((0, _authactions.performLogout)(params));
+    },
+
+    setLoginRedirectState: function setLoginRedirectState(params) {
+      return dispatch((0, _authactions.setLoginRedirectState)(params));
+    }
+  };
+}
+
+function mapStateToProps(state) {
+
+  console.log(FILE_NAME + "In mapStateToProps method");
+  console.log("Current State is - ", state);
+
+  return {
+    isLoggedIn: state.auth.isLoggedIn,
+    fcmToken: state.appnotifications.fcmToken,
+    lastNotificationId: state.appnotifications.lastNotificationId,
+
+    updateFcmTokenStatusData: state.appnotifications.updateFcmTokenStatusData,
+    updateFcmTokenStatusError: state.appnotifications.updateFcmTokenStatusError
+  };
+}
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(PushController);

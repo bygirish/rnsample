@@ -1,0 +1,124 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.setFCMToken = setFCMToken;
+exports.updateFCMToken = updateFCMToken;
+exports.setLastNotificationId = setLastNotificationId;
+exports.clearAppNotificationData = clearAppNotificationData;
+
+var _appnotificationsactiontypes = require('./appnotificationsactiontypes');
+
+var appNotificationsActionTypes = babelHelpers.interopRequireWildcard(_appnotificationsactiontypes);
+
+var _appnotificationsprocessing = require('./appnotificationsprocessing');
+
+var appNotificationsProcessing = babelHelpers.interopRequireWildcard(_appnotificationsprocessing);
+
+var _authactiontypes = require('../auth/authactiontypes');
+
+var authActionTypes = babelHelpers.interopRequireWildcard(_authactiontypes);
+
+var _authprocessing = require('../auth/authprocessing');
+
+var authProcessing = babelHelpers.interopRequireWildcard(_authprocessing);
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var FILE_NAME = "appnotificationsactions.js : ";
+
+var SCREEN_CATEGORY = 'notification';
+
+function setFCMToken(param) {
+
+  console.log(FILE_NAME + "In setFCMToken - ");
+  console.log("params - ", param);
+
+  return {
+
+    type: appNotificationsActionTypes.SET_FCM_TOKEN,
+    fcmToken: param.fcmToken
+
+  };
+}
+
+function updateFCMToken(params) {
+
+  console.log(FILE_NAME + "In updateFCMToken - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var updateFCMTokenRequest = appNotificationsProcessing.buildUpdateFCMTokenRequest(params, getState());
+
+    console.log("Current GetState Value is - ");console.log(getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(updateFCMTokenRequest.url, updateFCMTokenRequest.data, updateFCMTokenRequest.config).then(function (result) {
+
+      console.log("updateFCMTokenRequest Result - ", result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'updateFCMToken', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: appNotificationsActionTypes.SUCCESS_UPDATE_FCM_TOKEN,
+          response: appNotificationsProcessing.buildSuccessUpdateFCMTokenResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'updateFCMToken', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: authActionTypes.SUCCESS_LOGOUT,
+          response: authProcessing.buildSuccessPerformLogoutResponse(result, getState())
+        });
+      }
+    }).catch(function (err) {
+
+      console.log("updateFCMTokenRequest Error - ", err);
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'updateFCMToken', _utils.REQUEST_SERVER_ERROR);
+
+
+      dispatch({
+        type: appNotificationsActionTypes.FAILURE_UPDATE_FCM_TOKEN,
+        response: appNotificationsProcessing.buildServerErrorUpdateFCMTokenResponse(err, params)
+      });
+    });
+  };
+}
+
+function setLastNotificationId(param) {
+
+  console.log(FILE_NAME + "In setLastNotificationId - ");
+  console.log("params - ", param);
+
+  return {
+
+    type: appNotificationsActionTypes.SET_LAST_NOTIFICATION_ID,
+    lastNotificationId: param.lastNotificationId
+
+  };
+}
+
+function clearAppNotificationData(param) {
+
+  console.log(FILE_NAME + "In setLastNotificationId - ");
+  console.log("params - ", param);
+
+  return {
+
+    type: appNotificationsActionTypes.CLEAR_APP_NOTIFICATIONS_STATE_DATA
+
+  };
+}

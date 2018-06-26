@@ -1,0 +1,230 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = pastAttendanceReducer;
+
+var _pastattendanceactiontypes = require('./pastattendanceactiontypes');
+
+var pastAttendanceActionTypes = babelHelpers.interopRequireWildcard(_pastattendanceactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var FILE_NAME = "pastsattendancereducer.js";
+var initialState = {
+
+  errorCounter: 0,
+
+  pastAttendanceInformationData: null,
+  pastAttendanceInformationError: null,
+
+  pastAttendanceAppliedData: null,
+  pastAttendanceAppliedError: null,
+
+  pastAttendanceActionData: null,
+  pastAttendanceActionError: null,
+
+  pastAttendanceRosterInformationData: null,
+  pastAttendanceRosterInformationError: null,
+
+  pendingPastAttendanceInformationData: null,
+  pendingPastAttendanceInformationError: null
+
+};
+
+function pastAttendanceReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + " : In method pastAttendanceReduce");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case pastAttendanceActionTypes.SUCCESS_PAST_ATTENDANCE_INFORMATION:
+
+      console.log(FILE_NAME + " : In method pastAttendanceReducer SUCCESS_PAST_ATTENDANCE_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        pastAttendanceInformationData: action.response.data,
+        pastAttendanceInformationError: action.response.error
+      });
+
+      break;
+
+    case pastAttendanceActionTypes.FAILURE_PAST_ATTENDANCE_INFORMATION:
+
+      console.log(FILE_NAME + " : In method pastAttendanceReducer FAILURE_PAST_ATTENDANCE_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        pastAttendanceInformationData: action.response.data,
+        pastAttendanceInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case pastAttendanceActionTypes.SUCCESS_APPLY_PAST_ATTENDANCE:
+
+      console.log(FILE_NAME + " : In method pastAttendanceReducer SUCCESS_APPLY_PAST_ATTENDANCE");
+
+      return babelHelpers.extends({}, state, {
+        pastAttendanceAppliedData: action.response.data,
+        pastAttendanceAppliedError: action.response.error
+      });
+
+      break;
+
+    case pastAttendanceActionTypes.FAILURE_APPLY_PAST_ATTENDANCE:
+
+      console.log(FILE_NAME + " : In method pastAttendanceReducer FAILURE_APPLY_PAST_ATTENDANCE");
+
+      return babelHelpers.extends({}, state, {
+        pastAttendanceAppliedData: action.response.data,
+        pastAttendanceAppliedError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case pastAttendanceActionTypes.SUCCESS_PAST_ATTENDANCE_ACTION_TAKEN:
+
+      console.log(FILE_NAME + " : In method pastAttendanceReducer SUCCESS_PAST_ATTENDANCE_ACTION_TAKEN");
+
+      return babelHelpers.extends({}, state, {
+        pastAttendanceActionData: action.response.data,
+        pastAttendanceActionError: action.response.error
+      });
+
+      break;
+
+    case pastAttendanceActionTypes.FAILURE_PAST_ATTENDANCE_ACTION_TAKEN:
+
+      console.log(FILE_NAME + " : In method pastAttendanceReducer FAILURE_PAST_ATTENDANCE_ACTION_TAKEN");
+
+      return babelHelpers.extends({}, state, {
+        pastAttendanceActionData: action.response.data,
+        pastAttendanceActionError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case pastAttendanceActionTypes.SUCCESS_PENDING_PAST_ATTENDANCE_INFORMATION:
+
+      console.log(FILE_NAME + " : In method pastAttendanceReducer SUCCESS_PENDING_PAST_ATTENDANCE_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        pendingPastAttendanceInformationData: action.response.data,
+        pendingPastAttendanceInformationError: action.response.error
+      });
+
+      break;
+
+    case pastAttendanceActionTypes.FAILURE_PENDING_PAST_ATTENDANCE_INFORMATION:
+
+      console.log(FILE_NAME + " : In method pastAttendanceReducer FAILURE_PENDING_PAST_ATTENDANCE_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        pendingPastAttendanceInformationData: action.response.data,
+        pendingPastAttendanceInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case pastAttendanceActionTypes.SUCCESS_ROSTER_INFORMATION:
+
+      console.log(FILE_NAME + " : In method pastsattendancereducer SUCCESS_ROSTER_INFORMATION");
+
+      return {
+        errorCounter: state.errorCounter,
+        pastAttendanceRosterInformationData: action.response.data,
+        pastAttendanceRosterInformationError: action.response.error
+      };
+
+      break;
+
+    case pastAttendanceActionTypes.FAILURE_ROSTER_INFORMATION:
+
+      console.log(FILE_NAME + " : In method pastsattendancereducer FAILURE_ROSTER_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        pastAttendanceRosterInformationData: action.response.data,
+        pastAttendanceRosterInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case pastAttendanceActionTypes.SUCCESS_APPLIED_PAST_ATTENDANCE_LIST:
+
+      console.log("In method pastsattendancereducer SUCCESS_APPLIED_PAST_ATTENDANCE_LIST");
+
+      return {
+        errorCounter: state.errorCounter,
+        appliedPastAttendanceData: action.response.data,
+        appliedPastAttendanceError: action.response.error
+      };
+
+      break;
+
+    case pastAttendanceActionTypes.FAILURE_APPLIED_PAST_ATTENDANCE_LIST:
+
+      console.log("In method pastsattendancereducer FAILURE_APPLIED_PAST_ATTENDANCE_LIST");
+
+      return babelHelpers.extends({}, state, {
+        appliedPastAttendanceData: action.response.data,
+        appliedPastAttendanceError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case pastAttendanceActionTypes.CLEAR_PAST_ATTENDANCE_ERROR:
+
+      console.log("In method pastAttendanceReducer CLEAR_PAST_ATTENDANCE_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        pastAttendanceInformationError: null,
+        pastAttendanceAppliedError: null,
+        pastAttendanceActionError: null,
+        pastAttendanceRosterInformationError: null,
+        pendingPastAttendanceInformationError: null,
+        appliedPastAttendanceError: null
+      });
+
+      break;
+
+    case pastAttendanceActionTypes.CLEAR_PAST_ATTENDANCE_STATE_DATA:
+
+      console.log(FILE_NAME + " : In method pastAttendanceReducer CLEAR_PAST_ATTENDANCE_STATE_DATA");
+
+      return {
+
+        errorCounter: action.response.errorCounter,
+        pastAttendanceInformationData: action.response.pastAttendanceInformationData,
+        pastAttendanceInformationError: action.response.pastAttendanceInformationError,
+        pastAttendanceActionData: action.response.pastAttendanceActionData,
+        pastAttendanceActionError: action.response.pastAttendanceActionError,
+        pastAttendanceAppliedData: action.response.pastAttendanceAppliedData,
+        pastAttendanceAppliedError: action.response.pastAttendanceAppliedError,
+        pendingPastAttendanceInformationData: action.response.pendingPastAttendanceInformationData,
+        pendingPastAttendanceInformationError: action.response.pendingPastAttendanceInformationError,
+        pastAttendanceRosterInformationData: action.response.pastAttendanceRosterInformationData,
+        pastAttendanceRosterInformationError: action.response.pastAttendanceRosterInformationError,
+        appliedPastAttendanceData: action.response.appliedPastAttendanceData,
+        appliedPastAttendanceError: action.response.appliedPastAttendanceError
+
+      };
+
+      break;
+
+    default:
+
+      console.log(FILE_NAME + " : In method pastAttendanceReducer NOTHING");
+      return babelHelpers.extends({}, state);
+
+  }
+};

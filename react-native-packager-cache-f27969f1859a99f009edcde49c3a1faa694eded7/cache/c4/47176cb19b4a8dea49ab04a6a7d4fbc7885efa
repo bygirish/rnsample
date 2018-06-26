@@ -1,0 +1,118 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _ewbar = require('../ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewnetworkimage = require('../ewnetworkimage/ewnetworkimage');
+
+var _ewnetworkimage2 = babelHelpers.interopRequireDefault(_ewnetworkimage);
+
+var _ewh1text = require('../ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2lighttext = require('../ewh2lighttext/ewh2lighttext');
+
+var _ewh2lighttext2 = babelHelpers.interopRequireDefault(_ewh2lighttext);
+
+var _ewh3lighttext = require('../ewh3lighttext/ewh3lighttext');
+
+var _ewh3lighttext2 = babelHelpers.interopRequireDefault(_ewh3lighttext);
+
+var _utils = require('../../utils');
+
+exports.default = EwUserInfo = function EwUserInfo(_ref) {
+  var info = _ref.info;
+
+
+  console.log("EwSupervisorInfo.js : Supervisor Information is - ", info);
+
+  var imageUrl = info.imageUrl;
+
+  var textStyle = styles.textStyle;
+
+
+  var appliedDate = (0, _utils.convertServerDateTimeToMilliseconds)(info.datetime);
+
+  var formattedDate = customFormatForDate(appliedDate);
+
+  return _react2.default.createElement(
+    _reactNative.View,
+    { style: { marginBottom: 10, backgroundColor: 'transparent' } },
+    _react2.default.createElement(
+      _reactNative.View,
+      { style: { flexDirection: 'row', marginBottom: 10, justifyContent: "center" } },
+      _react2.default.createElement(
+        _reactNative.View,
+        { style: { flex: 0.7, marginLeft: 10 } },
+        _react2.default.createElement(_ewh1text2.default, {
+          text: info.name
+        }),
+        _react2.default.createElement(_ewh2lighttext2.default, {
+          text: info.designation,
+          customStyle: textStyle
+        }),
+        _react2.default.createElement(_ewh3lighttext2.default, {
+          text: formattedDate,
+          customStyle: textStyle
+        })
+      ),
+      _react2.default.createElement(
+        _reactNative.View,
+        { style: { flex: 0.3, justifyContent: 'center', alignItems: 'center' } },
+        _react2.default.createElement(_ewnetworkimage2.default, { networkUrl: info.imageUrl })
+      )
+    ),
+    _react2.default.createElement(_ewbar2.default, null)
+  );
+};
+
+function customFormatForDate(date) {
+
+  currentDate = new Date(date);
+
+  var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  var date = currentDate.getDate();
+
+  var dayName = days[currentDate.getDay()];
+
+  var monthName = monthNames[currentDate.getMonth()];
+
+  var year = currentDate.getFullYear();
+
+  formattedDate = dayName + ', ' + date + " " + monthName + " " + year + " - " + fomartTime12Hour(currentDate);
+
+  return formattedDate;
+}
+
+function fomartTime12Hour(time_24) {
+
+  var hours = time_24.getHours() % 12;
+  var minutes = time_24.getMinutes();
+
+  if (hours === 0) hours = 12;
+
+  formattedTime = (hours < 10 ? '0' : '') + hours + ":" + (minutes < 10 ? '0' : '') + minutes + (time_24.getHours() < 12 ? ' am' : ' pm');
+
+  return formattedTime;
+}
+
+var styles = {
+  textStyle: {
+    marginTop: 5
+  }
+};

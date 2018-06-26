@@ -1,0 +1,451 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SREI_CUSTOMER_CODE = exports.LOCATION_NOT_AVAILABLE_ERROR = exports.IOS_APPSTORE_LINK = exports.PLATFORM_IOS = exports.ANDROID_PLAYSTORE_LINK = exports.PLATFORM_ANDROID = exports.SESSION_EXPIRED_LOGOUT_SUCCESSFULL = exports.REQUEST_SERVER_ERROR = exports.REQUEST_FAILED = exports.REQUEST_SUCCESSFULL = exports.TOAST_LONG_LENGTH = exports.TOAST_SHORT_LENGTH = exports.REHYDRATE = exports.VERSION_NAME = exports.VERSION_CODE = exports.VERSION = exports.INFO_MESSAGE = exports.ERROR_MESSAGE = exports.WARNING_MESSAGE = exports.SUCCESS_MESSAGE = exports.DEVICE_WIDTH = exports.DEVICE_HEIGHT = exports.DEVICE_APP_VERSION = exports.DEVICE_ID = exports.FRESHDESK_URL = exports.NODE_JS_BASIC_URL = exports.PAYSLIP_DOWNLOAD_URL = exports.SELF_IMAGE_URL = exports.IMAGE_URL = exports.BASIC_URL = undefined;
+exports.getImageUrl = getImageUrl;
+exports.convertMillisecondsToServerDate = convertMillisecondsToServerDate;
+exports.convertMillisecondsToServerDateTime = convertMillisecondsToServerDateTime;
+exports.convertMillisecondsToServerTime = convertMillisecondsToServerTime;
+exports.convertServerDateToMilliseconds = convertServerDateToMilliseconds;
+exports.convertServerDateTimeToMilliseconds = convertServerDateTimeToMilliseconds;
+exports.convertServerTimeToMilliseconds = convertServerTimeToMilliseconds;
+exports.changeTimeDateAndConvertToMilliseconds = changeTimeDateAndConvertToMilliseconds;
+exports.showDeviceDateFormat = showDeviceDateFormat;
+exports.showDeviceDateTimeFormat = showDeviceDateTimeFormat;
+exports.showDeviceTimeFormat = showDeviceTimeFormat;
+exports.checkIfNullOrEmptyString = checkIfNullOrEmptyString;
+exports.getDayDifference = getDayDifference;
+exports.areDatesEqual = areDatesEqual;
+exports.getCurrentDate = getCurrentDate;
+exports.getCurrentTime = getCurrentTime;
+exports.trackServerRequestTimings = trackServerRequestTimings;
+exports.trackComponentVisibleTimings = trackComponentVisibleTimings;
+exports.isNetworkAvailable = isNetworkAvailable;
+exports.showAnimation = showAnimation;
+exports.isNumber = isNumber;
+exports.isEmailId = isEmailId;
+exports.getCurrencySymbol = getCurrencySymbol;
+exports.formatCurrencyIndianFormat = formatCurrencyIndianFormat;
+exports.getMobileOS = getMobileOS;
+exports.getJsonArray = getJsonArray;
+exports.sendEmail = sendEmail;
+exports.redirectToAppStore = redirectToAppStore;
+
+var _reactNative = require('react-native');
+
+var _GoogleAnalyticController = require('../GoogleAnalyticController');
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var PRODUCTION_MODE = false;
+
+if (PRODUCTION_MODE) {
+  console.log = function () {};
+}
+
+var BASIC_URL = exports.BASIC_URL = "https://www.myemploywise.com/asperm/services";
+var IMAGE_URL = exports.IMAGE_URL = "https://www.myemploywise.com/asperm/servlet/ggs.erm.android.ImageS?mode=employee_imageImport";
+var SELF_IMAGE_URL = exports.SELF_IMAGE_URL = "https://www.myemploywise.com/asperm/servlet/ggs.erm.android.ImageS?mode=imageImport";
+var PAYSLIP_DOWNLOAD_URL = exports.PAYSLIP_DOWNLOAD_URL = BASIC_URL + "/payslipdownload";
+var NODE_JS_BASIC_URL = exports.NODE_JS_BASIC_URL = "https://www.myemploywise.com:3000";
+var FRESHDESK_URL = exports.FRESHDESK_URL = "https://employwise.freshdesk.com/api/v2";
+
+var DeviceInfo = require('react-native-device-info');
+
+console.log("Device Info", DeviceInfo);
+console.log("Device Unique ID", DeviceInfo.getUniqueID());
+var DEVICE_ID = exports.DEVICE_ID = DeviceInfo.getUniqueID();
+var DEVICE_APP_VERSION = exports.DEVICE_APP_VERSION = DeviceInfo.getVersion();
+var DEVICE_HEIGHT = exports.DEVICE_HEIGHT = parseInt(_reactNative.Dimensions.get('window').height);
+
+var DEVICE_WIDTH = exports.DEVICE_WIDTH = parseInt(_reactNative.Dimensions.get('window').width);
+
+var SUCCESS_MESSAGE = exports.SUCCESS_MESSAGE = 'success';
+
+var WARNING_MESSAGE = exports.WARNING_MESSAGE = 'warn';
+
+var ERROR_MESSAGE = exports.ERROR_MESSAGE = 'error';
+
+var INFO_MESSAGE = exports.INFO_MESSAGE = 'info';
+
+var VERSION = exports.VERSION = "null";
+
+var VERSION_CODE = exports.VERSION_CODE = "";
+
+var VERSION_NAME = exports.VERSION_NAME = "";
+
+var REHYDRATE = exports.REHYDRATE = "persist/REHYDRATE";
+
+var TOAST_SHORT_LENGTH = exports.TOAST_SHORT_LENGTH = 2500;
+
+var TOAST_LONG_LENGTH = exports.TOAST_LONG_LENGTH = 5000;
+
+var REQUEST_SUCCESSFULL = exports.REQUEST_SUCCESSFULL = 'Request Successfull';
+
+var REQUEST_FAILED = exports.REQUEST_FAILED = 'Request Failed';
+
+var REQUEST_SERVER_ERROR = exports.REQUEST_SERVER_ERROR = 'Request SErver Error';
+
+var SESSION_EXPIRED_LOGOUT_SUCCESSFULL = exports.SESSION_EXPIRED_LOGOUT_SUCCESSFULL = 'session expired logout successfull';
+
+var PLATFORM_ANDROID = exports.PLATFORM_ANDROID = 'android';
+var ANDROID_PLAYSTORE_LINK = exports.ANDROID_PLAYSTORE_LINK = 'https://play.google.com/store/apps/details?id=com.employwise.ggs.employwise';
+
+var PLATFORM_IOS = exports.PLATFORM_IOS = 'ios';
+var IOS_APPSTORE_LINK = exports.IOS_APPSTORE_LINK = 'https://itunes.apple.com/in/app/employwise/id1191418553';
+
+var LOCATION_NOT_AVAILABLE_ERROR = exports.LOCATION_NOT_AVAILABLE_ERROR = "Location not available";
+
+var SREI_CUSTOMER_CODE = exports.SREI_CUSTOMER_CODE = 1665;
+function getImageUrl(sessionToken, genId) {
+  var source = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'abc';
+  var currentImageTimestamp = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var isSelfImage = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+
+
+  console.log("Inside getImageUrl" + currentImageTimestamp);
+
+  if (isSelfImage) thumbnailImage = SELF_IMAGE_URL + "&tokenid=" + sessionToken + "&deviceid=" + DEVICE_ID;else thumbnailImage = IMAGE_URL + "&tokenid=" + sessionToken + "&deviceid=" + DEVICE_ID + "&emp_code=" + genId;
+
+  if (currentImageTimestamp != null) {
+
+    thumbnailImage += "&updatedTimeStamp=" + currentImageTimestamp;
+
+    console.log("Source - " + source + "Inside getImageUrl utils", thumbnailImage);
+  } else {
+
+    console.log("Source - " + source + "Inside getImageUrl utils", thumbnailImage);
+  }
+
+  return thumbnailImage;
+}
+
+function convertMillisecondsToServerDate(milliseconds) {
+
+  var date = new Date(milliseconds);
+  var month = '' + (date.getMonth() + 1);
+  var day = '' + date.getDate();
+  var year = date.getFullYear();
+
+  if (month.length < 2) month = '0' + month;
+
+  if (day.length < 2) day = '0' + day;
+
+  formattedDate = [year, month, day].join('-') + " 00:00:00";
+
+  return formattedDate;
+}
+
+function convertMillisecondsToServerDateTime(milliseconds) {
+
+  var date = new Date(milliseconds);
+  var month = '' + (date.getMonth() + 1);
+  var day = '' + date.getDate();
+  var year = date.getFullYear();
+
+  if (month.length < 2) month = '0' + month;
+
+  if (day.length < 2) day = '0' + day;
+
+  formattedDate = [year, month, day].join('-') + " " + (date.getHours() < 10 ? '0' : '') + date.getHours() + ":00:00";
+
+  return formattedDate;
+}
+
+function convertMillisecondsToServerTime(milliseconds) {
+
+  var date = new Date(milliseconds);
+
+  formattedTime = (date.getHours() < 10 ? '0' : '') + date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+
+  return formattedTime;
+}
+
+function convertServerDateToMilliseconds(dateToFormat) {
+
+  var milliseconds = 0;
+  var formattedDate = new Date();
+
+  if (dateToFormat != null) {
+
+    formattedDate = new Date(dateToFormat.replace(/-/g, "/").substr(0, 19));
+
+    formattedDate.setHours(0);
+    formattedDate.setMinutes(0);
+    formattedDate.setSeconds(0);
+    formattedDate.setMilliseconds(0);
+  }
+
+  milliseconds = formattedDate.getTime();
+
+  return milliseconds;
+}
+
+function convertServerDateTimeToMilliseconds(dateToFormat) {
+
+  var milliseconds = 0;
+
+  if (dateToFormat != null) milliseconds = new Date(dateToFormat.replace(/-/g, "/").substr(0, 19)).getTime();
+
+  return milliseconds;
+}
+
+function convertServerTimeToMilliseconds(milliseconds, timeToFormat) {
+
+  var date = new Date(milliseconds);
+
+  date.setHours(timeToFormat.substr(0, 2));
+  date.setMinutes(timeToFormat.substr(3, 5));
+
+  if (date != null) milliseconds = new Date(date).getTime();
+
+  console.log("milliseconds", milliseconds);
+
+  return milliseconds;
+}
+
+function changeTimeDateAndConvertToMilliseconds(selectedDateMilliseconds, appliedDateMilliseconds) {
+
+  var selectedDate = new Date(selectedDateMilliseconds);
+
+  var appliedDate = new Date(appliedDateMilliseconds);
+
+  console.log("selectedDate", selectedDate);
+  console.log("appliedDate", appliedDate);
+
+  selectedDate.setDate(appliedDate.getDate());
+  selectedDate.setMonth(appliedDate.getMonth());
+  selectedDate.setYear(appliedDate.getFullYear());
+
+  console.log("selectedDate", selectedDate);
+
+  newmilliseconds = selectedDate.getTime();
+
+  return newmilliseconds;
+}
+function showDeviceDateFormat(milliseconds) {
+
+  console.log("milliseconds", milliseconds);
+
+  var formattedDate = "";
+
+  formattedDate = new Date(milliseconds).toDateString();
+
+  return formattedDate;
+}
+
+function showDeviceDateTimeFormat(milliseconds) {
+
+  currentDate = new Date(milliseconds);
+
+  var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var date = currentDate.getDate();
+  var dayName = days[currentDate.getDay()];
+  var monthName = monthNames[currentDate.getMonth()];
+  var year = currentDate.getFullYear();
+
+  formattedDate = dayName + ', ' + date + " " + monthName + " " + year + " - " + fomartTime12Hour(currentDate);
+  return formattedDate;
+}
+
+function fomartTime12Hour(time_24) {
+
+  console.log("In fomartTime12Hour method");
+
+  var hours = time_24.getHours() % 12;
+  var minutes = time_24.getMinutes();
+
+  if (hours === 0) hours = 12;
+  return (hours < 10 ? '0' : '') + hours + ":" + (minutes < 10 ? '0' : '') + minutes + (time_24.getHours() < 12 ? 'am' : 'pm');
+}
+
+function showDeviceTimeFormat(milliseconds) {
+
+  var formattedTime = "";
+
+  var date = new Date(milliseconds);
+
+  formattedTime = (date.getHours() < 10 ? '0' : '') + date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+
+  return formattedTime;
+}
+
+function checkIfNullOrEmptyString(data) {
+
+  if (data === "" || data === null || data === "null" || data === '') return true;
+
+  return false;
+}
+
+function getDayDifference(date1, date2) {
+
+  date1Milliseconds = date1.getTime();
+
+  date2Milliseconds = date2.getTime();
+
+  numberOfDays = Math.round((date2Milliseconds - date1Milliseconds) / (1000 * 60 * 60 * 24));
+
+  return numberOfDays;
+}
+
+function areDatesEqual(millisecondsDate1, millisecondsDate2) {
+
+  var date1 = new Date(millisecondsDate1);
+  var date2 = new Date(millisecondsDate2);
+
+  if (date1.getDay() != date2.getDay() || date1.getMonth() != date2.getMonth() || date1.getYear() != date2.getYear()) return false;else return true;
+}
+
+function getCurrentDate() {
+
+  var milliseconds = 0;
+  var formattedDate = new Date();
+
+  formattedDate.setHours(0);
+  formattedDate.setMinutes(0);
+  formattedDate.setSeconds(0);
+  formattedDate.setMilliseconds(0);
+
+  milliseconds = formattedDate.getTime();
+
+  return milliseconds;
+}
+
+function getCurrentTime() {
+
+  return new Date().getTime();
+}
+
+function trackServerRequestTimings(requestStartTime, requestCategory, requestName, requestStatus) {
+
+  requestEndTime = getCurrentTime();
+
+  totalRequestTime = getTimeDifferenceInMilliseconds(requestStartTime, requestEndTime);
+
+  console.log("requestDataReceived", totalRequestTime, requestCategory, requestStatus, requestName);
+
+  tracker.trackTiming(requestCategory, totalRequestTime, { name: requestName, label: requestStatus });
+}
+
+function trackComponentVisibleTimings(componentInitializeTime, componentCategory, componentName) {
+
+  componentUnmountedTime = getCurrentTime();
+
+  totalComponentTime = getTimeDifferenceInMilliseconds(componentInitializeTime, componentUnmountedTime);
+
+  console.log("trackComponentVisibleTimings", totalComponentTime, componentInitializeTime, componentCategory, componentName);
+
+  tracker.trackTiming(componentCategory, totalComponentTime, { name: componentName });
+}
+
+function getTimeDifferenceInMilliseconds(beginTime, endTime) {
+
+  difference = endTime - beginTime;
+  return difference;
+}
+
+function isNetworkAvailable() {
+
+  var isNetworkConnected = false;
+
+  _reactNative.NetInfo.isConnected.fetch().then(function (isConnected) {
+
+    console.log('isConnected ', isConnected);
+
+    isNetworkConnected = isConnected;
+  });
+
+  console.log('isConnected ', isNetworkConnected);
+
+  return isNetworkConnected;
+}
+
+function showAnimation(animationType) {
+
+  _reactNative.LayoutAnimation.configureNext(animationType);
+}
+
+function isNumber(text) {
+
+  var numbersRegex = /^[0-9]+$/;
+
+  if (text.match(numbersRegex)) return true;
+
+  return false;
+}
+
+function isEmailId(text) {
+
+  var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+  if (text.match(emailRegex)) return true;
+
+  return false;
+}
+
+function getCurrencySymbol(currency) {
+
+  switch (currency) {
+    case 'INR':
+      return '\u20B9';
+    case 'USD':
+      return '$';
+  }
+}
+
+function formatCurrencyIndianFormat(num) {
+  var n1, n2;
+  num = num + '' || '';
+
+  n1 = num.split('.');
+  n2 = n1[1] || null;
+  n1 = n1[0].replace(/(\d)(?=(\d\d)+\d$)/g, "$1,");
+  num = n2 ? n1 + '.' + n2 : n1;
+
+  return num;
+}
+
+function getMobileOS() {
+
+  if (_reactNative.Platform.OS == 'android') return PLATFORM_ANDROID;
+
+  return PLATFORM_IOS;
+}
+
+function getJsonArray(serverData) {
+
+  jsonArray = [];
+
+  if (serverData instanceof Array) {
+    jsonArray = serverData;
+  } else {
+    jsonArray.push(serverData);
+  }
+
+  return jsonArray;
+}
+
+function sendEmail(data) {
+
+  urlString = "";
+
+  if (data.email != null) urlString = urlString + 'mailto:' + data.email;
+
+  if (data.subject != null) urlString = urlString + '?subject=' + data.subject;
+
+  if (data.body != null) urlString = urlString + '&body=' + data.body;
+
+  url = _reactNative.Linking.openURL(urlString);
+}
+
+function redirectToAppStore() {
+
+  console.log("Inside redirectToAppStore");
+
+  if (getMobileOS() == PLATFORM_ANDROID) _reactNative.Linking.openURL(ANDROID_PLAYSTORE_LINK).catch(function (err) {
+    return console.error('An error occurred', err);
+  });else _reactNative.Linking.openURL(IOS_APPSTORE_LINK).catch(function (err) {
+    return console.error('An error occurred', err);
+  });
+}

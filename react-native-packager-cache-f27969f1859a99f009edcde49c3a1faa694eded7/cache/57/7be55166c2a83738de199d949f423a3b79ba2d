@@ -1,0 +1,648 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EwDeepLinkScreen = undefined;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _ewloadingindicator = require('../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _deeplinkingidentifiers = require('../utils/deeplinkingidentifiers.js');
+
+var deepLinkConstants = babelHelpers.interopRequireWildcard(_deeplinkingidentifiers);
+
+var _employeelistutils = require('../ewscreens/eip/employeelistutils.js');
+
+var employeelistConstants = babelHelpers.interopRequireWildcard(_employeelistutils);
+
+var _leaveactions = require('../services/leave/leaveactions');
+
+var _odrequestactions = require('../services/odrequest/odrequestactions');
+
+var _pastattendanceactions = require('../services/pastattendance/pastattendanceactions');
+
+var _travelactions = require('../services/travel/travelactions');
+
+var _commonexpenseclaimactions = require('../services/expenseclaim/common/commonexpenseclaimactions');
+
+var _authactions = require('../services/auth/authactions');
+
+var _routerscenekeys = require('../utils/routerscenekeys');
+
+var routerSceneKeys = babelHelpers.interopRequireWildcard(_routerscenekeys);
+
+var FILE_NAME = "ewdeeplinkscreen.js : ";
+
+var EwDeepLinkScreen = exports.EwDeepLinkScreen = function (_Component) {
+  babelHelpers.inherits(EwDeepLinkScreen, _Component);
+
+  function EwDeepLinkScreen(props, context) {
+    babelHelpers.classCallCheck(this, EwDeepLinkScreen);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwDeepLinkScreen.__proto__ || Object.getPrototypeOf(EwDeepLinkScreen)).call(this, props, context));
+
+    _this.isPendingNeedToAct = function (pendingData) {
+      var user_id = _this.props.pendingNeedToActData.employeeInfo.user_id;
+      var create_id = pendingData.create_id;
+
+
+      console.log("create_id is - ", create_id);
+
+      if (user_id != create_id) {
+
+        return true;
+      }
+
+      return false;
+    };
+
+    console.log(FILE_NAME + "In constructor");
+
+    _this.initialState = {
+
+      isDataPreLoaded: true,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwDeepLinkScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.pendingNeedToActData != null && nextProps.pendingNeedToActError == null) {
+
+        this.setState({
+          isLoading: false
+        });
+      }
+
+      if (nextProps.pendingLeaveInformation != null && nextProps.pendingLeaveInformationError == null) {
+
+        if (this.isPendingNeedToAct(nextProps.pendingLeaveInformation)) {
+
+          _reactNativeRouterFlux.Actions.ewleaveactionscreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE, isPendingLeaveDataAvailable: nextProps.pendingLeaveInformation });
+        } else {
+
+          _reactNativeRouterFlux.Actions.ewmyleaveactionscreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE, isMyLeaveDataAvailable: nextProps.pendingLeaveInformation });
+        }
+      }
+
+      if (nextProps.pendingLeaveInformation == null && nextProps.pendingLeaveInformationError != null) {
+
+        _reactNativeRouterFlux.Actions.pop();
+      }
+
+      if (nextProps.pendingOdInformation != null && nextProps.pendingOdInformationError == null) {
+
+        if (this.isPendingNeedToAct(nextProps.pendingOdInformation)) {
+          _reactNativeRouterFlux.Actions.ewodactionscreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE, isPendingOdDataAvailable: nextProps.pendingOdInformation });
+        } else {}
+      }
+
+      if (nextProps.pendingOdInformation == null && nextProps.pendingOdInformationError != null) {
+
+        _reactNativeRouterFlux.Actions.pop();
+      }
+
+      if (nextProps.pendingPastAttendanceInformationData != null && nextProps.pendingPastAttendanceInformationError == null) {
+
+        if (this.isPendingNeedToAct(nextProps.pendingPastAttendanceInformationData)) {
+          _reactNativeRouterFlux.Actions.ewpastattendanceactionscreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE, isPendingPastAttendanceDataAvailable: nextProps.pendingPastAttendanceInformationData });
+        } else {}
+      }
+
+      if (nextProps.pendingPastAttendanceInformationData == null && nextProps.pendingPastAttendanceInformationError != null) {
+
+        _reactNativeRouterFlux.Actions.pop();
+      }
+
+      if (nextProps.pendingTravelInformationData != null && nextProps.pendingTravelInformationError == null) {
+
+        if (this.isPendingNeedToAct(nextProps.pendingTravelInformationData.otherDetails)) {
+
+          _reactNativeRouterFlux.Actions.ewtravelactionscreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE, isPendingTravelDataAvailable: nextProps.pendingTravelInformationData });
+        } else {
+
+          _reactNativeRouterFlux.Actions.ewmytravelactionscreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE, isMyTravelDataAvailable: nextProps.pendingTravelInformationData });
+        }
+      }
+
+      if (nextProps.pendingTravelInformationData == null && nextProps.pendingTravelInformationError != null) {
+
+        _reactNativeRouterFlux.Actions.pop();
+      }
+
+      if (nextProps.expenseClaimInformationData != null && nextProps.expenseClaimInformationError == null) {
+
+        if (this.isPendingNeedToAct(nextProps.expenseClaimInformationData)) {
+
+          _reactNativeRouterFlux.Actions[routerSceneKeys.EW_EXPENSE_CLAIM_ACTION_KEY]({ type: _reactNativeRouterFlux.ActionConst.REPLACE, isExpenseClaimDataAvailable: nextProps.expenseClaimInformationData });
+        } else {}
+      }
+
+      if (nextProps.expenseClaimInformationData == null && nextProps.expenseClaimInformationError != null) {
+
+        _reactNativeRouterFlux.Actions.pop();
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return null;
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+
+      console.log(FILE_NAME + "In renderScreen method");
+
+      var deepLinkUrl = this.props.deepLinkUrl;
+
+
+      console.log("deeplinkurl - ", deepLinkUrl);
+
+      if (this.props.pendingNeedToActData != null && deepLinkUrl != undefined) {
+
+        deepLinkData = this.parseUrl(deepLinkUrl);
+
+        console.log("deepLinkData", deepLinkData);
+
+        screenName = this.getScreenName(deepLinkData);
+
+        console.log("screenName", screenName);
+
+        params = null;
+
+        switch (screenName) {
+          case deepLinkConstants.DASHBOARD:
+
+            _reactNativeRouterFlux.Actions.pop();
+
+            break;
+
+          case deepLinkConstants.APPLY_LEAVE:
+
+            _reactNativeRouterFlux.Actions.ewapplyleavescreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE });
+            break;
+
+          case deepLinkConstants.LEAVE_APPROVAL:
+
+            var params = {
+              leaveId: deepLinkData.deepLinkParametersInfo.leave_id
+            };
+
+            this.setState({
+              isLoading: true
+            });
+
+            this.props.getPendingLeaveInformation(params);
+
+            break;
+
+          case deepLinkConstants.MY_APPLIED_LEAVES:
+
+            _reactNativeRouterFlux.Actions.ewmyrequestscreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE });
+            break;
+
+          case deepLinkConstants.APPLY_OD:
+
+            _reactNativeRouterFlux.Actions.ewapplyodscreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE });
+            break;
+
+          case deepLinkConstants.OD_APPROVAL:
+
+            console.log("reachedodaction");
+
+            var params = {
+              odId: deepLinkData.deepLinkParametersInfo.odrequest_id
+            };
+
+            this.setState({
+              isLoading: true
+            });
+
+            this.props.getPendingOdRequestInformation(params);
+
+            break;
+
+          case deepLinkConstants.APPLY_PAST_ATTENDANCE:
+
+            _reactNativeRouterFlux.Actions.ewapplypastattendancescreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE });
+            break;
+
+          case deepLinkConstants.PAST_ATTENDANCE_APPROVAL:
+
+            var params = {
+              pastAttendanceId: deepLinkData.deepLinkParametersInfo.odrequest_id
+            };
+
+            this.setState({
+              isLoading: true
+            });
+
+            this.props.getPendingPastAttendanceInformation(params);
+
+            break;
+
+          case deepLinkConstants.COMPANY_DIRECTORY:
+
+            params = {
+
+              defaultTab: employeelistConstants.COMPANY_DIRECTORY_TAB
+
+            };
+
+            _reactNativeRouterFlux.Actions.ewemployeedirectoryscreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE, employeedirectoryData: params });
+            break;
+
+          case deepLinkConstants.TEAM_DIRECTORY:
+
+            params = {
+
+              defaultTab: employeelistConstants.MY_TEAM_TAB
+            };
+
+            _reactNativeRouterFlux.Actions.ewemployeedirectoryscreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE, employeedirectoryData: params });
+            break;
+
+          case deepLinkConstants.MY_CALENDAR:
+
+            if (deepLinkData.deepLinkParametersInfo.month != null && deepLinkData.deepLinkParametersInfo.year != null) {
+
+              params = {
+
+                month: deepLinkData.deepLinkParametersInfo.month,
+                year: deepLinkData.deepLinkParametersInfo.year
+              };
+            }
+
+            _reactNativeRouterFlux.Actions.ewmycalendarscreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE, calendarScreenData: params });
+            break;
+
+          case deepLinkConstants.MY_PAY_SLIP:
+
+            if (deepLinkData.deepLinkParametersInfo.month != null && deepLinkData.deepLinkParametersInfo.year != null) {
+
+              params = {
+
+                month: deepLinkData.deepLinkParametersInfo.month,
+                year: deepLinkData.deepLinkParametersInfo.year
+              };
+            }
+
+            _reactNativeRouterFlux.Actions.ewpayslipscreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE, payslipdata: params });
+            break;
+
+          case deepLinkConstants.MY_HOLIDAYS:
+
+            if (deepLinkData.deepLinkParametersInfo.year != null) {
+
+              params = {
+                year: deepLinkData.deepLinkParametersInfo.year
+              };
+            }
+
+            _reactNativeRouterFlux.Actions.ewholidayscreen({ type: _reactNativeRouterFlux.ActionConst.REPLACE, holidayData: params });
+            break;
+
+          case deepLinkConstants.TRAVEL_APPROVAL:
+
+            var params = {
+              requestId: deepLinkData.deepLinkParametersInfo.request_id
+            };
+
+            this.setState({
+              isLoading: true
+            });
+
+            this.props.getPendingTravelInformation(params);
+
+            break;
+
+          case deepLinkConstants.EXPENSE_CLAIM_APPROVAL:
+
+            var params = {
+              expenseId: deepLinkData.deepLinkParametersInfo.expense_id
+            };
+
+            this.setState({
+              isLoading: true
+            });
+
+            this.props.getExpenseClaimInformation(params);
+
+            break;
+
+          default:
+
+        }
+      } else {
+
+        _reactNativeRouterFlux.Actions.pop();
+      }
+
+      return null;
+    }
+  }, {
+    key: 'getScreenName',
+    value: function getScreenName(deepLinkData) {
+
+      console.log(FILE_NAME + "In getScreenName method");
+
+      var deepLinkScreenInfo = deepLinkData.deepLinkScreenInfo,
+          deepLinkParametersInfo = deepLinkData.deepLinkParametersInfo;
+
+
+      console.log("deepLinkScreenInfo", deepLinkScreenInfo);
+
+      console.log("deepLinkParametersInfo", deepLinkParametersInfo);
+
+      console.log("needtoactprops", this.props.pendingNeedToActData);
+
+      screenName = deepLinkConstants.DASHBOARD;
+
+      switch (deepLinkScreenInfo.url_doc) {
+
+        case deepLinkConstants.SERVER_LEAVE_DEEP_LINK:
+
+          if (deepLinkParametersInfo['mode'] == "apply") screenName = deepLinkConstants.APPLY_LEAVE;
+
+          if (deepLinkParametersInfo['mode'] == "edit") screenName = deepLinkConstants.LEAVE_APPROVAL;
+
+          if (deepLinkParametersInfo['mode'] == "leave_mycalendar") screenName = deepLinkConstants.MY_CALENDAR;
+
+          break;
+
+        case deepLinkConstants.SERVER_OD_PAST_ATTENDANCE_DEEP_LINK:
+
+          if (deepLinkParametersInfo['mode'] == "pastedit") screenName = deepLinkConstants.PAST_ATTENDANCE_APPROVAL;
+
+          if (deepLinkParametersInfo['mode'] == "edit") screenName = deepLinkConstants.OD_APPROVAL;
+
+          if (deepLinkParametersInfo['mode'] == "applyod") screenName = deepLinkConstants.APPLY_OD;
+
+          if (deepLinkParametersInfo['mode'] == "applypa") screenName = deepLinkConstants.APPLY_PAST_ATTENDANCE;
+
+          break;
+
+        case deepLinkConstants.SERVER_PAYSLIP_DEEP_LINK:
+
+          screenName = deepLinkConstants.MY_PAY_SLIP;
+
+          break;
+
+        case deepLinkConstants.SERVER_TRAVEL_DEEP_LINK:
+
+          if (deepLinkParametersInfo['mode'] == "editrequest") screenName = deepLinkConstants.TRAVEL_APPROVAL;
+
+          break;
+
+        case deepLinkConstants.SERVER_EXPENSE_DEEP_LINK:
+          screenName = deepLinkConstants.EXPENSE_CLAIM_APPROVAL;
+
+          break;
+
+        case deepLinkConstants.SERVER_HOMEPAGE_DEEP_LINK:
+
+          if (deepLinkParametersInfo['modulename'] == "employee") screenName = deepLinkConstants.TEAM_DIRECTORY;
+
+          if (deepLinkParametersInfo['modulename'] == "employee_directory") screenName = deepLinkConstants.COMPANY_DIRECTORY;
+
+          if (deepLinkParametersInfo['modulename'] == "holidays") screenName = deepLinkConstants.MY_HOLIDAYS;
+
+          if (deepLinkParametersInfo['modulename'] == "homepage") screenName = deepLinkConstants.DASHBOARD;
+
+          if (deepLinkParametersInfo['modulename'] == "Leave" && deepLinkParametersInfo['viewname'] == "my") screenName = deepLinkConstants.MY_APPLIED_LEAVES;
+
+          break;
+
+        default:
+
+      }
+
+      return screenName;
+    }
+  }, {
+    key: 'parseUrl',
+    value: function parseUrl(deepLinkUrl) {
+
+      console.log(FILE_NAME + "In parseUrl method");
+
+      url = deepLinkUrl.replace('https://www.myemploywise.com/asperm/servlet/ggs.erm.servlet.setup3.LoginS?', "");
+
+      url = url.split('?');
+
+      console.log("url receive is", url);
+
+      deepLinkData = {};
+
+      deepLinkScreenInfo = url[0];
+      screenInfo = [];
+
+      deepLinkParametersInfo = url[1];
+      parameterInfo = [];
+
+      if (deepLinkScreenInfo != undefined) {
+
+        screenInfo = deepLinkScreenInfo.split('&').reduce(function (params, param) {
+          var _param$split = param.split('='),
+              _param$split2 = babelHelpers.slicedToArray(_param$split, 2),
+              key = _param$split2[0],
+              value = _param$split2[1];
+
+          params[key] = value ? decodeURIComponent(value.replace(/\+/g, ' ')) : '';
+
+          return params;
+        }, {});
+      }
+
+      deepLinkData["deepLinkScreenInfo"] = screenInfo;
+
+      if (deepLinkParametersInfo != undefined) {
+
+        parameterInfo = deepLinkParametersInfo.split('~~').reduce(function (params, param) {
+          var _param$split3 = param.split('='),
+              _param$split4 = babelHelpers.slicedToArray(_param$split3, 2),
+              key = _param$split4[0],
+              value = _param$split4[1];
+
+          params[key] = value ? decodeURIComponent(value.replace(/\+/g, ' ')) : '';
+
+          return params;
+        }, {});
+      }
+
+      deepLinkData["deepLinkParametersInfo"] = parameterInfo;
+
+      return deepLinkData;
+    }
+  }]);
+  return EwDeepLinkScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction method");
+
+  return {
+
+    getPendingLeaveInformation: function getPendingLeaveInformation(params) {
+      return dispatch((0, _leaveactions.getPendingLeaveInformation)(params));
+    },
+    getPendingOdRequestInformation: function getPendingOdRequestInformation(params) {
+      return dispatch((0, _odrequestactions.getPendingOdRequestInformation)(params));
+    },
+    getPendingPastAttendanceInformation: function getPendingPastAttendanceInformation(params) {
+      return dispatch((0, _pastattendanceactions.getPendingPastAttendanceInformation)(params));
+    },
+    getPendingTravelInformation: function getPendingTravelInformation(params) {
+      return dispatch((0, _travelactions.getPendingTravelInformation)(params));
+    },
+    getExpenseClaimInformation: function getExpenseClaimInformation(params) {
+      return dispatch((0, _commonexpenseclaimactions.getExpenseClaimInformation)(params));
+    },
+
+    clearLoginRedirectState: function clearLoginRedirectState(params) {
+      return dispatch((0, _authactions.clearLoginRedirectState)(params));
+    }
+  };
+}
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    isLoggedIn: state.auth.isLoggedIn,
+
+    pendingNeedToActData: state.needtoact.needToActData,
+
+    pendingLeaveInformation: state.leave.pendingLeaveInformationData,
+    pendingLeaveInformationError: state.leave.pendingLeaveInformationError,
+
+    pendingOdInformation: state.odrequest.pendingOdRequestInformationData,
+    pendingOdInformationError: state.odrequest.pendingOdRequestInformationError,
+
+    pendingPastAttendanceInformationData: state.pastattendance.pendingPastAttendanceInformationData,
+    pendingPastAttendanceInformationError: state.pastattendance.pendingPastAttendanceInformationError,
+
+    expenseClaimInformationData: state.commonExpenseClaim.expenseClaimInformationData,
+    expenseClaimInformationError: state.commonExpenseClaim.expenseClaimInformationError,
+
+    pendingTravelInformationData: state.travel.pendingTravelInformationData,
+    pendingTravelInformationError: state.travel.pendingTravelInformationError
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwDeepLinkScreen);

@@ -1,0 +1,166 @@
+module.exports = {
+  "_args": [[{
+    "raw": "react-native-code-push@^5.1.3-beta",
+    "scope": null,
+    "escapedName": "react-native-code-push",
+    "name": "react-native-code-push",
+    "rawSpec": "^5.1.3-beta",
+    "spec": ">=5.1.3-beta <6.0.0",
+    "type": "range"
+  }, "/Users/DAMAGE/Documents/EwMobileApp/ew-mobile-app"]],
+  "_from": "react-native-code-push@>=5.1.3-beta <6.0.0",
+  "_id": "react-native-code-push@5.3.4",
+  "_inCache": true,
+  "_location": "/react-native-code-push",
+  "_nodeVersion": "8.9.1",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/react-native-code-push_5.3.4_1527172128410_0.976272003842747"
+  },
+  "_npmUser": {
+    "name": "alexandergoncharov",
+    "email": "alexander.goncharov94@gmail.com"
+  },
+  "_npmVersion": "6.0.0",
+  "_phantomChildren": {
+    "chalk": "1.1.1",
+    "cli-width": "2.2.0",
+    "escape-string-regexp": "1.0.5",
+    "exit-hook": "1.1.1",
+    "extend": "3.0.1",
+    "inflight": "1.0.6",
+    "inherits": "2.0.3",
+    "lodash": "4.17.4",
+    "minimatch": "3.0.4",
+    "object-assign": "4.1.1",
+    "once": "1.4.0",
+    "os-tmpdir": "1.0.2",
+    "path-is-absolute": "1.0.1",
+    "pinkie-promise": "2.0.1",
+    "plist": "1.2.0",
+    "run-async": "2.3.0",
+    "rx": "4.1.0",
+    "spawn-sync": "1.0.15",
+    "string-width": "1.0.2",
+    "strip-ansi": "3.0.1",
+    "through": "2.3.8"
+  },
+  "_requested": {
+    "raw": "react-native-code-push@^5.1.3-beta",
+    "scope": null,
+    "escapedName": "react-native-code-push",
+    "name": "react-native-code-push",
+    "rawSpec": "^5.1.3-beta",
+    "spec": ">=5.1.3-beta <6.0.0",
+    "type": "range"
+  },
+  "_requiredBy": ["/"],
+  "_resolved": "https://registry.npmjs.org/react-native-code-push/-/react-native-code-push-5.3.4.tgz",
+  "_shasum": "db5da06550435a1fcb64d94a79436d90d8ab8c58",
+  "_shrinkwrap": null,
+  "_spec": "react-native-code-push@^5.1.3-beta",
+  "_where": "/Users/DAMAGE/Documents/EwMobileApp/ew-mobile-app",
+  "author": {
+    "name": "Microsoft Corporation"
+  },
+  "bugs": {
+    "url": "https://github.com/Microsoft/react-native-code-push/issues"
+  },
+  "dependencies": {
+    "code-push": "2.0.5",
+    "glob": "^5.0.15",
+    "hoist-non-react-statics": "^2.3.1",
+    "inquirer": "1.1.2",
+    "plist": "1.2.0",
+    "xcode": "0.9.2"
+  },
+  "description": "React Native plugin for the CodePush service",
+  "devDependencies": {
+    "archiver": "latest",
+    "body-parser": "latest",
+    "code-push-plugin-testing-framework": "file:./code-push-plugin-testing-framework",
+    "del": "latest",
+    "express": "latest",
+    "gulp-insert": "latest",
+    "gulp-tslint": "latest",
+    "gulp-typescript": "2.12.2",
+    "mkdirp": "latest",
+    "q": "^1.4.1",
+    "run-sequence": "latest",
+    "tslint": "^4.3.1",
+    "typescript": "^2.1.5"
+  },
+  "directories": {},
+  "dist": {
+    "integrity": "sha512-NGY+bBJWSV1SrOhcOSeElBQ3/igG8Ka0J20ANTq210vyBBx+aKvky6FpBGtg6f1DxBg6/rwk3g5A4y3eFUZKmQ==",
+    "shasum": "db5da06550435a1fcb64d94a79436d90d8ab8c58",
+    "tarball": "https://registry.npmjs.org/react-native-code-push/-/react-native-code-push-5.3.4.tgz",
+    "fileCount": 187,
+    "unpackedSize": 1287511,
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbBswjCRA9TVsSAnZWagAAFDcP/Aqa03m+/c0omhURMsZZ\nWp9Hik71qGMfkziCtmm8hKl10LVqX0INE7FhPoWDOb3m+reRh72qFd6ssLNs\noMwQk4X8o9YoCqVh5eg877WPd1k9+wGbnc+OfdVJLDo8WTikyaJplKzfTgSF\nFhdDVQExWwet7BYmOjgPsQdY+0w1stkRG2WPIk9aYWY7UT5Q4q2YMgfbEh72\nLZz4hPXgzEKGbE3NJ/aTDymYgScg7DDrJpBRvgbuSWhH++Tanb6sZWIsjx+q\nicJWu/bIZHD6UySHKsrfOL3fo4kt/2gKmoXkRA/stfTL/ui2pmWWduddDiIs\nf9NkEtXfXrhpaby3cUz/r5kkoLW4Qe125YP3YkN9Cdoyzt5xEcyvV/DEivJg\nf8utX6991Tbxr+q9RzqnziNWDRuxgsPnYR6mvP8PrG4Q+hYv38TgLuGqfZLY\nxWaw6s1NIj1sTF5ucL/3TRO3sM8hcbpZwJ7kLBSEbRDsysM80wQNYcqPE28q\n1dPKYCqTuD+tVqVc3bIQRU0nfLnv4UlYvxSD5fGVSbvAcA/v7rSo6BiQGHVl\ns1YI2NjYLl0f8ETmODV0RNc5hVNd5smdgSHoQQ1/c+GrI4UFcTh3XO32owri\nawRRtA2nbOezjev0Me4GtIyr5hFM0UshJvxbV6DCYy6Mwa7LgIOage/WmTD1\nHyYi\r\n=RrDD\r\n-----END PGP SIGNATURE-----\r\n"
+  },
+  "gitHead": "4aa735c7283a5d367983cbf12ee38957f11fd447",
+  "homepage": "https://microsoft.github.io/code-push",
+  "keywords": ["react-native", "code", "push"],
+  "license": "MIT",
+  "main": "CodePush.js",
+  "maintainers": [{
+    "name": "alexandergoncharov",
+    "email": "alexander.goncharov94@gmail.com"
+  }, {
+    "name": "axemclion",
+    "email": "code@nparashuram.com"
+  }, {
+    "name": "bokang",
+    "email": "buptkang@gmail.com"
+  }, {
+    "name": "bretjohnson",
+    "email": "bret.johnson@microsoft.com"
+  }, {
+    "name": "max-mironov",
+    "email": "v-maximi@microsoft.com"
+  }, {
+    "name": "maximpop",
+    "email": "maximpop@microsoft.com"
+  }, {
+    "name": "pniko",
+    "email": "patrick.nikoletich@microsoft.com"
+  }, {
+    "name": "ryanjsalva",
+    "email": "ryanjsalva@gmail.com"
+  }, {
+    "name": "sergey-akhalkov",
+    "email": "v-seakha@microsoft.com"
+  }, {
+    "name": "silhouettes",
+    "email": "rich@rkhua.com"
+  }, {
+    "name": "toys",
+    "email": "toysruss89@gmail.com"
+  }],
+  "name": "react-native-code-push",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Microsoft/react-native-code-push.git"
+  },
+  "rnpm": {
+    "android": {
+      "packageInstance": "new CodePush(${androidDeploymentKey}, getApplicationContext(), BuildConfig.DEBUG)"
+    },
+    "ios": {
+      "sharedLibraries": ["libz"]
+    },
+    "params": [{
+      "type": "input",
+      "name": "androidDeploymentKey",
+      "message": "What is your CodePush deployment key for Android (hit <ENTER> to ignore)"
+    }],
+    "commands": {
+      "postlink": "node node_modules/react-native-code-push/scripts/postlink/run"
+    }
+  },
+  "typings": "typings/react-native-code-push.d.ts",
+  "version": "5.3.4"
+};

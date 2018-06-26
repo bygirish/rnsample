@@ -1,0 +1,41 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../utils');
+
+exports.default = {
+
+  accordionStyle: {
+    margin: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 5 : 5,
+    padding: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 8 : 5,
+    backgroundColor: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? appstyleguide.APP_LIGHT_GRAY : appstyleguide.APP_LIGHT_GRAY
+  },
+
+  accordionHeadingTextStyle: {
+    color: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? appstyleguide.APP_BLACK : appstyleguide.APP_BLACK,
+    fontSize: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 14 : 14
+  },
+
+  hiddenAccordionStyle: {
+    marginLeft: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 10 : 10,
+    marginRight: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 10 : 10,
+    padding: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 10 : 10,
+    borderWidth: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 0.5 : 0.5,
+    backgroundColor: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 'white' : 'white',
+    borderColor: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? appstyleguide.APP_LIGHT_GRAY : appstyleguide.APP_LIGHT_GRAY,
+    marginTop: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? -10 : -10,
+    paddingBottom: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 0 : 0
+  },
+
+  iconViewStyle: {
+
+    position: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 'absolute' : 'absolute',
+    right: (0, _utils.getMobileOS)() === _utils.PLATFORM_IOS ? 10 : 10
+  }
+
+};

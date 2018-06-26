@@ -1,0 +1,10 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var GET_PAST_ATTENDANCE_INFORMATION = exports.GET_PAST_ATTENDANCE_INFORMATION = '/PastAttendance?scope=I';
+var APPLY_PAST_ATTENDANCE = exports.APPLY_PAST_ATTENDANCE = '/PastAttendance?scope=I';
+var PAST_ATTENDANCE_ACTION = exports.PAST_ATTENDANCE_ACTION = '/PastAttendance?scope=I';
+var PENDING_PAST_ATTENDANCE_INFORMATION = exports.PENDING_PAST_ATTENDANCE_INFORMATION = '/PastAttendance?scope=I';
+var ROSTER_INFORMATION = exports.ROSTER_INFORMATION = '/PastAttendance?scope=I';
+
+var GET_APPLIED_PAST_ATTENDANCE_LIST = exports.GET_APPLIED_PAST_ATTENDANCE_LIST = '/HomePageM?scope=I';

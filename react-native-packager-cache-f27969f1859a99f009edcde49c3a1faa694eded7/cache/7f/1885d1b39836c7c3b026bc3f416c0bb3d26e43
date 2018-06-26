@@ -1,0 +1,707 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _GoogleAnalyticController = require('../../../GoogleAnalyticController');
+
+var _ewsupervisorinfo = require('../../../components/ewsupervisor/ewsupervisorinfo');
+
+var _ewsupervisorinfo2 = babelHelpers.interopRequireDefault(_ewsupervisorinfo);
+
+var _ewloadingindicator = require('../../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewbar = require('../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewscreentitle = require('../../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _utils = require('../../../utils');
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _pastattendanceerrorhandling = require('../../../services/pastattendance/pastattendanceerrorhandling');
+
+var pastAttendanceError = babelHelpers.interopRequireWildcard(_pastattendanceerrorhandling);
+
+var _pastattendanceutils = require('./pastattendanceutils');
+
+var pastAttendanceConstants = babelHelpers.interopRequireWildcard(_pastattendanceutils);
+
+var _modulelist = require('../../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _commonactions = require('../../../services/common/commonactions');
+
+var _animationutils = require('../../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _ewmypastattendanceactionscreenstyle = require('./styles/ewmypastattendanceactionscreenstyle');
+
+var _ewmypastattendanceactionscreenstyle2 = babelHelpers.interopRequireDefault(_ewmypastattendanceactionscreenstyle);
+
+var _pastattendanceactions = require('../../../services/pastattendance/pastattendanceactions');
+
+var FILE_NAME = "ewmypastattendanceactionscreen.js : ";
+
+var SCREEN_NAME = "My Applied Past Attendance Action Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwMyAppliedPastAttendanceActionScreen = function (_Component) {
+  babelHelpers.inherits(EwMyAppliedPastAttendanceActionScreen, _Component);
+
+  function EwMyAppliedPastAttendanceActionScreen(props, context) {
+    babelHelpers.classCallCheck(this, EwMyAppliedPastAttendanceActionScreen);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwMyAppliedPastAttendanceActionScreen.__proto__ || Object.getPrototypeOf(EwMyAppliedPastAttendanceActionScreen)).call(this, props, context));
+
+    _this._keyboardDidShow = function (event) {
+
+      console.log(FILE_NAME + "In _keyboardDidShow method");
+
+      scrollView.scrollToEnd({ animated: true });
+    };
+
+    _this.showCancelPastAttendanceDialog = function () {
+
+      console.log(FILE_NAME + "In showCancelPastAttendanceDialog method");
+
+      _reactNative.Alert.alert('Past Attendance', 'Do you really want to cancel your past attendance request?', [{ text: 'No', onPress: function onPress() {
+          return console.log('Cancel Pressed');
+        }, style: 'cancel' }, { text: 'Yes', onPress: function onPress() {
+          return _this.onPressAction(pastAttendanceConstants.PAST_ATTENDANCE_ACTION_CANCEL);
+        } }]);
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      console.log(FILE_NAME + "In clearCurrentMessage method");
+
+      _this.setState({
+        currentError: ''
+      });
+
+      _this.props.clearPastAttendanceError(null);
+    };
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      myAppliedPastAttendanceInformation: [],
+
+      componentInitializeTime: new Date().getTime() };
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwMyAppliedPastAttendanceActionScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      if (this.props.myPastAttendanceData) {
+
+        this.setState({
+          isDataPreLoaded: true,
+          isLoading: false,
+          myAppliedPastAttendanceInformation: this.props.myPastAttendanceData
+        });
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ");
+      console.log(nextProps);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage('Successfully', 'Past Attendance Cancelled', 'success');
+              }
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      this.keyboardDidShowListener = _reactNative.Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      this.keyboardDidShowListener.remove();
+
+      if (this.state.isDone && this.state.currentError == '') {
+
+        console.log(FILE_NAME + "Action Successfull");
+
+        var params = {
+          "0": 'CLEAR_STATE_DATA_ALL'
+        };
+
+        this.props.clearPastAttendanceStateData(params);
+      }
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+
+      console.log(FILE_NAME + "In renderScreen method");
+
+      var outerViewStyle = _ewmypastattendanceactionscreenstyle2.default.outerViewStyle,
+          innerViewStyle = _ewmypastattendanceactionscreenstyle2.default.innerViewStyle,
+          headingTextStyle = _ewmypastattendanceactionscreenstyle2.default.headingTextStyle;
+      var myAppliedPastAttendanceInformation = this.state.myAppliedPastAttendanceInformation;
+      var approver_Name = myAppliedPastAttendanceInformation.approver_Name,
+          approver_Designation = myAppliedPastAttendanceInformation.approver_Designation,
+          approver_EmpCode = myAppliedPastAttendanceInformation.approver_EmpCode,
+          status = myAppliedPastAttendanceInformation.status,
+          reason = myAppliedPastAttendanceInformation.reason,
+          applied_On_Timestamp = myAppliedPastAttendanceInformation.applied_On_Timestamp,
+          in_Time = myAppliedPastAttendanceInformation.in_Time,
+          out_Time = myAppliedPastAttendanceInformation.out_Time,
+          remarks = myAppliedPastAttendanceInformation.remarks;
+
+
+      console.log("myAppliedPastAttendanceInformation", myAppliedPastAttendanceInformation);
+
+      var info = {
+        name: approver_Name,
+        designation: approver_Designation,
+        imageUrl: (0, _utils.getImageUrl)(this.props.sessionToken, approver_EmpCode, 'My Past attendance action', this.props.currentImageTimestamp),
+        datetime: applied_On_Timestamp
+      };
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: 'Past Attendance Request'
+            })
+          ),
+          _react2.default.createElement(_nativeBase.Right, null)
+        ),
+        _react2.default.createElement(
+          _reactNative.ScrollView,
+          {
+            ref: function ref(_ref) {
+              return scrollView = _ref;
+            },
+            contentContainerStyle: _ewmypastattendanceactionscreenstyle2.default.contentContainerStyle,
+            keyboardShouldPersistTaps: 'always'
+          },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewmypastattendanceactionscreenstyle2.default.myPastAttendaceInfoContainer },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              status
+            )
+          ),
+          _react2.default.createElement(_ewsupervisorinfo2.default, { info: info }),
+          this.getMyPastAttendanceDate(myAppliedPastAttendanceInformation),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewmypastattendanceactionscreenstyle2.default.headingContainerStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewmypastattendanceactionscreenstyle2.default.headingTextStyle },
+              'Reason'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              reason
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewmypastattendanceactionscreenstyle2.default.headingContainerStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewmypastattendanceactionscreenstyle2.default.headingTextStyle },
+              'In time'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              in_Time
+            )
+          ),
+          this.showPastAttendanceOutTime(out_Time),
+          remarks != null ? _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewmypastattendanceactionscreenstyle2.default.headingContainerStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: _ewmypastattendanceactionscreenstyle2.default.headingTextStyle },
+              'Remarks'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              remarks
+            )
+          ) : null,
+          this.showFooter(status)
+        )
+      );
+    }
+  }, {
+    key: 'showPastAttendanceOutTime',
+    value: function showPastAttendanceOutTime(out_Time) {
+
+      console.log(FILE_NAME + "In showPastAttendanceOutTime method");
+
+      if (out_Time != null) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewmypastattendanceactionscreenstyle2.default.headingContainerStyle },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: _ewmypastattendanceactionscreenstyle2.default.headingTextStyle },
+            'Out time'
+          ),
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: { flex: 5 } },
+            out_Time
+          )
+        );
+      }
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME + "In handleError method");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case pastAttendanceError.AUTHENTICATION_FAILURE:
+          _reactNativeRouterFlux.Actions.ewlogin();
+          break;
+
+        case pastAttendanceError.SERVER_EXCEPTION:
+          this.showAlertMessage(pastAttendanceError.SERVER_ERROR);
+          return this.renderScreen();
+          break;
+
+        case pastAttendanceError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          break;
+
+        default:
+          return this.renderScreen();
+
+      }
+    }
+  }, {
+    key: 'showFooter',
+    value: function showFooter(myPastAttendanceStatusId) {
+
+      console.log(FILE_NAME + "In showFooterTab method");
+
+      console.log("In showFooterTab method", myPastAttendanceStatusId);
+
+      return null;
+    }
+  }, {
+    key: 'renderActionButtons',
+    value: function renderActionButtons(myAppliedPastAttendanceInformation, myPastAttendanceStatusId) {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In renderActionButtons method");
+
+      console.log("myPastAttendanceStatusId", myPastAttendanceStatusId == pastAttendanceConstants.STATUS_APPROVED);
+
+      if (myPastAttendanceStatusId == pastAttendanceConstants.STATUS_PENDING_APPROVAL && myAppliedPastAttendanceInformation.reapply_Flag != 'Y') {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewmypastattendanceactionscreenstyle2.default.footerContainerStyle },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { onPress: function onPress() {
+                return _this2.showCancelPastAttendanceDialog();
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Cancel Past Attendance'
+            )
+          )
+        );
+      }
+
+      if (myPastAttendanceStatusId == pastAttendanceConstants.STATUS_APPROVED) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 10 } },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { style: { marginRight: 10 }, onPress: function onPress() {
+                return _this2.showCancelPastAttendanceDialog();
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Cancel Past Attendance'
+            )
+          )
+        );
+      }
+    }
+  }, {
+    key: 'onPressAction',
+    value: function onPressAction(action) {
+
+      console.log(FILE_NAME + "In onPressAction method");
+
+      switch (action) {
+        case pastAttendanceConstants.PAST_ATTENDANCE_ACTION_CANCEL:
+
+          tracker.trackEvent(SCREEN_CATEGORY, 'past attendance cancelled');
+
+          this.sendActionToServer(pastAttendanceConstants.PAST_ATTENDANCE_ACTION_CANCEL);
+          break;
+
+        case pastAttendanceConstants.PAST_ATTENDANCE_ACTION_REAPPLY:
+
+          tracker.trackEvent(SCREEN_CATEGORY, 'past attendance reapply event');
+
+          this.redirectToPastAttendaceScreen();
+          break;
+        default:
+
+      }
+    }
+  }, {
+    key: 'redirectToPastAttendaceScreen',
+    value: function redirectToPastAttendaceScreen() {
+
+      console.log(FILE_NAME + "In redirectToPastAttendaceScreen method");
+
+      _reactNativeRouterFlux.Actions.ewapplypastattendancescreen({ reapplyPastAttendanceData: this.state.myAppliedPastAttendanceInformation });
+    }
+  }, {
+    key: 'sendActionToServer',
+    value: function sendActionToServer(action) {
+
+      console.log(FILE_NAME + "In onPressAction method");
+
+      var myAppliedPastAttendanceInformation = this.state.myAppliedPastAttendanceInformation;
+
+
+      myAppliedPastAttendanceInformation["action"] = action;
+
+      this.props.pastAttendanceAction(myAppliedPastAttendanceInformation);
+
+      this.setState({
+        isLoading: true
+      });
+    }
+  }, {
+    key: 'showOutDate',
+    value: function showOutDate(applyInDate, applyOutDate) {
+
+      console.log(FILE_NAME + "In showOutDate method");
+
+      var dateHeadingStyle = _ewmypastattendanceactionscreenstyle2.default.dateHeadingStyle,
+          headingTextStyle = _ewmypastattendanceactionscreenstyle2.default.headingTextStyle;
+
+
+      if (applyOutDate != null && applyInDate != applyOutDate) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: dateHeadingStyle },
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: headingTextStyle },
+            'To'
+          ),
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: { flex: 5 } },
+            applyOutDate
+          )
+        );
+      }
+    }
+  }, {
+    key: 'getMyPastAttendanceDate',
+    value: function getMyPastAttendanceDate(info) {
+
+      console.log(FILE_NAME + "In getMyPastAttendanceDate method");
+
+      var apply_InDate = info.apply_InDate,
+          apply_OutDate = info.apply_OutDate;
+      var dateHeadingStyle = _ewmypastattendanceactionscreenstyle2.default.dateHeadingStyle,
+          headingTextStyle = _ewmypastattendanceactionscreenstyle2.default.headingTextStyle;
+
+
+      if (apply_InDate === apply_OutDate) {
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: dateHeadingStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: headingTextStyle },
+              'For'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              apply_InDate
+            )
+          )
+        );
+      } else {
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: dateHeadingStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: headingTextStyle },
+              'From'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              apply_InDate
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: dateHeadingStyle },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: headingTextStyle },
+              'To'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { flex: 5 } },
+              apply_OutDate
+            )
+          )
+        );
+      }
+    }
+  }]);
+  return EwMyAppliedPastAttendanceActionScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction method");
+
+  return {
+
+    clearPastAttendanceStateData: function clearPastAttendanceStateData(params) {
+      return dispatch((0, _pastattendanceactions.clearPastAttendanceStateData)(params));
+    },
+    clearPastAttendanceError: function clearPastAttendanceError(params) {
+      return dispatch((0, _pastattendanceactions.clearPastAttendanceError)(params));
+    },
+
+    pastAttendanceAction: function pastAttendanceAction(params) {
+      return dispatch((0, _pastattendanceactions.pastAttendanceAction)(params));
+    },
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    }
+
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    pendingNeedToActData: state.needtoact.needToActData,
+
+    currentImageTimestamp: state.common.currentImageTimestamp,
+
+    pastAttendanceActionData: state.pastattendance.pastAttendanceActionData,
+    pastAttendanceActionError: state.pastattendance.pastAttendanceActionError
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwMyAppliedPastAttendanceActionScreen);

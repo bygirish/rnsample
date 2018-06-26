@@ -1,0 +1,82 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _ewtext = require('../ewtext/ewtext');
+
+var _ewtext2 = babelHelpers.interopRequireDefault(_ewtext);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var EwButton = function (_Component) {
+  babelHelpers.inherits(EwButton, _Component);
+
+  function EwButton(props, context) {
+    babelHelpers.classCallCheck(this, EwButton);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwButton.__proto__ || Object.getPrototypeOf(EwButton)).call(this, props, context));
+
+    _this.initialState = {};
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwButton, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      console.log("Inside componentDidUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log("Inside render");
+
+      var _props = this.props,
+          label = _props.label,
+          customStyle = _props.customStyle,
+          props = babelHelpers.objectWithoutProperties(_props, ['label', 'customStyle']);
+
+
+      textStyle = _styles2.default.textStyle;
+
+      if (this.props.textStyle) textStyle = this.props.textStyle;
+
+      return _react2.default.createElement(
+        _nativeBase.Button,
+        babelHelpers.extends({}, props, {
+          style: [_styles2.default.buttonStyle, customStyle],
+          onPress: this.props.onButonClicked
+        }),
+        _react2.default.createElement(_ewtext2.default, {
+          text: this.props.label,
+          customStyle: textStyle
+        })
+      );
+    }
+  }]);
+  return EwButton;
+}(_react.Component);
+
+exports.default = EwButton;

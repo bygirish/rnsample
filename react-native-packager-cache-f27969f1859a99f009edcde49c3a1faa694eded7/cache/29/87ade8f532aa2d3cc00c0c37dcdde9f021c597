@@ -1,0 +1,216 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getPaySlipInformation = getPaySlipInformation;
+exports.getAvailablePayslips = getAvailablePayslips;
+exports.clearPayrollError = clearPayrollError;
+exports.clearPayrollStateData = clearPayrollStateData;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _payrollprocessing = require('./payrollprocessing');
+
+var payrollProcessing = babelHelpers.interopRequireWildcard(_payrollprocessing);
+
+var _payrollactiontypes = require('./payrollactiontypes');
+
+var payrollActionTypes = babelHelpers.interopRequireWildcard(_payrollactiontypes);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _authactiontypes = require('../auth/authactiontypes');
+
+var authActionTypes = babelHelpers.interopRequireWildcard(_authactiontypes);
+
+var _authprocessing = require('../auth/authprocessing');
+
+var authProcessing = babelHelpers.interopRequireWildcard(_authprocessing);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var FILE_NAME = "payrollactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_PAYROLL;
+
+function getPaySlipInformation(params) {
+
+  console.log(FILE_NAME + "In getPaySlipInformation method - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getPaySlipInformationRequest = payrollProcessing.buildGetPaySlipInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getPaySlipInformationRequest.url, getPaySlipInformationRequest.data, getPaySlipInformationRequest.config).then(function (result) {
+
+      console.log("getPaySlipInformationRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPaySlipInformation', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: payrollActionTypes.SUCCESS_PAY_SLIP_DATA,
+          response: payrollProcessing.buildSuccessGetPaySlipInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPaySlipInformation', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: payrollActionTypes.FAILURE_PAY_SLIP_DATA,
+          response: payrollProcessing.buildFailedGetPaySlipInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      console.log("resposnecode is ", err.response.status);
+
+      if (err.response.status == globalErrors.STATUS_UNAUTHORIZED) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPaySlipInformation', SESSION_EXPIRED_LOGOUT_SUCCESSFULL);
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPaySlipInformation', _utils.REQUEST_SERVER_ERROR);
+
+        console.log("getPaySlipInformationRequest Error - ", err);
+
+        globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+        dispatch({
+          type: payrollActionTypes.FAILURE_PAY_SLIP_DATA,
+          response: payrollProcessing.buildServerErrorGetPaySlipInformationResponse(err, params)
+        });
+      }
+    });
+  };
+}
+
+function getAvailablePayslips(params) {
+
+  console.log(FILE_NAME + "In getAvailablePayslips method - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getAvailablePayslipsRequest = payrollProcessing.buildGetAvailablePayslipsRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(getAvailablePayslipsRequest.url, getAvailablePayslipsRequest.data, getAvailablePayslipsRequest.config).then(function (result) {
+
+      console.log("getAvailablePayslipsRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getAvailablePayslips', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: payrollActionTypes.SUCCESS_AVAILABLE_PAY_SLIPS,
+          response: payrollProcessing.buildSuccessGetAvailablePayslipsResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getAvailablePayslips', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: payrollActionTypes.FAILURE_AVAILABLE_PAY_SLIPS,
+          response: payrollProcessing.buildFailedGetAvailablePayslipsResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getAvailablePayslips', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getAvailablePayslipsRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: payrollActionTypes.FAILURE_AVAILABLE_PAY_SLIPS,
+        response: payrollProcessing.buildServerErrorGetAvailablePayslipsResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearPayrollError(params) {
+
+  return {
+    type: payrollActionTypes.CLEAR_PAYROLL_ERROR,
+    response: null
+  };
+}
+function clearPayrollStateData(params) {
+
+  console.log(FILE_NAME + "In clearPayrollStateData - ");
+  console.log("Type of Data to be cleared - ", params);
+
+  CLEAR_STATE_DATA_ALL = 'CLEAR_STATE_DATA_ALL';
+  CLEAR_STATE_ERROR_COUNTER = 'CLEAR_STATE_ERROR_COUNTER';
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var errorCounter = getState().payroll.errorCounter;
+
+    var availablePayslipsData = getState().payroll.availablePayslipsData;
+    var availablePayslipsError = getState().payroll.availablePayslipsError;
+
+    var paySlipInformationData = getState().payroll.paySlipInformationData;
+    var paySlipInformationError = getState().payroll.paySlipInformationError;
+
+    Object.keys(params).map(function (key) {
+      console.log("params attribute " + key + " value is - " + params[key]);
+
+      switch (params[key]) {
+        case CLEAR_STATE_DATA_ALL:
+
+          errorCounter = null;
+
+          paySlipInformationData = null;
+          paySlipInformationError = null;
+
+          availablePayslipsData = null;
+          availablePayslipsError = null;
+          break;
+
+        case CLEAR_STATE_ERROR_COUNTER:
+
+          errorCounter = null;
+          break;
+
+        default:
+
+      }
+    });
+
+    var response = {
+      errorCounter: errorCounter,
+      paySlipInformationData: paySlipInformationData,
+      paySlipInformationError: paySlipInformationError,
+      availablePayslipsData: availablePayslipsData,
+      availablePayslipsError: availablePayslipsError
+    };
+
+    dispatch({
+      type: payrollActionTypes.CLEAR_PAYROLL_STATE_DATA,
+      response: response
+    });
+  };
+}

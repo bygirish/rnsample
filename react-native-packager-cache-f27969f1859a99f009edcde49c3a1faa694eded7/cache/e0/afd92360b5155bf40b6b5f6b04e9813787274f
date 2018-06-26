@@ -1,0 +1,81 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+
+var React = require('react-native');
+
+var StyleSheet = React.StyleSheet,
+    Dimensions = React.Dimensions,
+    Platform = React.Platform;
+
+
+var deviceHeight = Dimensions.get('window').height;
+
+exports.default = {
+
+  spinnerElement: {
+    marginLeft: 5,
+    marginRight: 5
+  },
+
+  spinnerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  pickerStyle: {
+    marginTop: 5,
+    marginBottom: 5,
+    borderColor: appstyleguide.APP_LIGHT_GRAY,
+    borderWidth: 0.5
+  },
+
+  accordionStyle: {
+    margin: 5,
+    padding: Platform.OS === 'ios' ? 8 : 5,
+    backgroundColor: appstyleguide.APP_LIGHT_GRAY
+  },
+
+  accordionHeadingTextStyle: {
+    color: appstyleguide.APP_BLACK,
+    fontSize: 14
+  },
+
+  hiddenAccordionStyle: {
+    marginLeft: 10,
+    marginRight: 10,
+    padding: 10,
+    backgroundColor: appstyleguide.APP_WHITE,
+    borderWidth: 0.5,
+    borderColor: appstyleguide.APP_LIGHT_GRAY,
+    marginTop: -10,
+    paddingBottom: 0
+  },
+
+  dropdownElement: {
+    alignSelf: 'stretch',
+    alignItems: 'center'
+  },
+
+  dropdownContainer: {
+    marginTop: 5,
+    marginBottom: 5,
+    width: deviceHeight * 0.2,
+    borderColor: appstyleguide.APP_LIGHT_GRAY,
+    borderWidth: 0.5
+  },
+
+  loadAgainButtonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 50
+  }
+
+};

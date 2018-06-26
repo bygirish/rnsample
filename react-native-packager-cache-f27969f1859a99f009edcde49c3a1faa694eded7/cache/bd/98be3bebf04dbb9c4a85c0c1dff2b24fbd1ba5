@@ -1,0 +1,30 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getChatbotIssueModel = getChatbotIssueModel;
+function getChatbotIssueModel(clientData, currentState) {
+  var _currentState$needtoa = currentState.needtoact.needToActData.employeeInfo,
+      email = _currentState$needtoa.email,
+      empCode = _currentState$needtoa.empCode,
+      mobile_number = _currentState$needtoa.mobile_number,
+      name = _currentState$needtoa.name,
+      customer_id = _currentState$needtoa.customer_id,
+      user_id = _currentState$needtoa.user_id;
+
+
+  var params = {
+
+    chatbot_issue_document: {
+
+      chat_messages: clientData.messageList,
+      user_id: user_id,
+      email_id: email,
+      contact: mobile_number,
+      issue_type: issueType
+
+    }
+
+  };
+
+  return params;
+}

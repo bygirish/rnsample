@@ -1,0 +1,298 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../../utils');
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewcomponents = require('../../../../utils/ewcomponents');
+
+var _expenseutils = require('../../expenseutils');
+
+var expenseConstant = babelHelpers.interopRequireWildcard(_expenseutils);
+
+
+defaultMargin = appstyleguide.DEFAULT_MARGIN;
+
+var VendorDetails = function (_Component) {
+  babelHelpers.inherits(VendorDetails, _Component);
+
+  function VendorDetails(props, context) {
+    babelHelpers.classCallCheck(this, VendorDetails);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (VendorDetails.__proto__ || Object.getPrototypeOf(VendorDetails)).call(this, props, context));
+
+    elementValues = _this.handleElementValues(_this.props);
+
+    _this.initialState = {
+
+      gstinNumber: elementValues.gstinNumber,
+      vendorName: elementValues.vendorName,
+      sacHsnCode: elementValues.sacHsnCode,
+      isReveiwMode: elementValues.isReveiwMode
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(VendorDetails, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+
+      if (this.props.initialState == null) {
+
+        this.props.updateParentState(this.getVendorStateObject());
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (this.isStateChanged(nextProps.initialState)) {
+
+        this.setState({
+
+          gstinNumber: nextProps.initialState.gstinNumber,
+          vendorName: nextProps.initialState.vendorName,
+          sacHsnCode: nextProps.initialState.sacHsnCode
+
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props$configuration = this.props.configuration,
+          isGstNumbervisible = _props$configuration.isGstNumbervisible,
+          isVendorNameVisible = _props$configuration.isVendorNameVisible,
+          isSachcnCodeVisible = _props$configuration.isSachcnCodeVisible;
+      var isReveiwMode = this.state.isReveiwMode;
+
+
+      if (isGstNumbervisible) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewcomponents.EwH2Text, {
+            text: 'Vendor Details'
+          }),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row" } },
+            this.renderGstinnumberView(isGstNumbervisible, isReveiwMode),
+            this.renderVendorNameView(isVendorNameVisible, isReveiwMode)
+          ),
+          this.renderSachcnView(isSachcnCodeVisible, isReveiwMode)
+        );
+      }
+
+      return null;
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+
+      if (this.isStateChanged(this.props.initialState)) {
+
+        console.log("updating master screen", this.getVendorStateObject());
+
+        this.props.updateParentState(this.getVendorStateObject());
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'renderGstinnumberView',
+    value: function renderGstinnumberView(isGstNumbervisible, isReveiwMode) {
+      var _this2 = this;
+
+      if (isGstNumbervisible) {
+        var gstinNumber = this.state.gstinNumber;
+
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.5 } },
+          isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstant.GSTIN_LABEL,
+            value: gstinNumber
+          }) : _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+            label: expenseConstant.GSTIN_LABEL,
+            placeholderlabel: expenseConstant.GSTIN_PLACEHOLDER_LABEL,
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            onChangeText: function onChangeText(gstinNumber) {
+              return _this2.setState({ gstinNumber: gstinNumber });
+            },
+            value: gstinNumber
+          })
+        );
+      }
+    }
+  }, {
+    key: 'renderVendorNameView',
+    value: function renderVendorNameView(isVendorNameVisible, isReveiwMode) {
+      var _this3 = this;
+
+      if (isVendorNameVisible) {
+        var vendorName = this.state.vendorName;
+
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.5, marginLeft: 20 } },
+          isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstant.VENDOR_NAME_LABEL,
+            value: vendorName
+          }) : _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+            label: expenseConstant.VENDOR_NAME_LABEL,
+            placeholderlabel: expenseConstant.VENDOR_NAME_PLACEHOLDER_LABEL,
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            onChangeText: function onChangeText(vendorName) {
+              return _this3.setState({ vendorName: vendorName });
+            },
+            value: vendorName
+          })
+        );
+      }
+    }
+  }, {
+    key: 'renderSachcnView',
+    value: function renderSachcnView(isSachcnCodeVisible, isReveiwMode) {
+      var _this4 = this;
+
+      if (isSachcnCodeVisible) {
+        var sacHsnCode = this.state.sacHsnCode;
+
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.5, marginLeft: 20 } },
+          isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstant.SAC_HSN_LABEL,
+            value: sacHsnCode
+          }) : _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+            label: expenseConstant.SAC_HSN_LABEL,
+            placeholderlabel: expenseConstant.SAC_HSN_PLACEHOLDER_LABEL,
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            onChangeText: function onChangeText(sacHsnCode) {
+              return _this4.setState({ sacHsnCode: sacHsnCode });
+            },
+            value: sacHsnCode
+          })
+        );
+      }
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(propsData) {
+
+      gstinNumber = "";
+      vendorName = "";
+      sacHsnCode = "";
+      isReveiwMode = false;
+
+      console.log("propsData receive is ", propsData);
+
+      if (propsData.initialState != null) {
+
+        gstinNumber = propsData.initialState.gstinNumber;
+        vendorName = propsData.initialState.vendorName;
+        sacHsnCode = propsData.initialState.sacHsnCode;
+
+        isReveiwMode = propsData.configuration.isReveiwMode;
+      } else {
+
+        if (propsData.configuration != null) {
+
+          isReveiwMode = propsData.configuration.isReveiwMode;
+        }
+      }
+
+      elementValues = {
+
+        gstinNumber: gstinNumber,
+        vendorName: vendorName,
+        sacHsnCode: sacHsnCode,
+        isReveiwMode: isReveiwMode
+
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: 'isStateChanged',
+    value: function isStateChanged(initialState) {
+
+      if (JSON.stringify(initialState) != JSON.stringify(this.getVendorStateObject())) return true;
+
+      return false;
+    }
+  }, {
+    key: 'getVendorStateObject',
+    value: function getVendorStateObject() {
+
+      var vendorStateObject = {
+
+        gstinNumber: this.state.gstinNumber,
+        vendorName: this.state.vendorName,
+        sacHsnCode: this.state.sacHsnCode
+
+      };
+
+      return vendorStateObject;
+    }
+  }]);
+  return VendorDetails;
+}(_react.Component);
+
+exports.default = VendorDetails;

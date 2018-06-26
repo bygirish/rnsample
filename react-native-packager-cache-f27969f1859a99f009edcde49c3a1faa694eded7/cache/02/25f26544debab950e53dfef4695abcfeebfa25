@@ -1,0 +1,1529 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EwOtherExpenseScreen = undefined;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _GoogleAnalyticController = require('../../../GoogleAnalyticController');
+
+var _commonactions = require('../../../services/common/commonactions');
+
+var _othersclaimactions = require('../../../services/expenseclaim/others/othersclaimactions');
+
+var _ewcomponents = require('../../../utils/ewcomponents');
+
+var _routerscenekeys = require('../../../utils/routerscenekeys');
+
+var routerSceneKeys = babelHelpers.interopRequireWildcard(_routerscenekeys);
+
+var _commentsmodal = require('../components/ewmileageclaimcomponents/commentsmodal');
+
+var _commentsmodal2 = babelHelpers.interopRequireDefault(_commentsmodal);
+
+var _commentsview = require('../components/ewmileageclaimcomponents/commentsview');
+
+var _commentsview2 = babelHelpers.interopRequireDefault(_commentsview);
+
+var _ewotherexpensetype = require('../components/ewotherclaimcomponents/ewotherexpensetype');
+
+var _ewotherexpensetype2 = babelHelpers.interopRequireDefault(_ewotherexpensetype);
+
+var _ewothercustomfields = require('../components/ewotherclaimcomponents/ewothercustomfields');
+
+var _ewothercustomfields2 = babelHelpers.interopRequireDefault(_ewothercustomfields);
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _modulelist = require('../../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _animationutils = require('../../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _utils = require('../../../utils');
+
+var _datetimeutils = require('../../../utils/datetimeutils');
+
+var _expenseutils = require('../expenseutils');
+
+var expenseConstant = babelHelpers.interopRequireWildcard(_expenseutils);
+
+var _travelutils = require('../../travel/travelutils');
+
+var travelConstants = babelHelpers.interopRequireWildcard(_travelutils);
+
+var _othersclaimerrorhandling = require('../../../services/expenseclaim/others/othersclaimerrorhandling');
+
+var expenseError = babelHelpers.interopRequireWildcard(_othersclaimerrorhandling);
+
+var _screennameidentifiers = require('../../../utils/screennameidentifiers');
+
+var FILE_NAME = "ewotherexpensescreen.js : ";
+
+var SCREEN_NAME = "Other Expense Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_TRAVEL_AND_EXPENSE;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var defaultMargin = appstyleguide.DEFAULT_TOP_MARGIN;
+
+var EwOtherExpenseScreen = exports.EwOtherExpenseScreen = function (_Component) {
+  babelHelpers.inherits(EwOtherExpenseScreen, _Component);
+
+  function EwOtherExpenseScreen(props, context) {
+    babelHelpers.classCallCheck(this, EwOtherExpenseScreen);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwOtherExpenseScreen.__proto__ || Object.getPrototypeOf(EwOtherExpenseScreen)).call(this, props, context));
+
+    _this.handleBackButtonPress = function () {
+
+      console.log(FILE_NAME + " Inside handleBackButtonPress");
+
+      var isReveiwMode = _this.state.isReveiwMode;
+
+
+      if (!isReveiwMode) {
+
+        _reactNative.Alert.alert('Others Expense', 'Do you want to leave without saving ?', [{ text: 'Ok', onPress: function onPress() {
+            return _reactNativeRouterFlux.Actions.pop();
+          } }, { text: 'Cancel' }]);
+      } else _reactNativeRouterFlux.Actions.pop();
+
+      return true;
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+    };
+
+    _this._handleEwDateTimePicked = function (date, mode, elementKey) {
+
+      console.log(FILE_NAME, "In _handleEwDateTimePicked method");
+
+      console.log("Returned Date value is - ", date);
+      console.log("Mod is - ", mode);
+      console.log("For Element is - ", elementKey);
+
+      var valueDateTimePicker;
+
+      var dateSelected = new Date(date).getTime();
+
+      var expenseDate = _this.state.expenseDate;
+
+
+      switch (elementKey) {
+        case expenseConstant.EXPENSE_DATE_KEY:
+
+          _this.setState({
+            expenseDate: {
+              mode: expenseDate.mode,
+              key: expenseDate.key,
+              value: dateSelected
+            }
+          });
+
+          break;
+
+        default:
+
+      }
+    };
+
+    elementValues = _this.handleElementValues(_this.props.expenseData);
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      isExpenseTypeConfigurationAvailable: elementValues.isExpenseTypeConfigurationAvailable,
+      expenseName: expenseConstant.EXPENSE_OTHER,
+      expenseTypeInfo: elementValues.expenseTypeInfo,
+      expenseTypeData: elementValues.expenseTypeData,
+
+      imagesArray: elementValues.imagesArray,
+
+      invoiceDetails: elementValues.invoiceDetails,
+      invoiceNumber: elementValues.invoiceNumber,
+
+      allocationDetails: elementValues.allocationDetails,
+
+      expenseAmount: elementValues.expenseAmount,
+      expenseDateDropdownValue: elementValues.expenseDateDropdownValue,
+
+      expenseDate: {
+
+        key: expenseConstant.EXPENSE_DATE_KEY,
+        value: elementValues.expenseDate,
+        mode: 'date'
+
+      },
+
+      commentDetails: null,
+      isDeviationCommentVisible: elementValues.isDeviationCommentVisible,
+      deviationComment: elementValues.deviationComment,
+
+      paymentMode: elementValues.paymentMode,
+      paymentModeData: elementValues.paymentModeData,
+
+      expenseCurrency: elementValues.expenseCurrency,
+      otherCurrencyData: elementValues.otherCurrencyData,
+      otherCustomFieldValues: elementValues.otherCustomFieldValues,
+
+      isReveiwMode: elementValues.isReveiwMode,
+      isApproverScreen: elementValues.isApproverScreen,
+
+      expenseLogId: elementValues.expenseLogId,
+      componentInitializeTime: new Date().getTime()
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwOtherExpenseScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.othersLineItemData != null && nextProps.othersLineItemError == null) {
+
+        updatedExpenseState = babelHelpers.extends({}, this.state);
+        updatedExpenseState.previousExpenseLogId = this.state.expenseLogId;
+        updatedExpenseState.expenseDateInMilliseconds = this.getExpenseDate();
+
+        updatedExpenseState.expenseLogId = nextProps.othersLineItemData.id;
+
+        this.setState({
+
+          isLoading: false,
+          isDone: true
+
+        });
+
+        this.props.expenseData.updateOtherClaimState(updatedExpenseState);
+      }
+
+      if (nextProps.othersLineItemData == null && nextProps.othersLineItemError != null) {
+        var _nextProps$othersLine = nextProps.othersLineItemError,
+            error_flag = _nextProps$othersLine.error_flag,
+            isContinue = _nextProps$othersLine.isContinue;
+
+
+        isDeviationCommentVisible = false;
+
+        if (isContinue) {
+
+          isDeviationCommentVisible = true;
+
+          if (error_flag == null) error_flag = '';
+        } else {
+
+          if (error_flag == null) error_flag = expenseError.SERVER_EXCEPTION;
+        }
+
+        this.setState({
+
+          currentError: error_flag,
+          isLoading: false,
+          isDeviationCommentVisible: isDeviationCommentVisible
+
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewcomponents.EwLoadingIndicator, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+              {
+                this.props.expenseData.showAlertMessage('Successfully', expenseConstant.LINE_ITEM_SAVE_MESSAGE, 'success');
+              }
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions[routerSceneKeys.EW_LOGIN_KEY]();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+
+      _reactNative.BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonPress);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      _reactNative.BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonPress);
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this2 = this;
+
+      var _state = this.state,
+          imagesArray = _state.imagesArray,
+          isReveiwMode = _state.isReveiwMode,
+          expenseTypeInfo = _state.expenseTypeInfo,
+          expenseTypeData = _state.expenseTypeData,
+          isExpenseTypeConfigurationAvailable = _state.isExpenseTypeConfigurationAvailable;
+      var attachments_applicable = this.props.expenseData.otherProps.othersClaimInformation.expenseSetupInfo.attachments_applicable;
+
+
+      console.log(FILE_NAME + "In renderScreen", this.props);
+
+      console.log("other expense state is -", this.state);
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(_ewcomponents.EwHeader, {
+          onBackButtonPress: function onBackButtonPress() {
+            return _this2.handleBackButtonPress();
+          },
+          screenTitle: 'Others Expense',
+          screenReportId: _screennameidentifiers.CREATE_OTHERS_EXPENSE_ID
+        }),
+        _react2.default.createElement(
+          _nativeBase.Content,
+          null,
+          this.renderImageSlider(isReveiwMode),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { margin: appstyleguide.DEFAULT_MARGIN } },
+            _react2.default.createElement(_ewotherexpensetype2.default, {
+              initialState: expenseTypeInfo,
+              expenseTypesList: expenseTypeData,
+              isReveiwMode: true
+            }),
+            this.isExpenseTypeConfigurationAvailable()
+          )
+        )
+      );
+    }
+  }, {
+    key: 'renderImageSlider',
+    value: function renderImageSlider(isReveiwMode) {
+      var _this3 = this;
+
+      var attachments_applicable = this.props.expenseData.otherProps.othersClaimInformation.expenseSetupInfo.attachments_applicable;
+      var imagesArray = this.state.imagesArray;
+
+
+      if (attachments_applicable) {
+
+        if (!isReveiwMode || imagesArray.length > 0) {
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { backgroundColor: appstyleguide.APP_LIGHT_GRAY } },
+            _react2.default.createElement(_ewcomponents.EwImageSlider, {
+
+              initialState: imagesArray,
+              isAddButtonVisible: imagesArray.length == 0 && !isReveiwMode,
+              isDeleteButtonVisible: !isReveiwMode,
+              updateParentState: function updateParentState(componentState) {
+                return _this3.updateOtherExpenseState(expenseConstant.IMAGE_SLIDER_ID, componentState);
+              },
+              sliderHeight: _utils.DEVICE_HEIGHT * 0.4,
+              imageWidth: _utils.DEVICE_WIDTH * 0.5
+            })
+          );
+        }
+      }
+    }
+  }, {
+    key: 'isExpenseTypeConfigurationAvailable',
+    value: function isExpenseTypeConfigurationAvailable() {
+      var _this4 = this;
+
+      var _state2 = this.state,
+          imagesArray = _state2.imagesArray,
+          expenseTypeData = _state2.expenseTypeData,
+          expenseTypeInfo = _state2.expenseTypeInfo,
+          invoiceNumber = _state2.invoiceNumber,
+          deviationComment = _state2.deviationComment,
+          isReveiwMode = _state2.isReveiwMode,
+          isExpenseTypeConfigurationAvailable = _state2.isExpenseTypeConfigurationAvailable,
+          otherCustomFieldValues = _state2.otherCustomFieldValues;
+      var customExpenseTypes = expenseTypeInfo.expenseTypeConfiguration.customExpenseTypes;
+
+
+      if (isExpenseTypeConfigurationAvailable) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+            this.renderPaymentDropdownpicker(isReveiwMode),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+              this.renderExpenseAmountView(isReveiwMode)
+            )
+          ),
+          this.renderExpenseDate(),
+          isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstant.INVOICE_NUMBER_LABEL,
+            value: invoiceNumber,
+            customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+          }) : _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+            label: expenseConstant.INVOICE_NUMBER_LABEL,
+            placeholderlabel: expenseConstant.INVOICE_NUMBER_PLACEHOLDER_LABEL,
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            onChangeText: function onChangeText(invoiceNumber) {
+              return _this4.setState({ invoiceNumber: invoiceNumber });
+            },
+            value: invoiceNumber,
+            customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+
+          }),
+          _react2.default.createElement(_ewothercustomfields2.default, {
+            initialState: otherCustomFieldValues,
+            updateParentState: function updateParentState(componentState) {
+              return _this4.updateOtherExpenseState(expenseConstant.OTHER_CUSTOM_FIELD_COMPONENT_ID, componentState);
+            }
+          }),
+          isReveiwMode ? _react2.default.createElement(_commentsview2.default, {
+            otherProps: { expenseLogId: this.state.expenseLogId, expenseId: this.props.expenseData.otherProps.expenseId }
+
+          }) : null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row" } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.5, marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+              _react2.default.createElement(_ewcomponents.EwButton, {
+                label: isReveiwMode ? expenseConstant.ALLOCATION_DETAILS_REVEIW_LABEL : expenseConstant.ALLOCATION_DETAILS_LABEL,
+                customStyle: { backgroundColor: appstyleguide.APP_GRAY, alignSelf: "center" },
+                onButonClicked: function onButonClicked() {
+                  return _this4.openAllocationDetails();
+                }
+              })
+            ),
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.5 } },
+              _react2.default.createElement(_commentsmodal2.default, {
+                initialState: this.state.commentDetails,
+                isReveiwMode: this.state.isReveiwMode,
+                otherProps: { expenseLogId: this.state.expenseLogId, expenseId: this.props.expenseData.otherProps.expenseId },
+                customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN, flex: 0.5, marginLeft: appstyleguide.DEFAULT_LEFT_MARGIN },
+                updateParentState: function updateParentState(componentState) {
+                  return _this4.updateOtherExpenseState(expenseConstant.COMMENTS_MODAL_COMPONENT_ID, componentState);
+                }
+              })
+            )
+          ),
+          this.renderDeviationComment(),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { margin: defaultMargin + 10, alignSelf: "center" } },
+            !isReveiwMode ? _react2.default.createElement(_ewcomponents.EwButton, {
+              label: 'Save',
+              onButonClicked: function onButonClicked() {
+                return _this4.saveExpense();
+              }
+            }) : null
+          )
+        );
+      } else {
+
+        return _react2.default.createElement(_ewcomponents.EwSpinner, null);
+      }
+    }
+  }, {
+    key: 'changeExpenseDate',
+    value: function changeExpenseDate(expenseDate) {
+
+      this.setState({
+        expenseDateDropdownValue: expenseDate
+      });
+    }
+  }, {
+    key: 'renderDeviationComment',
+    value: function renderDeviationComment() {
+      var _this5 = this;
+
+      var _state3 = this.state,
+          isDeviationCommentVisible = _state3.isDeviationCommentVisible,
+          isReveiwMode = _state3.isReveiwMode,
+          deviationComment = _state3.deviationComment;
+
+
+      console.log("isDeviationCommentVisible", isDeviationCommentVisible, isReveiwMode, deviationComment);
+
+      if (isDeviationCommentVisible || this.isDeviationExist()) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+          !isReveiwMode ? _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+            label: travelConstants.DEVIATION_LABEL,
+            placeholderlabel: travelConstants.DEVIATION_PLACEHOLDER_LABEL,
+            autoCorrect: false,
+            autoCapitalize: 'none',
+            onChangeText: function onChangeText(deviationComment) {
+              return _this5.setState({ deviationComment: deviationComment });
+            },
+            value: deviationComment
+
+          }) : _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: travelConstants.DEVIATION_LABEL,
+            value: deviationComment
+          })
+        );
+      }
+    }
+  }, {
+    key: 'renderExpenseDate',
+    value: function renderExpenseDate() {
+      var _this6 = this;
+
+      var _state4 = this.state,
+          expenseDate = _state4.expenseDate,
+          expenseDateDropdownValue = _state4.expenseDateDropdownValue,
+          expenseTypeInfo = _state4.expenseTypeInfo,
+          isReveiwMode = _state4.isReveiwMode;
+      var _expenseTypeInfo$expe = expenseTypeInfo.expenseTypeConfiguration,
+          isMonthlyClaim = _expenseTypeInfo$expe.isMonthlyClaim,
+          monthlyData = _expenseTypeInfo$expe.monthlyData;
+
+
+      console.log("expenseDateisss", expenseDate);
+
+      if (isMonthlyClaim) {
+
+        return _react2.default.createElement(_ewcomponents.EwDropdownPicker, {
+          pickerLabel: expenseConstant.EXPENSE_DATE_MONTHLY_LABEL,
+          pickerPlaceholderLabel: monthlyData[0].value,
+          isDefaultPickerValueSelected: expenseDateDropdownValue == expenseConstant.DEFAULT_PICKER_VALUE,
+          customViewStyle: { marginTop: 20, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+          dataArray: monthlyData,
+          selectedValue: expenseDateDropdownValue,
+          onPickerValueChange: function onPickerValueChange(expenseDateDropdownValue) {
+            _this6.changeExpenseDate(expenseDateDropdownValue);
+          }
+        });
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstant.EXPENSE_DATE_LABEL,
+            value: (0, _utils.showDeviceDateFormat)(expenseDate.value),
+            customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+          }) : _react2.default.createElement(_ewcomponents.EwDateButton, {
+            label: expenseConstant.EXPENSE_DATE_LABEL,
+            customViewStyle: { flex: 0.5, marginTop: appstyleguide.DEFAULT_TOP_MARGIN, marginRight: appstyleguide.DEFAULT_RIGHT_MARGIN },
+            dateObject: expenseDate,
+            maxDateTimePicker: new Date((0, _utils.getCurrentDate)()),
+            _handleEwDateTimePicked: function _handleEwDateTimePicked(date, mode, elementKey) {
+              return _this6._handleEwDateTimePicked(date, mode, elementKey);
+            }
+          })
+        );
+      }
+    }
+  }, {
+    key: 'openAllocationDetails',
+    value: function openAllocationDetails() {
+      var _this7 = this;
+
+      totalTaxAmount = this.state.expenseAmount;
+      updatedAllocationState = this.state.allocationDetails;
+
+      if (updatedAllocationState != null) {
+
+        updatedAllocationState = babelHelpers.extends({}, this.state.allocationDetails);
+        updatedAllocationState.isReveiwMode = this.state.isReveiwMode;
+      }
+
+      if (this.state.invoiceDetails != null && this.state.invoiceDetails.isGstCharged) {
+
+        totalTaxAmount = this.state.invoiceDetails.totalTaxAmount;
+      }
+
+      var allocationData = {
+
+        configuration: this.props.expenseData.otherProps.othersClaimInformation.expenseSetupInfo,
+        otherProps: this.props.expenseData.otherProps.othersClaimInformation,
+        totalTaxAmount: totalTaxAmount,
+        showAlertMessage: function showAlertMessage(messageText, messageHeading, messageType) {
+          return _this7.props.expenseData.showAlertMessage(messageText, messageHeading, messageType);
+        },
+        initialState: updatedAllocationState,
+        updateParentState: function updateParentState(componentState) {
+          return _this7.updateOtherExpenseState(expenseConstant.ALLOCATION_DETAILS_COMPONENT_ID, componentState);
+        }
+
+      };
+
+      _reactNativeRouterFlux.Actions[routerSceneKeys.EW_ALLOCATION_DETAILS_KEY]({ allocationData: allocationData });
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME, "In handleError Method");
+
+      console.log("this.state.currentError", this.state.currentError);
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.props.expenseData.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+
+          this.props.expenseData.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+        case expenseError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+        case expenseError.APPROVER_NOT_FOUND:
+          this.props.expenseData.showAlertMessage(expenseError.APPROVER_NOT_FOUND);
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        console.log("Handling Post Rendering Error");
+
+        switch (this.state.currentError) {
+
+          case expenseError.SERVER_EXCEPTION:
+
+            this.props.expenseData.showAlertMessage(expenseError.SERVER_ERROR);
+
+            if (this.state.currentError != '') this.clearCurrentMessage();
+
+            return this.renderScreen();
+
+            break;
+
+          default:
+
+            if (this.state.currentError != '') this.clearCurrentMessage();
+
+            this.props.expenseData.showAlertMessage(this.state.currentError);
+
+            return this.renderScreen();
+
+            break;
+
+        }
+      }
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(data) {
+
+      expenseDateDropdownValue = expenseConstant.DEFAULT_PICKER_VALUE;
+      expenseDate = (0, _utils.getCurrentDate)();
+
+      expenseTypeInfo = null;
+      expenseTypeData = [];
+      imagesArray = [];
+      otherCurrencyData = [];
+      paymentModeData = [];
+      otherCustomFieldValues = null;
+      invoiceDetails = null;
+      invoiceNumber = "";
+      allocationDetails = null;
+      expenseAmount = "";
+      expenseLogId = null;
+      deviationComment = "";
+
+      isReveiwMode = false;
+      isExpenseTypeConfigurationAvailable = true;
+      isDeviationCommentVisible = false;
+      paymentMode = expenseConstant.DEFAULT_PICKER_VALUE;
+      expenseCurrency = expenseConstant.DEFAULT_PICKER_VALUE;
+
+      if (data != null && data.initialState != null) {
+
+        propsData = data.initialState;
+
+        expenseDateDropdownValue = propsData.expenseDateDropdownValue;
+        expenseTypeInfo = propsData.expenseTypeInfo;
+        expenseDate = propsData.expenseDate.value;
+        imagesArray = propsData.imagesArray;
+        invoiceDetails = propsData.invoiceDetails;
+        invoiceNumber = propsData.invoiceNumber;
+        allocationDetails = propsData.allocationDetails;
+        expenseAmount = propsData.expenseAmount;
+        expenseLogId = propsData.expenseLogId;
+        isDeviationCommentVisible = propsData.isDeviationCommentVisible;
+        deviationComment = propsData.deviationComment;
+        isReveiwMode = propsData.isReveiwMode;
+        paymentMode = propsData.paymentMode;
+        expenseCurrency = propsData.expenseCurrency;
+        otherCustomFieldValues = propsData.otherCustomFieldValues;
+      } else {
+
+        propsData = data.otherProps;
+
+        expenseTypeInfo = propsData.expenseTypeInfo;
+
+        var _expenseTypeInfo$expe2 = expenseTypeInfo.expenseTypeConfiguration,
+            isMonthlyClaim = _expenseTypeInfo$expe2.isMonthlyClaim,
+            monthlyData = _expenseTypeInfo$expe2.monthlyData;
+
+
+        if (isMonthlyClaim) expenseDateDropdownValue = monthlyData[1].value;
+
+        otherCustomFieldValues = propsData.expenseTypeInfo.expenseTypeConfiguration.customExpenseTypes;
+        expenseCurrency = this.getExpenseCurrency(propsData.othersClaimInformation.baseCurrency, propsData.othersClaimInformation.othersCurrencyInfo);
+        paymentMode = propsData.othersClaimInformation.paymentModes[1].value;
+      }
+
+      expenseTypeData = data.otherProps.othersClaimInformation.expenseTypes;
+      otherCurrencyData = data.otherProps.othersClaimInformation.othersCurrencyInfo;
+      paymentModeData = data.otherProps.othersClaimInformation.paymentModes;
+
+      elementValues = {
+
+        expenseTypeInfo: expenseTypeInfo,
+        expenseTypeData: expenseTypeData,
+        expenseCurrency: expenseCurrency,
+        paymentMode: paymentMode,
+        paymentModeData: paymentModeData,
+        expenseDate: expenseDate,
+        expenseDateDropdownValue: expenseDateDropdownValue,
+        imagesArray: imagesArray,
+        invoiceDetails: invoiceDetails,
+        invoiceNumber: invoiceNumber,
+        allocationDetails: allocationDetails,
+        expenseAmount: expenseAmount,
+        expenseLogId: expenseLogId,
+        deviationComment: deviationComment,
+        isDeviationCommentVisible: isDeviationCommentVisible,
+        isReveiwMode: isReveiwMode,
+        isExpenseTypeConfigurationAvailable: isExpenseTypeConfigurationAvailable,
+        otherCurrencyData: otherCurrencyData,
+        otherCustomFieldValues: otherCustomFieldValues
+      };
+
+      console.log("elementValues", elementValues, data, this.props);
+
+      return elementValues;
+    }
+  }, {
+    key: 'renderPaymentDropdownpicker',
+    value: function renderPaymentDropdownpicker(isReveiwMode) {
+      var _this8 = this;
+
+      var _state5 = this.state,
+          paymentMode = _state5.paymentMode,
+          paymentModeData = _state5.paymentModeData;
+
+
+      expenseType = this.getExpenseType();
+
+      if (!expenseType.taxAmountRequired) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstant.PAYMENT_MODE_LABEL,
+            value: paymentModeData[paymentMode].label
+          }) : _react2.default.createElement(_ewcomponents.EwDropdownPicker, {
+            pickerLabel: expenseConstant.PAYMENT_MODE_LABEL,
+            pickerPlaceholderLabel: paymentModeData[0].value,
+            isDefaultPickerValueSelected: paymentMode == expenseConstant.DEFAULT_PICKER_VALUE,
+            dataArray: paymentModeData,
+            selectedValue: paymentMode,
+            onPickerValueChange: function onPickerValueChange(paymentMode) {
+              return _this8.onPaymentModeChange(paymentMode);
+            }
+          })
+        );
+      }
+    }
+  }, {
+    key: 'onPaymentModeChange',
+    value: function onPaymentModeChange(paymentMode) {
+
+      if (paymentMode != expenseConstant.DEFAULT_PICKER_VALUE) this.setState({ paymentMode: paymentMode });
+    }
+  }, {
+    key: 'getExpenseCurrency',
+    value: function getExpenseCurrency(baseCurrency, otherCurrency) {
+
+      console.log("baseCurrency", baseCurrency, otherCurrency);
+
+      for (var _iterator = otherCurrency, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+        var _ref;
+
+        if (_isArray) {
+          if (_i >= _iterator.length) break;
+          _ref = _iterator[_i++];
+        } else {
+          _i = _iterator.next();
+          if (_i.done) break;
+          _ref = _i.value;
+        }
+
+        var currency = _ref;
+
+
+        if (currency.currencyId == baseCurrency) return currency.value;
+      }
+
+      return expenseConstant.DEFAULT_PICKER_VALUE;
+    }
+  }, {
+    key: 'getExchangeRate',
+    value: function getExchangeRate() {
+      var _state6 = this.state,
+          expenseCurrency = _state6.expenseCurrency,
+          otherCurrencyData = _state6.otherCurrencyData;
+
+
+      if (expenseCurrency != expenseConstant.DEFAULT_PICKER_VALUE) {
+
+        return otherCurrencyData[expenseCurrency].conversionRate;
+      }
+
+      return '';
+    }
+  }, {
+    key: 'getExpenseType',
+    value: function getExpenseType() {
+      var _state7 = this.state,
+          expenseTypeData = _state7.expenseTypeData,
+          expenseTypeInfo = _state7.expenseTypeInfo;
+
+
+      if (expenseTypeInfo.expenseType == expenseConstant.DEFAULT_PICKER_VALUE) return expenseTypeData[0];
+
+      return expenseTypeData[expenseTypeInfo.expenseType];
+    }
+  }, {
+    key: 'isDeviationExist',
+    value: function isDeviationExist() {
+
+      expenseType = this.getExpenseType();
+
+      console.log("expenseType receive is ", expenseType);
+
+      if (expenseType.isApplicableToEmployee) return false;
+
+      return true;
+    }
+  }, {
+    key: 'getBaseCurrency',
+    value: function getBaseCurrency() {
+      var baseCurrency = this.props.expenseData.otherProps.othersClaimInformation.baseCurrency;
+
+
+      return baseCurrency;
+    }
+  }, {
+    key: 'renderExpenseAmountView',
+    value: function renderExpenseAmountView(isReveiwMode) {
+      var _this9 = this;
+
+      expenseType = this.getExpenseType();
+
+      var expenseAmount = this.state.expenseAmount;
+
+
+      if (isReveiwMode) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstant.EXPENSE_AMOUNT_LABEL,
+            value: expenseAmount
+          }),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+            this.renderGstDetails(expenseType)
+          ),
+          !expenseType.taxAmountRequired && this.getExchangeRate() != '' ? _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstant.EXHANGE_RATE_LABEL,
+            value: this.getExchangeRate(),
+            customViewStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+          }) : null
+        );
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row" } },
+            _react2.default.createElement(
+              _reactNative.View,
+              { style: { flex: 0.5 } },
+              _react2.default.createElement(_ewcomponents.EwFloatingLabel, {
+                label: expenseConstant.EXPENSE_AMOUNT_LABEL,
+                placeholderlabel: expenseConstant.EXPENSE_AMOUNT_PLACEHOLDER_LABEL,
+                autoCorrect: false,
+                autoCapitalize: 'none',
+                onChangeText: function onChangeText(newExpenseAmount) {
+                  return _this9.onExpenseAmountChange(newExpenseAmount);
+                },
+                value: expenseAmount,
+                keyboardType: 'numeric'
+              })
+            ),
+            this.renderGstDetails(expenseType)
+          ),
+          !expenseType.taxAmountRequired && this.getExchangeRate() != '' ? _react2.default.createElement(_ewcomponents.EwH2Text, {
+            text: expenseConstant.EXHANGE_RATE_LABEL + " - " + this.getExchangeRate(),
+            customStyle: { marginTop: appstyleguide.DEFAULT_TOP_MARGIN }
+          }) : null
+        );
+      }
+    }
+  }, {
+    key: 'onExpenseAmountChange',
+    value: function onExpenseAmountChange(newExpenseAmount) {
+
+      var updatedInvoiceDetails = this.state.invoiceDetails;
+
+      if (updatedInvoiceDetails != null) {
+
+        updatedInvoiceDetails["postTaxAmount"] = parseFloat(updatedInvoiceDetails.postTaxAmount) + parseFloat(newExpenseAmount) - parseFloat(updatedInvoiceDetails.preTaxAmount);
+        updatedInvoiceDetails["preTaxAmount"] = newExpenseAmount;
+      }
+
+      this.setState({
+        expenseAmount: newExpenseAmount,
+        invoiceDetails: updatedInvoiceDetails
+      });
+    }
+  }, {
+    key: 'renderGstDetails',
+    value: function renderGstDetails(expenseType) {
+      var _this10 = this;
+
+      var _state8 = this.state,
+          expenseCurrency = _state8.expenseCurrency,
+          otherCurrencyData = _state8.otherCurrencyData,
+          isReveiwMode = _state8.isReveiwMode;
+
+
+      if (expenseType.taxAmountRequired) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.5, marginTop: 10 } },
+          _react2.default.createElement(_ewcomponents.EwButton, {
+            label: this.state.isReveiwMode ? expenseConstant.INVOICE_DETAILS_REVEIW_LABEL : expenseConstant.INVOICE_DETAILS_LABEL,
+            customStyle: { alignSelf: isReveiwMode ? 'flex-start' : 'flex-end', backgroundColor: appstyleguide.APP_GRAY },
+            onButonClicked: function onButonClicked() {
+              return _this10.renderInvoiceScreen();
+            }
+          })
+        );
+      } else {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.3 } },
+          isReveiwMode ? _react2.default.createElement(_ewcomponents.Reveiw, {
+            heading: expenseConstant.CURRENCY_PICKER_LABEL,
+            value: otherCurrencyData[expenseCurrency].label
+          }) : _react2.default.createElement(_ewcomponents.EwDropdownPicker, {
+            pickerLabel: expenseConstant.CURRENCY_PICKER_LABEL,
+            pickerPlaceholderLabel: otherCurrencyData[0].value,
+            isDefaultPickerValueSelected: expenseCurrency == expenseConstant.DEFAULT_PICKER_VALUE,
+            customViewStyle: { marginLeft: appstyleguide.DEFAULT_TOP_MARGIN, marginTop: appstyleguide.DEFAULT_TOP_MARGIN },
+            dataArray: otherCurrencyData,
+            selectedValue: expenseCurrency,
+            onPickerValueChange: function onPickerValueChange(expenseCurrency) {
+              _this10.setState({ expenseCurrency: expenseCurrency });
+            }
+          })
+        );
+      }
+    }
+  }, {
+    key: 'renderInvoiceScreen',
+    value: function renderInvoiceScreen() {
+      var _this11 = this;
+
+      extraProps = babelHelpers.extends({}, this.state);
+
+      extraProps.currencyPicker = this.state.otherCurrencyData;
+      extraProps.baseCurrency = this.getBaseCurrency();
+      extraProps.paymentModes = this.state.paymentModeData;
+      extraProps.expenseDateInMilliseconds = this.getExpenseDate();
+
+      updatedInvoiceState = this.state.invoiceDetails;
+
+      if (updatedInvoiceState != null) {
+
+        updatedInvoiceState = babelHelpers.extends({}, this.state.invoiceDetails);
+        updatedInvoiceState.isReveiwMode = this.state.isReveiwMode;
+      }
+
+      var invoiceState = {
+
+        initialState: updatedInvoiceState,
+        isReveiwMode: this.state.isReveiwMode,
+        configuration: this.props.expenseData.otherProps.othersClaimInformation.expenseSetupInfo,
+        showAlertMessage: function showAlertMessage(messageText, messageHeading, messageType) {
+          return _this11.props.expenseData.showAlertMessage(messageText, messageHeading, messageType);
+        },
+        otherProps: extraProps,
+        updateParentState: function updateParentState(componentState) {
+          return _this11.updateOtherExpenseState(expenseConstant.INVOICE_COMPONENT_ID, componentState);
+        }
+
+      };
+
+      _reactNativeRouterFlux.Actions[routerSceneKeys.EW_INVOICE_DETAILS_KEY]({ invoiceState: invoiceState });
+    }
+  }, {
+    key: 'updateOtherExpenseState',
+    value: function updateOtherExpenseState(componentKey, data) {
+
+      console.log("Inside updateOtherExpenseState", componentKey, data);
+
+      switch (componentKey) {
+        case expenseConstant.IMAGE_SLIDER_ID:
+
+          this.setState({
+
+            imagesArray: [].concat(babelHelpers.toConsumableArray(data))
+          });
+          break;
+
+        case expenseConstant.INVOICE_COMPONENT_ID:
+
+          this.setState({
+            imagesArray: data.imagesArray,
+            expenseAmount: data.preTaxAmount,
+            invoiceDetails: data,
+            invoiceNumber: data.invoiceNumber
+          });
+          break;
+
+        case expenseConstant.ALLOCATION_DETAILS_COMPONENT_ID:
+
+          this.setState({
+            allocationDetails: data
+          });
+
+          break;
+        case expenseConstant.COMMENTS_MODAL_COMPONENT_ID:
+
+          updatedCommentDetails = [];
+
+          if (this.state.commentDetails != null) updatedCommentDetails = [].concat(babelHelpers.toConsumableArray(this.state.commentDetails));
+
+          updatedCommentDetails.push(data);
+
+          this.setState({
+
+            commentDetails: updatedCommentDetails
+          });
+
+          break;
+
+        case expenseConstant.OTHER_CUSTOM_FIELD_COMPONENT_ID:
+
+          updatedArray = [];
+
+          for (var _iterator2 = data, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+            var _ref2;
+
+            if (_isArray2) {
+              if (_i2 >= _iterator2.length) break;
+              _ref2 = _iterator2[_i2++];
+            } else {
+              _i2 = _iterator2.next();
+              if (_i2.done) break;
+              _ref2 = _i2.value;
+            }
+
+            var arrayObject = _ref2;
+
+            updatedArray.push(babelHelpers.extends({}, arrayObject));
+          }
+
+          this.setState({
+
+            otherCustomFieldValues: updatedArray
+          });
+
+          break;
+
+        default:
+
+      }
+    }
+  }, {
+    key: 'saveExpense',
+    value: function saveExpense() {
+
+      console.log(FILE_NAME, "In saveExpense method");
+
+      if (this.doLocalValidation()) {
+        var _state9 = this.state,
+            expenseAmount = _state9.expenseAmount,
+            expenseLogId = _state9.expenseLogId,
+            allocationDetails = _state9.allocationDetails,
+            invoiceDetails = _state9.invoiceDetails,
+            invoiceNumber = _state9.invoiceNumber,
+            imagesArray = _state9.imagesArray,
+            commentDetails = _state9.commentDetails,
+            paymentMode = _state9.paymentMode,
+            expenseCurrency = _state9.expenseCurrency,
+            paymentModeData = _state9.paymentModeData,
+            isDeviationCommentVisible = _state9.isDeviationCommentVisible,
+            deviationComment = _state9.deviationComment,
+            otherCustomFieldValues = _state9.otherCustomFieldValues;
+        var _props$expenseData$ot = this.props.expenseData.otherProps.othersClaimInformation,
+            bu_id = _props$expenseData$ot.bu_id,
+            company_id = _props$expenseData$ot.company_id,
+            emp_costcenter_id = _props$expenseData$ot.emp_costcenter_id,
+            function_id = _props$expenseData$ot.function_id,
+            grade_id = _props$expenseData$ot.grade_id,
+            location_id = _props$expenseData$ot.location_id;
+
+
+        companyId = company_id;
+        businessUnitId = bu_id;
+        costCenterId = emp_costcenter_id;
+        functionId = function_id;
+        gradeId = grade_id;
+        locationId = location_id;
+
+        cgstRate = "";
+        cgstAmount = "";
+        sgstRate = "";
+        sgstAmount = "";
+        igstRate = "";
+        igstAmount = "";
+        invoiceDate = "";
+        gstinNumber = "";
+        preTaxAmount = expenseAmount;
+        postTaxAmount = expenseAmount;
+        taxAmount = 0;
+        projectDetails = null;
+
+        expensePaymentMode = paymentMode;
+        expensePaymentCurrency = expenseCurrency;
+
+        if (allocationDetails != null) {
+
+          companyId = allocationDetails.companyId;
+          businessUnitId = allocationDetails.businessUnitId;
+          costCenterId = allocationDetails.costCenterId;
+          functionId = allocationDetails.functionId;
+          gradeId = allocationDetails.gradeId;
+          locationId = allocationDetails.locationId;
+          projectDetails = allocationDetails.projectDetails;
+        }
+
+        if (invoiceDetails != null) {
+
+          if (expenseConstant.isGstApplicable(this.getExpenseDate())) {
+
+            if (invoiceDetails.isGstCharged) {
+
+              gstinNumber = invoiceDetails.vendorDetails.gstinNumber;
+              cgstRate = invoiceDetails.beneficiaryDetails.cgstRate;
+              cgstAmount = invoiceDetails.beneficiaryDetails.cgstAmount;
+              sgstRate = invoiceDetails.beneficiaryDetails.sgstRate;
+              sgstAmount = invoiceDetails.beneficiaryDetails.sgstAmount;
+              igstRate = invoiceDetails.beneficiaryDetails.igstRate;
+              igstAmount = invoiceDetails.beneficiaryDetails.igstAmount;
+            }
+          } else {
+
+            taxAmount = invoiceDetails.beneficiaryDetails.taxAmount;
+          }
+
+          postTaxAmount = invoiceDetails.postTaxAmount;
+          invoiceDate = (0, _utils.convertMillisecondsToServerDate)(invoiceDetails.invoiceDate.value);
+          expensePaymentMode = invoiceDetails.paymentMode;
+          expensePaymentCurrency = invoiceDetails.expenseCurrency;
+        }
+
+        invoiceImage = null;
+
+        if (imagesArray.length != 0) invoiceImage = imagesArray[0];
+
+        var params = {
+
+          "postTaxAmount": postTaxAmount,
+          "exchangeRate": otherCurrencyData[expensePaymentCurrency].conversionRate,
+          "customExpenseTypes": otherCustomFieldValues,
+          "paymentMode": paymentModeData[expensePaymentMode].label,
+          "currency": otherCurrencyData[expensePaymentCurrency].currencyId,
+          "expenseType": this.getExpenseType().expenseTypeId,
+          "invoiceDate": invoiceDate,
+          "invoiceImage": invoiceImage,
+          "expenseid": this.props.expenseData.otherProps.expenseId,
+          "expenseDate": (0, _utils.convertMillisecondsToServerDate)(this.getExpenseDate()),
+          "companyId": companyId,
+          "businessUnitId": businessUnitId,
+          "costCenterId": costCenterId,
+          "functionId": functionId,
+          "gradeId": gradeId,
+          "locationId": locationId,
+          "comments": commentDetails,
+          "cgstRate": cgstRate,
+          "cgstAmount": cgstAmount,
+          "sgstRate": sgstRate,
+          "sgstAmount": sgstAmount,
+          "igstRate": igstRate,
+          "igstAmount": igstAmount,
+          "taxAmount": taxAmount,
+          "gstNumber": gstinNumber,
+          "invoiceNumber": invoiceNumber,
+          "preTaxAmount": preTaxAmount,
+          "projectDetails": projectDetails,
+          "logId": expenseLogId,
+          "token": this.props.sessionToken,
+          "device_id": _utils.DEVICE_ID
+
+        };
+
+        if (isDeviationCommentVisible || this.isDeviationExist()) params["deviationComment"] = deviationComment;
+
+        console.log("lineitem params server -", params);
+
+        this.props.saveOthersLineItem(params);
+
+        this.setState({
+
+          isLoading: true
+        });
+      }
+    }
+  }, {
+    key: 'getExpenseDate',
+    value: function getExpenseDate() {
+      var _state10 = this.state,
+          expenseDate = _state10.expenseDate,
+          expenseDateDropdownValue = _state10.expenseDateDropdownValue,
+          expenseTypeInfo = _state10.expenseTypeInfo;
+      var _expenseTypeInfo$expe3 = expenseTypeInfo.expenseTypeConfiguration,
+          isMonthlyClaim = _expenseTypeInfo$expe3.isMonthlyClaim,
+          monthlyData = _expenseTypeInfo$expe3.monthlyData;
+
+
+      serverExpenseDate = null;
+
+      if (isMonthlyClaim) {
+
+        console.log("monthlyData", monthlyData[expenseDateDropdownValue]);
+
+        var date = monthlyData[expenseDateDropdownValue].label.split(',');
+
+        month = (0, _datetimeutils.getMonthIndex)(date[0]);
+        year = date[1].trim();
+
+        console.log("monthyear", month, year);
+
+        days = (0, _datetimeutils.getDaysInMonth)(month, year);
+
+        formattedDate = year + "/" + month + "/" + days + " 00:00:00";
+
+        serverExpenseDate = new Date(formattedDate).getTime();
+
+        console.log("monthyear", serverExpenseDate);
+      } else serverExpenseDate = expenseDate.value;
+
+      return serverExpenseDate;
+    }
+  }, {
+    key: 'doLocalValidation',
+    value: function doLocalValidation() {
+      var _state11 = this.state,
+          expenseDate = _state11.expenseDate,
+          expenseAmount = _state11.expenseAmount,
+          expenseDateDropdownValue = _state11.expenseDateDropdownValue,
+          expenseTypeInfo = _state11.expenseTypeInfo,
+          isDeviationCommentVisible = _state11.isDeviationCommentVisible,
+          deviationComment = _state11.deviationComment,
+          invoiceDetails = _state11.invoiceDetails,
+          imagesArray = _state11.imagesArray,
+          allocationDetails = _state11.allocationDetails,
+          otherCustomFieldValues = _state11.otherCustomFieldValues;
+      var isMonthlyClaim = expenseTypeInfo.expenseTypeConfiguration.isMonthlyClaim;
+      var _props$expenseData$ot2 = this.props.expenseData.otherProps.othersClaimInformation.expenseSetupInfo,
+          attachment_mandatory = _props$expenseData$ot2.attachment_mandatory,
+          attachments_applicable = _props$expenseData$ot2.attachments_applicable,
+          project_applicable = _props$expenseData$ot2.project_applicable,
+          project_mandatory_for_requester = _props$expenseData$ot2.project_mandatory_for_requester;
+
+
+      var expenseType = this.getExpenseType();
+
+      if (isMonthlyClaim) {
+
+        if (expenseDateDropdownValue == expenseConstant.DEFAULT_PICKER_VALUE) {
+
+          this.props.expenseData.showAlertMessage(expenseConstant.EXPENSE_DATE_EMPTY);
+
+          return false;
+        }
+      }
+
+      if (expenseAmount.trim() == "") {
+
+        this.props.expenseData.showAlertMessage(expenseConstant.EXPENSE_AMOUNT_EMPTY);
+
+        return false;
+      }
+
+      if (!expenseType.taxAmountRequired) {
+
+        if (this.getExchangeRate() == '' || this.getExchangeRate() <= 0) {
+
+          this.props.expenseData.showAlertMessage(expenseConstant.EXCHANGE_RATE_NOT_EXIST);
+          return false;
+        }
+      }
+
+      if (expenseType.taxAmountRequired && invoiceDetails == null) {
+
+        this.props.expenseData.showAlertMessage(expenseConstant.INVOICE_DETAILS_EMPTY);
+
+        return false;
+      }
+
+      if (attachments_applicable && attachment_mandatory && imagesArray.length == 0) {
+
+        this.props.expenseData.showAlertMessage(expenseConstant.ATTACHMENT_EMPTY);
+
+        return false;
+      }
+
+      if (project_applicable && project_mandatory_for_requester && allocationDetails == null) {
+
+        this.props.expenseData.showAlertMessage(expenseConstant.ALLOCATION_DETAILS_EMPTY);
+
+        return false;
+      }
+
+      if ((isDeviationCommentVisible || this.isDeviationExist()) && deviationComment.trim() == "") {
+
+        this.props.expenseData.showAlertMessage(travelConstants.DEVIATION_MESSAGE_EMPTY);
+
+        return false;
+      }
+
+      if (otherCustomFieldValues.length != 0) {
+
+        for (var _iterator3 = otherCustomFieldValues, _isArray3 = Array.isArray(_iterator3), _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[typeof Symbol === 'function' ? Symbol.iterator : '@@iterator']();;) {
+          var _ref3;
+
+          if (_isArray3) {
+            if (_i3 >= _iterator3.length) break;
+            _ref3 = _iterator3[_i3++];
+          } else {
+            _i3 = _iterator3.next();
+            if (_i3.done) break;
+            _ref3 = _i3.value;
+          }
+
+          var customFieldValue = _ref3;
+
+
+          if (customFieldValue.value.trim() == "") {
+
+            this.props.expenseData.showAlertMessage(" Please enter " + customFieldValue.label.toLowerCase());
+
+            return false;
+          }
+        }
+      }
+
+      return true;
+    }
+  }]);
+  return EwOtherExpenseScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction");
+
+  return {
+    saveOthersLineItem: function saveOthersLineItem(params) {
+      return dispatch((0, _othersclaimactions.saveOthersLineItem)(params));
+    }
+
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.auth.isLoggedIn,
+    errorWebService: state.auth.errorWebService,
+    sessionToken: state.auth.sessionToken,
+
+    othersLineItemData: state.othersClaim.othersLineItemData,
+    othersLineItemError: state.othersClaim.othersLineItemError
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwOtherExpenseScreen);

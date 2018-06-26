@@ -1,0 +1,111 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _redux = require('redux');
+
+var _drawerreducer = require('./drawer/drawerreducer');
+
+var _drawerreducer2 = babelHelpers.interopRequireDefault(_drawerreducer);
+
+var _authreducer = require('./auth/authreducer');
+
+var _authreducer2 = babelHelpers.interopRequireDefault(_authreducer);
+
+var _needtoactreducer = require('./needtoact/needtoactreducer');
+
+var _needtoactreducer2 = babelHelpers.interopRequireDefault(_needtoactreducer);
+
+var _holidayreducer = require('./holidays/holidayreducer');
+
+var _holidayreducer2 = babelHelpers.interopRequireDefault(_holidayreducer);
+
+var _pastattendancereducer = require('./pastattendance/pastattendancereducer');
+
+var _pastattendancereducer2 = babelHelpers.interopRequireDefault(_pastattendancereducer);
+
+var _odrequestreducer = require('./odrequest/odrequestreducer');
+
+var _odrequestreducer2 = babelHelpers.interopRequireDefault(_odrequestreducer);
+
+var _leavereducer = require('./leave/leavereducer');
+
+var _leavereducer2 = babelHelpers.interopRequireDefault(_leavereducer);
+
+var _calendarreducer = require('./calendar/calendarreducer');
+
+var _calendarreducer2 = babelHelpers.interopRequireDefault(_calendarreducer);
+
+var _appnotificationsreducer = require('./appnotifications/appnotificationsreducer');
+
+var _appnotificationsreducer2 = babelHelpers.interopRequireDefault(_appnotificationsreducer);
+
+var _attendancereducer = require('./attendance/attendancereducer');
+
+var _attendancereducer2 = babelHelpers.interopRequireDefault(_attendancereducer);
+
+var _travelreducer = require('./travel/travelreducer');
+
+var _travelreducer2 = babelHelpers.interopRequireDefault(_travelreducer);
+
+var _eipreducer = require('./eip/eipreducer');
+
+var _eipreducer2 = babelHelpers.interopRequireDefault(_eipreducer);
+
+var _commonreducer = require('./common/commonreducer');
+
+var _commonreducer2 = babelHelpers.interopRequireDefault(_commonreducer);
+
+var _payrollreducer = require('./payroll/payrollreducer');
+
+var _payrollreducer2 = babelHelpers.interopRequireDefault(_payrollreducer);
+
+var _chatbotreducer = require('./chatbot/chatbotreducer');
+
+var _chatbotreducer2 = babelHelpers.interopRequireDefault(_chatbotreducer);
+
+var _compensationreducer = require('./compensation/compensationreducer');
+
+var _compensationreducer2 = babelHelpers.interopRequireDefault(_compensationreducer);
+
+var _mileageclaimreducer = require('./expenseclaim/mileage/mileageclaimreducer');
+
+var _mileageclaimreducer2 = babelHelpers.interopRequireDefault(_mileageclaimreducer);
+
+var _othersclaimreducer = require('./expenseclaim/others/othersclaimreducer');
+
+var _othersclaimreducer2 = babelHelpers.interopRequireDefault(_othersclaimreducer);
+
+var _travelclaimreducer = require('./expenseclaim/travel/travelclaimreducer');
+
+var _travelclaimreducer2 = babelHelpers.interopRequireDefault(_travelclaimreducer);
+
+var _commonexpenseclaimreducer = require('./expenseclaim/common/commonexpenseclaimreducer');
+
+var _commonexpenseclaimreducer2 = babelHelpers.interopRequireDefault(_commonexpenseclaimreducer);
+
+exports.default = (0, _redux.combineReducers)({
+
+  drawer: _drawerreducer2.default,
+
+  auth: _authreducer2.default,
+  needtoact: _needtoactreducer2.default,
+  holidays: _holidayreducer2.default,
+
+  pastattendance: _pastattendancereducer2.default,
+  odrequest: _odrequestreducer2.default,
+  leave: _leavereducer2.default,
+  calendar: _calendarreducer2.default,
+  appnotifications: _appnotificationsreducer2.default,
+  attendance: _attendancereducer2.default,
+  travel: _travelreducer2.default,
+  eip: _eipreducer2.default,
+  common: _commonreducer2.default,
+  payroll: _payrollreducer2.default,
+  chatbot: _chatbotreducer2.default,
+  compensation: _compensationreducer2.default,
+  mileageClaim: _mileageclaimreducer2.default,
+  commonExpenseClaim: _commonexpenseclaimreducer2.default,
+  othersClaim: _othersclaimreducer2.default,
+  travelClaim: _travelclaimreducer2.default
+});

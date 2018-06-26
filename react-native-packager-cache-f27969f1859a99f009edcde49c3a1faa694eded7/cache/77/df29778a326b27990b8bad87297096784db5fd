@@ -1,0 +1,37 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var PushNotificationsController = function (_Component) {
+  babelHelpers.inherits(PushNotificationsController, _Component);
+
+  function PushNotificationsController(props, context) {
+    babelHelpers.classCallCheck(this, PushNotificationsController);
+    return babelHelpers.possibleConstructorReturn(this, (PushNotificationsController.__proto__ || Object.getPrototypeOf(PushNotificationsController)).call(this, props, context));
+  }
+
+  babelHelpers.createClass(PushNotificationsController, [{
+    key: 'ComponentWillMount',
+    value: function ComponentWillMount() {}
+  }, {
+    key: 'render',
+    value: function render() {
+      return null;
+    }
+  }, {
+    key: 'ComponentDidMount',
+    value: function ComponentDidMount() {}
+  }, {
+    key: 'sendLocalNotification',
+    value: function sendLocalNotification(params) {}
+  }]);
+  return PushNotificationsController;
+}(_react.Component);
+
+exports.default = PushNotificationsController;

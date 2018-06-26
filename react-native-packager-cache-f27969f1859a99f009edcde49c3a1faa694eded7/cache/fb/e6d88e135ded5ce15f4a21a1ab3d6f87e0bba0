@@ -1,0 +1,53 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../../utils');
+
+var React = require('react-native');
+
+var StyleSheet = React.StyleSheet,
+    Dimensions = React.Dimensions,
+    Platform = React.Platform;
+exports.default = {
+
+  outerViewStyle: {
+    flex: 2,
+    justifyContent: 'space-between',
+    flexDirection: 'row'
+  },
+
+  innerViewStyle: {
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'column'
+  },
+
+  contentContainerStyle: {
+    margin: appstyleguide.DEFAULT_MARGIN,
+    alignSelf: 'stretch'
+  },
+
+  contentStyle: {
+    marginBottom: 20,
+    marginTop: 10,
+    marginLeft: 5,
+    backgroundColor: 'transparent'
+  },
+
+  claimStatusStyles: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    width: _utils.DEVICE_WIDTH * 0.95,
+    marginTop: appstyleguide.DEFAULT_TOP_MARGIN,
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginBottom: appstyleguide.DEFAULT_BOTTOM_MARGIN,
+    backgroundColor: appstyleguide.APP_LIGHT_GRAY
+  }
+
+};

@@ -1,0 +1,84 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = holidayReducer;
+
+var _holidayactiontypes = require('./holidayactiontypes');
+
+var holidayActionTypes = babelHelpers.interopRequireWildcard(_holidayactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var FILE_NAME = "holidayreducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+  holidayData: null,
+  holidayError: null
+
+};
+
+function holidayReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method holidayReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case holidayActionTypes.SUCCESS_GET_HOLIDAY_LIST:
+
+      console.log("In method holidayReducer SUCCESS_GET_HOLIDAY_LIST");
+
+      return {
+        holidayData: action.response.data,
+        holidayError: action.response.error
+      };
+
+      break;
+
+    case holidayActionTypes.FAILURE_GET_HOLIDAY_LIST:
+
+      console.log("In method holidayReducer FAILURE_GET_HOLIDAY_LIST");
+
+      return babelHelpers.extends({}, state, {
+        holidayData: action.response.data,
+        holidayError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case holidayActionTypes.CLEAR_HOLIDAY_ERROR:
+
+      console.log("In method commonReducer CLEAR_HOLIDAY_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        holidayError: null
+      });
+
+      break;
+
+    case holidayActionTypes.CLEAR_HOLIDAY_STATE_DATA:
+
+      console.log("In method holidayReducer CLEAR_HOLIDAY_STATE_DATA");
+
+      return {
+        errorCounter: action.response.errorCounter,
+        holidayData: action.response.holidayData,
+        holidayError: action.response.holidayError
+      };
+
+      break;
+
+    default:
+
+      console.log("In method holidayReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

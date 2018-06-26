@@ -1,0 +1,273 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = leaveReducer;
+
+var _leaveactiontypes = require('./leaveactiontypes');
+
+var leaveActionTypes = babelHelpers.interopRequireWildcard(_leaveactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var FILE_NAME = "leavereducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+
+  leaveInformationData: null,
+  leaveInformationError: null,
+
+  leaveBalanceData: null,
+  leaveBalanceError: null,
+
+  appliedLeavesData: null,
+  appliedLeavesError: null,
+
+  applyLeaveStatusData: null,
+  applyLeaveStatusError: null,
+
+  leaveActionData: null,
+  leaveActionError: null,
+
+  leaveDaysData: null,
+  leaveDaysError: null,
+
+  pendingLeaveInformationData: null,
+  pendingLeaveInformationError: null
+
+};
+
+function leaveReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method leaveReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case leaveActionTypes.SUCCESS_LEAVE_INFORMATION:
+
+      console.log("In method leavereducer SUCCESS_LEAVE_INFORMATION");
+
+      return {
+
+        leaveInformationData: action.response.data,
+        leaveInformationError: action.response.error
+      };
+
+      break;
+
+    case leaveActionTypes.FAILURE_LEAVE_INFORMATION:
+
+      console.log("In method leavereducer FAILURE_LEAVE_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        leaveInformationData: action.response.data,
+        leaveInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case leaveActionTypes.SUCCESS_LEAVE_BALANCE_LIST:
+
+      console.log("In method leavereducer SUCCESS_LEAVE_BALANCE_LIST");
+
+      return {
+
+        leaveBalanceData: action.response.data,
+        leaveBalanceError: action.response.error
+      };
+
+      break;
+
+    case leaveActionTypes.FAILURE_LEAVE_BALANCE_LIST:
+
+      console.log("In method leavereducer FAILURE_LEAVE_BALANCE_LIST");
+
+      return babelHelpers.extends({}, state, {
+        leaveBalanceData: action.response.data,
+        leaveBalanceError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case leaveActionTypes.SUCCESS_APPLIED_LEAVES_LIST:
+
+      console.log("In method leavereducer SUCCESS_APPLIED_LEAVES_LIST");
+
+      return {
+
+        appliedLeavesData: action.response.data.pendingItemInfo,
+        appliedLeavesError: action.response.error
+
+      };
+
+      break;
+
+    case leaveActionTypes.FAILURE_APPLIED_LEAVES_LIST:
+
+      console.log("In method leavereducer FAILURE_APPLIED_LEAVES_LIST");
+
+      return babelHelpers.extends({}, state, {
+        appliedLeavesData: action.response.data,
+        appliedLeavesError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case leaveActionTypes.SUCCESS_APPLY_LEAVE:
+
+      console.log("In method leavereducer SUCCESS_APPLY_LEAVE");
+
+      return {
+
+        applyLeaveStatusData: action.response.data,
+        applyLeaveStatusError: action.response.error
+      };
+
+      break;
+
+    case leaveActionTypes.FAILURE_APPLY_LEAVE:
+
+      console.log("In method leavereducer FAILURE_APPLY_LEAVE");
+
+      return babelHelpers.extends({}, state, {
+        applyLeaveStatusData: action.response.data,
+        applyLeaveStatusError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case leaveActionTypes.SUCCESS_LEAVE_ACTION_TAKEN:
+
+      console.log("In method leavereducer SUCCESS_LEAVE_ACTION_TAKEN");
+
+      return babelHelpers.extends({}, state, {
+        leaveActionData: action.response.data,
+        leaveActionError: action.response.error
+      });
+
+      break;
+
+    case leaveActionTypes.FAILURE_LEAVE_ACTION_TAKEN:
+
+      console.log("In method leavereducer FAILURE_LEAVE_ACTION_TAKENs");
+
+      return babelHelpers.extends({}, state, {
+        leaveActionData: action.response.data,
+        leaveActionError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case leaveActionTypes.SUCCESS_LEAVE_DAYS:
+
+      console.log("In method leavereducer SUCCESS_LEAVE_DAYS");
+
+      return {
+
+        leaveDaysData: action.response.data,
+        leaveDaysError: action.response.error
+      };
+
+      break;
+
+    case leaveActionTypes.FAILURE_LEAVE_DAYS:
+
+      console.log("In method leavereducer FAILURE_LEAVE_DAYS");
+
+      return babelHelpers.extends({}, state, {
+        leaveDaysData: action.response.data,
+        leaveDaysError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case leaveActionTypes.SUCCESS_PENDING_LEAVE_INFORMATION:
+
+      console.log("In method leavereducer SUCCESS_PENDING_LEAVE_INFORMATION");
+
+      return {
+
+        pendingLeaveInformationData: action.response.data,
+        pendingLeaveInformationError: action.response.error
+      };
+
+      break;
+
+    case leaveActionTypes.FAILURE_PENDING_LEAVE_INFORMATION:
+
+      console.log("In method leavereducer FAILURE_PENDING_LEAVE_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        pendingLeaveInformationData: action.response.data,
+        pendingLeaveInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case leaveActionTypes.CLEAR_LEAVE_ERROR:
+
+      console.log("In method leavereducer CLEAR_LEAVE_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        leaveInformationError: null,
+        leaveBalanceError: null,
+        appliedLeavesError: null,
+        applyLeaveStatusError: null,
+        leaveActionError: null,
+        leaveDaysError: null,
+        pendingLeaveInformationError: null
+
+      });
+
+      break;
+
+    case leaveActionTypes.CLEAR_LEAVE_STATE_DATA:
+
+      console.log("In method leavereducer CLEAR_LEAVE_STATE_DATA");
+
+      return {
+
+        errorCounter: action.response.errorCounter,
+
+        leaveInformationData: action.response.leaveInformationData,
+        leaveInformationError: action.response.leaveInformationError,
+
+        leaveBalanceData: action.response.leaveBalanceData,
+        leaveBalanceError: action.response.leaveBalanceError,
+
+        appliedLeavesData: action.response.appliedLeavesData,
+        appliedLeavesError: action.response.appliedLeavesError,
+
+        applyLeaveStatusData: action.response.applyLeaveStatusData,
+        applyLeaveStatusError: action.response.applyLeaveStatusError,
+
+        leaveActionData: action.response.leaveActionData,
+        leaveActionError: action.response.leaveActionError,
+
+        leaveDaysData: action.response.leaveDaysData,
+        leaveDaysError: action.response.leaveDaysError
+
+      };
+
+      break;
+
+    default:
+
+      console.log("In method leavereducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

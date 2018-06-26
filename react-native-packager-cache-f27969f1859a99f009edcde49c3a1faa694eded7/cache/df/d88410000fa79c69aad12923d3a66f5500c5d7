@@ -1,0 +1,523 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.uploadImage = uploadImage;
+exports.getAppUpdateConfiguration = getAppUpdateConfiguration;
+exports.getAppRatingConfiguration = getAppRatingConfiguration;
+exports.updateUserRating = updateUserRating;
+exports.createUserFeedback = createUserFeedback;
+exports.updateRefreshToggle = updateRefreshToggle;
+exports.showDropDownAlertMessage = showDropDownAlertMessage;
+exports.updatePromptTransactionDate = updatePromptTransactionDate;
+exports.updateTotalActivityCount = updateTotalActivityCount;
+exports.clearCommonError = clearCommonError;
+exports.clearAlertMessage = clearAlertMessage;
+exports.updateImageTimestamp = updateImageTimestamp;
+exports.updateAppUpdateApiConfigurationTimestamp = updateAppUpdateApiConfigurationTimestamp;
+exports.updateLastPromptTimestamp = updateLastPromptTimestamp;
+exports.clearCommonStateData = clearCommonStateData;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _commonprocessing = require('./commonprocessing');
+
+var commonProcessing = babelHelpers.interopRequireWildcard(_commonprocessing);
+
+var _commonactiontypes = require('./commonactiontypes');
+
+var commonActionTypes = babelHelpers.interopRequireWildcard(_commonactiontypes);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _commonobjectmapping = require('./commonobjectmapping');
+
+var FILE_NAME = "commonactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_EMPLOYEE_INFORMATION_PORTAL;
+
+function uploadImage(params) {
+
+  console.log(FILE_NAME + "In uploadImage method - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var uploadImageRequest = commonProcessing.buildUploadImageRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.put(uploadImageRequest.url, uploadImageRequest.data, uploadImageRequest.config).then(function (result) {
+
+      console.log("uploadImageRequest Result - ", result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'uploadImage', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: commonActionTypes.SUCCESS_UPLOAD_IMAGE,
+          response: commonProcessing.buildSuccessUploadImageResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'uploadImage', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: commonActionTypes.FAILURE_UPLOAD_IMAGE,
+          response: commonProcessing.buildFailedUploadImageResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      console.log("uploadImage Error - ", err);
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'uploadImage', _utils.REQUEST_SERVER_ERROR);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: commonActionTypes.FAILURE_UPLOAD_IMAGE,
+        response: commonProcessing.buildServerErrorUploadImageResponse(err, params)
+      });
+    });
+  };
+}
+
+function getAppUpdateConfiguration(params) {
+
+  var functionName = "getAppUpdateConfiguration";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    serverData = (0, _commonobjectmapping.getAppUpdateServerModel)(params, getState());
+
+    var appUpdateConfigurationRequest = commonProcessing.buildAppUpdateConfigurationRequest(serverData, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(appUpdateConfigurationRequest.url, appUpdateConfigurationRequest.data, appUpdateConfigurationRequest.config).then(function (result) {
+
+      console.log("appUpdateConfigurationRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: commonActionTypes.SUCCESS_GET_APP_UPDATE_CONFIGURATION,
+          response: commonProcessing.buildSuccessAppUpdateConfigurationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: commonActionTypes.FAILURE_GET_APP_UPDATE_CONFIGURATION,
+          response: commonProcessing.buildFailedAppUpdateConfigurationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      console.log(functionName + " Error - ", err);
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: commonActionTypes.FAILURE_GET_APP_UPDATE_CONFIGURATION,
+        response: commonProcessing.buildServerErrorAppUpdateConfigurationResponse(err, params)
+      });
+    });
+  };
+}
+
+function getAppRatingConfiguration(params) {
+
+  var functionName = "getAppRatingConfiguration";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var appRatingConfigurationRequest = commonProcessing.buildGetAppRatingConfigurationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(appRatingConfigurationRequest.url, appRatingConfigurationRequest.data, appRatingConfigurationRequest.config).then(function (result) {
+
+      console.log("appRatingConfigurationRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: commonActionTypes.SUCCESS_GET_APP_RATING_CONFIGURATION,
+          response: commonProcessing.buildSuccessGetAppRatingConfigurationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: commonActionTypes.FAILURE_GET_APP_RATING_CONFIGURATION,
+          response: commonProcessing.buildFailedGetAppRatingConfigurationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      console.log(functionName + " Error - ", err);
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: commonActionTypes.FAILURE_GET_APP_RATING_CONFIGURATION,
+        response: commonProcessing.buildServerErrorGetAppRatingConfigurationResponse(err, params)
+      });
+    });
+  };
+}
+
+function updateUserRating(params) {
+
+  var functionName = "updateUserRating";
+
+  console.log(FILE_NAME + "In updateUserRating method - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    serverData = (0, _commonobjectmapping.getUpdateAppReveiwModel)(params, getState());
+
+    var updateUserRatingRequest = commonProcessing.buildUpdateUserRatingRequest(serverData, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(updateUserRatingRequest.url, updateUserRatingRequest.data, updateUserRatingRequest.config).then(function (result) {
+
+      console.log("updateUserRatingRequest Result - ", result);
+
+      if (result.data != null) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: commonActionTypes.SUCCESS_UPDATE_USER_RATING,
+          response: commonProcessing.buildSuccessUpdateUserRatingResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: commonActionTypes.FAILURE_UPDATE_USER_RATING,
+          response: commonProcessing.buildFailedUpdateUserRatingResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      console.log("createUserRating Error - ", err);
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: commonActionTypes.FAILURE_UPDATE_USER_RATING,
+        response: commonProcessing.buildServerErrorUpdateUserRatingResponse(err, params)
+      });
+    });
+  };
+}
+
+function createUserFeedback(params) {
+
+  console.log(FILE_NAME + "In createUserFeedback method - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var serverData = (0, _commonobjectmapping.getAppFeedbackModel)(params, getState());
+    console.log("serverData", serverData);
+
+    var createUserFeedbackRequest = commonProcessing.buildCreateUserFeedbackRequest(serverData, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(createUserFeedbackRequest.url, createUserFeedbackRequest.data, createUserFeedbackRequest.config).then(function (result) {
+
+      console.log("createUserFeedbackRequest Result - ", result);
+
+      if (result.data.create_flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'createUserFeedback', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: commonActionTypes.SUCCESS_CREATE_FEEDBACK,
+          response: commonProcessing.buildSuccessCreateUserFeedbackResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'createUserFeedback', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: commonActionTypes.FAILURE_CREATE_FEEDBACK,
+          response: commonProcessing.buildFailedCreateUserFeedbackResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      console.log("createUserFeedback Error - ", err);
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'createUserFeedback', _utils.REQUEST_SERVER_ERROR);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: commonActionTypes.FAILURE_CREATE_FEEDBACK,
+        response: commonProcessing.buildServerErrorCreateUserFeedbackResponse(err, params)
+      });
+    });
+  };
+}
+
+function updateRefreshToggle() {
+
+  console.log(FILE_NAME + "In updateRefreshToggle - ");
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var refreshToggle = getState().common.refreshToggle;
+
+    var updatedRefreshToggle = !refreshToggle;
+
+    var response = {
+
+      refreshToggle: updatedRefreshToggle
+
+    };
+
+    dispatch({
+      type: commonActionTypes.REFRESH_TOGGLE,
+      response: response
+    });
+  };
+}
+
+function showDropDownAlertMessage(params) {
+
+  console.log(FILE_NAME + "In showDropDownAlertMessage - ");
+
+  return function (dispatch, getState) {
+
+    dispatch({
+      type: commonActionTypes.SHOW_ALERT_MESSAGE,
+      response: params
+    });
+  };
+}
+
+function updatePromptTransactionDate(params) {
+
+  console.log(FILE_NAME + "In updatePromptTransactionDate - ");
+
+  return function (dispatch, getState) {
+
+    dispatch({
+      type: commonActionTypes.UPDATE_PROMPT_TRANSACTION_DATE,
+      response: params
+    });
+  };
+}
+
+function updateTotalActivityCount(params) {
+
+  console.log(FILE_NAME + "In updateTotalActivityCount - ");
+
+  return function (dispatch, getState) {
+
+    totalActivityCount = getState().common.totalActivityCount;
+
+    if (totalActivityCount != null) totalActivityCount += 1;else totalActivityCount = 0;
+
+    dispatch({
+      type: commonActionTypes.UPDATE_TOTAL_ACTIVITY_COUNT,
+      response: totalActivityCount
+    });
+  };
+}
+
+function clearCommonError(params) {
+
+  return {
+    type: commonActionTypes.CLEAR_COMMON_ERROR,
+    response: null
+  };
+}
+
+function clearAlertMessage(params) {
+
+  console.log(FILE_NAME + "In clearAlertMessage - ");
+
+  return function (dispatch, getState) {
+
+    dispatch({
+      type: commonActionTypes.CLEAR_ALERT_MESSAGE,
+      response: params
+    });
+  };
+}
+
+function updateImageTimestamp(params) {
+
+  console.log(FILE_NAME + "In updateImageTimestamp - ");
+
+  return function (dispatch, getState) {
+
+    dispatch({
+      type: commonActionTypes.UPDATE_IMAGE_TIMESTAMP,
+      response: (0, _utils.getCurrentTime)()
+    });
+  };
+}
+
+function updateAppUpdateApiConfigurationTimestamp(params) {
+
+  console.log(FILE_NAME + "In updateAppUpdateApiConfigurationTimestamp - ");
+
+  return function (dispatch, getState) {
+
+    dispatch({
+      type: commonActionTypes.UPDATE_APP_UPDATE_API_CONFIGURATION_TIMESTAMP,
+      response: (0, _utils.getCurrentTime)()
+    });
+  };
+}
+
+function updateLastPromptTimestamp(params) {
+
+  console.log(FILE_NAME + "In updateLastPromptTimestamp - ");
+
+  return function (dispatch, getState) {
+
+    dispatch({
+      type: commonActionTypes.UPDATE_LAST_PROMPT_TIMESTAMP,
+      response: (0, _utils.getCurrentTime)()
+    });
+  };
+}
+
+function clearCommonStateData(params) {
+
+  console.log(FILE_NAME + "In clearCommonStateData - ");
+  console.log("Type of Data to be cleared - ", params);
+
+  CLEAR_STATE_DATA_ALL = 'CLEAR_STATE_DATA_ALL';
+  CLEAR_STATE_ERROR_COUNTER = 'CLEAR_STATE_ERROR_COUNTER';
+  CLEAR_STATE_UPDATE_USER_RATING_DATA = 'CLEAR_STATE_UPDATE_USER_RATING_DATA';
+  CLEAR_STATE_APP_FEEDBACK_DATA = 'CLEAR_STATE_APP_FEEDBACK_DATA';
+  CLEAR_STATE_APP_UPDATE_CONFIGURATION_DATA = 'CLEAR_STATE_APP_UPDATE_CONFIGURATION_DATA';
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var errorCounter = getState().common.errorCounter;
+    var uploadImageStatusData = getState().common.uploadImageStatusData;
+    var uploadImageStatusError = getState().common.uploadImageStatusError;
+
+    var updateUserRatingStatusData = getState().common.updateUserRatingStatusData;
+    var updateUserRatingStatusError = getState().common.updateUserRatingStatusError;
+
+    var createUserFeedbackStatusData = getState().common.createUserFeedbackStatusData;
+    var createUserFeedbackStatusError = getState().common.createUserFeedbackStatusError;
+
+    var appUpdateConfigurationData = getState().common.appUpdateConfigurationData;
+    var appUpdateConfigurationError = getState().common.appUpdateConfigurationError;
+
+    Object.keys(params).map(function (key) {
+      console.log("params attribute " + key + " value is - " + params[key]);
+
+      switch (params[key]) {
+        case CLEAR_STATE_DATA_ALL:
+
+          errorCounter = null;
+          uploadImageStatusData = null;
+          uploadImageStatusError = null;
+          break;
+
+        case CLEAR_STATE_ERROR_COUNTER:
+
+          errorCounter = null;
+          break;
+
+        case CLEAR_STATE_UPDATE_USER_RATING_DATA:
+
+          updateUserRatingStatusData = null;
+          updateUserRatingStatusError = null;
+          break;
+
+        case CLEAR_STATE_APP_FEEDBACK_DATA:
+
+          createUserFeedbackStatusData = null;
+          createUserFeedbackStatusError = null;
+          break;
+
+        case CLEAR_STATE_APP_UPDATE_CONFIGURATION_DATA:
+
+          appUpdateConfigurationData = null;
+          appUpdateConfigurationError = null;
+          break;
+
+        default:
+
+      }
+    });
+
+    var response = {
+      errorCounter: errorCounter,
+      uploadImageStatusData: uploadImageStatusData,
+      uploadImageStatusError: uploadImageStatusError,
+      updateUserRatingStatusData: updateUserRatingStatusData,
+      updateUserRatingStatusError: updateUserRatingStatusError,
+      createUserFeedbackStatusData: createUserFeedbackStatusData,
+      createUserFeedbackStatusError: createUserFeedbackStatusError,
+      appUpdateConfigurationData: appUpdateConfigurationData,
+      appUpdateConfigurationError: appUpdateConfigurationError
+    };
+
+    dispatch({
+      type: commonActionTypes.CLEAR_COMMON_STATE_DATA,
+      response: response
+    });
+  };
+}

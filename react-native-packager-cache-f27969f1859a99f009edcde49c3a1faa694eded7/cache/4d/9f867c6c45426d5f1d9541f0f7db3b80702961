@@ -1,0 +1,11 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _LocationSwitch = require('./LocationSwitch');
+
+var _LocationSwitch2 = babelHelpers.interopRequireDefault(_LocationSwitch);
+
+exports.default = _LocationSwitch2.default;

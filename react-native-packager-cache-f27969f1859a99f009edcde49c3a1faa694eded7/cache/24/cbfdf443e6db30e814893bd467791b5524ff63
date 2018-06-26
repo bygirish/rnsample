@@ -1,0 +1,169 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _Avatar = require('./Avatar');
+
+var _Avatar2 = babelHelpers.interopRequireDefault(_Avatar);
+
+var _Bubble = require('./Bubble');
+
+var _Bubble2 = babelHelpers.interopRequireDefault(_Bubble);
+
+var _SystemMessage = require('./SystemMessage');
+
+var _SystemMessage2 = babelHelpers.interopRequireDefault(_SystemMessage);
+
+var _Day = require('./Day');
+
+var _Day2 = babelHelpers.interopRequireDefault(_Day);
+
+var _utils = require('./utils');
+
+var Message = function (_React$Component) {
+  babelHelpers.inherits(Message, _React$Component);
+
+  function Message() {
+    babelHelpers.classCallCheck(this, Message);
+    return babelHelpers.possibleConstructorReturn(this, (Message.__proto__ || Object.getPrototypeOf(Message)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(Message, [{
+    key: 'getInnerComponentProps',
+    value: function getInnerComponentProps() {
+      var _props = this.props,
+          containerStyle = _props.containerStyle,
+          props = babelHelpers.objectWithoutProperties(_props, ['containerStyle']);
+
+      return babelHelpers.extends({}, props, {
+        isSameUser: _utils.isSameUser,
+        isSameDay: _utils.isSameDay
+      });
+    }
+  }, {
+    key: 'renderDay',
+    value: function renderDay() {
+      if (this.props.currentMessage.createdAt) {
+        var dayProps = this.getInnerComponentProps();
+        if (this.props.renderDay) {
+          return this.props.renderDay(dayProps);
+        }
+        return _react2.default.createElement(_Day2.default, dayProps);
+      }
+      return null;
+    }
+  }, {
+    key: 'renderBubble',
+    value: function renderBubble() {
+      var bubbleProps = this.getInnerComponentProps();
+      if (this.props.renderBubble) {
+        return this.props.renderBubble(bubbleProps);
+      }
+      return _react2.default.createElement(_Bubble2.default, bubbleProps);
+    }
+  }, {
+    key: 'renderSystemMessage',
+    value: function renderSystemMessage() {
+      var systemMessageProps = this.getInnerComponentProps();
+      if (this.props.renderSystemMessage) {
+        return this.props.renderSystemMessage(systemMessageProps);
+      }
+      return _react2.default.createElement(_SystemMessage2.default, systemMessageProps);
+    }
+  }, {
+    key: 'renderAvatar',
+    value: function renderAvatar() {
+      if (this.props.user._id === this.props.currentMessage.user._id && !this.props.showUserAvatar) {
+        return null;
+      }
+      var avatarProps = this.getInnerComponentProps();
+      var currentMessage = avatarProps.currentMessage;
+
+      if (currentMessage.user.avatar === null) {
+        return null;
+      }
+      return _react2.default.createElement(_Avatar2.default, avatarProps);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        this.renderDay(),
+        this.props.currentMessage.system ? this.renderSystemMessage() : _react2.default.createElement(
+          _reactNative.View,
+          { style: [styles[this.props.position].container, { marginBottom: (0, _utils.isSameUser)(this.props.currentMessage, this.props.nextMessage) ? 2 : 10 }, this.props.containerStyle[this.props.position]] },
+          this.props.position === "left" ? this.renderAvatar() : null,
+          this.renderBubble(),
+          this.props.position === "right" ? this.renderAvatar() : null
+        )
+      );
+    }
+  }]);
+  return Message;
+}(_react2.default.Component);
+
+exports.default = Message;
+
+
+var styles = {
+  left: _reactNative.StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      alignItems: 'flex-end',
+      justifyContent: 'flex-start',
+      marginLeft: 8,
+      marginRight: 0
+    }
+  }),
+  right: _reactNative.StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      alignItems: 'flex-end',
+      justifyContent: 'flex-end',
+      marginLeft: 0,
+      marginRight: 8
+    }
+  })
+};
+
+Message.defaultProps = {
+  renderAvatar: undefined,
+  renderBubble: null,
+  renderDay: null,
+  renderSystemMessage: null,
+  position: 'left',
+  currentMessage: {},
+  nextMessage: {},
+  previousMessage: {},
+  user: {},
+  containerStyle: {}
+};
+
+Message.propTypes = {
+  renderAvatar: _propTypes2.default.func,
+  showUserAvatar: _propTypes2.default.bool,
+  renderBubble: _propTypes2.default.func,
+  renderDay: _propTypes2.default.func,
+  renderSystemMessage: _propTypes2.default.func,
+  position: _propTypes2.default.oneOf(['left', 'right']),
+  currentMessage: _propTypes2.default.object,
+  nextMessage: _propTypes2.default.object,
+  previousMessage: _propTypes2.default.object,
+  user: _propTypes2.default.object,
+  containerStyle: _propTypes2.default.shape({
+    left: _reactNative.ViewPropTypes.style,
+    right: _reactNative.ViewPropTypes.style
+  })
+};

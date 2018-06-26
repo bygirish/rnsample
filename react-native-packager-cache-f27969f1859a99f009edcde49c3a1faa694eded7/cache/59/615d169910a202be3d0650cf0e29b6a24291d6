@@ -1,0 +1,99 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _moment = require('moment');
+
+var _moment2 = babelHelpers.interopRequireDefault(_moment);
+
+var Time = function (_React$Component) {
+  babelHelpers.inherits(Time, _React$Component);
+
+  function Time() {
+    babelHelpers.classCallCheck(this, Time);
+    return babelHelpers.possibleConstructorReturn(this, (Time.__proto__ || Object.getPrototypeOf(Time)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(Time, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: [styles[this.props.position].container, this.props.containerStyle[this.props.position]] },
+        _react2.default.createElement(
+          _reactNative.Text,
+          { style: [styles[this.props.position].text, this.props.textStyle[this.props.position]] },
+          (0, _moment2.default)(this.props.currentMessage.createdAt).locale(this.context.getLocale()).format(this.props.timeFormat)
+        )
+      );
+    }
+  }]);
+  return Time;
+}(_react2.default.Component);
+
+exports.default = Time;
+
+
+var containerStyle = {
+  marginLeft: 10,
+  marginRight: 10,
+  marginBottom: 5
+};
+
+var textStyle = {
+  fontSize: 10,
+  backgroundColor: 'transparent',
+  textAlign: 'right'
+};
+
+var styles = {
+  left: _reactNative.StyleSheet.create({
+    container: babelHelpers.extends({}, containerStyle),
+    text: babelHelpers.extends({
+      color: '#aaa'
+    }, textStyle)
+  }),
+  right: _reactNative.StyleSheet.create({
+    container: babelHelpers.extends({}, containerStyle),
+    text: babelHelpers.extends({
+      color: '#fff'
+    }, textStyle)
+  })
+};
+
+Time.contextTypes = {
+  getLocale: _propTypes2.default.func
+};
+
+Time.defaultProps = {
+  position: 'left',
+  currentMessage: {
+    createdAt: null
+  },
+  containerStyle: {},
+  textStyle: {}
+};
+
+Time.propTypes = {
+  position: _propTypes2.default.oneOf(['left', 'right']),
+  currentMessage: _propTypes2.default.object,
+  containerStyle: _propTypes2.default.shape({
+    left: _reactNative.ViewPropTypes.style,
+    right: _reactNative.ViewPropTypes.style
+  }),
+  textStyle: _propTypes2.default.shape({
+    left: _reactNative.Text.propTypes.style,
+    right: _reactNative.Text.propTypes.style
+  }),
+  timeFormat: _propTypes2.default.string
+};

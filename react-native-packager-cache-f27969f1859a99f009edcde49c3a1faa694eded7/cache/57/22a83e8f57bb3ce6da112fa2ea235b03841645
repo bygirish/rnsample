@@ -1,0 +1,155 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _utils = require('../../utils');
+
+var _nativeBase = require('native-base');
+
+var _ewtext = require('../ewtext/ewtext');
+
+var _ewtext2 = babelHelpers.interopRequireDefault(_ewtext);
+
+var _ewh4text = require('../ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _styles3 = require('../ewh4text/styles');
+
+var _styles4 = babelHelpers.interopRequireDefault(_styles3);
+
+var defaultHeight = 40;
+
+var EwDropdownPicker = function (_Component) {
+  babelHelpers.inherits(EwDropdownPicker, _Component);
+
+  function EwDropdownPicker(props, context) {
+    babelHelpers.classCallCheck(this, EwDropdownPicker);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwDropdownPicker.__proto__ || Object.getPrototypeOf(EwDropdownPicker)).call(this, props, context));
+
+    _this.initialState = {};
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwDropdownPicker, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+
+      this._animatedIsFocused = new _reactNative.Animated.Value(0);
+
+      if (!this.props.isDefaultPickerValueSelected) {
+
+        this.animatePickerLabel();
+      }
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+
+      this.animatePickerLabel();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          dataArray = _props.dataArray,
+          customPickerView = _props.customPickerView,
+          isDefaultPickerValueSelected = _props.isDefaultPickerValueSelected,
+          pickerPlaceholderLabel = _props.pickerPlaceholderLabel,
+          pickerLabel = _props.pickerLabel,
+          customViewStyle = _props.customViewStyle,
+          props = babelHelpers.objectWithoutProperties(_props, ['dataArray', 'customPickerView', 'isDefaultPickerValueSelected', 'pickerPlaceholderLabel', 'pickerLabel', 'customViewStyle']);
+
+
+      console.log("dataArray", dataArray);
+
+      var labelStyle = {
+        position: 'absolute',
+        marginLeft: this._animatedIsFocused.interpolate({
+          inputRange: [0, 1],
+          outputRange: [10, 0]
+        }),
+        marginTop: this._animatedIsFocused.interpolate({
+          inputRange: [0, 1],
+          outputRange: [6, -20]
+        }),
+
+        fontSize: this._animatedIsFocused.interpolate({
+          inputRange: [0, 1],
+          outputRange: [18, _styles4.default.textStyle.fontSize]
+        }),
+        color: this._animatedIsFocused.interpolate({
+          inputRange: [0, 1],
+          outputRange: [appstyleguide.APP_WHITE, appstyleguide.APP_BLACK]
+        })
+      };
+
+      displayLabel = "";
+
+      if (!isDefaultPickerValueSelected) displayLabel = pickerLabel;
+
+      console.log("display label is - ", displayLabel);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: [_styles2.default.outerViewStyle, customViewStyle] },
+        _react2.default.createElement(_ewh4text2.default, {
+
+          text: displayLabel
+
+        }),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: _styles2.default.spinnerContainer },
+          _react2.default.createElement(
+            _nativeBase.Picker,
+            babelHelpers.extends({}, props, {
+              style: _styles2.default.spinnerElement,
+              supportedOrientations: ['portrait', 'landscape'],
+              iosHeader: 'Select one',
+              mode: 'dropdown',
+              selectedValue: this.props.selectedValue,
+              onValueChange: this.props.onPickerValueChange
+            }),
+            customPickerView != null ? customPickerView : dataArray.map(function (item, key) {
+              return _react2.default.createElement(_nativeBase.Item, { key: key, label: item.label, value: item.value });
+            })
+          )
+        )
+      );
+    }
+  }, {
+    key: 'animatePickerLabel',
+    value: function animatePickerLabel() {
+
+      _reactNative.Animated.timing(this._animatedIsFocused, {
+        toValue: !this.props.isDefaultPickerValueSelected ? 1 : 0,
+        duration: 200
+      }).start();
+    }
+  }]);
+  return EwDropdownPicker;
+}(_react.Component);
+
+exports.default = EwDropdownPicker;

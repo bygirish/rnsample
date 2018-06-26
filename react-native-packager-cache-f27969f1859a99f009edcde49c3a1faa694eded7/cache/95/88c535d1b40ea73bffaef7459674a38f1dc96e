@@ -1,0 +1,77 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = calendarReducer;
+
+var _calendaractiontypes = require('./calendaractiontypes');
+
+var calendarActionTypes = babelHelpers.interopRequireWildcard(_calendaractiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var FILE_NAME = "calendareducer.js : ";
+
+var initialState = {
+
+  errorCounter: 0,
+
+  calendarData: null,
+  calendarError: null
+
+};
+
+function calendarReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method AuthReducer LOGIN");
+  console.log(action.type);
+  console.log(state);
+
+  switch (action.type) {
+
+    case calendarActionTypes.SUCCESS_CALENDAR_INFORMATION:
+
+      console.log("In method calendarReducer SUCCESS_PAST_ATTENDANCE_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        calendarData: action.response.data,
+        calendarError: action.response.error
+      });
+
+      break;
+
+    case calendarActionTypes.FAILURE_CALENDAR_INFORMATION:
+
+      console.log("In method calndarReducer FAILURE_PAST_ATTENDANCE_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        calendarData: action.response.data,
+        calendarError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case calendarActionTypes.CLEAR_CALENDAR_ERROR:
+
+      console.log("In method calndarReducer CLEAR_CALENDAR_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        calendarError: null
+
+      });
+
+      break;
+
+    default:
+
+      console.log("In method calndarReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

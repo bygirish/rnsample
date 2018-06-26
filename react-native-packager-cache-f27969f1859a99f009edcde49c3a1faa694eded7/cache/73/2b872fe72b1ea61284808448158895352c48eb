@@ -1,0 +1,281 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _reactNativeScrollableTabViewMaskBar = require('react-native-scrollable-tab-view-mask-bar');
+
+var _reactNativeScrollableTabViewMaskBar2 = babelHelpers.interopRequireDefault(_reactNativeScrollableTabViewMaskBar);
+
+var _utils = require('../../utils');
+
+var _ewscreentitle = require('../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _ewreportissue = require('../../components/ewreportissue/ewreportissue');
+
+var _ewreportissue2 = babelHelpers.interopRequireDefault(_ewreportissue);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _ewmyappliedleavesscreen = require('../leave/ewmyappliedleavesscreen');
+
+var _ewmyappliedleavesscreen2 = babelHelpers.interopRequireDefault(_ewmyappliedleavesscreen);
+
+var _ewmyappliedpastattendancescreen = require('../attendance/pastattendance/ewmyappliedpastattendancescreen');
+
+var _ewmyappliedpastattendancescreen2 = babelHelpers.interopRequireDefault(_ewmyappliedpastattendancescreen);
+
+var _ewmyappliedodscreen = require('../attendance/od/ewmyappliedodscreen');
+
+var _ewmyappliedodscreen2 = babelHelpers.interopRequireDefault(_ewmyappliedodscreen);
+
+var _ewmyappliedtravelscreen = require('../travel/ewmyappliedtravelscreen');
+
+var _ewmyappliedtravelscreen2 = babelHelpers.interopRequireDefault(_ewmyappliedtravelscreen);
+
+var _screennameidentifiers = require('../../utils/screennameidentifiers');
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appStyleGuide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+
+var FILE_NAME = "ewmyrequestscreen.js : ";
+
+var SCREEN_NAME = "My Request Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var EwMyRequestScreen = function (_Component) {
+  babelHelpers.inherits(EwMyRequestScreen, _Component);
+
+  function EwMyRequestScreen(props) {
+    babelHelpers.classCallCheck(this, EwMyRequestScreen);
+
+
+    console.log(FILE_NAME + " In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwMyRequestScreen.__proto__ || Object.getPrototypeOf(EwMyRequestScreen)).call(this, props));
+
+    _this.isModuleSubscribed = function (moduleId) {
+
+      var modulesSubscribed = _this.props.pendingNeedToActData.moduleSubscribed.moduleId;
+
+      if (modulesSubscribed.includes(moduleId)) return true;
+
+      return false;
+    };
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwMyRequestScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + " In componentWillMount method");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + " In componentWillReceiveProps method");
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + " In shouldComponentUpdate method");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + " In componentWillUpdate method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + " In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        return this.renderScreen();
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + " In componentDidMount method");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + " In componentDidUpdate method");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + " In componentWillUnmount method");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + " In renderScreen method");
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          { hasTabs: true },
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: 'My Requests'
+            })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Right,
+            null,
+            _react2.default.createElement(_ewreportissue2.default, {
+              screenId: _screennameidentifiers.VIEW_MY_REQUESTS_ID
+            })
+          )
+        ),
+        _react2.default.createElement(
+          _nativeBase.Tabs,
+          { renderTabBar: function renderTabBar() {
+              return _this2.getScrollableTab();
+            } },
+          _react2.default.createElement(
+            _nativeBase.Tab,
+            { heading: 'Leave', textStyle: { fontSize: 16 } },
+            _react2.default.createElement(_ewmyappliedleavesscreen2.default, { isMyRequest: true })
+          ),
+          this.renderMyTravelTab(),
+          _react2.default.createElement(
+            _nativeBase.Tab,
+            { heading: 'Out On Work', textStyle: { fontSize: 16 } },
+            _react2.default.createElement(_ewmyappliedodscreen2.default, { isMyRequest: true })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Tab,
+            { heading: 'Past Attendance', textStyle: { fontSize: 16 } },
+            _react2.default.createElement(_ewmyappliedpastattendancescreen2.default, { isMyRequest: true })
+          )
+        )
+      );
+    }
+  }, {
+    key: 'renderMyTravelTab',
+    value: function renderMyTravelTab() {
+
+      travelModuleSubscribed = this.isModuleSubscribed(modules.TRAVEL_AND_EXPENSE);
+
+      if (travelModuleSubscribed) {
+
+        return _react2.default.createElement(
+          _nativeBase.Tab,
+          { heading: 'Travel', textStyle: { fontSize: 16 } },
+          _react2.default.createElement(_ewmyappliedtravelscreen2.default, { isMyRequest: true })
+        );
+      }
+    }
+  }, {
+    key: 'getScrollableTab',
+    value: function getScrollableTab() {
+
+      return _react2.default.createElement(_reactNativeScrollableTabViewMaskBar2.default, {
+        activeTextColor: appStyleGuide.APP_WHITE,
+        underlineStyle: { backgroundColor: appStyleGuide.APP_WHITE },
+        inactiveTextColor: appStyleGuide.APP_WHITE,
+        backgroundColor: appStyleGuide.APP_BLUE,
+        showMask: false,
+        maskMode: 'light' });
+    }
+  }]);
+  return EwMyRequestScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + " In bindAction method");
+
+  return {};
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    isLoggedIn: state.auth.isLoggedIn,
+
+    pendingNeedToActData: state.needtoact.needToActData
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwMyRequestScreen);

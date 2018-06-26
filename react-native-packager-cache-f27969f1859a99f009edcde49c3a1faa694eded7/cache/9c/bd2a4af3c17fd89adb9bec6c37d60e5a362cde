@@ -1,0 +1,170 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getNeedToActList = getNeedToActList;
+exports.clearNeedToActError = clearNeedToActError;
+exports.clearNeedToActStateData = clearNeedToActStateData;
+
+var _needtoactactiontypes = require('./needtoactactiontypes');
+
+var needToActActionTypes = babelHelpers.interopRequireWildcard(_needtoactactiontypes);
+
+var _needtoactprocessing = require('./needtoactprocessing');
+
+var needToActProcessing = babelHelpers.interopRequireWildcard(_needtoactprocessing);
+
+var _authactiontypes = require('../auth/authactiontypes');
+
+var authActionTypes = babelHelpers.interopRequireWildcard(_authactiontypes);
+
+var _authprocessing = require('../auth/authprocessing');
+
+var authProcessing = babelHelpers.interopRequireWildcard(_authprocessing);
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _needtoacterrorhandling = require('./needtoacterrorhandling');
+
+var needToActError = babelHelpers.interopRequireWildcard(_needtoacterrorhandling);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _authactions = require('../../services/auth/authactions');
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var FILE_NAME = "needtoactctions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+function getNeedToActList(params) {
+
+  console.log(FILE_NAME + "In getNeedToActList method ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getNeedToActListRequest = needToActProcessing.buildGetNeedToActListRequest(params, getState());
+
+    console.log("Current GetState Value is - ");
+    console.log(getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getNeedToActListRequest.url, getNeedToActListRequest.data, getNeedToActListRequest.config).then(function (result) {
+
+      console.log("getNeedToActList Result - ", result);
+
+      if (result.data.employeeInfo != null) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getNeedToActList', _utils.REQUEST_SUCCESSFULL);
+
+        console.log("reached null state");
+
+        dispatch({
+          type: needToActActionTypes.SUCCESS_GET_NEED_TO_ACT_LIST,
+          response: needToActProcessing.buildSuccessGetNeedToActListResponse(result, params)
+        });
+      } else {
+
+        if (result.data.error_flag == needToActError.AUTHENTICATION_FAILURE) {
+
+          (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getNeedToActList', _utils.SESSION_EXPIRED_LOGOUT_SUCCESSFULL);
+
+          dispatch({
+            type: authActionTypes.SUCCESS_LOGOUT,
+            response: authProcessing.buildSuccessPerformLogoutResponse(result, getState())
+          });
+        } else {
+
+          (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getNeedToActList', _utils.REQUEST_FAILED);
+
+          dispatch({
+            type: needToActActionTypes.FAILURE_GET_NEED_TO_ACT_LIST,
+            response: needToActProcessing.buildFailedGetNeedToActListResponse(result, params)
+          });
+        }
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getNeedToActList', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getNeedToActList Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: needToActActionTypes.FAILURE_GET_NEED_TO_ACT_LIST,
+        response: needToActProcessing.buildServerErrorGetNeedToActListResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearNeedToActError(params) {
+
+  return {
+    type: needToActActionTypes.CLEAR_NEED_TO_ACT_ERROR,
+    response: null
+  };
+}
+
+function clearNeedToActStateData(params) {
+
+  console.log(FILE_NAME + "In clearNeedToActStateData - ");
+  console.log("Type of Data to be cleared - ", params);
+
+  CLEAR_STATE_DATA_ALL = 'CLEAR_STATE_DATA_ALL';
+  CLEAR_STATE_ERROR_COUNTER = 'CLEAR_STATE_ERROR_COUNTER';
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var errorCounter = getState().needtoact.errorCounter;
+    var needToActData = getState().needtoact.needToActData;
+    var needToActError = getState().needtoact.needToActError;
+
+    Object.keys(params).map(function (key) {
+
+      console.log("params attribute " + key + " value is - " + params[key]);
+
+      switch (params[key]) {
+
+        case CLEAR_STATE_DATA_ALL:
+
+          errorCounter = null;
+          needToActData = null;
+          needToActError = null;
+          break;
+
+        case CLEAR_STATE_ERROR_COUNTER:
+
+          errorCounter = null;
+          break;
+
+        default:
+
+      }
+    });
+
+    var response = {
+      errorCounter: errorCounter,
+      needToActData: needToActData,
+      needToActError: needToActError
+    };
+
+    dispatch({
+      type: needToActActionTypes.CLEAR_NEED_TO_ACT_STATE_DATA,
+      response: response
+    });
+  };
+}

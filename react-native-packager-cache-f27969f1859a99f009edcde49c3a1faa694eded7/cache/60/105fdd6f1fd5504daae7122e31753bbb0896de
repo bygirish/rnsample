@@ -1,0 +1,385 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getMileageClaimInformation = getMileageClaimInformation;
+exports.clearMileageClaimError = clearMileageClaimError;
+exports.saveMileageMasterItem = saveMileageMasterItem;
+exports.saveMileageLineItem = saveMileageLineItem;
+exports.deleteMileageLineItem = deleteMileageLineItem;
+exports.submitMileageExpenseClaim = submitMileageExpenseClaim;
+exports.clearMileageExpenseClaimStateData = clearMileageExpenseClaimStateData;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _mileageclaimprocessing = require('./mileageclaimprocessing');
+
+var mileageClaimProcessing = babelHelpers.interopRequireWildcard(_mileageclaimprocessing);
+
+var _mileageclaimactiontypes = require('./mileageclaimactiontypes');
+
+var mileageClaimActionTypes = babelHelpers.interopRequireWildcard(_mileageclaimactiontypes);
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../../utils');
+
+var _modulelist = require('../../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _mileageobjectmapping = require('./mileageobjectmapping');
+
+var FILE_NAME = "mileageclaimactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_TRAVEL_AND_EXPENSE;
+
+function getMileageClaimInformation(params) {
+
+  var functionName = "getMileageClaimInformation";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getMileageClaimInformationRequest = mileageClaimProcessing.buildGetMileageClaimInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getMileageClaimInformationRequest.url, getMileageClaimInformationRequest.data, getMileageClaimInformationRequest.config).then(function (result) {
+
+      console.log("getMileageClaimInformationRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: mileageClaimActionTypes.SUCCESS_GET_MILEAGE_CLAIM_INFORMATION,
+          response: mileageClaimProcessing.buildSuccesGetMileageClaimInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: mileageClaimActionTypes.FAILURE_GET_MILEAGE_CLAIM_INFORMATION,
+          response: mileageClaimProcessing.buildFailedGetMileageClaimInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getMileageClaimInformationRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: mileageClaimActionTypes.FAILURE_GET_MILEAGE_CLAIM_INFORMATION,
+        response: mileageClaimProcessing.buildServerErrorGetMileageClaimInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearMileageClaimError(params) {
+
+  return {
+    type: mileageClaimActionTypes.CLEAR_EXPENSE_MILEAGE_CLAIM_ERROR,
+    response: null
+  };
+}
+
+function saveMileageMasterItem(params) {
+
+  var functionName = "saveMileageMasterItem";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var saveMileageMasterItemRequest = mileageClaimProcessing.buildSaveMileageMasterItemRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(saveMileageMasterItemRequest.url, saveMileageMasterItemRequest.data, saveMileageMasterItemRequest.config).then(function (result) {
+
+      console.log("saveMileageMasterItemRequest Result - ", result);
+
+      if (result.data.success != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: mileageClaimActionTypes.SUCCESS_SAVE_MILEAGE_MASTER_ITEM_INFORMATION,
+          response: mileageClaimProcessing.buildSuccesSaveMileageMasterItemResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: mileageClaimActionTypes.FAILURE_SAVE_MILEAGE_MASTER_ITEM_INFORMATION,
+          response: mileageClaimProcessing.buildFailedSaveMileageMasterItemResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("saveMileageMasterItemRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: mileageClaimActionTypes.FAILURE_SAVE_MILEAGE_MASTER_ITEM_INFORMATION,
+        response: mileageClaimProcessing.buildServerErrorSaveMileageMasterItemResponse(err, params)
+      });
+    });
+  };
+}
+
+function saveMileageLineItem(params) {
+
+  var functionName = "saveMileageLineItem";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var serverParams = (0, _mileageobjectmapping.getServerMileageLineItemModel)(params, getState());
+
+    var saveMileageLineItemRequest = mileageClaimProcessing.buildSaveMileageLineItemRequest(serverParams, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.put(saveMileageLineItemRequest.url, saveMileageLineItemRequest.data, saveMileageLineItemRequest.config).then(function (result) {
+
+      console.log("saveMileageLineItemRequest Result - ", result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: mileageClaimActionTypes.SUCCESS_SAVE_MILEAGE_LINE_ITEM_INFORMATION,
+          response: mileageClaimProcessing.buildSuccesSaveMileageLineItemResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: mileageClaimActionTypes.FAILURE_SAVE_MILEAGE_LINE_ITEM_INFORMATION,
+          response: mileageClaimProcessing.buildFailedSaveMileageLineItemResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("saveMileageLineItemRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: mileageClaimActionTypes.FAILURE_SAVE_MILEAGE_LINE_ITEM_INFORMATION,
+        response: mileageClaimProcessing.buildServerErrorSaveMileageLineItemResponse(err, params)
+      });
+    });
+  };
+}
+
+function deleteMileageLineItem(params) {
+  var _this = this;
+
+  var functionName = "deleteMileageLineItem";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function _callee(dispatch, getState) {
+    var deleteMileageLineItemRequest, onSuccess, onFailure, onError, result;
+    return regeneratorRuntime.async(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            onError = function onError(error) {
+              dispatch({
+                type: mileageClaimActionTypes.FAILURE_DELETE_MILEAGE_LINE_ITEM_INFORMATION,
+                response: mileageClaimProcessing.buildServerErrorDeleteMileageLineItemResponse(error, params)
+              });
+              return error;
+            };
+
+            onFailure = function onFailure(result) {
+              dispatch({
+                type: mileageClaimActionTypes.FAILURE_DELETE_MILEAGE_LINE_ITEM_INFORMATION,
+                response: mileageClaimProcessing.buildFailedDeleteMileageLineItemResponse(result, params)
+              });
+              return result.data;
+            };
+
+            onSuccess = function onSuccess(result) {
+              dispatch({
+                type: mileageClaimActionTypes.SUCCESS_DELETE_MILEAGE_LINE_ITEM_INFORMATION,
+                response: mileageClaimProcessing.buildSuccesDeleteMileageLineItemResponse(result, params)
+              });
+              return result.data;
+            };
+
+            deleteMileageLineItemRequest = mileageClaimProcessing.buildDeleteMileageLineItemRequest(params, getState());
+
+
+            console.log("Current GetState Value is - ", getState);
+
+            requestStartTime = (0, _utils.getCurrentTime)();
+
+            _context.prev = 6;
+            _context.next = 9;
+            return regeneratorRuntime.awrap(_axios2.default.delete(deleteMileageLineItemRequest.url, deleteMileageLineItemRequest.config));
+
+          case 9:
+            result = _context.sent;
+
+            if (!(result.data.update_Flag == 1)) {
+              _context.next = 14;
+              break;
+            }
+
+            return _context.abrupt('return', onSuccess(result));
+
+          case 14:
+            return _context.abrupt('return', onFailure(result));
+
+          case 15:
+            _context.next = 20;
+            break;
+
+          case 17:
+            _context.prev = 17;
+            _context.t0 = _context['catch'](6);
+            return _context.abrupt('return', onError(_context.t0));
+
+          case 20:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, null, _this, [[6, 17]]);
+  };
+}
+
+function submitMileageExpenseClaim(params) {
+
+  var functionName = "submitMileageExpenseClaim";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  var serverParams = (0, _mileageobjectmapping.getSubmitMileageExpenseClaimModel)(params);
+
+  return function (dispatch, getState) {
+
+    var submitMileageExpenseClaimRequest = mileageClaimProcessing.buildSubmitMileageExpenseClaimRequest(serverParams, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.put(submitMileageExpenseClaimRequest.url, submitMileageExpenseClaimRequest.data, submitMileageExpenseClaimRequest.config).then(function (result) {
+
+      console.log("submitMileageExpenseClaimRequest Result - ", result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: mileageClaimActionTypes.SUCCESS_SUBMIT_MILEAGE_EXPENSE_CLAIM_INFORMATION,
+          response: mileageClaimProcessing.buildSuccessSubmitMileageExpenseClaimResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: mileageClaimActionTypes.FAILURE_SUBMIT_MILEAGE_EXPENSE_CLAIM_INFORMATION,
+          response: mileageClaimProcessing.buildFailedSubmitMileageExpenseClaimResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("submitMileageExpenseClaimRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: mileageClaimActionTypes.FAILURE_SUBMIT_MILEAGE_EXPENSE_CLAIM_INFORMATION,
+        response: mileageClaimProcessing.buildServerErrorSubmitMileageExpenseClaimResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearMileageExpenseClaimStateData(params) {
+
+  console.log(FILE_NAME + "In clearMileageExpenseClaimStateData - ");
+  console.log("Type of Data to be cleared - ", params);
+
+  CLEAR_STATE_DATA_ALL = 'CLEAR_STATE_DATA_ALL';
+
+  CLEAR_STATE_ERROR_COUNTER = 'CLEAR_STATE_ERROR_COUNTER';
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var errorCounter = getState().mileageExpenseClaim.errorCounter;
+
+    Object.keys(params).map(function (key) {
+      console.log("params attribute " + key + " value is - " + params[key]);
+
+      switch (params[key]) {
+        case CLEAR_STATE_DATA_ALL:
+
+          errorCounter = 0;
+
+          break;
+
+        case CLEAR_STATE_ERROR_COUNTER:
+
+          errorCounter = null;
+          break;
+
+        default:
+
+      }
+    });
+
+    var response = {
+      errorCounter: errorCounter
+
+    };
+
+    dispatch({
+      type: mileageClaimActionTypes.CLEAR_EXPENSE_MILEAGE_CLAIM_STATE_DATA,
+      response: response
+    });
+  };
+}

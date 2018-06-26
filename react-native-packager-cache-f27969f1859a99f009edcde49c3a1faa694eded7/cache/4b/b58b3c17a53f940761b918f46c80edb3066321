@@ -1,0 +1,78 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetHolidaysListRequest = buildGetHolidaysListRequest;
+exports.buildSuccessGetHolidaysListResponse = buildSuccessGetHolidaysListResponse;
+exports.buildFailedGetHolidaysListResponse = buildFailedGetHolidaysListResponse;
+exports.buildServerErrorGetHolidaysListResponse = buildServerErrorGetHolidaysListResponse;
+
+var _holidayapiendpoints = require('./holidayapiendpoints');
+
+var holidayApiEndPoints = babelHelpers.interopRequireWildcard(_holidayapiendpoints);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var FILE_NAME = "holidayprocessing.js : ";
+
+function buildGetHolidaysListRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetHolidaysListRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + holidayApiEndPoints.GET_HOLIDAY_LIST + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&year=" + params.year + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var holidayRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", holidayRequest);
+
+  return holidayRequest;
+}
+
+function buildSuccessGetHolidaysListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetHolidaysListResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetHolidaysListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetHolidaysListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetHolidaysListResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetHolidaysListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

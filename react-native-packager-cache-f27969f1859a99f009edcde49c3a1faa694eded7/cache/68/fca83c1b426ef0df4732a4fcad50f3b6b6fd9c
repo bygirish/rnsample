@@ -1,0 +1,1604 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EwDashBoard = undefined;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _draweractions = require('../../services/drawer/draweractions');
+
+var _reactNativeGeocoding = require('react-native-geocoding');
+
+var _reactNativeGeocoding2 = babelHelpers.interopRequireDefault(_reactNativeGeocoding);
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _needtoactactions = require('../../services/needtoact/needtoactactions');
+
+var _holidayactions = require('../../services/holidays/holidayactions');
+
+var _calendaractions = require('../../services/calendar/calendaractions');
+
+var _pastattendanceactions = require('../../services/pastattendance/pastattendanceactions');
+
+var _odrequestactions = require('../../services/odrequest/odrequestactions');
+
+var _attendanceactions = require('../../services/attendance/attendanceactions');
+
+var _authactions = require('../../services/auth/authactions');
+
+var _reactNativeLocationSwitch = require('react-native-location-switch');
+
+var _reactNativeLocationSwitch2 = babelHelpers.interopRequireDefault(_reactNativeLocationSwitch);
+
+var _ewcomponents = require('../../utils/ewcomponents');
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _leaveactions = require('../../services/leave/leaveactions');
+
+var _reactNativeActionButton = require('react-native-action-button');
+
+var _reactNativeActionButton2 = babelHelpers.interopRequireDefault(_reactNativeActionButton);
+
+var _dashboardutils = require('./dashboardutils');
+
+var dashboardConstants = babelHelpers.interopRequireWildcard(_dashboardutils);
+
+var _needtoacterrorhandling = require('../../services/needtoact/needtoacterrorhandling');
+
+var needToActError = babelHelpers.interopRequireWildcard(_needtoacterrorhandling);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _reactNativeImageCropPicker = require('react-native-image-crop-picker');
+
+var _reactNativeImageCropPicker2 = babelHelpers.interopRequireDefault(_reactNativeImageCropPicker);
+
+var _reactNativeFetchBlob = require('react-native-fetch-blob');
+
+var _reactNativeFetchBlob2 = babelHelpers.interopRequireDefault(_reactNativeFetchBlob);
+
+var _ewdashboardstyle = require('./styles/ewdashboardstyle');
+
+var _ewdashboardstyle2 = babelHelpers.interopRequireDefault(_ewdashboardstyle);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _screennameidentifiers = require('../../utils/screennameidentifiers');
+
+var _routerscenekeys = require('../../utils/routerscenekeys');
+
+var routerSceneKeys = babelHelpers.interopRequireWildcard(_routerscenekeys);
+
+var _ewappupdatemodal = require('./components/ewappupdatemodal');
+
+var _ewappupdatemodal2 = babelHelpers.interopRequireDefault(_ewappupdatemodal);
+
+var _ewappratingmodal = require('./components/ewappratingmodal');
+
+var _ewappratingmodal2 = babelHelpers.interopRequireDefault(_ewappratingmodal);
+
+var FILE_NAME = "ewdashboard.js : ";
+
+var SCREEN_NAME = "HomePage Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+var spacing = 10;
+var createApplicationIcon = require('../../../img/elementicons/createapplication.png');
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var trainIcon = require('../../../img/trainIcon.png');
+var chatIcon = require('../../../img/chaticons/chatIcon.png');
+
+expenseTypeArray = [{
+  key: dashboardConstants.EXPENSE_TRAVEL_KEY,
+  label: dashboardConstants.EXPENSE_TRAVEL_LABEL,
+  icon: trainIcon
+}, {
+  key: dashboardConstants.EXPENSE_STAY_KEY,
+  label: dashboardConstants.EXPENSE_STAY_LABEL,
+  icon: trainIcon
+}, {
+  key: dashboardConstants.EXPENSE_FOOD_KEY,
+  label: dashboardConstants.EXPENSE_FOOD_LABEL,
+  icon: trainIcon
+}, {
+  key: dashboardConstants.EXPENSE_TRANSPORT_KEY,
+  label: dashboardConstants.EXPENSE_TRANSPORT_LABEL,
+  icon: trainIcon
+}, {
+  key: dashboardConstants.EXPENSE_MILEAGE_KEY,
+  label: dashboardConstants.EXPENSE_MILEAGE_LABEL,
+  icon: trainIcon
+}, {
+  key: dashboardConstants.EXPENSE_PARKING_KEY,
+  label: dashboardConstants.EXPENSE_PARKING_LABEL,
+  icon: trainIcon
+}, {
+  key: dashboardConstants.EXPENSE_OTHERS_KEY,
+  label: dashboardConstants.EXPENSE_OTHERS_LABEL,
+  icon: trainIcon
+}];
+
+var EwDashBoard = exports.EwDashBoard = function (_Component) {
+  babelHelpers.inherits(EwDashBoard, _Component);
+
+  function EwDashBoard(props, context) {
+    babelHelpers.classCallCheck(this, EwDashBoard);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwDashBoard.__proto__ || Object.getPrototypeOf(EwDashBoard)).call(this, props, context));
+
+    _this.isModuleSubscribed = function (moduleId) {
+
+      var modulesSubscribed = _this.state.pendingNeedToActData.moduleSubscribed.moduleId;
+
+      if (modulesSubscribed.includes(moduleId)) return true;
+
+      return false;
+    };
+
+    _this.showActionButton = function (leaveModuleSubscribed, travelModuleSubscribed) {
+
+      if (leaveModuleSubscribed) {
+        return _react2.default.createElement(
+          _reactNativeActionButton2.default,
+          { buttonColor: appstyleguide.APP_BLUE, spacing: spacing },
+          _react2.default.createElement(
+            _reactNativeActionButton2.default.Item,
+            { textContainerStyle: _ewdashboardstyle2.default.fabTextContainerStyle, textStyle: _ewdashboardstyle2.default.fabTextStyle, buttonColor: appstyleguide.DASHBOARD_COLOR, title: dashboardConstants.APPLY_LEAVE_LABEL, onPress: function onPress() {
+                return _this.onPressActionButtons(dashboardConstants.CREATE_LEAVE_KEY);
+              } },
+            _react2.default.createElement(_reactNative.Image, { source: createApplicationIcon, style: {} })
+          ),
+          _react2.default.createElement(
+            _reactNativeActionButton2.default.Item,
+            { textContainerStyle: _ewdashboardstyle2.default.fabTextContainerStyle, textStyle: _ewdashboardstyle2.default.fabTextStyle, buttonColor: appstyleguide.DASHBOARD_COLOR, title: dashboardConstants.APPLY_OUT_ON_WORK_LABEL, onPress: function onPress() {
+                return _this.onPressActionButtons(dashboardConstants.CREATE_OUT_ON_WORK_KEY);
+              } },
+            _react2.default.createElement(_reactNative.Image, { source: createApplicationIcon })
+          ),
+          _react2.default.createElement(
+            _reactNativeActionButton2.default.Item,
+            { textContainerStyle: _ewdashboardstyle2.default.fabTextContainerStyle, textStyle: _ewdashboardstyle2.default.fabTextStyle, buttonColor: appstyleguide.DASHBOARD_COLOR, title: dashboardConstants.APPLY_PAST_ATTENDANCE_LABEL, onPress: function onPress() {
+                return _this.onPressActionButtons(dashboardConstants.CREATE_PAST_ATTENDANCE_KEY);
+              } },
+            _react2.default.createElement(_reactNative.Image, { source: createApplicationIcon })
+          ),
+          _this.renderTravelExpenseActionButton(travelModuleSubscribed),
+          travelModuleSubscribed ? _react2.default.createElement(
+            _reactNativeActionButton2.default.Item,
+            { textContainerStyle: _ewdashboardstyle2.default.fabTextContainerStyle, textStyle: _ewdashboardstyle2.default.fabTextStyle, buttonColor: appstyleguide.DASHBOARD_COLOR, title: dashboardConstants.APPLY_MILEAGE_CLAIM_LABEL, onPress: function onPress() {
+                return _this.onPressActionButtons(dashboardConstants.CREATE_MILEAGE_CLAIM_KEY);
+              } },
+            _react2.default.createElement(_reactNative.Image, { source: createApplicationIcon })
+          ) : '',
+          travelModuleSubscribed ? _react2.default.createElement(
+            _reactNativeActionButton2.default.Item,
+            { textContainerStyle: _ewdashboardstyle2.default.fabTextContainerStyle, textStyle: _ewdashboardstyle2.default.fabTextStyle, buttonColor: appstyleguide.DASHBOARD_COLOR, title: dashboardConstants.APPLY_OTHERS_CLAIM_LABEL, onPress: function onPress() {
+                return _this.onPressActionButtons(dashboardConstants.CREATE_OTHERS_CLAIM_KEY);
+              } },
+            _react2.default.createElement(_reactNative.Image, { source: createApplicationIcon })
+          ) : ''
+        );
+      }
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+    };
+
+    _this.handleLocationError = function (error) {
+
+      console.log("error is ", error);
+
+      var remarks = "";
+
+      if (error == dashboardConstants.LOCATION_PERMISSION_NOT_GRANTED) remarks = dashboardConstants.MESSAGE_LOCATION_PERMISSION_NOT_GRANTED;else {
+
+        if (error.message == dashboardConstants.LOCATION_NOT_CAPTURED) remarks = dashboardConstants.MESSAGE_LOCATION_CANT_CAPTURE;else if (error.message == dashboardConstants.GPS_NOT_AVAILABLE) remarks = dashboardConstants.MESSAGE_GPS_TURNED_OFF;else remarks = error.message;
+      }
+
+      locationData = {
+
+        latitude: "",
+        longitude: "",
+        area: "",
+        remarks: remarks
+      };
+
+      console.log("locationData is ", locationData);
+
+      _this.updateAttendanceAction(_this.state.attendanceData, locationData);
+    };
+
+    _this.onPressListItem = function (pendingItemData) {
+
+      console.log(FILE_NAME + "In onPressListItem Method");
+
+      if (pendingItemData.pi_Module_Id == modules.LEAVE_AND_ATTENDANCE) {
+
+        if (pendingItemData.pi_Txn_Type == dashboardConstants.PENDING_LEAVE) {
+
+          tracker.trackEvent(SCREEN_CATEGORY, 'Leave - need to act item clicked');
+
+          _reactNativeRouterFlux.Actions.ewleaveactionscreen({ leaveData: pendingItemData });
+        }
+
+        if (pendingItemData.pi_Txn_Type == dashboardConstants.PENDING_OD_REQUEST) {
+
+          tracker.trackEvent(SCREEN_CATEGORY, 'OD - need to act item clicked');
+
+          _reactNativeRouterFlux.Actions.ewodactionscreen({ odData: pendingItemData });
+        }
+        if (pendingItemData.pi_Txn_Type == dashboardConstants.PENDING_PAST_ATTENANCE) {
+
+          tracker.trackEvent(SCREEN_CATEGORY, 'PA - need to act item clicked');
+
+          _reactNativeRouterFlux.Actions.ewpastattendanceactionscreen({ pastAttendanceData: pendingItemData });
+        }
+      }
+
+      if (pendingItemData.pi_Module_Id == modules.TRAVEL_AND_EXPENSE) {
+
+        switch (pendingItemData.pi_Txn_Type) {
+
+          case dashboardConstants.PENDING_TRAVEL:
+
+            tracker.trackEvent(SCREEN_CATEGORY, 'Travel - need to act item clicked');
+
+            _reactNativeRouterFlux.Actions.ewtravelactionscreen({ travelData: pendingItemData });
+
+            break;
+
+          case dashboardConstants.PENDING_CONVEYANCE_CLAIM:
+
+            tracker.trackEvent(SCREEN_CATEGORY, 'Mileage Expense - need to act item clicked');
+
+            _reactNativeRouterFlux.Actions[routerSceneKeys.EW_EXPENSE_CLAIM_ACTION_KEY]({ expenseClaimData: pendingItemData });
+
+            break;
+
+          case dashboardConstants.PENDING_OTHER_CLAIM:
+
+            tracker.trackEvent(SCREEN_CATEGORY, 'Other Expense - need to act item clicked');
+
+            _reactNativeRouterFlux.Actions[routerSceneKeys.EW_EXPENSE_CLAIM_ACTION_KEY]({ expenseClaimData: pendingItemData });
+
+            break;
+
+          case dashboardConstants.PENDING_TRAVEL:
+
+            tracker.trackEvent(SCREEN_CATEGORY, 'Travel - need to act item clicked');
+
+            _reactNativeRouterFlux.Actions.ewtravelactionscreen({ travelData: pendingItemData });
+
+            break;
+          default:
+
+        }
+      }
+    };
+
+    _this.onPressActionButtons = function (buttonKey) {
+
+      console.log(FILE_NAME + "In onPressActionButtons Method");
+
+      switch (buttonKey) {
+        case dashboardConstants.CREATE_LEAVE_KEY:
+
+          _reactNativeRouterFlux.Actions.ewapplyleavescreen();
+          break;
+
+        case dashboardConstants.CREATE_OUT_ON_WORK_KEY:
+
+          _reactNativeRouterFlux.Actions.ewapplyodscreen();
+          break;
+
+        case dashboardConstants.CREATE_PAST_ATTENDANCE_KEY:
+
+          _reactNativeRouterFlux.Actions.ewapplypastattendancescreen();
+          break;
+
+        case dashboardConstants.CREATE_TRAVEL_KEY:
+
+          _reactNativeRouterFlux.Actions.ewapplytravelscreen();
+          break;
+
+        case dashboardConstants.CREATE_EXPENSE_KEY:
+
+          _this.changeExpenseModalState();
+
+          break;
+
+        case dashboardConstants.CREATE_MILEAGE_CLAIM_KEY:
+
+          _reactNativeRouterFlux.Actions[routerSceneKeys.EW_MILEAGE_CLAIM_KEY]();
+          break;
+
+        case dashboardConstants.CREATE_OTHERS_CLAIM_KEY:
+
+          _reactNativeRouterFlux.Actions[routerSceneKeys.EW_OTHER_CLAIM_KEY]();
+          break;
+
+        default:
+
+      }
+    };
+
+    console.log(FILE_NAME + "In constructor");
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      pendingNeedToActData: null,
+      attendanceData: null,
+
+      isExpenseModalVisible: false,
+
+      reason: '',
+
+      refreshing: false,
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwDashBoard, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.pendingNeedToActData != null && nextProps.pendingNeedToActError == null) {
+
+        console.log("Inside update state");
+
+        if (nextProps.loginRedirectState != null) {
+
+          console.log("Inside redirect url", this.props, nextProps);
+
+          _reactNativeRouterFlux.Actions.ewdeeplinkscreen({ deepLinkUrl: nextProps.loginRedirectState });
+
+          this.props.clearLoginRedirectState(null);
+        }
+
+        this.setState({
+          isLoading: false,
+          refreshing: false,
+          pendingNeedToActData: nextProps.pendingNeedToActData,
+          attendanceData: nextProps.pendingNeedToActData.attendance
+        });
+
+        _GoogleAnalyticController.googleAnalyticController.setUserId(nextProps.pendingNeedToActData.employeeInfo.name);
+      }
+
+      if (nextProps.pendingNeedToActData == null && nextProps.pendingNeedToActError != null) {
+        if (this.props.pendingNeedToActData != null) {
+          this.setState({
+            isLoading: false,
+            refreshing: false,
+            currentError: nextProps.pendingNeedToActError
+          });
+        } else {
+          this.setState({
+            isLoading: false,
+            refreshing: false,
+            pendingNeedToActData: null,
+            currentError: nextProps.pendingNeedToActError
+          });
+        }
+      }
+
+      if (nextProps.pendingNeedToActData == null && nextProps.pendingNeedToActError == null) {
+
+        console.log("need to act data to be updated");
+        var params = null;
+        this.props.getNeedToActList(params);
+      }
+
+      if (nextProps.attendanceStatusData != null && nextProps.attendanceStatusError == null && this.props.attendanceStatusData != nextProps.attendanceStatusData) {
+
+        this.setState({
+          isLoading: false,
+          attendanceData: nextProps.attendanceStatusData
+        });
+      }
+
+      if (nextProps.attendanceStatusData == null && nextProps.attendanceStatusError != null) {
+        if (this.props.attendanceData != null) {
+          this.setState({
+            isLoading: false,
+            currentError: nextProps.attendanceStatusError
+          });
+        } else {
+          this.setState({
+            isLoading: false,
+
+            currentError: nextProps.attendanceStatusError
+          });
+        }
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+
+      console.log("pendingNeedToActData is - ", this.state.pendingNeedToActData);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() method ");
+
+      console.log("pendingNeedToActData is - ", this.state.pendingNeedToActData);
+      console.log("currentError", this.state.currentError);
+
+      if (this.props.isLoggedIn) {
+        console.log("Logged in");
+        if (this.state.isLoading) {
+          console.log("Loading is active");
+          return _react2.default.createElement(_ewcomponents.EwLoadingIndicator, null);
+        } else {
+          console.log("Loading is not active");
+          if (this.state.isDataPreLoaded) {
+            console.log("Date Pre-loading was successful");
+            if (this.state.isDone && this.state.currentError == '') {
+              console.log("Action was completed successfully");
+              {
+                this.showAlertMessage();
+              }
+              _reactNativeRouterFlux.Actions.pop({ type: ActionConst.REFRESH });
+              return null;
+            } else {
+              console.log("Action has not been completed yet");
+              if (this.state.currentError == '') {
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+                console.log("Render Screen with Error", this.state.currentError);
+                return this.handleError();
+              }
+            }
+          } else {
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+            return this.handleError();
+          }
+        }
+      } else {
+        console.log("Not Logged in");
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      var params = null;
+
+      this.props.getNeedToActList(params);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In renderScreen method");
+
+      var _state = this.state,
+          attendanceData = _state.attendanceData,
+          pendingNeedToActData = _state.pendingNeedToActData;
+
+
+      console.log("attendancedataafterrefresh", attendanceData);
+
+      var employeeInfo = null,
+          leaveModuleSubscribed = false,
+          travelModuleSubscribed = false;
+
+      if (pendingNeedToActData != null) {
+        employeeInfo = pendingNeedToActData.employeeInfo;
+        leaveModuleSubscribed = this.isModuleSubscribed(modules.LEAVE_AND_ATTENDANCE);
+        travelModuleSubscribed = this.isModuleSubscribed(modules.TRAVEL_AND_EXPENSE);
+      }
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            null,
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _this2.onPressMenu();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { ios: 'ios-menu', android: 'md-menu' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewcomponents.EwScreenTitle, {
+              text: 'Dashboard'
+            })
+          ),
+          _react2.default.createElement(
+            _nativeBase.Right,
+            null,
+            _react2.default.createElement(_ewcomponents.EwReportIssue, {
+              screenId: _screennameidentifiers.VIEW_DASHBOARD_ID
+            }),
+            this.renderChatbotButton(employeeInfo),
+            console.log("pendingNeedToActData is - ", this.props.pendingNeedToActData),
+            _react2.default.createElement(
+              _nativeBase.Badge,
+              { style: _ewdashboardstyle2.default.pendingNotificationsBadge },
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: _ewdashboardstyle2.default.pendingNotificationsText },
+                pendingNeedToActData == null ? "0" : pendingNeedToActData.pendingItemInfo.length
+              )
+            )
+          )
+        ),
+        _react2.default.createElement(
+          _nativeBase.Content,
+          { refreshControl: _react2.default.createElement(_reactNative.RefreshControl, {
+              refreshing: this.state.refreshing,
+              onRefresh: this._onRefresh.bind(this)
+            }) },
+          _react2.default.createElement(_ewappupdatemodal2.default, null),
+          pendingNeedToActData != null ? _react2.default.createElement(_ewappratingmodal2.default, {
+            showAlertMessage: function showAlertMessage(messageText, messageHeading, messageType) {
+              return _this2.showAlertMessage(messageText, messageHeading, messageType);
+            }
+          }) : null,
+          this.getAttendanceListItem(attendanceData, employeeInfo, leaveModuleSubscribed),
+          console.log("pendingNeedToActData is - ", pendingNeedToActData),
+          this.showNeedToActList(leaveModuleSubscribed)
+        ),
+        this.showActionButton(leaveModuleSubscribed, travelModuleSubscribed)
+      );
+    }
+  }, {
+    key: 'renderChatbotButton',
+    value: function renderChatbotButton(employeeInfo) {
+
+      if (employeeInfo != null && employeeInfo.customer_id == _utils.SREI_CUSTOMER_CODE) {
+
+        return _react2.default.createElement(_ewcomponents.EwIcon, {
+          iconSource: chatIcon,
+          customIconStyle: { marginRight: 20 },
+          onIconPressed: function onIconPressed() {
+            return _reactNativeRouterFlux.Actions.ewchatbotscreen();
+          }
+        });
+      }
+    }
+  }, {
+    key: 'renderTravelExpenseActionButton',
+    value: function renderTravelExpenseActionButton(travelModuleSubscribed) {
+      var _this3 = this;
+
+      if (travelModuleSubscribed) {
+
+        return _react2.default.createElement(
+          _reactNativeActionButton2.default.Item,
+          { textContainerStyle: _ewdashboardstyle2.default.fabTextContainerStyle, textStyle: _ewdashboardstyle2.default.fabTextStyle, buttonColor: appstyleguide.DASHBOARD_COLOR, title: dashboardConstants.APPLY_TRAVEL_LABEL, onPress: function onPress() {
+              return _this3.onPressActionButtons(dashboardConstants.CREATE_TRAVEL_KEY);
+            } },
+          _react2.default.createElement(_reactNative.Image, { source: createApplicationIcon })
+        );
+      }
+
+      return '';
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME + "In handleError method");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      console.log("handleerror", this.state.currentError);
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+          console.log("isNetworkAvailable ", (0, _utils.isNetworkAvailable)());
+
+          this.showAlertMessage();
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (this.state.currentError) {
+
+          case needToActError.SERVER_EXCEPTION:
+            this.showAlertMessage(needToActError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          case dashboardConstants.GPS_NOT_AVAILABLE:
+            this.showAlertMessage();
+            return this.renderScreen();
+            break;
+
+          default:
+            this.showAlertMessage();
+            return this.renderScreen();
+
+        }
+      }
+    }
+  }, {
+    key: 'showMarkOutDialog',
+    value: function showMarkOutDialog() {
+      var _this4 = this;
+
+      console.log(FILE_NAME + "In showMarkOutDialog method");
+
+      _reactNative.Alert.alert('Mark Out', 'Do you really want to mark out?', [{ text: 'No', onPress: function onPress() {
+          return console.log('Cancel Pressed');
+        }, style: 'cancel' }, { text: 'Yes', onPress: function onPress() {
+          return _this4.requestLocationPermission();
+        } }]);
+    }
+  }, {
+    key: 'onMarkAttendance',
+    value: function onMarkAttendance(attendanceData) {
+
+      console.log(FILE_NAME + "In onMarkAttendance method");
+
+      switch (attendanceData.action) {
+        case dashboardConstants.MARK_IN_ATTENDANCE:
+
+          tracker.trackEvent(SCREEN_CATEGORY, 'mark in');
+
+          this.requestLocationPermission();
+
+          break;
+
+        case dashboardConstants.MARK_OUT_ATTENDANCE:
+
+          tracker.trackEvent(SCREEN_CATEGORY, 'mark out');
+
+          this.showMarkOutDialog();
+
+          break;
+
+        case dashboardConstants.MARK_OUT_PAST_ATTENDANCE:
+
+          tracker.trackEvent(SCREEN_CATEGORY, 'mark out past attendance');
+
+          _reactNativeRouterFlux.Actions.ewapplypastattendancescreen({ attendanceData: attendanceData });
+
+          break;
+
+        default:
+      }
+    }
+  }, {
+    key: 'getUserLocation',
+    value: function getUserLocation() {
+      var _this5 = this;
+
+      console.log(FILE_NAME + "In getUserLocation method");
+
+      navigator.geolocation.getCurrentPosition(function (position) {
+
+        console.log("userPosition", position);
+
+        locationData = {
+
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          area: '',
+          remarks: ''
+        };
+
+        _this5.updateAttendanceAction(_this5.state.attendanceData, locationData);
+      }, function (error) {
+
+        _this5.handleLocationError(error);
+
+        console.log("current  error is", error);
+      }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 });
+    }
+  }, {
+    key: 'getGeocodedLocation',
+    value: function getGeocodedLocation(position) {
+      var _this6 = this;
+
+      _reactNativeGeocoding2.default.setApiKey('AIzaSyAby8-of0KsJ22tJcqs6_Dk-e8_9gvhMjU');
+
+      _reactNativeGeocoding2.default.getFromLatLng(position.coords.latitude, position.coords.longitude).then(function (json) {
+
+        var address_component = json.results[0].formatted_address;
+
+        console.log("userLocation", address_component);
+
+        locationData = {
+
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          area: address_component,
+          remarks: ''
+        };
+
+        _this6.updateAttendanceAction(_this6.state.attendanceData, locationData);
+      }, function (error) {
+
+        _this6.handleLocationError(error);
+
+        console.log("erroris", error);
+      });
+    }
+  }, {
+    key: 'requestLocationPermission',
+    value: function requestLocationPermission() {
+      var granted;
+      return regeneratorRuntime.async(function requestLocationPermission$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (!(_reactNative.Platform.OS == 'android')) {
+                _context.next = 18;
+                break;
+              }
+
+              if (!(_reactNative.Platform.Version >= 23)) {
+                _context.next = 14;
+                break;
+              }
+
+              _context.prev = 2;
+              _context.next = 5;
+              return regeneratorRuntime.awrap(_reactNative.PermissionsAndroid.request(_reactNative.PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION));
+
+            case 5:
+              granted = _context.sent;
+
+
+              if (granted === _reactNative.PermissionsAndroid.RESULTS.GRANTED) {
+                this.getUserLocation();
+
+                this.setState({
+                  isLoading: true
+                });
+                console.log("Location permission granted");
+              } else {
+
+                this.handleLocationError(dashboardConstants.LOCATION_PERMISSION_NOT_GRANTED);
+
+                this.setState({
+                  isLoading: true
+                });
+
+                console.log("Location permission denied");
+              }
+              _context.next = 12;
+              break;
+
+            case 9:
+              _context.prev = 9;
+              _context.t0 = _context['catch'](2);
+
+              console.warn(_context.t0);
+
+            case 12:
+              _context.next = 16;
+              break;
+
+            case 14:
+              this.getUserLocation();
+
+              this.setState({
+                isLoading: true
+              });
+
+            case 16:
+              _context.next = 21;
+              break;
+
+            case 18:
+              this.getUserLocation();
+
+              this.setState({
+                isLoading: true
+              });
+              console.log("Location permission granted");
+
+            case 21:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, null, this, [[2, 9]]);
+    }
+  }, {
+    key: 'isGpsEnabled',
+    value: function isGpsEnabled() {
+      var _this7 = this;
+
+      console.log(FILE_NAME + "In isGpsEnabled method");
+
+      _reactNativeLocationSwitch2.default.isLocationEnabled(function () {
+
+        _this7.getUserLocation();
+
+        _this7.setState({
+          isLoading: true
+        });
+      }, function () {
+        _this7.changeLocationStatus();
+      });
+    }
+  }, {
+    key: 'changeLocationStatus',
+    value: function changeLocationStatus() {
+      var _this8 = this;
+
+      console.log(FILE_NAME + "In changeLocationStatus method");
+
+      _reactNativeLocationSwitch2.default.enableLocationService(1000, true, function () {
+
+        _this8.getUserLocation();
+
+        _this8.setState({
+          isLoading: true
+        });
+      }, function () {
+        _this8.changeLocationStatus();
+      });
+    }
+  }, {
+    key: 'updateAttendanceAction',
+    value: function updateAttendanceAction(attendanceData, locationData) {
+
+      console.log(FILE_NAME + "In updateAttendanceAction method");
+
+      var params = {
+        "action": attendanceData.action,
+        "actionForDate": attendanceData.actionForDate,
+        "latitude": locationData.latitude,
+        "longitude": locationData.longitude,
+        "area": locationData.area,
+        "remarks": locationData.remarks,
+        "reason": "0",
+        "pastAttendanceDate": "null",
+        "pastAttendanceTime": "null"
+      };
+
+      console.log("params are", params);
+
+      this.props.updateAttendance(params);
+    }
+  }, {
+    key: 'getAttendanceListItem',
+    value: function getAttendanceListItem(attendanceData, employeeInfo, leaveModuleSubscribed) {
+      var _this9 = this;
+
+      if (leaveModuleSubscribed) {
+
+        console.log(FILE_NAME + "In getAttendanceListItem method");
+
+        if (attendanceData != null && employeeInfo != null) {
+
+          attendanceText = this.getAttendanceText(attendanceData);
+
+
+          return _react2.default.createElement(
+            _nativeBase.ListItem,
+            { avatar: true, onPress: function onPress() {
+                return _this9.onMarkAttendance(attendanceData);
+              } },
+            _react2.default.createElement(
+              _nativeBase.Left,
+              null,
+              _react2.default.createElement(_ewcomponents.EwNetworkImage, { networkUrl: (0, _utils.getImageUrl)(this.props.sessionToken, employeeInfo.empCode, 'Dashboard', this.props.currentImageTimestamp) })
+            ),
+            _react2.default.createElement(
+              _nativeBase.Body,
+              null,
+              _react2.default.createElement(_ewcomponents.EwH1Text, {
+                text: attendanceText.h1text
+              }),
+              _react2.default.createElement(_ewcomponents.EwH2LightText, {
+                note: true,
+                text: attendanceText.h2text
+              })
+            )
+          );
+        }
+      }
+    }
+  }, {
+    key: 'getAttendanceStatus',
+    value: function getAttendanceStatus(attendanceData) {
+
+      console.log(FILE_NAME + "In getAttendanceStatus method");
+
+      primaryText = "";
+
+      secondaryView = null;
+
+      switch (attendanceData.action) {
+        case dashboardConstants.MARK_IN_ATTENDANCE:
+
+          primaryText = dashboardConstants.MARK_IN_ATTENDANCE_LABEL;
+          secondaryView = _react2.default.createElement(
+            _nativeBase.Text,
+            { note: true },
+            'For Today'
+          );
+
+          break;
+
+        case dashboardConstants.MARK_OUT_ATTENDANCE:
+
+          primaryText = dashboardConstants.MARK_OUT_ATTENDANCE_LABEL;
+          secondaryView = _react2.default.createElement(
+            _nativeBase.Text,
+            null,
+            'For Today'
+          );
+
+          break;
+
+        case dashboardConstants.MARK_OUT_PAST_ATTENDANCE:
+          primaryText = dashboardConstants.MARK_OUT_PAST_ATTENDANCE_LABEL;
+          secondaryView = _react2.default.createElement(
+            _nativeBase.Text,
+            null,
+            'For Today'
+          );
+          break;
+
+        case dashboardConstants.MARK_IN_NOT_ALLOWED:
+          primaryText = "You Marked Your attendance";
+          secondaryView = _react2.default.createElement(
+            _nativeBase.Text,
+            null,
+            'For Today'
+          );
+          break;
+
+        case dashboardConstants.MARK_IN_NOT_AVAILABLE:
+          primaryText = "";
+          secondaryView = _react2.default.createElement(
+            _reactNative.View,
+            null,
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'For Today'
+            ),
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'For Today'
+            )
+          );
+
+          break;
+
+        default:
+
+      }
+
+      attendanceText = {
+        primaryText: primaryText,
+        secondaryView: secondaryView
+      };
+
+      return attendanceText;
+    }
+  }, {
+    key: 'getMarkInTime',
+    value: function getMarkInTime(attendanceData) {
+
+      if (attendanceData.actualTimeInString != null) return this.getFormattedDate(attendanceData.actualTimeInString);
+
+      return attendanceData.actualTimeIn;
+    }
+  }, {
+    key: 'getMarkOutTime',
+    value: function getMarkOutTime(attendanceData) {
+
+      if (attendanceData.actualTimeOutString != null) return this.getFormattedDate(attendanceData.actualTimeOutString);
+
+      return attendanceData.actualTimeOut;
+    }
+  }, {
+    key: 'getMarkInView',
+    value: function getMarkInView(attendanceData) {
+
+      markInText = dashboardConstants.ATTENDANCE_STATUS_MARKED_IN + " - " + this.getMarkInTime(attendanceData);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Text,
+          null,
+          markInText
+        ),
+        _react2.default.createElement(
+          _nativeBase.Text,
+          null,
+          attendanceData.markInLocation
+        )
+      );
+    }
+  }, {
+    key: 'getMarkOutView',
+    value: function getMarkOutView(attendanceData) {
+
+      markOutText = dashboardConstants.ATTENDANCE_STATUS_MARKED_OUT + " - " + this.getMarkOutTime(attendanceData);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Text,
+          null,
+          markOutText
+        ),
+        _react2.default.createElement(
+          _nativeBase.Text,
+          null,
+          attendanceData.markOutLocation
+        )
+      );
+    }
+  }, {
+    key: 'getAttendanceText',
+    value: function getAttendanceText(attendanceData) {
+
+      console.log(FILE_NAME + "In getAttendanceText method");
+
+      h1text = "";
+      h2text = "";
+
+      switch (attendanceData.action) {
+        case dashboardConstants.MARK_IN_ATTENDANCE:
+
+          h1text = dashboardConstants.MARK_IN_ATTENDANCE_LABEL;
+          h2text = "For Today";
+
+          break;
+
+        case dashboardConstants.MARK_OUT_ATTENDANCE:
+
+          h1text = dashboardConstants.MARK_OUT_ATTENDANCE_LABEL;
+          h2text = "You marked in at " + this.getMarkInTime(attendanceData);
+
+          if (attendanceData.markin_location != null) h2text += "\n" + attendanceData.markin_location;
+
+
+          break;
+
+        case dashboardConstants.MARK_OUT_PAST_ATTENDANCE:
+          h1text = dashboardConstants.MARK_OUT_PAST_ATTENDANCE_LABEL;
+          h2text = "You marked in at " + this.getMarkInTime(attendanceData);
+          break;
+
+        case dashboardConstants.MARK_IN_NOT_ALLOWED:
+          h1text = "You Marked Your attendance";
+          h2text = this.getH2Text(attendanceData);
+          break;
+
+        case dashboardConstants.MARK_IN_NOT_AVAILABLE:
+          h1text = "";
+          h2text = this.getH2Text(attendanceData);
+          break;
+
+        default:
+
+      }
+
+      attendanceText = {
+        h1text: h1text,
+        h2text: h2text
+      };
+
+      return attendanceText;
+    }
+  }, {
+    key: 'getH2Text',
+    value: function getH2Text(attendanceData) {
+
+      console.log(FILE_NAME + "In getH2Text method");
+
+      h2text = "";
+
+      if (attendanceData.actualTimeIn != null && attendanceData.actualTimeOut != null) {
+        h2text = "You marked in at " + this.getMarkInTime(attendanceData) + ", Marked Out at " + this.getMarkOutTime(attendanceData);
+      } else if (attendanceData.actualTimeIn != null) {
+        h2text = "You marked in at " + this.getMarkInTime(attendanceData);
+      } else if (attendanceData.actualTimeOut != null) {
+        h2text = "You marked out at " + this.getMarkOutTime(attendanceData);
+      } else {
+        h2text = "Authorised wifi connection required";
+      }
+
+      return h2text;
+    }
+  }, {
+    key: 'getFormattedDate',
+    value: function getFormattedDate(serverTimestamp) {
+
+      return (0, _utils.showDeviceDateTimeFormat)((0, _utils.convertServerDateTimeToMilliseconds)(serverTimestamp));
+    }
+  }, {
+    key: '_onRefresh',
+    value: function _onRefresh() {
+
+      console.log(FILE_NAME + "In _onRefresh method");
+
+      this.setState({
+
+        refreshing: true,
+        attendanceData: null
+
+      });
+      var params = null;
+
+      this.props.getNeedToActList(params);
+    }
+  }, {
+    key: 'showNeedToActList',
+    value: function showNeedToActList(leaveModuleSubscribed) {
+      var _this10 = this;
+
+      console.log(FILE_NAME + "In showNeedToActList Method");
+
+      if (this.state.pendingNeedToActData != null && this.props.pendingNeedToActError == null) {
+
+        if (leaveModuleSubscribed) {
+
+          console.log("1st Case");
+
+          return _react2.default.createElement(_nativeBase.List, { dataArray: this.state.pendingNeedToActData.pendingItemInfo, renderRow: function renderRow(data) {
+              return _react2.default.createElement(
+                _reactNative.View,
+                null,
+                _react2.default.createElement(
+                  _nativeBase.ListItem,
+                  { avatar: true, onPress: function onPress() {
+                      return _this10.onPressListItem(data);
+                    } },
+                  _react2.default.createElement(
+                    _nativeBase.Left,
+                    null,
+                    _react2.default.createElement(_ewcomponents.EwNetworkImage, { networkUrl: (0, _utils.getImageUrl)(_this10.props.sessionToken, data.gen_id, 'Dashboard', _this10.props.currentImageTimestamp) })
+                  ),
+                  _react2.default.createElement(
+                    _nativeBase.Body,
+                    null,
+                    _react2.default.createElement(_ewcomponents.EwH1Text, {
+                      text: _this10.getTextForPendingItem(data)
+                    }),
+                    _react2.default.createElement(_ewcomponents.EwH2LightText, {
+                      text: "By " + data.user_Name + "(" + data.gen_id + ")" + _this10.getPendingItemDate(data.pi_dt)
+                    })
+                  )
+                )
+              );
+            } });
+        }
+      } else if (this.state.pendingNeedToActData == null && this.props.pendingNeedToActError == null) {
+
+        console.log("2nd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewdashboardstyle2.default.spinnerContainer },
+          _react2.default.createElement(_nativeBase.Spinner, { size: 'small' }),
+          _react2.default.createElement(
+            _nativeBase.Text,
+            { style: _ewdashboardstyle2.default.spinnerElement },
+            'Loading...'
+          )
+        );
+      } else if (this.state.pendingNeedToActData == null && this.props.pendingNeedToActError != null) {
+
+        console.log("3rd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewdashboardstyle2.default.loadAgainButtonContainer },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { onPress: function onPress() {
+                return _this10.props.getNeedToActList();
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Load Again'
+            )
+          )
+        );
+      } else {
+
+        console.log("4th Case");
+        console.log("this.state.pendingNeedToActData, ", this.state.pendingNeedToActData);
+        console.log("this.props.pendingNeedToActError, ", this.props.pendingNeedToActError);
+      }
+    }
+  }, {
+    key: 'getPendingItemDate',
+    value: function getPendingItemDate(date) {
+
+      if (date != null) {
+
+        return ", " + date;
+      }
+
+      return "";
+    }
+  }, {
+    key: 'changeExpenseModalState',
+    value: function changeExpenseModalState() {
+
+      this.setState({
+
+        isExpenseModalVisible: !this.state.isExpenseModalVisible
+      });
+    }
+  }, {
+    key: 'showExpenseModal',
+    value: function showExpenseModal() {
+      var _this11 = this;
+
+      if (this.state.isExpenseModalVisible) {
+
+        return _react2.default.createElement(
+          _ewcomponents.EwModal,
+          {
+            onBackButtonPress: function onBackButtonPress() {
+              return _this11.changeExpenseModalState();
+            },
+            isModalVisible: this.state.isExpenseModalVisible,
+            onBackdropPress: function onBackdropPress() {
+              return console.log("onBackdropPress");
+            }
+          },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { backgroundColor: appstyleguide.APP_BLUE } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              { style: { color: appstyleguide.APP_WHITE, padding: 10 } },
+              'Select Expense Type'
+            )
+          ),
+          Object.keys(expenseTypeArray).map(function (key, expenseIndex) {
+            return _this11.getExPenseTypeView(expenseIndex);
+          })
+        );
+      }
+    }
+  }, {
+    key: 'getExPenseTypeView',
+    value: function getExPenseTypeView(expenseIndex) {
+      var _this12 = this;
+
+      if (expenseIndex % 2 == 0) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { flexDirection: "row", margin: 10 } },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _reactNative.TouchableOpacity,
+              { onPress: function onPress() {
+                  return _this12.onExpenseTypeClicked(expenseTypeArray[expenseIndex].key);
+                } },
+              _react2.default.createElement(_reactNative.Image, { style: { height: 40, width: 40, alignSelf: "center" }, source: expenseTypeArray[expenseIndex].icon }),
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: { alignSelf: "center" } },
+                expenseTypeArray[expenseIndex].label
+              )
+            )
+          ),
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: { flex: 0.5 } },
+            expenseIndex + 1 < expenseTypeArray.length ? _react2.default.createElement(
+              _reactNative.TouchableOpacity,
+              { onPress: function onPress() {
+                  return _this12.onExpenseTypeClicked(expenseTypeArray[expenseIndex + 1].key);
+                } },
+              _react2.default.createElement(_reactNative.Image, { style: { height: 40, width: 40, alignSelf: "center" }, source: expenseTypeArray[expenseIndex + 1].icon }),
+              _react2.default.createElement(
+                _nativeBase.Text,
+                { style: { alignSelf: "center" } },
+                expenseTypeArray[expenseIndex + 1].label
+              )
+            ) : null
+          )
+        );
+      }
+    }
+  }, {
+    key: 'captureExpensePhoto',
+    value: function captureExpensePhoto(expenseKey) {
+      var _this13 = this;
+
+      _reactNativeImageCropPicker2.default.openCamera({
+        width: _utils.DEVICE_WIDTH,
+        height: _utils.DEVICE_HEIGHT,
+        cropping: true,
+        includeBase64: true,
+        compressImageQuality: 0.8
+      }).then(function (image) {
+
+        _this13.redirectToExpenseScreen(expenseKey, image);
+
+        console.log("imageProperties from Camera - 1 ", image);
+      }).catch(function (err) {
+        if (err == "Error: Cannot find image data") _reactNative.Alert.alert("Error", "Upload correct format");
+      });
+    }
+  }, {
+    key: 'redirectToExpenseScreen',
+    value: function redirectToExpenseScreen(expenseKey) {
+
+      _reactNativeRouterFlux.Actions.ewcreateexpensescreen({ expenseData: { expenseKey: expenseKey } });
+    }
+  }, {
+    key: 'onExpenseTypeClicked',
+    value: function onExpenseTypeClicked(expenseKey) {
+
+      this.changeExpenseModalState();
+
+      this.redirectToExpenseScreen(expenseKey);
+    }
+  }, {
+    key: 'onPressMenu',
+    value: function onPressMenu() {
+
+      console.log(FILE_NAME + "onPressMenu Method");
+
+      this.props.openDrawer();
+    }
+  }, {
+    key: 'getTextForPendingItem',
+    value: function getTextForPendingItem(pendingItemData) {
+
+      console.log(FILE_NAME + "getTextForPendingItem Method");
+
+      if (pendingItemData.pi_Module_Id == modules.LEAVE_AND_ATTENDANCE) {
+
+        if (pendingItemData.pi_Txn_Type == dashboardConstants.PENDING_LEAVE) {
+
+          switch (pendingItemData.pi_Txn_Subtype) {
+
+            case dashboardConstants.APPLY_LEAVE:
+              return dashboardConstants.APPROVE_LEAVE_LABEL;
+              break;
+
+            case dashboardConstants.CANCEL_LEAVE:
+              return dashboardConstants.APPROVE_LEAVE_CANCELLATION_LABEL;
+              break;
+
+            default:
+
+          }
+        }
+
+        if (pendingItemData.pi_Txn_Type == dashboardConstants.PENDING_OD_REQUEST) return dashboardConstants.APPROVE_OUT_ON_WORK_LABEL;
+
+        if (pendingItemData.pi_Txn_Type == dashboardConstants.PENDING_PAST_ATTENANCE) return dashboardConstants.APPROVE_PAST_ATTENDANCE_LABEL;
+      }
+
+      if (pendingItemData.pi_Module_Id == modules.TRAVEL_AND_EXPENSE) {
+
+        switch (pendingItemData.pi_Txn_Type) {
+
+          case dashboardConstants.PENDING_TRAVEL:
+
+            return dashboardConstants.APPROVE_TRAVEL_LABEL;
+            break;
+
+          case dashboardConstants.PENDING_CONVEYANCE_CLAIM:
+
+            return dashboardConstants.APPROVE_MILEAGE_CLAIM_LABEL;
+            break;
+
+          case dashboardConstants.PENDING_OTHER_CLAIM:
+
+            return dashboardConstants.APPROVE_OTHER_CLAIM_LABEL;
+            break;
+
+          default:
+
+        }
+      }
+    }
+  }]);
+  return EwDashBoard;
+}(_react.Component);
+
+EwDashBoard.propTypes = {};
+
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction method");
+
+  return {
+    getNeedToActList: function getNeedToActList(params) {
+      return dispatch((0, _needtoactactions.getNeedToActList)(params));
+    },
+    updateAttendance: function updateAttendance(params) {
+      return dispatch((0, _attendanceactions.updateAttendance)(params));
+    },
+
+    clearNeedToActError: function clearNeedToActError(params) {
+      return dispatch((0, _needtoactactions.clearNeedToActError)(params));
+    },
+
+    clearLoginRedirectState: function clearLoginRedirectState(params) {
+      return dispatch((0, _authactions.clearLoginRedirectState)(params));
+    },
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    }
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.auth.isLoggedIn,
+    loginRedirectState: state.auth.loginRedirectState,
+
+    pendingNeedToActData: state.needtoact.needToActData,
+    pendingNeedToActError: state.needtoact.needToActError,
+
+    attendanceStatusData: state.attendance.attendanceData,
+    attendanceStatusError: state.attendance.attendanceError,
+
+    currentImageTimestamp: state.common.currentImageTimestamp,
+
+    errorCounter: state.needtoact.errorCounter,
+    sessionToken: state.auth.sessionToken
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwDashBoard);

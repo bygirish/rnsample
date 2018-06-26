@@ -1,0 +1,150 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var FILE_NAME = "ewsettings.js : ";
+var popRoute = _reactNativeNavigationReduxHelpers.actions.popRoute;
+
+
+var datas = ['Setting 1', 'Setting 2', 'Setting 3', 'Setting 4', 'Setting 5', 'Setting 6', 'Setting 7', 'Setting 8'];
+
+var EwSettings = function (_Component) {
+  babelHelpers.inherits(EwSettings, _Component);
+
+  function EwSettings() {
+    babelHelpers.classCallCheck(this, EwSettings);
+    return babelHelpers.possibleConstructorReturn(this, (EwSettings.__proto__ || Object.getPrototypeOf(EwSettings)).apply(this, arguments));
+  }
+
+  babelHelpers.createClass(EwSettings, [{
+    key: 'render',
+    value: function render() {
+
+      var listItems = datas.map(function (data) {
+        return _react2.default.createElement(
+          _nativeBase.ListItem,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Text,
+            null,
+            data
+          ),
+          _react2.default.createElement(
+            _nativeBase.Right,
+            null,
+            _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-forward' })
+          )
+        );
+      });
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            null,
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            null,
+            _react2.default.createElement(
+              _nativeBase.Title,
+              null,
+              'Settings'
+            )
+          ),
+          _react2.default.createElement(_nativeBase.Right, null)
+        ),
+        _react2.default.createElement(
+          _nativeBase.Content,
+          null,
+          _react2.default.createElement(
+            _nativeBase.List,
+            null,
+            datas.map(function (data) {
+              return _react2.default.createElement(
+                _nativeBase.ListItem,
+                null,
+                _react2.default.createElement(
+                  _nativeBase.Text,
+                  null,
+                  data
+                ),
+                _react2.default.createElement(
+                  _nativeBase.Right,
+                  null,
+                  _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-forward' })
+                )
+              );
+            })
+          ),
+          _react2.default.createElement(
+            _nativeBase.List,
+            null,
+            datas.map(function (data) {
+              _react2.default.createElement(
+                _nativeBase.ListItem,
+                null,
+                _react2.default.createElement(
+                  _nativeBase.Text,
+                  null,
+                  data
+                ),
+                _react2.default.createElement(
+                  _nativeBase.Right,
+                  null,
+                  _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-forward' })
+                )
+              );
+            })
+          ),
+          _react2.default.createElement(_nativeBase.List, {
+            dataArray: datas, renderRow: function renderRow(data) {
+              return _react2.default.createElement(
+                _nativeBase.ListItem,
+                null,
+                _react2.default.createElement(
+                  _nativeBase.Text,
+                  null,
+                  data
+                ),
+                _react2.default.createElement(
+                  _nativeBase.Right,
+                  null,
+                  _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-forward' })
+                )
+              );
+            }
+          })
+        )
+      );
+    }
+  }]);
+  return EwSettings;
+}(_react.Component);
+
+exports.default = EwSettings;

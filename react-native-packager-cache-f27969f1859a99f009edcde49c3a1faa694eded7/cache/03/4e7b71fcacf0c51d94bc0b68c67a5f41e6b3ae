@@ -1,0 +1,350 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetMileageClaimInformationRequest = buildGetMileageClaimInformationRequest;
+exports.buildSuccesGetMileageClaimInformationResponse = buildSuccesGetMileageClaimInformationResponse;
+exports.buildFailedGetMileageClaimInformationResponse = buildFailedGetMileageClaimInformationResponse;
+exports.buildServerErrorGetMileageClaimInformationResponse = buildServerErrorGetMileageClaimInformationResponse;
+exports.buildSaveMileageMasterItemRequest = buildSaveMileageMasterItemRequest;
+exports.buildSuccesSaveMileageMasterItemResponse = buildSuccesSaveMileageMasterItemResponse;
+exports.buildFailedSaveMileageMasterItemResponse = buildFailedSaveMileageMasterItemResponse;
+exports.buildServerErrorSaveMileageMasterItemResponse = buildServerErrorSaveMileageMasterItemResponse;
+exports.buildSaveMileageLineItemRequest = buildSaveMileageLineItemRequest;
+exports.buildSuccesSaveMileageLineItemResponse = buildSuccesSaveMileageLineItemResponse;
+exports.buildFailedSaveMileageLineItemResponse = buildFailedSaveMileageLineItemResponse;
+exports.buildServerErrorSaveMileageLineItemResponse = buildServerErrorSaveMileageLineItemResponse;
+exports.buildSubmitMileageExpenseClaimRequest = buildSubmitMileageExpenseClaimRequest;
+exports.buildSuccessSubmitMileageExpenseClaimResponse = buildSuccessSubmitMileageExpenseClaimResponse;
+exports.buildFailedSubmitMileageExpenseClaimResponse = buildFailedSubmitMileageExpenseClaimResponse;
+exports.buildServerErrorSubmitMileageExpenseClaimResponse = buildServerErrorSubmitMileageExpenseClaimResponse;
+exports.buildDeleteMileageLineItemRequest = buildDeleteMileageLineItemRequest;
+exports.buildSuccesDeleteMileageLineItemResponse = buildSuccesDeleteMileageLineItemResponse;
+exports.buildFailedDeleteMileageLineItemResponse = buildFailedDeleteMileageLineItemResponse;
+exports.buildServerErrorDeleteMileageLineItemResponse = buildServerErrorDeleteMileageLineItemResponse;
+
+var _mileageclaimapiendpoints = require('./mileageclaimapiendpoints');
+
+var mileageClaimApiEndPoints = babelHelpers.interopRequireWildcard(_mileageclaimapiendpoints);
+
+var _utils = require('../../../utils');
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _mileageobjectmapping = require('./mileageobjectmapping');
+
+var FILE_NAME = "mileageclaimprocessing.js : ";
+
+function buildGetMileageClaimInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetMileageClaimInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + mileageClaimApiEndPoints.GET_MILEAGE_CLAIM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=createConveyanceExpenseForm" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var mileageClaimInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", mileageClaimInformationRequest);
+
+  return mileageClaimInformationRequest;
+}
+
+function buildSuccesGetMileageClaimInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetMileageClaimInformationResponse Method - ");
+
+  serverData = (0, _mileageobjectmapping.getMileageClaimModel)(result.data);
+
+  var response = {
+    data: serverData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetMileageClaimInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetMileageClaimInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorGetMileageClaimInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetMileageClaimInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildSaveMileageMasterItemRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildSaveMileageMasterItemRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + mileageClaimApiEndPoints.SAVE_MILEAGE_MASTER_ITEM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=createConveyanceMasterItem" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    },
+    responseType: 'json'
+  };
+
+  var saveMileageMasterItemRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", saveMileageMasterItemRequest);
+
+  return saveMileageMasterItemRequest;
+}
+
+function buildSuccesSaveMileageMasterItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesSaveMileageMasterItemResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedSaveMileageMasterItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedSaveMileageMasterItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_message
+  };
+
+  return response;
+}
+
+function buildServerErrorSaveMileageMasterItemResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorSaveMileageMasterItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildSaveMileageLineItemRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildSaveMileageLineItemRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + mileageClaimApiEndPoints.SAVE_MILEAGE_LINE_ITEM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=" + params.expenseApiMode + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    },
+    responseType: 'json'
+  };
+
+  var saveMileageLineItemRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", saveMileageLineItemRequest);
+
+  return saveMileageLineItemRequest;
+}
+
+function buildSuccesSaveMileageLineItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesSaveMileageLineItemResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedSaveMileageLineItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedSaveMileageLineItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data
+  };
+
+  return response;
+}
+
+function buildServerErrorSaveMileageLineItemResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorSaveMileageLineItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildSubmitMileageExpenseClaimRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildSubmitMileageExpenseClaimRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + mileageClaimApiEndPoints.SUBMIT_MILEAGE_EXPENSE_CLAIM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=submitConveyanceClaim" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json',
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var submitMileageClaimInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", submitMileageClaimInformationRequest);
+
+  return submitMileageClaimInformationRequest;
+}
+
+function buildSuccessSubmitMileageExpenseClaimResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessSubmitMileageExpenseClaimResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedSubmitMileageExpenseClaimResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedSubmitMileageExpenseClaimResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data
+  };
+
+  return response;
+}
+
+function buildServerErrorSubmitMileageExpenseClaimResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorSubmitMileageExpenseClaimResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildDeleteMileageLineItemRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildDeleteMileageLineItemRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + mileageClaimApiEndPoints.DELETE_MILEAGE_LINE_ITEM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=deleteConveyanceLineItem" + "&currentTimeStamp=" + new Date().getTime();
+
+  var config = {
+    'Content-Type': 'application/json',
+    data: (0, _mileageobjectmapping.getServerMileageLineItemDeleteModel)(params),
+    responseType: 'json'
+  };
+
+  var deleteMileageClaimInformationRequest = {
+    url: url,
+
+    config: config
+  };
+
+  console.log("loginRequest is -", deleteMileageClaimInformationRequest);
+
+  return deleteMileageClaimInformationRequest;
+}
+
+function buildSuccesDeleteMileageLineItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesDeleteMileageLineItemResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedDeleteMileageLineItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedDeleteMileageLineItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorDeleteMileageLineItemResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorDeleteMileageLineItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

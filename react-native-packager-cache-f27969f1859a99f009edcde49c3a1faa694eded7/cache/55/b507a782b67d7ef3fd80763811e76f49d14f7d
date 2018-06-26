@@ -1,0 +1,230 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = odRequestReducer;
+
+var _odrequestactiontypes = require('./odrequestactiontypes');
+
+var odRequestActionTypes = babelHelpers.interopRequireWildcard(_odrequestactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var FILE_NAME = "odrequestreducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+
+  odRequestInformationData: null,
+  odRequestInformationError: null,
+
+  odRequestActionData: null,
+  odRequestActionError: null,
+
+  odRequestAppliedData: null,
+  odRequestAppliedError: null,
+
+  odRosterInformationData: null,
+  odRosterInformationError: null,
+
+  pendingOdRequestInformationData: null,
+  pendingOdRequestInformationError: null,
+
+  appliedOdData: null,
+  appliedOdError: null
+
+};
+
+function odRequestReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method odRequestReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case odRequestActionTypes.SUCCESS_OD_REQUEST_INFORMATION:
+
+      console.log("In method odRequestReducer SUCCESS_OD_REQUEST_INFORMATION");
+
+      return {
+        odRequestInformationData: action.response.data,
+        odRequestInformationError: action.response.error
+      };
+
+      break;
+
+    case odRequestActionTypes.FAILURE_OD_REQUEST_INFORMATION:
+
+      console.log("In method odRequestReducer FAILURE_OD_REQUEST_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        odRequestInformationData: action.response.data,
+        odRequestInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case odRequestActionTypes.SUCCESS_OD_ACTION_TAKEN:
+
+      console.log("In method odRequestReducer SUCCESS_OD_ACTION_TAKEN");
+
+      return {
+        odRequestActionData: action.response.data,
+        odRequestActionError: action.response.error
+      };
+
+      break;
+
+    case odRequestActionTypes.FAILURE_OD_ACTION_TAKEN:
+
+      console.log("In method odRequestReducer FAILURE_OD_ACTION_TAKEN");
+
+      return babelHelpers.extends({}, state, {
+        odRequestActionData: action.response.data,
+        odRequestActionError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case odRequestActionTypes.SUCCESS_APPLY_OD_REQUEST:
+
+      console.log("In method odRequestReducer SUCCESS_APPLY_OD_REQUEST");
+
+      return {
+        odRequestAppliedData: action.response.data,
+        odRequestAppliedError: action.response.error
+      };
+
+      break;
+
+    case odRequestActionTypes.FAILURE_APPLY_OD_REQUEST:
+
+      console.log("In method odRequestReducer FAILURE_APPLY_OD_REQUEST");
+
+      return babelHelpers.extends({}, state, {
+        odRequestAppliedData: action.response.data,
+        odRequestAppliedError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case odRequestActionTypes.SUCCESS_PENDING_OD_INFORMATION:
+
+      console.log("In method odRequestReducer SUCCESS_PENDING_OD_INFORMATION");
+
+      return {
+        pendingOdRequestInformationData: action.response.data,
+        pendingOdRequestInformationError: action.response.error
+      };
+
+      break;
+
+    case odRequestActionTypes.FAILURE_PENDING_OD_INFORMATION:
+
+      console.log("In method odRequestReducer FAILURE_PENDING_OD_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        pendingOdRequestInformationData: action.response.data,
+        pendingOdRequestInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case odRequestActionTypes.SUCCESS_ROSTER_INFORMATION:
+
+      console.log("In method odRequestReducer SUCCESS_ROSTER_INFORMATION");
+
+      return {
+        odRosterInformationData: action.response.data,
+        odRosterInformationError: action.response.error
+      };
+
+      break;
+
+    case odRequestActionTypes.FAILURE_ROSTER_INFORMATION:
+
+      console.log("In method odRequestReducer FAILURE_ROSTER_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        odRosterInformationData: action.response.data,
+        odRosterInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case odRequestActionTypes.SUCCESS_APPLIED_OD_LIST:
+
+      console.log("In method odRequestReducer SUCCESS_APPLIED_OD_LIST");
+
+      return {
+        appliedOdData: action.response.data,
+        appliedOdError: action.response.error
+      };
+
+      break;
+
+    case odRequestActionTypes.FAILURE_APPLIED_OD_LIST:
+
+      console.log("In method odRequestReducer FAILURE_APPLIED_OD_LIST");
+
+      return babelHelpers.extends({}, state, {
+        appliedOdData: action.response.data,
+        appliedOdError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case odRequestActionTypes.CLEAR_OD_ERROR:
+
+      console.log("In method odRequestReducer CLEAR_OD_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        odRequestInformationError: null,
+        odRequestActionError: null,
+        odRequestAppliedError: null,
+        odRosterInformationError: null,
+        pendingOdRequestInformationError: null,
+        appliedOdError: null
+      });
+
+      break;
+
+    case odRequestActionTypes.CLEAR_OD_STATE_DATA:
+
+      console.log("In method odRequestReducer CLEAR_OD_STATE_DATA");
+
+      return {
+        errorCounter: action.response.errorCounter,
+        odRosterInformationData: action.response.odRosterInformationData,
+        odRosterInformationError: action.response.odRosterInformationError,
+        odRequestInformationData: action.response.odRequestInformationData,
+        odRequestInformationError: action.response.odRequestInformationError,
+        odRequestActionData: action.response.odRequestActionData,
+        odRequestActionError: action.response.odRequestActionError,
+        odRequestAppliedData: action.response.odRequestAppliedData,
+        odRequestAppliedError: action.response.odRequestAppliedError,
+        pendingOdRequestInformationData: action.response.pendingOdRequestInformationData,
+        pendingOdRequestInformationError: action.response.pendingOdRequestInformationError,
+        appliedOdData: action.response.appliedOdData,
+        appliedOdError: action.response.appliedOdError
+      };
+
+      break;
+
+    default:
+
+      console.log("In method odRequestReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

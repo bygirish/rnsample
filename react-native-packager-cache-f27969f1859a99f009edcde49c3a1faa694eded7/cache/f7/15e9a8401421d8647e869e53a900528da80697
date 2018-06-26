@@ -1,0 +1,14 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var DEFAULT_MOBILE_NUMBER_LENGTH = exports.DEFAULT_MOBILE_NUMBER_LENGTH = 10;
+
+var EMAIL_OR_MOBILE_INVALID = exports.EMAIL_OR_MOBILE_INVALID = "Please enter valid mobile number or email id";
+
+var EMAIL_OR_MOBILE_EMPTY = exports.EMAIL_OR_MOBILE_EMPTY = "Please enter email id or mobile number";
+
+var PASSWORD_EMPTY = exports.PASSWORD_EMPTY = "Please enter password";
+
+var EMPLOYEE_CODE_EMPTY = exports.EMPLOYEE_CODE_EMPTY = "Please enter employee code";
+
+var CUSTOMER_CODE_EMPTY = exports.CUSTOMER_CODE_EMPTY = "Please enter customer code";

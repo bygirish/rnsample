@@ -1,0 +1,805 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _GoogleAnalyticController = require('../../GoogleAnalyticController');
+
+var _ewsupervisorinfo = require('../../components/ewsupervisor/ewsupervisorinfo');
+
+var _ewsupervisorinfo2 = babelHelpers.interopRequireDefault(_ewsupervisorinfo);
+
+var _ewloadingindicator = require('../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewbar = require('../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewscreentitle = require('../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _ewh2text = require('../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewh4text = require('../../components/ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewh3lighttext = require('../../components/ewh3lighttext/ewh3lighttext');
+
+var _ewh3lighttext2 = babelHelpers.interopRequireDefault(_ewh3lighttext);
+
+var _ewbutton = require('../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _compensationerrorhandling = require('../../services/compensation/compensationerrorhandling');
+
+var compensationError = babelHelpers.interopRequireWildcard(_compensationerrorhandling);
+
+var _compensationutils = require('./compensationutils');
+
+var myClaimConstants = babelHelpers.interopRequireWildcard(_compensationutils);
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _commonactions = require('../../services/common/commonactions');
+
+var _animationutils = require('../../utils/animationutils');
+
+var animationUtils = babelHelpers.interopRequireWildcard(_animationutils);
+
+var _ewmyappliedclaimactionstyles = require('./styles/ewmyappliedclaimactionstyles');
+
+var _ewmyappliedclaimactionstyles2 = babelHelpers.interopRequireDefault(_ewmyappliedclaimactionstyles);
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appStyleGuide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _compensationactions = require('../../services/compensation/compensationactions');
+
+var FILE_NAME = "ewmyclaimactionscreen.js : ";
+
+var SCREEN_NAME = "My Claim Action Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_COMPENSATION_AND_BENEFITS;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+var EwMyAppliedClaimActionScreen = function (_Component) {
+  babelHelpers.inherits(EwMyAppliedClaimActionScreen, _Component);
+
+  function EwMyAppliedClaimActionScreen(props) {
+    babelHelpers.classCallCheck(this, EwMyAppliedClaimActionScreen);
+
+
+    console.log(FILE_NAME + "In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwMyAppliedClaimActionScreen.__proto__ || Object.getPrototypeOf(EwMyAppliedClaimActionScreen)).call(this, props));
+
+    _this._keyboardDidShow = function (event) {
+
+      console.log(FILE_NAME + "In _keyboardDidShow method");
+
+      scrollView.scrollToEnd({ animated: true });
+    };
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      console.log(FILE_NAME + "In clearCurrentMessage method");
+
+      _this.setState({
+        currentError: ''
+      });
+
+      _this.props.clearCompensationError(null);
+    };
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      myAppliedClaimInformation: [],
+
+      componentInitializeTime: new Date().getTime() };
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwMyAppliedClaimActionScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+
+      if (this.props.myAppliedClaimData) {
+
+        this.setState({
+          isDataPreLoaded: true,
+          isLoading: false,
+          myAppliedClaimInformation: this.props.myAppliedClaimData
+        });
+      } else {
+
+        this.getMyClaimData();
+
+        this.setState({
+          isDataPreLoaded: false,
+          isLoading: true
+        });
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ");
+      console.log(nextProps);
+
+      if (nextProps.myAppliedClaimInformationData != null && nextProps.myAppliedClaimInformationError == null) {
+
+        this.setState({
+          myAppliedClaimInformation: nextProps.myAppliedClaimInformationData,
+          isLoading: false,
+          isDataPreLoaded: true,
+          refreshing: false
+        });
+      }
+
+      if (nextProps.myAppliedClaimInformationData == null && nextProps.myAppliedClaimInformationError != null) {
+
+        this.setState({
+          isLoading: false,
+          currentError: nextProps.appliedCtcClaimError,
+          refreshing: false
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + "In componentWillUpdate");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage('Successfully', 'Out on Work Cancelled', 'success');
+              }
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError == '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+
+      this.keyboardDidShowListener = _reactNative.Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      this.keyboardDidShowListener.remove();
+
+      if (this.state.isDone && this.state.currentError == '') {
+
+        console.log(FILE_NAME + "Action Successfull");
+
+        var params = {
+          "0": 'CLEAR_STATE_DATA_ALL'
+        };
+
+        this.props.clearCompensationStateData(params);
+      }
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this2 = this;
+
+      console.log(FILE_NAME + "In renderScreen method");
+
+      console.log("myAppliedClaimInformation", myAppliedClaimInformation);
+      var myAppliedClaimInformation = this.state.myAppliedClaimInformation;
+      var _myAppliedClaimInform = myAppliedClaimInformation.claimDetails,
+          Status = _myAppliedClaimInform.Status,
+          Approver_Name = _myAppliedClaimInform.Approver_Name,
+          Approver_Designation = _myAppliedClaimInform.Approver_Designation,
+          Approver_Employee_Code = _myAppliedClaimInform.Approver_Employee_Code,
+          Create_Date = _myAppliedClaimInform.Create_Date;
+
+
+      var supervisorInfo = {
+        name: Approver_Name,
+        designation: Approver_Designation,
+        imageUrl: (0, _utils.getImageUrl)(this.props.sessionToken, Approver_Employee_Code, 'My Claim action', this.props.currentImageTimestamp),
+        datetime: Create_Date
+      };
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        _react2.default.createElement(
+          _nativeBase.Header,
+          null,
+          _react2.default.createElement(
+            _nativeBase.Left,
+            { style: { flex: 0.5 } },
+            _react2.default.createElement(
+              _nativeBase.Button,
+              { transparent: true, onPress: function onPress() {
+                  return _reactNativeRouterFlux.Actions.pop();
+                } },
+              _react2.default.createElement(_nativeBase.Icon, { name: 'arrow-back' })
+            )
+          ),
+          _react2.default.createElement(
+            _nativeBase.Body,
+            { style: { flex: 3 } },
+            _react2.default.createElement(_ewscreentitle2.default, {
+              text: 'Claim Request'
+            })
+          ),
+          _react2.default.createElement(_nativeBase.Right, null)
+        ),
+        _react2.default.createElement(
+          _nativeBase.Content,
+          {
+            ref: function ref(_ref) {
+              return scrollView = _ref;
+            },
+            contentContainerStyle: _ewmyappliedclaimactionstyles2.default.contentContainerStyle,
+            keyboardShouldPersistTaps: 'always'
+          },
+          _react2.default.createElement(
+            _reactNative.View,
+            { style: _ewmyappliedclaimactionstyles2.default.claimStatusStyles },
+            _react2.default.createElement(_ewh3text2.default, {
+              text: Status
+            })
+          ),
+          _react2.default.createElement(_ewbutton2.default, {
+            label: 'View Entitlement Summary',
+            onButonClicked: function onButonClicked() {
+              return _this2.renderEntitlementSummary(myAppliedClaimInformation);
+            },
+            customStyle: { backgroundColor: appStyleGuide.APP_GRAY, margin: appStyleGuide.DEFAULT_MARGIN, alignSelf: "center" }
+          }),
+          this.renderPayheadComponentDetails(myAppliedClaimInformation),
+          this.renderClaimInformation(myAppliedClaimInformation, Status),
+          _react2.default.createElement(_ewsupervisorinfo2.default, {
+            info: supervisorInfo
+          }),
+          this.renderActionButtons(Status)
+        )
+      );
+    }
+  }, {
+    key: 'renderEntitlementSummary',
+    value: function renderEntitlementSummary(myAppliedClaimInformation) {
+
+      console.log("Inside renderEntitlementSummary");
+    }
+  }, {
+    key: 'renderActionButtons',
+    value: function renderActionButtons(Status) {
+      var _this3 = this;
+
+      switch (Status) {
+        case myClaimConstants.DRAFT_LABEL:
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", marginTop: appStyleGuide.DEFAULT_TOP_MARGIN, justifyContent: "center" } },
+            _react2.default.createElement(_ewbutton2.default, {
+              label: myClaimConstants.DISCARD_LABEL,
+              onPressAction: function onPressAction() {
+                return _this3.sendRequestToServer(myClaimConstants.DISCARD_ACTION_ID);
+              }
+            }),
+            _react2.default.createElement(_ewbutton2.default, {
+              label: myClaimConstants.SAVE_AS_DRAFT_LABEL,
+              onPressAction: function onPressAction() {
+                return _this3.sendRequestToServer(myClaimConstants.SAVE_AS_DRAFT_ACTION_ID);
+              },
+              customStyle: { marginLeft: 15 }
+            }),
+            _react2.default.createElement(_ewbutton2.default, {
+              label: myClaimConstants.SUBMIT_LABEL,
+              customStyle: { marginLeft: 15 },
+              onPressAction: function onPressAction() {
+                return _this3.sendRequestToServer(myClaimConstants.SUBMIT_ACTION_ID);
+              }
+            })
+          );
+          break;
+
+        case myClaimConstants.RECONSIDER_LABEL:
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", marginTop: appStyleGuide.DEFAULT_TOP_MARGIN, justifyContent: "center" } },
+            _react2.default.createElement(_ewbutton2.default, {
+              label: myClaimConstants.WITHDRAWN_LABEL,
+              onPressAction: function onPressAction() {
+                return _this3.sendRequestToServer(myClaimConstants.WITHDRAWN_ACTION_ID);
+              }
+            }),
+            _react2.default.createElement(_ewbutton2.default, {
+              label: myClaimConstants.REAPPLY_LABEL,
+              onPressAction: function onPressAction() {
+                return _this3.sendRequestToServer(myClaimConstants.REAPPLY_ACTION_ID);
+              },
+              customStyle: { marginLeft: 15 }
+            })
+          );
+          break;
+
+        case myClaimConstants.PENDING_APPROVAL_LABEL:
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: { flexDirection: "row", marginTop: appStyleGuide.DEFAULT_TOP_MARGIN, justifyContent: "center" } },
+            _react2.default.createElement(_ewbutton2.default, {
+              label: myClaimConstants.WITHDRAWN_LABEL,
+              onPressAction: function onPressAction() {
+                return _this3.sendRequestToServer(myClaimConstants.WITHDRAWN_ACTION_ID);
+              }
+            })
+          );
+          break;
+        default:
+
+      }
+    }
+  }, {
+    key: 'sendRequestToServer',
+    value: function sendRequestToServer(actionId) {
+
+      console.log("Inside sendRequestToServer");
+    }
+  }, {
+    key: 'renderClaimInformation',
+    value: function renderClaimInformation(myAppliedClaimInformation, Status) {
+
+      console.log("Inside renderClaimInformation");
+
+      if (myAppliedClaimInformation != null) {
+        var _myAppliedClaimInform2 = myAppliedClaimInformation.claimDetails,
+            Create_Date = _myAppliedClaimInform2.Create_Date,
+            claimedAmount = _myAppliedClaimInform2.claimedAmount,
+            Currency = _myAppliedClaimInform2.Currency;
+
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          null,
+          this.renderClaimInfoView(myClaimConstants.REFERENCE_LABEL, myAppliedClaimInformation.claim_reference_no),
+          Status == myClaimConstants.DRAFT_LABEL ? null : this.renderClaimInfoView(myClaimConstants.CLAIM_DATE_LABEL, this.getDeviceDateFormat(Create_Date)),
+          this.renderClaimInfoView(myClaimConstants.CLAIMED_AMOUNT_LABEL, this.getAmountDeviceFormat(claimedAmount, Currency)),
+          this.renderOtherClaimInfo(Status)
+        );
+      }
+    }
+  }, {
+    key: 'renderOtherClaimInfo',
+    value: function renderOtherClaimInfo(Status) {
+      var _state$myAppliedClaim = this.state.myAppliedClaimInformation.claimDetails,
+          Approver_Claim_Date = _state$myAppliedClaim.Approver_Claim_Date,
+          approvedAmount = _state$myAppliedClaim.approvedAmount,
+          paidAmount = _state$myAppliedClaim.paidAmount,
+          withdraw_reason = _state$myAppliedClaim.withdraw_reason,
+          Currency = _state$myAppliedClaim.Currency,
+          reconsider_reason = _state$myAppliedClaim.reconsider_reason,
+          Reason = _state$myAppliedClaim.Reason,
+          withdraw_date = _state$myAppliedClaim.withdraw_date;
+
+
+      switch (Status) {
+        case myClaimConstants.PENDING_APPROVAL_LABEL:
+
+          break;
+
+        case myClaimConstants.APPROVED_LABEL:
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            this.renderClaimInfoView(myClaimConstants.APPROVAL_DATE_LABEL, this.getDeviceDateFormat(Approver_Claim_Date)),
+            this.renderClaimInfoView(myClaimConstants.APPROVED_AMOUNT_LABEL, this.getAmountDeviceFormat(approvedAmount, Currency))
+          );
+          break;
+
+        case myClaimConstants.PAID_LABEL:
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            this.renderClaimInfoView(myClaimConstants.APPROVAL_DATE_LABEL, this.getDeviceDateFormat(Approver_Claim_Date)),
+            this.renderClaimInfoView(myClaimConstants.APPROVED_AMOUNT_LABEL, this.getAmountDeviceFormat(approvedAmount, Currency)),
+            this.renderClaimInfoView(myClaimConstants.PAYMENT_DATE_LABEL, this.getDeviceDateFormat(payment_Date)),
+            this.renderClaimInfoView(myClaimConstants.PAID_AMOUNT_LABEL, this.getAmountDeviceFormat(paidAmount, Currency))
+          );
+          break;
+
+        case myClaimConstants.WITHDRAWN_LABEL:
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            this.renderClaimInfoView(myClaimConstants.WITHDRAW_DATE_LABEL, this.getDeviceDateFormat(withdraw_date)),
+            this.renderClaimInfoView(myClaimConstants.REASON_LABEL, withdraw_reason)
+          );
+          break;
+
+        case myClaimConstants.RECONSIDER_LABEL:
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            this.renderClaimInfoView(myClaimConstants.REASON_LABEL, reconsider_reason)
+          );
+          break;
+
+        case myClaimConstants.REJECTED_LABEL:
+
+          return _react2.default.createElement(
+            _reactNative.View,
+            null,
+            this.renderClaimInfoView(myClaimConstants.REJECTION_DATE_LABEL, this.getDeviceDateFormat(withdraw_date)),
+            this.renderClaimInfoView(myClaimConstants.REASON_LABEL, Reason)
+          );
+          break;
+
+        default:
+
+      }
+
+      return null;
+    }
+  }, {
+    key: 'getDeviceDateFormat',
+    value: function getDeviceDateFormat(serverDate) {
+
+      return (0, _utils.showDeviceDateFormat)((0, _utils.convertServerDateTimeToMilliseconds)(serverDate));
+    }
+  }, {
+    key: 'getAmountDeviceFormat',
+    value: function getAmountDeviceFormat(amount, currency) {
+
+      formattedAmount = currency + " " + amount;
+
+      return formattedAmount;
+    }
+  }, {
+    key: 'renderClaimInfoView',
+    value: function renderClaimInfoView(label, value) {
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { flexDirection: "row", marginTop: appStyleGuide.DEFAULT_TOP_MARGIN } },
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.5, marginLeft: 20 } },
+          _react2.default.createElement(_ewh3text2.default, {
+            text: label
+          })
+        ),
+        _react2.default.createElement(
+          _reactNative.View,
+          { style: { flex: 0.5 } },
+          _react2.default.createElement(_ewh3lighttext2.default, {
+            text: value
+          })
+        )
+      );
+    }
+  }, {
+    key: 'renderPayheadComponentDetails',
+    value: function renderPayheadComponentDetails(myAppliedClaimInformation) {
+      var _this4 = this;
+
+      console.log("Inside renderPayheadComponentDetails");
+
+      payheadComponents = myAppliedClaimInformation.claimDetails.reclaimdetailsinfo;
+
+      if (payheadComponents.length > 0) {
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: { marginTop: appStyleGuide.DEFAULT_TOP_MARGIN } },
+          Object.keys(payheadComponents).map(function (key) {
+            return _react2.default.createElement(
+              _reactNative.View,
+              { style: { marginTop: appStyleGuide.DEFAULT_TOP_MARGIN } },
+              _react2.default.createElement(_ewh2text2.default, {
+                text: payheadComponents[key].component_name
+              }),
+              _react2.default.createElement(_ewh4text2.default, {
+                text: myClaimConstants.CLAIMED_AMOUNT_LABEL + "  " + _this4.getAmountDeviceFormat(payheadComponents[key].Claim_Amt, payheadComponents[key].currency_symbol),
+                customStyle: { marginTop: 5 }
+              }),
+              _react2.default.createElement(_ewbar2.default, {
+                customStyle: { marginTop: appStyleGuide.DEFAULT_TOP_MARGIN }
+              })
+            );
+          })
+        );
+      }
+    }
+  }, {
+    key: 'getMyClaimData',
+    value: function getMyClaimData() {
+
+      var params = {
+        "expense_id": "22541",
+        "claim_reference_no": "BEN/1391",
+        "employee_id": 78301,
+        "employee_code": "0001"
+
+      };
+
+      this.props.getClaimInformation(params);
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME + " In handleError method");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      console.log("this.state.currentError", this.state.currentError);
+
+      if (this.state.currentError == '') {
+        return null;
+      }
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+        case compensationError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (this.state.currentError) {
+
+          case compensationError.SERVER_EXCEPTION:
+
+            this.showAlertMessage(compensationError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          default:
+
+            this.showAlertMessage();
+            return this.renderScreen();
+        }
+      }
+    }
+  }, {
+    key: 'showFooter',
+    value: function showFooter(myClaimId) {
+
+      console.log(FILE_NAME + "In showFooterTab method");
+
+      console.log("In showFooterTab method", myOdStatusId);
+
+      var myAppliedClaimInformation = this.state.myAppliedClaimInformation;
+      var create_id = myAppliedClaimInformation.create_id;
+
+
+      if (this.props.pendingNeedToActData != undefined && this.props.pendingNeedToActData != null) {
+        var user_id = this.props.pendingNeedToActData.employeeInfo.user_id;
+
+        if (user_id == create_id) {
+
+          return this.renderActionButtons(myAppliedClaimInformation, myClaimId);
+        }
+      }
+    }
+  }]);
+  return EwMyAppliedClaimActionScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction method");
+
+  return {
+
+    clearCompensationStateData: function clearCompensationStateData(params) {
+      return dispatch((0, _compensationactions.clearCompensationStateData)(params));
+    },
+    clearCompensationError: function clearCompensationError(params) {
+      return dispatch((0, _compensationactions.clearCompensationError)(params));
+    },
+    getClaimInformation: function getClaimInformation(params) {
+      return dispatch((0, _compensationactions.getClaimInformation)(params));
+    },
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    }
+
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+
+    myAppliedClaimInformationData: state.compensation.myAppliedClaimInformationData,
+    myAppliedClaimInformationError: state.compensation.myAppliedClaimInformationError,
+
+    currentImageTimestamp: state.common.currentImageTimestamp,
+
+    pendingNeedToActData: state.needtoact.needToActData
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwMyAppliedClaimActionScreen);

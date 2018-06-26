@@ -1,0 +1,22 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../utils');
+
+var _styles = require('../ewh3text/styles');
+
+var styles = babelHelpers.interopRequireWildcard(_styles);
+exports.default = {
+
+    textStyle: {
+
+        fontSize: (0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID ? styles.default.textStyle.fontSize : styles.default.textStyle.fontSize,
+        color: (0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID ? appstyleguide.APP_GRAY : appstyleguide.APP_GRAY
+    }
+
+};

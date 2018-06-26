@@ -1,0 +1,170 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactNativeParsedText = require('react-native-parsed-text');
+
+var _reactNativeParsedText2 = babelHelpers.interopRequireDefault(_reactNativeParsedText);
+
+var _reactNativeCommunications = require('react-native-communications');
+
+var _reactNativeCommunications2 = babelHelpers.interopRequireDefault(_reactNativeCommunications);
+
+var WWW_URL_PATTERN = /^www\./i;
+
+var MessageText = function (_React$Component) {
+  babelHelpers.inherits(MessageText, _React$Component);
+
+  function MessageText(props) {
+    babelHelpers.classCallCheck(this, MessageText);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (MessageText.__proto__ || Object.getPrototypeOf(MessageText)).call(this, props));
+
+    _this.onUrlPress = _this.onUrlPress.bind(_this);
+    _this.onPhonePress = _this.onPhonePress.bind(_this);
+    _this.onEmailPress = _this.onEmailPress.bind(_this);
+    return _this;
+  }
+
+  babelHelpers.createClass(MessageText, [{
+    key: 'onUrlPress',
+    value: function onUrlPress(url) {
+      if (WWW_URL_PATTERN.test(url)) {
+        this.onUrlPress('http://' + url);
+      } else {
+        _reactNative.Linking.canOpenURL(url).then(function (supported) {
+          if (!supported) {
+            console.error('No handler for URL:', url);
+          } else {
+            _reactNative.Linking.openURL(url);
+          }
+        });
+      }
+    }
+  }, {
+    key: 'onPhonePress',
+    value: function onPhonePress(phone) {
+      var options = ['Call', 'Text', 'Cancel'];
+      var cancelButtonIndex = options.length - 1;
+      this.context.actionSheet().showActionSheetWithOptions({
+        options: options,
+        cancelButtonIndex: cancelButtonIndex
+      }, function (buttonIndex) {
+        switch (buttonIndex) {
+          case 0:
+            _reactNativeCommunications2.default.phonecall(phone, true);
+            break;
+          case 1:
+            _reactNativeCommunications2.default.text(phone);
+            break;
+        }
+      });
+    }
+  }, {
+    key: 'onEmailPress',
+    value: function onEmailPress(email) {
+      _reactNativeCommunications2.default.email([email], null, null, null, null);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var linkStyle = _reactNative.StyleSheet.flatten([styles[this.props.position].link, this.props.linkStyle[this.props.position]]);
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: [styles[this.props.position].container, this.props.containerStyle[this.props.position]] },
+        _react2.default.createElement(
+          _reactNativeParsedText2.default,
+          {
+            style: [styles[this.props.position].text, this.props.textStyle[this.props.position], this.props.customTextStyle],
+            parse: [].concat(babelHelpers.toConsumableArray(this.props.parsePatterns(linkStyle)), [{ type: 'url', style: linkStyle, onPress: this.onUrlPress }, { type: 'phone', style: linkStyle, onPress: this.onPhonePress }, { type: 'email', style: linkStyle, onPress: this.onEmailPress }]),
+            childrenProps: babelHelpers.extends({}, this.props.textProps)
+          },
+          this.props.currentMessage.text
+        )
+      );
+    }
+  }]);
+  return MessageText;
+}(_react2.default.Component);
+
+exports.default = MessageText;
+
+
+var textStyle = {
+  fontSize: 16,
+  lineHeight: 20,
+  marginTop: 5,
+  marginBottom: 5,
+  marginLeft: 10,
+  marginRight: 10
+};
+
+var styles = {
+  left: _reactNative.StyleSheet.create({
+    container: {},
+    text: babelHelpers.extends({
+      color: 'black'
+    }, textStyle),
+    link: {
+      color: 'black',
+      textDecorationLine: 'underline'
+    }
+  }),
+  right: _reactNative.StyleSheet.create({
+    container: {},
+    text: babelHelpers.extends({
+      color: 'white'
+    }, textStyle),
+    link: {
+      color: 'white',
+      textDecorationLine: 'underline'
+    }
+  })
+};
+
+MessageText.contextTypes = {
+  actionSheet: _propTypes2.default.func
+};
+
+MessageText.defaultProps = {
+  position: 'left',
+  currentMessage: {
+    text: ''
+  },
+  containerStyle: {},
+  textStyle: {},
+  linkStyle: {},
+  parsePatterns: function parsePatterns() {
+    return [];
+  }
+};
+
+MessageText.propTypes = {
+  position: _propTypes2.default.oneOf(['left', 'right']),
+  currentMessage: _propTypes2.default.object,
+  containerStyle: _propTypes2.default.shape({
+    left: _reactNative.ViewPropTypes.style,
+    right: _reactNative.ViewPropTypes.style
+  }),
+  textStyle: _propTypes2.default.shape({
+    left: _reactNative.Text.propTypes.style,
+    right: _reactNative.Text.propTypes.style
+  }),
+  linkStyle: _propTypes2.default.shape({
+    left: _reactNative.Text.propTypes.style,
+    right: _reactNative.Text.propTypes.style
+  }),
+  parsePatterns: _propTypes2.default.func,
+  textProps: _propTypes2.default.object,
+  customTextStyle: _reactNative.Text.propTypes.style
+};

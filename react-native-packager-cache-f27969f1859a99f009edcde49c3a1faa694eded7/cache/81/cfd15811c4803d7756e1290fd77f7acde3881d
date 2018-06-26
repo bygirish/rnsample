@@ -1,0 +1,539 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getLeaveInformation = getLeaveInformation;
+exports.getLeaveDays = getLeaveDays;
+exports.getLeaveTypesAndBalances = getLeaveTypesAndBalances;
+exports.getAppliedLeavesList = getAppliedLeavesList;
+exports.applyLeave = applyLeave;
+exports.leaveAction = leaveAction;
+exports.getPendingLeaveInformation = getPendingLeaveInformation;
+exports.clearLeaveError = clearLeaveError;
+exports.clearLeaveStateData = clearLeaveStateData;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _leaveprocessing = require('./leaveprocessing');
+
+var leaveProcessing = babelHelpers.interopRequireWildcard(_leaveprocessing);
+
+var _leaveactiontypes = require('./leaveactiontypes');
+
+var leaveActionTypes = babelHelpers.interopRequireWildcard(_leaveactiontypes);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var FILE_NAME = "leaveactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+function getLeaveInformation(params) {
+
+  console.log(FILE_NAME + "In getLeaveInformation Method");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getLeaveInformationRequest = leaveProcessing.buildGetLeaveInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getLeaveInformationRequest.url, getLeaveInformationRequest.data, getLeaveInformationRequest.config).then(function (result) {
+
+      console.log("getLeaveInformationRequest Result - ", result);
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getLeaveInformation', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: leaveActionTypes.SUCCESS_LEAVE_INFORMATION,
+          response: leaveProcessing.buildSuccessGetLeaveInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getLeaveInformation', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: leaveActionTypes.FAILURE_LEAVE_INFORMATION,
+          response: leaveProcessing.buildFailedGetLeaveInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getLeaveInformation', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getLeaveInformation Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: leaveActionTypes.FAILURE_LEAVE_INFORMATION,
+        response: leaveProcessing.buildServerErrorGetLeaveInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function getLeaveDays(params) {
+
+  console.log(FILE_NAME + "In getLeaveDays Method");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+    var getLeaveDaysRequest = leaveProcessing.buildGetLeaveDaysRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getLeaveDaysRequest.url, getLeaveDaysRequest.data, getLeaveDaysRequest.config).then(function (result) {
+
+      console.log("getLeaveDaysRequest Result - ", result);
+
+      if (result.data.days != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getLeaveDays', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: leaveActionTypes.SUCCESS_LEAVE_DAYS,
+          response: leaveProcessing.buildSuccessGetLeaveDaysResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getLeaveDays', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: leaveActionTypes.FAILURE_LEAVE_DAYS,
+          response: leaveProcessing.buildFailedGetLeaveDaysResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getLeaveDays', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getLeaveDaysRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: leaveActionTypes.FAILURE_LEAVE_DAYS,
+        response: leaveProcessing.buildServerErrorGetLeaveDaysResponse(err, params)
+      });
+    });
+  };
+}
+
+function getLeaveTypesAndBalances(params) {
+
+  console.log(FILE_NAME + "In getLeaveBalanceList Method");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getLeaveBalanceRequest = leaveProcessing.buildGetLeaveTypesAndBalancesRequest(params, getState());
+
+    console.log("Current GetState Value is - ");console.log(getState());
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getLeaveBalanceRequest.url, getLeaveBalanceRequest.data, getLeaveBalanceRequest.config).then(function (result) {
+
+      console.log("getLeaveBalanceRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getLeaveTypesAndBalances', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: leaveActionTypes.SUCCESS_LEAVE_BALANCE_LIST,
+          response: leaveProcessing.buildSuccessGetLeaveTypesAndBalancesResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getLeaveTypesAndBalances', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: leaveActionTypes.FAILURE_LEAVE_BALANCE_LIST,
+          response: leaveProcessing.buildFailedGetLeaveTypesAndBalancesResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getLeaveTypesAndBalances', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getLeaveBalanceRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: leaveActionTypes.FAILURE_LEAVE_BALANCE_LIST,
+        response: leaveProcessing.buildServerErrorGetLeaveTypesAndBalancesResponse(err, params)
+      });
+    });
+  };
+}
+
+function getAppliedLeavesList(params) {
+
+  console.log(FILE_NAME + "In getAppliedLeavesList Method");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getAppliedLeavesRequest = leaveProcessing.buildGetAppliedLeavesListRequest(params, getState());
+
+    console.log("Current GetState Value is - ");console.log(getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getAppliedLeavesRequest.url, getAppliedLeavesRequest.data, getAppliedLeavesRequest.config).then(function (result) {
+
+      console.log("getAppliedLeavesRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getAppliedLeavesList', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: leaveActionTypes.SUCCESS_APPLIED_LEAVES_LIST,
+          response: leaveProcessing.buildSuccessGetAppliedLeavesListResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getAppliedLeavesList', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: leaveActionTypes.FAILURE_APPLIED_LEAVES_LIST,
+          response: leaveProcessing.buildFailedGetAppliedLeavesListResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getAppliedLeavesList', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getAppliedLeavesRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: leaveActionTypes.FAILURE_APPLIED_LEAVES_LIST,
+        response: leaveProcessing.buildServerErrorGetAppliedLeavesListResponse(err, params)
+      });
+    });
+  };
+}
+
+function applyLeave(params) {
+
+  console.log(FILE_NAME + "In applyLeave Method");
+  console.log("params - ");console.log(params);
+
+  return function (dispatch, getState) {
+
+    var applyLeaveRequest = leaveProcessing.buildApplyLeaveRequest(params, getState());
+
+    console.log("Current GetState Value is - ");console.log(getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(applyLeaveRequest.url, applyLeaveRequest.data, applyLeaveRequest.config).then(function (result) {
+
+      console.log("applyLeaveRequest Result - ", result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'applyLeave', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: leaveActionTypes.SUCCESS_APPLY_LEAVE,
+          response: leaveProcessing.buildSuccessApplyLeaveResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'applyLeave', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: leaveActionTypes.FAILURE_APPLY_LEAVE,
+          response: leaveProcessing.buildFailedApplyLeaveResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'applyLeave', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("applyLeaveRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: leaveActionTypes.FAILURE_APPLY_LEAVE,
+        response: leaveProcessing.buildServerErrorApplyLeaveResponse(err, params)
+      });
+    });
+  };
+}
+
+function leaveAction(params) {
+
+  console.log(FILE_NAME + "In leaveAction Method");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var leaveActionRequest = leaveProcessing.buildLeaveActionRequest(params, getState());
+
+    console.log("Current GetState Value is - ");console.log(getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.put(leaveActionRequest.url, leaveActionRequest.data, leaveActionRequest.config).then(function (result) {
+
+      console.log("leaveActionRequest Result - ", result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'leaveAction', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: leaveActionTypes.SUCCESS_LEAVE_ACTION_TAKEN,
+          response: leaveProcessing.buildSuccessLeaveActionResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'leaveAction', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: leaveActionTypes.FAILURE_LEAVE_ACTION_TAKEN,
+          response: leaveProcessing.buildFailedLeaveActionResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'leaveAction', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("leaveActionRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: leaveActionTypes.FAILURE_LEAVE_ACTION_TAKEN,
+        response: leaveProcessing.buildServerErrorLeaveActionResponse(err, params)
+      });
+    });
+  };
+}
+
+function getPendingLeaveInformation(params) {
+
+  console.log(FILE_NAME + "In getPendingLeaveInformation Method");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getPendingLeaveInformationRequest = leaveProcessing.buildGetPendingLeaveInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getPendingLeaveInformationRequest.url, getPendingLeaveInformationRequest.data, getPendingLeaveInformationRequest.config).then(function (result) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPendingLeaveInformation', _utils.REQUEST_SUCCESSFULL);
+
+      console.log("getPendingLeaveInformationRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPendingLeaveInformation', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: leaveActionTypes.SUCCESS_PENDING_LEAVE_INFORMATION,
+          response: leaveProcessing.buildSuccessGetPendingLeaveInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPendingLeaveInformation', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: leaveActionTypes.FAILURE_PENDING_LEAVE_INFORMATION,
+          response: leaveProcessing.buildFailedGetPendingLeaveInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPendingLeaveInformation', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getPendingLeaveInformationRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: leaveActionTypes.FAILURE_PENDING_LEAVE_INFORMATION,
+        response: leaveProcessing.buildServerErrorGetPendingLeaveInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearLeaveError(params) {
+
+  return {
+    type: leaveActionTypes.CLEAR_LEAVE_ERROR,
+    response: null
+  };
+}
+
+function clearLeaveStateData(params) {
+
+  console.log(FILE_NAME + "In clearLeaveStateData Method");
+  console.log("Type of Data to be cleared - ", params);
+
+  CLEAR_STATE_DATA_ALL = 'CLEAR_STATE_DATA_ALL';
+  CLEAR_STATE_ERROR_DATA_COUNTER = 'CLEAR_STATE_ERROR_DATA_COUNTER';
+  CLEAR_STATE_DATA_LEAVE_INFORMATION = 'CLEAR_STATE_DATA_LEAVE_INFORMATION';
+  CLEAR_STATE_DATA_LEAVE_BALANCE = 'CLEAR_STATE_DATA_LEAVE_BALANCE';
+  CLEAR_STATE_DATA_APPLIED_LEAVES = 'CLEAR_STATE_DATA_APPLIED_LEAVES';
+  CLEAR_STATE_DATA_APPLY_LEAVE_STATUS = 'CLEAR_STATE_DATA_APPLY_LEAVE_STATUS';
+  CLEAR_STATE_DATA_LEAVE_ACTION = 'CLEAR_STATE_DATA_LEAVE_ACTION';
+  CLEAR_STATE_DATA_APPLY_LEAVE_DAYS = 'CLEAR_STATE_DATA_APPLY_LEAVE_DAYS';
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var errorCounter = getState().leave.errorCounter;
+
+    var leaveInformationData = getState().leave.leaveInformationData;
+    var leaveInformationError = getState().leave.leaveInformationError;
+
+    var leaveBalanceData = getState().leave.leaveBalanceData;
+    var leaveBalanceError = getState().leave.leaveBalanceError;
+
+    var appliedLeavesData = getState().leave.appliedLeavesData;
+    var appliedLeavesError = getState().leave.appliedLeavesError;
+
+    var applyLeaveStatusData = getState().leave.applyLeaveStatusData;
+    var applyLeaveStatusError = getState().leave.applyLeaveStatusError;
+
+    var leaveActionData = getState().leave.leaveActionData;
+    var leaveActionError = getState().leave.leaveActionError;
+
+    var leaveDaysData = getState().leave.leaveDaysData;
+    var leaveDaysError = getState().leave.leaveDaysError;
+
+    Object.keys(params).map(function (key) {
+
+      console.log("params attribute " + key + " value is - " + params[key]);
+
+      switch (params[key]) {
+        case CLEAR_STATE_DATA_ALL:
+          errorCounter = 0;
+
+          leaveInformationData = null;
+          leaveInformationError = null;
+
+          leaveBalanceData = null;
+          leaveBalanceError = null;
+
+          appliedLeavesData = null;
+          appliedLeavesError = null;
+
+          applyLeaveStatusData = null;
+          applyLeaveStatusError = null;
+
+          leaveActionData = null;
+          leaveActionError = null;
+
+          leaveDaysData = null;
+          leaveDaysError = null;
+
+          break;
+
+        case CLEAR_STATE_ERROR_DATA_COUNTER:
+          errorCounter = null;
+
+          break;
+
+        case CLEAR_STATE_DATA_LEAVE_INFORMATION:
+          leaveInformationData = null;
+          leaveInformationError = null;
+
+          break;
+
+        case CLEAR_STATE_DATA_LEAVE_BALANCE:
+          leaveBalanceData = null;
+          leaveBalanceError = null;
+
+          break;
+
+        case CLEAR_STATE_DATA_APPLIED_LEAVES:
+          appliedLeavesData = null;
+          appliedLeavesError = null;
+
+          break;
+
+        case CLEAR_STATE_DATA_APPLY_LEAVE_STATUS:
+          applyLeaveStatusData = null;
+          applyLeaveStatusError = null;
+
+          break;
+
+        case CLEAR_STATE_DATA_LEAVE_ACTION:
+          leaveActionData = null;
+          leaveActionError = null;
+
+          break;
+
+        case CLEAR_STATE_DATA_APPLY_LEAVE_DAYS:
+          leaveDaysData = null;
+          leaveDaysError = null;
+
+          break;
+
+        default:
+
+      }
+    });
+
+    var response = {
+      errorCounter: errorCounter,
+
+      leaveInformationData: leaveInformationData,
+      leaveInformationError: leaveInformationError,
+
+      leaveBalanceData: leaveBalanceData,
+      leaveBalanceError: leaveBalanceError,
+
+      appliedLeavesData: appliedLeavesData,
+      appliedLeavesError: appliedLeavesError,
+
+      applyLeaveStatusData: applyLeaveStatusData,
+      applyLeaveStatusError: applyLeaveStatusError,
+
+      leaveActionData: leaveActionData,
+      leaveActionError: leaveActionError,
+
+      leaveDaysData: leaveDaysData,
+      leaveDaysError: leaveDaysError
+    };
+
+    dispatch({
+      type: leaveActionTypes.CLEAR_LEAVE_STATE_DATA,
+      response: response
+    });
+  };
+}

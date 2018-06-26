@@ -1,0 +1,469 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetLeaveInformationRequest = buildGetLeaveInformationRequest;
+exports.buildSuccessGetLeaveInformationResponse = buildSuccessGetLeaveInformationResponse;
+exports.buildFailedGetLeaveInformationResponse = buildFailedGetLeaveInformationResponse;
+exports.buildServerErrorGetLeaveInformationResponse = buildServerErrorGetLeaveInformationResponse;
+exports.buildGetLeaveDaysRequest = buildGetLeaveDaysRequest;
+exports.buildSuccessGetLeaveDaysResponse = buildSuccessGetLeaveDaysResponse;
+exports.buildFailedGetLeaveDaysResponse = buildFailedGetLeaveDaysResponse;
+exports.buildServerErrorGetLeaveDaysResponse = buildServerErrorGetLeaveDaysResponse;
+exports.buildGetLeaveTypesAndBalancesRequest = buildGetLeaveTypesAndBalancesRequest;
+exports.buildSuccessGetLeaveTypesAndBalancesResponse = buildSuccessGetLeaveTypesAndBalancesResponse;
+exports.buildFailedGetLeaveTypesAndBalancesResponse = buildFailedGetLeaveTypesAndBalancesResponse;
+exports.buildServerErrorGetLeaveTypesAndBalancesResponse = buildServerErrorGetLeaveTypesAndBalancesResponse;
+exports.buildApplyLeaveRequest = buildApplyLeaveRequest;
+exports.buildSuccessApplyLeaveResponse = buildSuccessApplyLeaveResponse;
+exports.buildFailedApplyLeaveResponse = buildFailedApplyLeaveResponse;
+exports.buildServerErrorApplyLeaveResponse = buildServerErrorApplyLeaveResponse;
+exports.buildGetAppliedLeavesListRequest = buildGetAppliedLeavesListRequest;
+exports.buildSuccessGetAppliedLeavesListResponse = buildSuccessGetAppliedLeavesListResponse;
+exports.buildFailedGetAppliedLeavesListResponse = buildFailedGetAppliedLeavesListResponse;
+exports.buildServerErrorGetAppliedLeavesListResponse = buildServerErrorGetAppliedLeavesListResponse;
+exports.buildLeaveActionRequest = buildLeaveActionRequest;
+exports.buildSuccessLeaveActionResponse = buildSuccessLeaveActionResponse;
+exports.buildFailedLeaveActionResponse = buildFailedLeaveActionResponse;
+exports.buildServerErrorLeaveActionResponse = buildServerErrorLeaveActionResponse;
+exports.buildGetPendingLeaveInformationRequest = buildGetPendingLeaveInformationRequest;
+exports.buildSuccessGetPendingLeaveInformationResponse = buildSuccessGetPendingLeaveInformationResponse;
+exports.buildFailedGetPendingLeaveInformationResponse = buildFailedGetPendingLeaveInformationResponse;
+exports.buildServerErrorGetPendingLeaveInformationResponse = buildServerErrorGetPendingLeaveInformationResponse;
+
+var _leaveapiendpoints = require('./leaveapiendpoints');
+
+var leaveApiEndPoints = babelHelpers.interopRequireWildcard(_leaveapiendpoints);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var FILE_NAME = "leaveprocessing.js : ";
+
+function buildGetLeaveInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetLeaveInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + leaveApiEndPoints.GET_LEAVE_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&leavetype_id=" + params.leaveId;
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var leaveInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", leaveInformationRequest);
+
+  return leaveInformationRequest;
+};
+
+function buildSuccessGetLeaveInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetLeaveInformationResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+};
+
+function buildFailedGetLeaveInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetLeaveInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetLeaveInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetLeaveInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetLeaveDaysRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetLeaveDaysRequest Method - ");
+
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + leaveApiEndPoints.GET_LEAVE_DAYS + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&leavetype_id=" + params.leaveId + "&half_day=" + params.halfDay + "&half_day2=" + params.halfDay2 + "&isshortleave=" + params.isShortLeave + "&start_date=" + params.startDate + "&end_date=" + params.endDate + "&start_time=" + params.startTime + "&end_time=" + params.endTime + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var leaveDaysRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", leaveDaysRequest);
+
+  return leaveDaysRequest;
+};
+
+function buildSuccessGetLeaveDaysResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetLeaveDaysResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+};
+
+function buildFailedGetLeaveDaysResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetLeaveDaysResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching number of days'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetLeaveDaysResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetLeaveDaysResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetLeaveTypesAndBalancesRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetLeaveTypesAndBalancesRequest Method - ");
+
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + leaveApiEndPoints.GET_LEAVE_BALANCE_LIST + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {};
+
+  var config = {
+    responseType: 'json',
+    headers: { 'Cache-Control': 'no-store' }
+  };
+
+  var leaveBalanceListRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", leaveBalanceListRequest);
+
+  return leaveBalanceListRequest;
+}
+
+function buildSuccessGetLeaveTypesAndBalancesResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetLeaveTypesAndBalancesResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+};
+
+function buildFailedGetLeaveTypesAndBalancesResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetLeaveTypesAndBalancesResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetLeaveTypesAndBalancesResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetLeaveTypesAndBalancesResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildApplyLeaveRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildApplyLeaveRequest Method - ");
+
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + leaveApiEndPoints.APPLY_LEAVE + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME;
+
+  var data = params;
+
+  var config = {
+    responseType: 'json',
+    headers: { 'cache-control': 'no-cache' }
+  };
+
+  var applyLeaveRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", applyLeaveRequest);
+
+  return applyLeaveRequest;
+};
+
+function buildSuccessApplyLeaveResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessApplyLeaveResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedApplyLeaveResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedApplyLeaveResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data
+  };
+
+  return response;
+}
+
+function buildServerErrorApplyLeaveResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorApplyLeaveResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetAppliedLeavesListRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetAppliedLeavesListRequest Method - ");
+
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + leaveApiEndPoints.GET_APPLIED_LEAVES_LIST + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&request_type=" + params.requestType + "&current_id=" + params.currentId + "&no_of_record=" + params.numberOfRecords + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var appliedLeavesListRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", appliedLeavesListRequest);
+
+  return appliedLeavesListRequest;
+};
+
+function buildSuccessGetAppliedLeavesListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetAppliedLeavesListResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+};
+
+function buildFailedGetAppliedLeavesListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetAppliedLeavesListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetAppliedLeavesListResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetAppliedLeavesListResponse Method - ");
+
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildLeaveActionRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildLeaveActionRequest Method - ");
+
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + leaveApiEndPoints.LEAVE_ACTION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME;
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var leaveActionRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", leaveActionRequest);
+
+  return leaveActionRequest;
+};
+
+function buildSuccessLeaveActionResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessLeaveActionResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+};
+
+function buildFailedLeaveActionResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedLeaveActionResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorLeaveActionResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorLeaveActionResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetPendingLeaveInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetPendingLeaveInformationRequest Method - ");
+
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + leaveApiEndPoints.GET_PENDING_LEAVE_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&pi_txn_id=" + params.leaveId;
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var pendingLeaveInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", pendingLeaveInformationRequest);
+
+  return pendingLeaveInformationRequest;
+};
+
+function buildSuccessGetPendingLeaveInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetPendingLeaveInformationResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetPendingLeaveInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetPendingLeaveInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetPendingLeaveInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetPendingLeaveInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

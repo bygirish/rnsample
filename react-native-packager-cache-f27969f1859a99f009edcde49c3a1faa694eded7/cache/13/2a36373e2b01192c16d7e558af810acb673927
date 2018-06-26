@@ -1,0 +1,397 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = travelReducer;
+
+var _travelactiontypes = require("./travelactiontypes");
+
+var travelActionTypes = babelHelpers.interopRequireWildcard(_travelactiontypes);
+
+var FILE_NAME = "travelreducer.js : ";
+var initialState = {
+
+  errorCounter: 0,
+
+  pendingTravelInformationData: null,
+  pendingTravelInformationError: null,
+
+  travelActionData: null,
+  travelActionError: null,
+
+  travelAppliedData: null,
+  travelAppliedError: null,
+
+  currencyInformationData: null,
+  currencyInformationError: null,
+
+  cityInformationData: null,
+  cityInformationError: null,
+
+  cityCategoryInformationData: null,
+  cityCategoryInformationError: null,
+
+  travelInformationData: null,
+  travelInformationError: null,
+
+  travelClientAccountInformationData: null,
+  travelClientAccountInformationError: null,
+
+  travelClientAccountProjectsInformationData: null,
+  travelClientAccountProjectsInformationError: null,
+
+  travelApproverInformationData: null,
+  travelApproverInformationError: null,
+
+  travelPurposeInformationData: null,
+  travelPurposeInformationError: null,
+
+  appliedTravelData: null,
+  appliedTravelError: null
+
+};
+
+function travelReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method travelReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case travelActionTypes.SUCCESS_PENDING_TRAVEL_INFORMATION:
+
+      console.log("In method travelReducer SUCCESS_PENDING_TRAVEL_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        pendingTravelInformationData: action.response.data,
+        pendingTravelInformationError: action.response.error
+      });
+
+      break;
+
+    case travelActionTypes.FAILURE_PENDING_TRAVEL_INFORMATION:
+
+      console.log("In method travelReducer FAILURE_PENDING_TRAVEL_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        pendingTravelInformationData: action.response.data,
+        pendingTravelInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case travelActionTypes.SUCCESS_TRAVEL_ACTION_TAKEN:
+
+      console.log("In method travelReducer SUCCESS_TRAVEL_ACTION_TAKEN");
+
+      return {
+
+        travelActionData: action.response.data,
+        travelActionError: action.response.error
+      };
+
+      break;
+
+    case travelActionTypes.FAILURE_TRAVEL_ACTION_TAKEN:
+
+      console.log("In method travelReducer FAILURE_TRAVEL_ACTION_TAKEN");
+
+      return babelHelpers.extends({}, state, {
+        travelActionData: action.response.data,
+        travelActionError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case travelActionTypes.SUCCESS_APPLY_TRAVEL:
+
+      console.log("In method travelReducer SUCCESS_APPLY_TRAVEL");
+
+      return {
+
+        travelAppliedData: action.response.data,
+        travelAppliedError: action.response.error
+      };
+
+      break;
+
+    case travelActionTypes.FAILURE_APPLY_TRAVEL:
+
+      console.log("In method travelReducer FAILURE_APPLY_TRAVEL");
+
+      return babelHelpers.extends({}, state, {
+        travelAppliedData: action.response.data,
+        travelAppliedError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case travelActionTypes.SUCCESS_APPLIED_TRAVEL_LIST:
+
+      console.log("In method travelReducer SUCCESS_APPLIED_TRAVEL_LIST");
+
+      return {
+        appliedTravelData: action.response.data,
+        appliedTravelError: action.response.error
+      };
+
+      break;
+
+    case travelActionTypes.FAILURE_APPLIED_TRAVEL_LIST:
+
+      console.log("In method travelReducer FAILURE_APPLIED_TRAVEL_LIST");
+
+      return babelHelpers.extends({}, state, {
+        appliedTravelData: action.response.data,
+        appliedTravelError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case travelActionTypes.SUCCESS_GET_TRAVEL_INFORMATION:
+
+      console.log("In method travelReducer SUCCESS_GET_TRAVEL_INFORMATION");
+
+      return {
+
+        travelInformationData: action.response.data,
+        travelInformationError: action.response.error
+      };
+
+      break;
+
+    case travelActionTypes.FAILURE_GET_TRAVEL_INFORMATION:
+
+      console.log("In method travelReducer FAILURE_GET_TRAVEL_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        travelInformationData: action.response.data,
+        travelInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case travelActionTypes.SUCCESS_GET_CITY_INFORMATION:
+
+      console.log("In method travelReducer SUCCESS_GET_CITY_INFORMATION");
+
+      return {
+
+        cityInformationData: action.response.data,
+        cityInformationError: action.response.error
+      };
+
+      break;
+
+    case travelActionTypes.FAILURE_GET_CITY_INFORMATION:
+
+      console.log("In method travelReducer FAILURE_GET_CITY_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        cityInformationData: action.response.data,
+        cityInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case travelActionTypes.SUCCESS_GET_TRAVEL_CITY_CATEGORY:
+
+      console.log("In method travelReducer SUCCESS_GET_TRAVEL_CITY_CATEGORY");
+
+      return {
+
+        cityCategoryInformationData: action.response.data,
+        cityCategoryInformationError: action.response.error
+      };
+
+      break;
+
+    case travelActionTypes.FAILURE_GET_TRAVEL_CITY_CATEGORY:
+
+      console.log("In method travelReducer FAILURE_GET_TRAVEL_CITY_CATEGORY");
+
+      return babelHelpers.extends({}, state, {
+        cityCategoryInformationData: action.response.data,
+        cityCategoryInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case travelActionTypes.SUCCESS_GET_CURRENCY_INFORMATION:
+
+      console.log("In method travelReducer SUCCESS_GET_CURRENCY_INFORMATION");
+
+      return {
+
+        currencyInformationData: action.response.data,
+        currencyInformationError: action.response.error
+      };
+
+      break;
+
+    case travelActionTypes.FAILURE_GET_CURRENCY_INFORMATION:
+
+      console.log("In method travelReducer FAILURE_GET_CURRENCY_INFORMATION");
+
+      return babelHelpers.extends({}, state, {
+        currencyInformationData: action.response.data,
+        currencyInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case travelActionTypes.SUCCESS_GET_TRAVEL_PURPOSE:
+
+      console.log("In method travelReducer SUCCESS_GET_TRAVEL_PURPOSE");
+
+      return {
+
+        travelPurposeInformationData: action.response.data,
+        travelPurposeInformationError: action.response.error
+      };
+
+      break;
+
+    case travelActionTypes.FAILURE_GET_TRAVEL_PURPOSE:
+
+      console.log("In method travelReducer FAILURE_GET_TRAVEL_PURPOSE");
+
+      return babelHelpers.extends({}, state, {
+        travelPurposeInformationData: action.response.data,
+        travelPurposeInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case travelActionTypes.SUCCESS_GET_TRAVEL_CLIENT_ACCOUNT:
+
+      console.log("In method travelReducer SUCCESS_GET_TRAVEL_CLIENT_ACCOUNT");
+
+      return {
+
+        travelClientAccountInformationData: action.response.data,
+        travelClientAccountInformationError: action.response.error
+      };
+
+      break;
+
+    case travelActionTypes.FAILURE_GET_TRAVEL_CLIENT_ACCOUNT:
+
+      console.log("In method travelReducer FAILURE_GET_TRAVEL_CLIENT_ACCOUNT");
+
+      return babelHelpers.extends({}, state, {
+        travelClientAccountInformationData: action.response.data,
+        travelClientAccountInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case travelActionTypes.SUCCESS_GET_TRAVEL_CLIENT_ACCOUNT_PROJECTS:
+
+      console.log("In method travelReducer SUCCESS_GET_TRAVEL_CLIENT_ACCOUNT_PROJECTS");
+
+      return {
+
+        travelClientAccountProjectsInformationData: action.response.data,
+        travelClientAccountProjectsInformationError: action.response.error
+      };
+
+      break;
+
+    case travelActionTypes.FAILURE_GET_TRAVEL_CLIENT_ACCOUNT_PROJECTS:
+
+      console.log("In method travelReducer FAILURE_GET_TRAVEL_CLIENT_ACCOUNT_PROJECTS");
+
+      return babelHelpers.extends({}, state, {
+        travelClientAccountProjectsInformationData: action.response.data,
+        travelClientAccountProjectsInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case travelActionTypes.SUCCESS_GET_TRAVEL_APPROVER:
+
+      console.log("In method travelReducer SUCCESS_GET_TRAVEL_APPROVER");
+
+      return {
+
+        travelApproverInformationData: action.response.data,
+        travelApproverInformationError: action.response.error
+      };
+
+      break;
+
+    case travelActionTypes.FAILURE_GET_TRAVEL_APPROVER:
+
+      console.log("In method travelReducer FAILURE_GET_TRAVEL_APPROVER");
+
+      return babelHelpers.extends({}, state, {
+        travelApproverInformationData: action.response.data,
+        travelApproverInformationError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case travelActionTypes.CLEAR_TRAVEL_ERROR:
+
+      console.log("In method travelReducer CLEAR_TRAVEL_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        pendingTravelInformationError: null,
+        travelActionError: null,
+        travelAppliedError: null,
+        currencyInformationError: null,
+        cityInformationError: null,
+        cityCategoryInformationError: null,
+        travelInformationError: null,
+        travelClientAccountInformationError: null,
+        travelClientAccountProjectsInformationError: null,
+        travelApproverInformationError: null,
+        travelPurposeInformationError: null,
+        appliedTravelError: null
+
+      });
+
+      break;
+
+    case travelActionTypes.CLEAR_TRAVEL_STATE_DATA:
+
+      console.log("In method travelReducer CLEAR_TRAVEL_STATE_DATA");
+
+      return {
+        errorCounter: action.response.errorCounter,
+        pendingTravelInformationData: action.response.pendingTravelInformationData,
+        pendingTravelInformationError: action.response.pendingTravelInformationError,
+        travelActionData: action.response.travelActionData,
+        travelActionError: action.response.travelActionError,
+        travelAppliedData: action.response.travelAppliedData,
+        travelAppliedError: action.response.travelAppliedError,
+        travelClientAccountInformationData: action.response.travelClientAccountInformationData,
+        travelClientAccountInformationError: action.response.travelClientAccountInformationError,
+        travelClientAccountProjectsInformationData: action.response.travelClientAccountProjectsInformationData,
+        travelClientAccountProjectsInformationError: action.response.travelClientAccountProjectsInformationError
+      };
+
+      break;
+
+    default:
+
+      console.log("In method travelReducer NOTHING");
+
+      return babelHelpers.extends({}, state);
+
+  }
+};

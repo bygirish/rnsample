@@ -1,0 +1,48 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _pushconstants = require("./pushconstants");
+
+var _pushconstants2 = babelHelpers.interopRequireDefault(_pushconstants);
+
+var _reactNativePushNotification = require("react-native-push-notification");
+
+var _reactNativePushNotification2 = babelHelpers.interopRequireDefault(_reactNativePushNotification);
+
+var FILE_NAME = "pushclient.js : ";
+var API_URL = "https://fcm.googleapis.com/fcm/send";
+
+var PushClient = function () {
+  function PushClient() {
+    babelHelpers.classCallCheck(this, PushClient);
+
+
+    console.log(FILE_NAME + "In Constructor");
+
+    this.sendNotification = this.sendNotification.bind(this);
+    this.scheduleNotification = this.scheduleNotification.bind(this);
+  }
+
+  babelHelpers.createClass(PushClient, [{
+    key: "sendNotification",
+    value: function sendNotification(notificationData, lastNotificationId) {
+
+      console.log(FILE_NAME + "In sendNotification method");
+
+      _reactNativePushNotification2.default.localNotification({
+        id: lastNotificationId + 1
+      });
+    }
+  }, {
+    key: "scheduleNotification",
+    value: function scheduleNotification(notificationData) {
+
+      console.log(FILE_NAME + "In scheduleNotification method");
+    }
+  }]);
+  return PushClient;
+}();
+
+var pushClient = new PushClient();
+exports.default = pushClient;

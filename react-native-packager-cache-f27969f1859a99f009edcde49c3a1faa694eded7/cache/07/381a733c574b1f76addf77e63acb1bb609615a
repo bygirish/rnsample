@@ -1,0 +1,153 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _nativeBase = require('native-base');
+
+var _utils = require('../../../utils');
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _ewh4text = require('../../../components/ewh4text/ewh4text');
+
+var _ewh4text2 = babelHelpers.interopRequireDefault(_ewh4text);
+
+var _ewh3text = require('../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewh2text = require('../../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh1text = require('../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewbar = require('../../../components/ewbar/ewbar');
+
+var _ewbar2 = babelHelpers.interopRequireDefault(_ewbar);
+
+var _ewh3lighttext = require('../../../components/ewh3lighttext/ewh3lighttext');
+
+var _ewh3lighttext2 = babelHelpers.interopRequireDefault(_ewh3lighttext);
+
+var _ewcard = require('../../../components/ewcard/ewcard');
+
+var _ewcard2 = babelHelpers.interopRequireDefault(_ewcard);
+
+var _ewmodal = require('../../../components/ewmodal/ewmodal');
+
+var _ewmodal2 = babelHelpers.interopRequireDefault(_ewmodal);
+
+var _ewbutton = require('../../../components/ewbutton/ewbutton');
+
+var _ewbutton2 = babelHelpers.interopRequireDefault(_ewbutton);
+
+var _leaveactions = require('../../../services/leave/leaveactions');
+
+var listStyle = {
+
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-around'
+};
+
+var EwListitem = function (_Component) {
+  babelHelpers.inherits(EwListitem, _Component);
+
+  function EwListitem(props, context) {
+    babelHelpers.classCallCheck(this, EwListitem);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwListitem.__proto__ || Object.getPrototypeOf(EwListitem)).call(this, props, context));
+
+    _this.initialState = {};
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwListitem, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log("In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          label = _props.label,
+          value = _props.value;
+
+
+      console.log("key value recieve is ", label, value);
+
+      return _react2.default.createElement(
+        _reactNative.View,
+        { style: { flexDirection: "row", marginTop: appstyleguide.DEFAULT_TOP_MARGIN } },
+        _react2.default.createElement(_ewh2text2.default, {
+          text: label,
+          customStyle: { flex: 0.5 }
+        }),
+        _react2.default.createElement(_ewh2text2.default, {
+          text: value,
+          customStyle: { flex: 0.5, alignSelf: 'flex-start', marginLeft: 10 }
+        })
+      );
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log("Inside componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }]);
+  return EwListitem;
+}(_react.Component);
+
+exports.default = EwListitem;

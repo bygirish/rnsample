@@ -1,0 +1,133 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var Actions = function (_React$Component) {
+  babelHelpers.inherits(Actions, _React$Component);
+
+  function Actions(props) {
+    babelHelpers.classCallCheck(this, Actions);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (Actions.__proto__ || Object.getPrototypeOf(Actions)).call(this, props));
+
+    _this.onActionsPress = _this.onActionsPress.bind(_this);
+    return _this;
+  }
+
+  babelHelpers.createClass(Actions, [{
+    key: 'onActionsPress',
+    value: function onActionsPress() {
+      var _this2 = this;
+
+      var options = Object.keys(this.props.options);
+      var cancelButtonIndex = Object.keys(this.props.options).length - 1;
+      this.context.actionSheet().showActionSheetWithOptions({
+        options: options,
+        cancelButtonIndex: cancelButtonIndex,
+        tintColor: this.props.optionTintColor
+      }, function (buttonIndex) {
+        var i = 0;
+        for (var key in _this2.props.options) {
+          if (_this2.props.options.hasOwnProperty(key)) {
+            if (buttonIndex === i) {
+              _this2.props.options[key](_this2.props);
+              return;
+            }
+            i++;
+          }
+        }
+      });
+    }
+  }, {
+    key: 'renderIcon',
+    value: function renderIcon() {
+      if (this.props.icon) {
+        return this.props.icon();
+      }
+      return _react2.default.createElement(
+        _reactNative.View,
+        {
+          style: [styles.wrapper, this.props.wrapperStyle]
+        },
+        _react2.default.createElement(
+          _reactNative.Text,
+          {
+            style: [styles.iconText, this.props.iconTextStyle]
+          },
+          '+'
+        )
+      );
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        _reactNative.TouchableOpacity,
+        {
+          style: [styles.container, this.props.containerStyle],
+          onPress: this.props.onPressActionButton || this.onActionsPress
+        },
+        this.renderIcon()
+      );
+    }
+  }]);
+  return Actions;
+}(_react2.default.Component);
+
+exports.default = Actions;
+
+
+var styles = _reactNative.StyleSheet.create({
+  container: {
+    width: 26,
+    height: 26,
+    marginLeft: 10,
+    marginBottom: 10
+  },
+  wrapper: {
+    borderRadius: 13,
+    borderColor: '#b2b2b2',
+    borderWidth: 2,
+    flex: 1
+  },
+  iconText: {
+    color: '#b2b2b2',
+    fontWeight: 'bold',
+    fontSize: 16,
+    backgroundColor: 'transparent',
+    textAlign: 'center'
+  }
+});
+
+Actions.contextTypes = {
+  actionSheet: _propTypes2.default.func
+};
+
+Actions.defaultProps = {
+  onSend: function onSend() {},
+  options: {},
+  optionTintColor: '#007AFF',
+  icon: null,
+  containerStyle: {},
+  iconTextStyle: {}
+};
+
+Actions.propTypes = {
+  onSend: _propTypes2.default.func,
+  options: _propTypes2.default.object,
+  optionTintColor: _propTypes2.default.string,
+  icon: _propTypes2.default.func,
+  onPressActionButton: _propTypes2.default.func,
+  containerStyle: _reactNative.ViewPropTypes.style,
+  iconTextStyle: _reactNative.Text.propTypes.style
+};

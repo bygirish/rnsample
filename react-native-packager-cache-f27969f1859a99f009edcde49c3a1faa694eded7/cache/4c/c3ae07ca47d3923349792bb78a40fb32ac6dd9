@@ -1,0 +1,23 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _appstyleguide = require('../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _utils = require('../../utils');
+
+exports.default = {
+  textStyle: {
+    marginLeft: (0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID ? 10 : 10,
+    alignItems: (0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID ? "center" : "center",
+    alignSelf: (0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID ? "center" : "center"
+  },
+
+  radioButtonViewstyle: {
+
+    flexDirection: (0, _utils.getMobileOS)() == _utils.PLATFORM_ANDROID ? "row" : "row"
+  }
+
+};

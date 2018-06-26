@@ -1,0 +1,62 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var EW_LOGIN_KEY = exports.EW_LOGIN_KEY = "ewlogin";
+var EW_LOGOUT_KEY = exports.EW_LOGOUT_KEY = "ewlogout";
+
+var EW_SETTINGS_KEY = exports.EW_SETTINGS_KEY = "ewsettings";
+
+var EW_DASHBOARD_KEY = exports.EW_DASHBOARD_KEY = "ewdashboard";
+var EW_DASHBOARD_DRAWER_KEY = exports.EW_DASHBOARD_DRAWER_KEY = "ewdashboarddrawer";
+
+var EW_APPLY_LEAVE_KEY = exports.EW_APPLY_LEAVE_KEY = "ewapplyleavescreen";
+var EW_LEAVE_ACTION_KEY = exports.EW_LEAVE_ACTION_KEY = "ewleaveactionscreen";
+var EW_MY_APPLIED_LEAVES_LISTING_KEY = exports.EW_MY_APPLIED_LEAVES_LISTING_KEY = "ewmyappliedleavesscreen";
+var EW_MY_APPLIED_LEAVES_ACTION_KEY = exports.EW_MY_APPLIED_LEAVES_ACTION_KEY = "ewmyleaveactionscreen";
+
+var EW_APPLY_OD_KEY = exports.EW_APPLY_OD_KEY = "ewapplyodscreen";
+var EW_OD_ACTION_KEY = exports.EW_OD_ACTION_KEY = "ewodactionscreen";
+var EW_MY_APPLIED_OD_LISTING_KEY = exports.EW_MY_APPLIED_OD_LISTING_KEY = "ewmyappliedodscreen";
+var EW_MY_APPLIED_OD_ACTION_KEY = exports.EW_MY_APPLIED_OD_ACTION_KEY = "ewmyodactionscreen";
+
+var EW_APPLY_PAST_ATTENDANCE_KEY = exports.EW_APPLY_PAST_ATTENDANCE_KEY = "ewapplypastattendancescreen";
+var EW_PAST_ATTENDANCE_ACTION_KEY = exports.EW_PAST_ATTENDANCE_ACTION_KEY = "ewpastattendanceactionscreen";
+var EW_MY_APPLIED_PAST_ATTENDANCE_LISTING_KEY = exports.EW_MY_APPLIED_PAST_ATTENDANCE_LISTING_KEY = "ewmyappliedpastattendancescreen";
+var EW_MY_APPLIED_PAST_ATTENDANCE_ACTION_KEY = exports.EW_MY_APPLIED_PAST_ATTENDANCE_ACTION_KEY = "ewmypastattendanceactionscreen";
+
+var EW_APPLY_TRAVEL_KEY = exports.EW_APPLY_TRAVEL_KEY = "ewapplytravelscreen";
+var EW_TRAVEL_ACTION_KEY = exports.EW_TRAVEL_ACTION_KEY = "ewtravelactionscreen";
+var EW_MY_APPLIED_TRAVEL_LISTING_KEY = exports.EW_MY_APPLIED_TRAVEL_LISTING_KEY = "ewmyappliedtravelscreen";
+var EW_MY_APPLIED_TRAVEL_ACTION_KEY = exports.EW_MY_APPLIED_TRAVEL_ACTION_KEY = "ewmytravelactionscreen";
+
+var EW_CALENDAR_KEY = exports.EW_CALENDAR_KEY = "ewmycalendarscreen";
+var EW_EMPLOYEE_DIRECTORY_KEY = exports.EW_EMPLOYEE_DIRECTORY_KEY = "ewemployeedirectoryscreen";
+var EW_IMAGE_UPLOAD_KEY = exports.EW_IMAGE_UPLOAD_KEY = "ewimageuploadscreen";
+var EW_HOLIDAYS_KEY = exports.EW_HOLIDAYS_KEY = "ewholidayscreen";
+
+var EW_PAYSLIP_KEY = exports.EW_PAYSLIP_KEY = "ewpayslipscreen";
+
+var EW_DEEP_LINK_KEY = exports.EW_DEEP_LINK_KEY = "ewdeeplinkscreen";
+var EW_RATING_KEY = exports.EW_RATING_KEY = "ewratingscreen";
+var EW_FEEDBACK_KEY = exports.EW_FEEDBACK_KEY = "ewfeedbackscreen";
+
+var EW_MILEAGE_CLAIM_KEY = exports.EW_MILEAGE_CLAIM_KEY = "ewmileageclaimscreen";
+var EW_MILEAGE_EXPENSE_KEY = exports.EW_MILEAGE_EXPENSE_KEY = "ewmileageexpensescreen";
+var EW_OTHER_CLAIM_KEY = exports.EW_OTHER_CLAIM_KEY = "ewotherclaimscreen";
+var EW_OTHER_EXPENSE_KEY = exports.EW_OTHER_EXPENSE_KEY = "ewotherexpensescreen";
+var EW_TRAVEL_CLAIM_KEY = exports.EW_TRAVEL_CLAIM_KEY = "ewtravelclaimscreen";
+var EW_TRAVEL_EXPENSE_KEY = exports.EW_TRAVEL_EXPENSE_KEY = "ewtravelexpensescreen";
+
+var EW_ALLOCATION_DETAILS_KEY = exports.EW_ALLOCATION_DETAILS_KEY = "ewallocationdetailsscreen";
+var EW_INVOICE_DETAILS_KEY = exports.EW_INVOICE_DETAILS_KEY = "ewinvoicedetailsscreen";
+var EW_MY_APPLIED_EXPENSE_CLAIMS_KEY = exports.EW_MY_APPLIED_EXPENSE_CLAIMS_KEY = "ewmyappliedexpenseclaimscreen";
+var EW_EXPENSE_CLAIM_ACTION_KEY = exports.EW_EXPENSE_CLAIM_ACTION_KEY = "ewexpenseclaimactionscreen";
+
+var EW_MY_COMPENSATION_KEY = exports.EW_MY_COMPENSATION_KEY = "ewmycompensationscreen";
+var EW_MY_APPLIED_CTC_CLAIMS_KEY = exports.EW_MY_APPLIED_CTC_CLAIMS_KEY = "ewmyappliedctcclaimscreen";
+var EW_MY_APPLIED_CLAIM_ACTION_KEY = exports.EW_MY_APPLIED_CLAIM_ACTION_KEY = "ewmyappliedclaimactionscreen";
+var EW_ENTITLEMENT_SUMMARY_KEY = exports.EW_ENTITLEMENT_SUMMARY_KEY = "ewentitlementsummaryscreen";
+
+var EW_MY_REQUEST_KEY = exports.EW_MY_REQUEST_KEY = "ewmyrequestscreen";
+var EW_CHATBOT_KEY = exports.EW_CHATBOT_KEY = "ewchatbotscreen";
+var EW_ONBOARDING_KEY = exports.EW_ONBOARDING_KEY = "ewonboardingscreen";

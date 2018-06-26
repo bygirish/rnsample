@@ -1,0 +1,71 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var SERVER_EXCEPTION = exports.SERVER_EXCEPTION = 'Exception occured';
+
+var INVALID_STATE = exports.INVALID_STATE = 'Invalid state';
+var LEAVE_APPROVAL_SETUP_NOT_DEFINED = exports.LEAVE_APPROVAL_SETUP_NOT_DEFINED = 'Approval setup not defined';
+var LEAVE_APPROVAL_NOT_FOUND = exports.LEAVE_APPROVAL_NOT_FOUND = 'No Approver found for given approval setup..';
+var LEAVE_REQUEST_BEFORE_DOJ = exports.LEAVE_REQUEST_BEFORE_DOJ = 'Leave can not be before date of joining';
+var LEAVE_END_DATE_AFTER_START_DATE = exports.LEAVE_END_DATE_AFTER_START_DATE = 'End date can not be befor start date.';
+var LEAVE_OF_PREVIOUS_YR_NOT_ALLOWED = exports.LEAVE_OF_PREVIOUS_YR_NOT_ALLOWED = "Leave Application for Previous Year are not Allowed.";
+var LEAVE_OF_CONTIGEOUS_SAME_TYPE = exports.LEAVE_OF_CONTIGEOUS_SAME_TYPE = 'This leave application is in continuation to another leave application of same type and needs to be combined with that. Currently leave reapply functionality is not available through the app.';
+var LEAVE_OF_CONTIGEOUS_DIFFERENT_TYPE = exports.LEAVE_OF_CONTIGEOUS_DIFFERENT_TYPE = 'This leave application is in continuation to another leave application and the leave period of this leave needs to continue after that with no gap. Please press Ok to re-submit with changed dates.';
+var LEAVE_TRAVEL_EXISTS = exports.LEAVE_TRAVEL_EXISTS = 'Travel exists for the applied date.Are you sure you want to continue submitting this Request ?';
+var COMP_APPROVER_NOT_FOUND = exports.COMP_APPROVER_NOT_FOUND = "Approver Not Found";
+var COMP_OFF_ALREADY_EXISTS = exports.COMP_OFF_ALREADY_EXISTS = "Compensatory Off Already Exists";
+
+var LEAVE_EXIST_FOR_APPLIED_DATE = exports.LEAVE_EXIST_FOR_APPLIED_DATE = "Full day leave already exist between Leave Period.";
+var LEAVE_EXIST_FOR_FIRST_HALF = exports.LEAVE_EXIST_FOR_FIRST_HALF = "Leave for first half exists for applied Date.";
+var LEAVE_EXIST_FOR_SECOND_HALF = exports.LEAVE_EXIST_FOR_SECOND_HALF = "Leave for second half exists for applied Date.";
+var TWO_HALF_DAY_LEAVE_EXIST_FOR_APPLIED_DATE = exports.TWO_HALF_DAY_LEAVE_EXIST_FOR_APPLIED_DATE = "Two half day leaves exists for applied Date.";
+var OD_EXIST_FOR_APPLIED_DATE = exports.OD_EXIST_FOR_APPLIED_DATE = "OD already exists for applied Date.";
+var TRAVEL_ALREADY_EXIST = exports.TRAVEL_ALREADY_EXIST = "Travel exists for applied Date.";
+var SHORT_LEAVE_EXIST = exports.SHORT_LEAVE_EXIST = "Short Leave exists for applied date.";
+var HALF_DAY_AND_SHORT_LEAVE_EXIST = exports.HALF_DAY_AND_SHORT_LEAVE_EXIST = "Half day and Short Leave exists for applied date.";
+
+var DATE_CANNOT_BE_BEFORE_ABSENCE_PERIOD = exports.DATE_CANNOT_BE_BEFORE_ABSENCE_PERIOD = "Date cannot be in Separation/Leave of Absence period";
+var REQUEST_BEFORE_DOJ = exports.REQUEST_BEFORE_DOJ = "Past Attendance cannot be applied before date of joining";
+var APPLY_IN_DATE_CAN_NOT_BE_FUTURE = exports.APPLY_IN_DATE_CAN_NOT_BE_FUTURE = "Request can not be for future date";
+var APPLY_OUT_DATE_CAN_NOT_BE_FUTURE = exports.APPLY_OUT_DATE_CAN_NOT_BE_FUTURE = "To date can not be future date";
+var IN_TIME_CAN_NOT_BE_FUTURE = exports.IN_TIME_CAN_NOT_BE_FUTURE = "In time should be before current time";
+var OUT_TIME_CAN_NOT_BE_FUTURE = exports.OUT_TIME_CAN_NOT_BE_FUTURE = "Out time can not be after current time";
+var IN_TIME_CAN_NOT_BE_AFTER_OUT_TIME = exports.IN_TIME_CAN_NOT_BE_AFTER_OUT_TIME = "In time can not be after out time";
+
+var LEAVE_BALANCE_EXHAUSTED = exports.LEAVE_BALANCE_EXHAUSTED = 'Not enough balance to apply for this leave.';
+var LEAVE_POLICY_VIOLATION = exports.LEAVE_POLICY_VIOLATION = 'Policy does not allow these many days leaves of this type at one time.';
+var LEAVE_MIN_DAYS_REQUIRED = exports.LEAVE_MIN_DAYS_REQUIRED = 'A minimum number of days of leaves of this type is required at one time.';
+var LEAVE_PRIOR_APPROVAL_REQUIRED = exports.LEAVE_PRIOR_APPROVAL_REQUIRED = 'Prior approval for this leave type is required.';
+var MAX_LEAVE_YEAR_EXCEEDED = exports.MAX_LEAVE_YEAR_EXCEEDED = 'The maxiumum number of leaves allowed for this type in a year has been exceeded.';
+var MAX_LEAVE_TENURE_EXCEEDED = exports.MAX_LEAVE_TENURE_EXCEEDED = 'The maximum number of times of leaves allowed in your tenure has been exceeded.';
+var MIN_SERVE_PERIOD_REQUIRED = exports.MIN_SERVE_PERIOD_REQUIRED = 'Minimum period to become eligible for this leave type has not yet been served.';
+var LEAVE_CANNOT_BE_CLUBBED = exports.LEAVE_CANNOT_BE_CLUBBED = 'This leave cannot be clubbed with an existing leave application.';
+
+var LEAVE_TIME_EXCEEDED = exports.LEAVE_TIME_EXCEEDED = 'Times entered is more than the maximun hour allowed.';
+var LEAVE_BALANCE_NOT_AVAILABLE_DUE_TO_PENDING_LEAVE = exports.LEAVE_BALANCE_NOT_AVAILABLE_DUE_TO_PENDING_LEAVE = 'Not enough balance as there are some pending Leave exist';
+var LEAVE_FOR_CONFIRMED_EMPLOYEE = exports.LEAVE_FOR_CONFIRMED_EMPLOYEE = 'Only confirmed employee can apply for this leave.';
+var ENOUGH_BALANCE_NOT_AVAILABLE_FOR_NEXT_YEAR = exports.ENOUGH_BALANCE_NOT_AVAILABLE_FOR_NEXT_YEAR = 'Enough balance may not be there at the time of this leave next year.';
+var ENOUGH_BALANCE_NOT_AVAILABLE_FOR_NEXT_YEAR_DUE_TO_PENDING_LEAVE = exports.ENOUGH_BALANCE_NOT_AVAILABLE_FOR_NEXT_YEAR_DUE_TO_PENDING_LEAVE = 'Enough balance may not be there at the time of this leave next year as there are some pending Leave exist.';
+var ENOUGH_BALANCE_NOT_AVAILABLE_FOR_LAST_YEAR = exports.ENOUGH_BALANCE_NOT_AVAILABLE_FOR_LAST_YEAR = 'Not enough balance at the time of this leave last year.';
+var ENOUGH_BALANCE_NOT_AVAILABLE_FOR_LAST_YEAR_DUE_TO_PENDING_LEAVE = exports.ENOUGH_BALANCE_NOT_AVAILABLE_FOR_LAST_YEAR_DUE_TO_PENDING_LEAVE = 'Not enough balance at the time of this leave last year as there are some pending Leave exist.';
+var PENDING_ENCASHMENT_REQUEST_EXISTS = exports.PENDING_ENCASHMENT_REQUEST_EXISTS = 'Pending encashment request exists, due to which this leave cannot be applied for more than ';
+
+var LEAVE_BEFORE_COMP_OFF = exports.LEAVE_BEFORE_COMP_OFF = 'Leave cannot be before Comp Off work date.';
+var MAX_LEAVE_IN_PERIOD_EXCEEDED = exports.MAX_LEAVE_IN_PERIOD_EXCEEDED = 'You are exceeding the limit of maximum leave in a period.';
+var MAX_LEAVE_MUST_BE_GREATER_THAN_ZERO = exports.MAX_LEAVE_MUST_BE_GREATER_THAN_ZERO = 'Maximum allowed at one time must be grater than zero.';
+var MAX_LEAVE_IN_YEAR_MUST_BE_GREATER_THAN_ZERO = exports.MAX_LEAVE_IN_YEAR_MUST_BE_GREATER_THAN_ZERO = 'Maximum allowed in a year must be grater than zero.';
+var MAX_TIMES_LEAVE_ALLOWED_IN_YEAR_MUST_BE_GREATER_THAN_ZERO = exports.MAX_TIMES_LEAVE_ALLOWED_IN_YEAR_MUST_BE_GREATER_THAN_ZERO = 'Maximum no of times allowed in year must be grater than zero.';
+var START_AND_END_DATE_MANDATORY = exports.START_AND_END_DATE_MANDATORY = 'Start date and End date are manadatory.';
+var END_DATE_MUST_BE_GREATER_THAN_START_DATE = exports.END_DATE_MUST_BE_GREATER_THAN_START_DATE = 'End date must be greater or equal to start date(as per leave year).';
+var END_DATE_MUST_BE_SMALLER_YEAR_END_DATE = exports.END_DATE_MUST_BE_SMALLER_YEAR_END_DATE = 'End date must be smaller or equal to leave year end date(as per leave year).';
+var INVALID_DATE = exports.INVALID_DATE = 'Invalid Start/End date.';
+
+var START_DATE_IS_WEEKLY_OFF = exports.START_DATE_IS_WEEKLY_OFF = 'Start date is on Weekly Off';
+var END_DATE_IS_WEEKLY_OFF = exports.END_DATE_IS_WEEKLY_OFF = 'End date is on Weekly Off';
+var START_DATE_IS_HOLIDAY = exports.START_DATE_IS_HOLIDAY = 'Start date is on Holiday';
+var END_DATE_IS_HOLIDAY = exports.END_DATE_IS_HOLIDAY = 'End date is on Holiday';
+var LEAVE_DATE_IS_NOT_BIRTHDAY = exports.LEAVE_DATE_IS_NOT_BIRTHDAY = 'Leave date is not birthday.';
+var LEAVE_DATE_IS_NOT_ANNIVERSARY = exports.LEAVE_DATE_IS_NOT_ANNIVERSARY = 'Leave date is not anniversary.';
+var LEAVE_DATE_IS_AFTER_COMP_OFF = exports.LEAVE_DATE_IS_AFTER_COMP_OFF = 'Leave cannot be after Comp Off expiry date.';
+
+var SERVER_ERROR = exports.SERVER_ERROR = "Server is down, please try after some time";

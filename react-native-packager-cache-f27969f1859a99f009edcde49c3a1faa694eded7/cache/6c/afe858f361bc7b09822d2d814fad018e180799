@@ -1,0 +1,105 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EwRatingScreen = undefined;
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _reactNativeNavigationReduxHelpers = require('react-native-navigation-redux-helpers');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _ewratings = require('../components/ewratings/ewratings');
+
+var _ewratings2 = babelHelpers.interopRequireDefault(_ewratings);
+
+var FILE_NAME = "ewdeeplinkscreen.js : ";
+
+var EwRatingScreen = exports.EwRatingScreen = function (_Component) {
+  babelHelpers.inherits(EwRatingScreen, _Component);
+
+  function EwRatingScreen(props, context) {
+    babelHelpers.classCallCheck(this, EwRatingScreen);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwRatingScreen.__proto__ || Object.getPrototypeOf(EwRatingScreen)).call(this, props, context));
+
+    console.log(FILE_NAME + "In constructor");
+
+    _this.initialState = {
+
+      isDataPreLoaded: true,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+
+    _this.state = _this.initialState;
+
+    return _this;
+  }
+
+  babelHelpers.createClass(EwRatingScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount(props) {
+
+      console.log(FILE_NAME + "In componentWillMount");
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + "In componentWillReceiveProps");
+      console.log("New Props are - ", nextProps);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + "In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render method");
+
+      return _react2.default.createElement(_ewratings2.default, null);
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + "In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + "In componentDidUpdate");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + "In componentWillUnmount");
+    }
+  }]);
+  return EwRatingScreen;
+}(_react.Component);
+
+exports.default = EwRatingScreen;

@@ -1,0 +1,415 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetOthersClaimInformationRequest = buildGetOthersClaimInformationRequest;
+exports.buildSuccesGetOthersClaimInformationResponse = buildSuccesGetOthersClaimInformationResponse;
+exports.buildFailedGetOthersClaimInformationResponse = buildFailedGetOthersClaimInformationResponse;
+exports.buildServerErrorGetOthersClaimInformationResponse = buildServerErrorGetOthersClaimInformationResponse;
+exports.buildSaveOthersMasterItemRequest = buildSaveOthersMasterItemRequest;
+exports.buildSuccesSaveOthersMasterItemResponse = buildSuccesSaveOthersMasterItemResponse;
+exports.buildFailedSaveOthersMasterItemResponse = buildFailedSaveOthersMasterItemResponse;
+exports.buildServerErrorSaveOthersMasterItemResponse = buildServerErrorSaveOthersMasterItemResponse;
+exports.buildSaveOthersLineItemRequest = buildSaveOthersLineItemRequest;
+exports.buildSuccesSaveOthersLineItemResponse = buildSuccesSaveOthersLineItemResponse;
+exports.buildFailedSaveOthersLineItemResponse = buildFailedSaveOthersLineItemResponse;
+exports.buildServerErrorSaveOthersLineItemResponse = buildServerErrorSaveOthersLineItemResponse;
+exports.buildSubmitOthersExpenseClaimRequest = buildSubmitOthersExpenseClaimRequest;
+exports.buildSuccessSubmitOthersExpenseClaimResponse = buildSuccessSubmitOthersExpenseClaimResponse;
+exports.buildFailedSubmitOthersExpenseClaimResponse = buildFailedSubmitOthersExpenseClaimResponse;
+exports.buildServerErrorSubmitOthersExpenseClaimResponse = buildServerErrorSubmitOthersExpenseClaimResponse;
+exports.buildDeleteOthersLineItemRequest = buildDeleteOthersLineItemRequest;
+exports.buildSuccesDeleteOthersLineItemResponse = buildSuccesDeleteOthersLineItemResponse;
+exports.buildFailedDeleteOthersLineItemResponse = buildFailedDeleteOthersLineItemResponse;
+exports.buildServerErrorDeleteOthersLineItemResponse = buildServerErrorDeleteOthersLineItemResponse;
+exports.buildGetOthersExpenseComponentInformationRequest = buildGetOthersExpenseComponentInformationRequest;
+exports.buildSuccesGetOthersExpenseComponentInformationResponse = buildSuccesGetOthersExpenseComponentInformationResponse;
+exports.buildFailedGetOthersExpenseComponentInformationResponse = buildFailedGetOthersExpenseComponentInformationResponse;
+exports.buildServerErrorGetOthersExpenseComponentInformationResponse = buildServerErrorGetOthersExpenseComponentInformationResponse;
+
+var _othersclaimapiendpoints = require('./othersclaimapiendpoints');
+
+var othersClaimApiEndPoints = babelHelpers.interopRequireWildcard(_othersclaimapiendpoints);
+
+var _utils = require('../../../utils');
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _othersobjectmapping = require('./othersobjectmapping');
+
+var FILE_NAME = "othersclaimprocessing.js : ";
+
+function buildGetOthersClaimInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetOthersClaimInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + othersClaimApiEndPoints.GET_OTHERS_CLAIM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=createOthersExpenseForm" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var othersClaimInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", othersClaimInformationRequest);
+
+  return othersClaimInformationRequest;
+}
+
+function buildSuccesGetOthersClaimInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetOthersClaimInformationResponse Method - ");
+
+  serverData = (0, _othersobjectmapping.getOthersClaimModel)(result.data);
+
+  var response = {
+    data: serverData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetOthersClaimInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetOthersClaimInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorGetOthersClaimInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetOthersClaimInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildSaveOthersMasterItemRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildSaveOthersMasterItemRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + othersClaimApiEndPoints.SAVE_OTHERS_MASTER_ITEM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=createOtherMasterItem" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    },
+    responseType: 'json'
+  };
+
+  var saveOthersMasterItemRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", saveOthersMasterItemRequest);
+
+  return saveOthersMasterItemRequest;
+}
+
+function buildSuccesSaveOthersMasterItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesSaveOthersMasterItemResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedSaveOthersMasterItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedSaveOthersMasterItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_message
+  };
+
+  return response;
+}
+
+function buildServerErrorSaveOthersMasterItemResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorSaveOthersMasterItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildSaveOthersLineItemRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildSaveOthersLineItemRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + othersClaimApiEndPoints.SAVE_OTHERS_LINE_ITEM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=" + params.expenseApiMode + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    },
+    responseType: 'json'
+  };
+
+  var saveOthersLineItemRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", saveOthersLineItemRequest);
+
+  return saveOthersLineItemRequest;
+}
+
+function buildSuccesSaveOthersLineItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesSaveOthersLineItemResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedSaveOthersLineItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedSaveOthersLineItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data
+  };
+
+  return response;
+}
+
+function buildServerErrorSaveOthersLineItemResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorSaveOthersLineItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildSubmitOthersExpenseClaimRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildSubmitOthersExpenseClaimRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + othersClaimApiEndPoints.SUBMIT_OTHERS_EXPENSE_CLAIM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=submitOtherClaim" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = params;
+
+  var config = {
+    responseType: 'json',
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var submitOthersClaimInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", submitOthersClaimInformationRequest);
+
+  return submitOthersClaimInformationRequest;
+}
+
+function buildSuccessSubmitOthersExpenseClaimResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessSubmitOthersExpenseClaimResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedSubmitOthersExpenseClaimResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedSubmitOthersExpenseClaimResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data
+  };
+
+  return response;
+}
+
+function buildServerErrorSubmitOthersExpenseClaimResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorSubmitOthersExpenseClaimResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildDeleteOthersLineItemRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildDeleteOthersLineItemRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + othersClaimApiEndPoints.DELETE_OTHERS_LINE_ITEM_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=deleteOtherLineItem" + "&currentTimeStamp=" + new Date().getTime();
+
+  var config = {
+    'Content-Type': 'application/json',
+    data: (0, _othersobjectmapping.getServerOthersLineItemDeleteModel)(params),
+    responseType: 'json'
+  };
+
+  var deleteOthersClaimInformationRequest = {
+    url: url,
+
+    config: config
+  };
+
+  console.log("loginRequest is -", deleteOthersClaimInformationRequest);
+
+  return deleteOthersClaimInformationRequest;
+}
+
+function buildSuccesDeleteOthersLineItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesDeleteOthersLineItemResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedDeleteOthersLineItemResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedDeleteOthersLineItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorDeleteOthersLineItemResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorDeleteOthersLineItemResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetOthersExpenseComponentInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetOthersExpenseComponentInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + othersClaimApiEndPoints.GET_OTHERS_EXPENSE_COMPONENT_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&mode=TravelExpenseApprover" + "&component_id=" + params.componentId + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var othersExpenseComponentInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", othersExpenseComponentInformationRequest);
+
+  return othersExpenseComponentInformationRequest;
+}
+
+function buildSuccesGetOthersExpenseComponentInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetOthersExpenseComponentInformationResponse Method - ");
+
+  serverData = (0, _othersobjectmapping.getOthersComponentConfigurationModel)(result.data);
+
+  var response = {
+    data: serverData,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetOthersExpenseComponentInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetOthersExpenseComponentInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching '
+  };
+
+  return response;
+}
+
+function buildServerErrorGetOthersExpenseComponentInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetOthersExpenseComponentInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

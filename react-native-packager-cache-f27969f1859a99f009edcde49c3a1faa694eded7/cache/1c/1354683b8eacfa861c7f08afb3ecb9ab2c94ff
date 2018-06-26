@@ -1,0 +1,596 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _reactNativeRouterFlux = require('react-native-router-flux');
+
+var _GoogleAnalyticController = require('../../../GoogleAnalyticController');
+
+var _ewnetworkimage = require('../../../components/ewnetworkimage/ewnetworkimage');
+
+var _ewnetworkimage2 = babelHelpers.interopRequireDefault(_ewnetworkimage);
+
+var _ewlistview = require('../../../components/ewlistview/ewlistview');
+
+var _ewlistview2 = babelHelpers.interopRequireDefault(_ewlistview);
+
+var _ewlistitem = require('../components/ewmyappliedexpenseclaimcomponents/ewlistitem');
+
+var _ewlistitem2 = babelHelpers.interopRequireDefault(_ewlistitem);
+
+var _utils = require('../../../utils');
+
+var _globalerrors = require('../../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _ewloadingindicator = require('../../../components/ewloadingindicator/ewloadingindicator');
+
+var _ewloadingindicator2 = babelHelpers.interopRequireDefault(_ewloadingindicator);
+
+var _ewh1text = require('../../../components/ewh1text/ewh1text');
+
+var _ewh1text2 = babelHelpers.interopRequireDefault(_ewh1text);
+
+var _ewh2text = require('../../../components/ewh2text/ewh2text');
+
+var _ewh2text2 = babelHelpers.interopRequireDefault(_ewh2text);
+
+var _ewh3text = require('../../../components/ewh3text/ewh3text');
+
+var _ewh3text2 = babelHelpers.interopRequireDefault(_ewh3text);
+
+var _ewscreentitle = require('../../../components/ewscreentitle/ewscreentitle');
+
+var _ewscreentitle2 = babelHelpers.interopRequireDefault(_ewscreentitle);
+
+var _expenseutils = require('../expenseutils');
+
+var expenseConstants = babelHelpers.interopRequireWildcard(_expenseutils);
+
+var _modulelist = require('../../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var _appstyleguide = require('../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _commonactions = require('../../../services/common/commonactions');
+
+var _ewmyappliedexpenseclaimscreenstyles = require('../styles/ewmyappliedexpenseclaimscreenstyles');
+
+var _ewmyappliedexpenseclaimscreenstyles2 = babelHelpers.interopRequireDefault(_ewmyappliedexpenseclaimscreenstyles);
+
+var _commonexpenseclaimactions = require('../../../services/expenseclaim/common/commonexpenseclaimactions');
+
+var _commonexpenseclaimerrorhandling = require('../../../services/expenseclaim/common/commonexpenseclaimerrorhandling');
+
+var expenseError = babelHelpers.interopRequireWildcard(_commonexpenseclaimerrorhandling);
+
+var _routerscenekeys = require('../../../utils/routerscenekeys');
+
+var routerSceneKeys = babelHelpers.interopRequireWildcard(_routerscenekeys);
+
+var FILE_NAME = "ewmyappliedotherclaimscreen.js : ";
+
+var SCREEN_NAME = "My Applied Other Claim Screen";
+
+var SCREEN_CATEGORY = modules.MODULE_TRAVEL_AND_EXPENSE;
+
+var tracker = _GoogleAnalyticController.googleAnalyticController.getGoogleAnlyticTracker();
+
+NUMBER_OF_RECORDS = 10;
+REQUEST_TYPE = 'MyExpenseClaimOthers';
+
+var EwMyAppliedOtherClaimScreen = function (_Component) {
+  babelHelpers.inherits(EwMyAppliedOtherClaimScreen, _Component);
+
+  function EwMyAppliedOtherClaimScreen(props) {
+    babelHelpers.classCallCheck(this, EwMyAppliedOtherClaimScreen);
+
+
+    console.log(FILE_NAME + " In constructor");
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwMyAppliedOtherClaimScreen.__proto__ || Object.getPrototypeOf(EwMyAppliedOtherClaimScreen)).call(this, props));
+
+    _this.showAlertMessage = function (messageText, messageHeading, messageType) {
+
+      console.log(FILE_NAME + "In showAlertMessage method");
+
+      if (messageText === undefined) messageText = _this.state.currentError;
+
+      if (messageHeading === undefined) messageHeading = 'Oops';
+
+      if (messageType === undefined) messageType = 'error';
+
+      message = {
+
+        messageText: messageText,
+        messageHeading: messageHeading,
+        messageType: messageType
+      };
+
+      if (_this.state.currentError != '') _this.clearCurrentMessage();
+
+      _this.props.showDropDownAlertMessage(message);
+    };
+
+    _this.clearCurrentMessage = function () {
+
+      _this.setState({
+        currentError: ''
+      });
+    };
+
+    _this.onPressListItem = function (data) {
+
+      console.log(FILE_NAME + " In onPressListItem method");
+
+      tracker.trackEvent(SCREEN_CATEGORY, 'my applied other expense claim list item clicked');
+      _reactNativeRouterFlux.Actions.ewmyappliedexpenseclaimaction({ expenseClaimData: data });
+    };
+
+    _this._loadMoreExpenseAsync = function () {
+
+      console.log(FILE_NAME + "In _loadMoreExpenseAsync");
+
+      var areAllExpenseLoaded = _this.state.areAllExpenseLoaded;
+
+
+      if (_this.props.appliedExpenseClaimError == null && !areAllExpenseLoaded) _this.getAppliedExpenseInformation();
+    };
+
+    tracker.trackScreenView(SCREEN_NAME);
+
+    _this.initialState = {
+      isDataPreLoaded: false,
+      isLoading: false,
+      isDone: false,
+      currentError: '',
+
+      appliedExpenseClaimData: null,
+      areAllExpenseLoaded: false,
+
+      refreshing: false,
+
+      componentInitializeTime: new Date().getTime()
+
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwMyAppliedOtherClaimScreen, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log(FILE_NAME + " In componentWillMount method");
+
+      this.setState({
+        isDataPreLoaded: true,
+        isLoading: false
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      console.log(FILE_NAME + " In componentWillReceiveProps method");
+
+      console.log("New Props are - ", nextProps);
+
+      if (nextProps.appliedExpenseClaimData != null && nextProps.appliedExpenseClaimError == null && nextProps.appliedExpenseClaimData.requestType == REQUEST_TYPE) {
+
+        elementValues = this.handleElementValues(nextProps.appliedExpenseClaimData.pendingItemInfo, this.state.appliedExpenseClaimData);
+
+        this.setState({
+          appliedExpenseClaimData: elementValues.appliedExpenseClaimData,
+          areAllExpenseLoaded: elementValues.areAllExpenseLoaded,
+          isLoading: false,
+          refreshing: false
+        });
+      }
+
+      if (nextProps.appliedExpenseClaimData == null && nextProps.appliedExpenseClaimError != null) {
+
+        this.setState({
+          isLoading: false,
+          currentError: nextProps.appliedExpenseClaimError,
+          refreshing: false
+        });
+      }
+
+      if (nextProps.appliedExpenseClaimData == null && nextProps.appliedExpenseClaimError == null && nextProps.errorCounter == 0) {
+
+        this.getAppliedExpenseInformation();
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log(FILE_NAME + " In shouldComponentUpdate method");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+
+      console.log(FILE_NAME + " In componentWillUpdate method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + " In render() Method");
+
+      if (this.props.isLoggedIn) {
+
+        console.log("Logged in");
+
+        if (this.state.isLoading) {
+
+          console.log("Loading is active");
+
+          return _react2.default.createElement(_ewloadingindicator2.default, null);
+        } else {
+
+          console.log("Loading is not active");
+
+          if (this.state.isDataPreLoaded) {
+
+            console.log("Date Pre-loading was successful");
+
+            if (this.state.isDone && this.state.currentError == '') {
+
+              console.log("Action was completed successfully");
+
+              {
+                this.showAlertMessage();
+              }
+
+              _reactNativeRouterFlux.Actions.pop({ type: _reactNativeRouterFlux.ActionConst.REFRESH });
+
+              return null;
+            } else {
+
+              console.log("Action has not been completed yet");
+
+              if (this.state.currentError === '') {
+
+                console.log("Render Screen");
+
+                return this.renderScreen();
+              } else {
+
+                console.log("Render Screen with Error", this.state.currentError);
+
+                return this.handleError();
+              }
+            }
+          } else {
+
+            console.log("Date Pre-loading failed with error -", this.state.currentError);
+            return this.handleError();
+          }
+        }
+      } else {
+
+        console.log("Not Logged in");
+
+        _reactNativeRouterFlux.Actions.ewlogin();
+        return null;
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log(FILE_NAME + " In componentDidMount method");
+
+      this.getAppliedExpenseInformation();
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log(FILE_NAME + " In componentDidUpdate method");
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log(FILE_NAME + " In componentWillUnmount method");
+
+      (0, _utils.trackComponentVisibleTimings)(this.state.componentInitializeTime, SCREEN_CATEGORY, SCREEN_NAME);
+
+      var params = {
+        "0": 'CLEAR_STATE_DATA_ALL'
+      };
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+
+      console.log(FILE_NAME + " In renderScreen method");
+
+      var appliedExpenseClaimData = this.state.appliedExpenseClaimData;
+
+
+      console.log(appliedExpenseClaimData);
+
+      return _react2.default.createElement(
+        _nativeBase.Container,
+        null,
+        this.showMyAppliedExpenseClaimList(appliedExpenseClaimData)
+      );
+    }
+  }, {
+    key: 'handleError',
+    value: function handleError() {
+
+      console.log(FILE_NAME + " In handleError method");
+
+      tracker.trackScreenView(SCREEN_NAME + ' with Error - ' + this.state.currentError);
+
+      console.log("this.state.currentError", this.state.currentError);
+
+      if (this.state.currentError == '') {
+        return null;
+      }
+
+      switch (this.state.currentError) {
+
+        case globalErrors.AUTHENTICATION_FAILURE:
+          this.showAlertMessage("Session expired, Please login again");
+          _reactNativeRouterFlux.Actions.ewlogin();
+          return null;
+          break;
+
+        case globalErrors.LOCAL_SERVER_ACCESS_ERROR:
+
+          this.showAlertMessage();
+
+          if (!this.state.isDataPreLoaded) {
+            _reactNativeRouterFlux.Actions.pop();
+            return null;
+          }
+          if (this.state.isDataPreLoaded && !this.state.isDone) {
+            return this.renderScreen();
+          }
+
+          break;
+
+        case expenseError.INVALID_STATE:
+          _reactNativeRouterFlux.Actions.pop();
+          return null;
+          break;
+
+      }
+
+      if (!this.state.isDataPreLoaded) {
+        return null;
+      }
+
+      if (this.state.isDataPreLoaded && !this.state.isDone) {
+
+        switch (this.state.currentError) {
+
+          case expenseError.SERVER_EXCEPTION:
+
+            this.showAlertMessage(expenseError.SERVER_ERROR);
+            return this.renderScreen();
+            break;
+
+          default:
+
+            this.showAlertMessage();
+            return this.renderScreen();
+        }
+      }
+    }
+  }, {
+    key: 'getAppliedExpenseInformation',
+    value: function getAppliedExpenseInformation() {
+      var appliedExpenseClaimData = this.state.appliedExpenseClaimData;
+
+
+      currentId = 0;
+
+      if (appliedExpenseClaimData != null && appliedExpenseClaimData.length != 0) currentId = appliedExpenseClaimData[appliedExpenseClaimData.length - 1].pi_Txn_Id;
+
+      var params = {
+        requestType: REQUEST_TYPE,
+        currentId: currentId,
+        numberOfRecords: NUMBER_OF_RECORDS
+      };
+
+      this.props.getAppliedExpenseClaimList(params);
+    }
+  }, {
+    key: 'handleElementValues',
+    value: function handleElementValues(appliedExpenseclaimList, currentListVisible) {
+
+      areAllExpenseLoaded = this.state.areAllExpenseLoaded;
+      console.log("handleElementValues", appliedExpenseclaimList, currentListVisible);
+      if (currentListVisible != null) {
+
+        if (appliedExpenseclaimList != null) {
+
+          if (appliedExpenseclaimList.length == 0) {
+
+            areAllExpenseLoaded = true;
+
+            appliedExpenseclaimList = this.state.appliedExpenseClaimData;
+          } else {
+
+            updatedExpenseListVisible = [].concat(babelHelpers.toConsumableArray(currentListVisible), babelHelpers.toConsumableArray(appliedExpenseclaimList));
+
+            console.log("updatedExpenseListVisible", updatedExpenseListVisible);
+            appliedExpenseclaimList = updatedExpenseListVisible;
+          }
+        }
+      }
+
+      elementValues = {
+
+        appliedExpenseClaimData: appliedExpenseclaimList,
+        areAllExpenseLoaded: areAllExpenseLoaded
+      };
+
+      return elementValues;
+    }
+  }, {
+    key: '_onRefresh',
+    value: function _onRefresh() {
+
+      console.log(FILE_NAME + "In _onRefresh method");
+
+      this.setState({
+        refreshing: true
+      });
+
+      this.getAppliedExpenseInformation();
+    }
+  }, {
+    key: 'renderListItem',
+    value: function renderListItem(_ref) {
+      var _this2 = this;
+
+      var item = _ref.item;
+
+
+      var otherDetails = {
+
+        "sessionToken": this.props.sessionToken,
+        "currentImageTimestamp": this.props.currentImageTimestamp
+
+      };
+
+      return _react2.default.createElement(_ewlistitem2.default, {
+        listItemData: item,
+        otherDetails: otherDetails,
+        onListItemClicked: function onListItemClicked(item) {
+          return _this2.onPressListItem(item);
+        }
+      });
+    }
+  }, {
+    key: 'showMyAppliedExpenseClaimList',
+    value: function showMyAppliedExpenseClaimList(appliedExpenseClaimData) {
+      var _this3 = this;
+
+      console.log(FILE_NAME + " In showMyAppliedExpenseClaimList method");
+
+      if (appliedExpenseClaimData != null && this.props.appliedExpenseClaimError == null) {
+
+        return _react2.default.createElement(_ewlistview2.default, {
+          listData: appliedExpenseClaimData,
+          extraData: this.state,
+          listKey: function listKey(data, index) {
+            return index;
+          },
+          renderListItem: function renderListItem(data) {
+            return _this3.renderListItem(data);
+          },
+          onEndReached: function onEndReached() {
+            return _this3._loadMoreExpenseAsync();
+          },
+          onEndReachedThreshold: 0.5,
+          isAllDataLoaded: this.state.areAllExpenseLoaded,
+          refreshing: this.state.refreshing,
+          onRefresh: this._onRefresh.bind(this)
+        });
+      } else if (appliedExpenseClaimData == null && this.props.appliedExpenseClaimError == null) {
+
+        console.log("2nd Case", _ewmyappliedexpenseclaimscreenstyles2.default);
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewmyappliedexpenseclaimscreenstyles2.default.spinnerContainer },
+          _react2.default.createElement(_nativeBase.Spinner, { size: 'small' }),
+          _react2.default.createElement(_ewh1text2.default, {
+            text: 'Loading Your Other Expense Claim Requests...'
+          })
+        );
+      } else if (appliedExpenseClaimData == null && this.props.appliedExpenseClaimError != null) {
+
+        console.log("3rd Case");
+
+        return _react2.default.createElement(
+          _reactNative.View,
+          { style: _ewmyappliedexpenseclaimscreenstyles2.default.loadAgainButtonContainer },
+          _react2.default.createElement(
+            _nativeBase.Button,
+            { onPress: function onPress() {
+                return _this3.getAppliedExpenseInformation();
+              } },
+            _react2.default.createElement(
+              _nativeBase.Text,
+              null,
+              'Load Again'
+            )
+          )
+        );
+      } else {
+
+        console.log("4th Case");
+        console.log("appliedExpenseClaimData, ", appliedExpenseClaimData);
+        console.log("this.props.appliedExpenseClaimError, ", this.props.appliedExpenseClaimError);
+      }
+    }
+  }]);
+  return EwMyAppliedOtherClaimScreen;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + " In bindAction method");
+
+  return {
+
+    showDropDownAlertMessage: function showDropDownAlertMessage(params) {
+      return dispatch((0, _commonactions.showDropDownAlertMessage)(params));
+    },
+    getAppliedExpenseClaimList: function getAppliedExpenseClaimList(params) {
+      return dispatch((0, _commonexpenseclaimactions.getAppliedExpenseClaimList)(params));
+    },
+    clearExpenseStateData: function clearExpenseStateData(params) {
+      return dispatch((0, _commonexpenseclaimactions.clearExpenseStateData)(params));
+    }
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+
+    sessionToken: state.auth.sessionToken,
+    isLoggedIn: state.auth.isLoggedIn,
+    errorWebService: state.auth.errorWebService,
+
+    appliedExpenseClaimData: state.commonExpenseClaim.appliedExpenseClaimData,
+    appliedExpenseClaimError: state.commonExpenseClaim.appliedExpenseClaimError,
+
+    errorCounter: state.commonExpenseClaim.errorCounter,
+
+    currentImageTimestamp: state.common.currentImageTimestamp
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwMyAppliedOtherClaimScreen);

@@ -1,0 +1,86 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetNeedToActListRequest = buildGetNeedToActListRequest;
+exports.buildSuccessGetNeedToActListResponse = buildSuccessGetNeedToActListResponse;
+exports.buildFailedGetNeedToActListResponse = buildFailedGetNeedToActListResponse;
+exports.buildServerErrorGetNeedToActListResponse = buildServerErrorGetNeedToActListResponse;
+
+var _needtoactapiendpoints = require('./needtoactapiendpoints');
+
+var needToActApiEndPoints = babelHelpers.interopRequireWildcard(_needtoactapiendpoints);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var FILE_NAME = "needtoactprocessing.js : ";
+
+function buildGetNeedToActListRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetNeedToActListRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + needToActApiEndPoints.GET_NEED_TO_ACT_LIST + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&pi_id=0" + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v3+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+
+  };
+
+  var loginRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", loginRequest);
+
+  return loginRequest;
+}
+
+function buildSuccessGetNeedToActListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetNeedToActListResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetNeedToActListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetNeedToActListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data
+  };
+
+  return response;
+}
+
+function buildServerErrorGetNeedToActListResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetNeedToActListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  console.log("server error response is ", response);
+
+  return response;
+}

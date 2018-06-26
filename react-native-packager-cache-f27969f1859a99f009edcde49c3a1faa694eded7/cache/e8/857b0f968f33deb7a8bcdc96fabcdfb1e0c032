@@ -1,0 +1,397 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetOdRequestInformation = buildGetOdRequestInformation;
+exports.buildSuccessGetOdRequestInformationResponse = buildSuccessGetOdRequestInformationResponse;
+exports.buildFailedGetOdRequestInformationResponse = buildFailedGetOdRequestInformationResponse;
+exports.buildServerErrorGetOdRequestInformationResponse = buildServerErrorGetOdRequestInformationResponse;
+exports.buildApplyOdRequest = buildApplyOdRequest;
+exports.buildSuccessApplyOdRequestResponse = buildSuccessApplyOdRequestResponse;
+exports.buildFailedApplyOdRequestResponse = buildFailedApplyOdRequestResponse;
+exports.buildServerErrorApplyOdRequestResponse = buildServerErrorApplyOdRequestResponse;
+exports.buildOdActionRequest = buildOdActionRequest;
+exports.buildSuccessOdActionResponse = buildSuccessOdActionResponse;
+exports.buildFailedOdActionResponse = buildFailedOdActionResponse;
+exports.buildServerErrorOdActionResponse = buildServerErrorOdActionResponse;
+exports.buildGetPendingOdRequestInformation = buildGetPendingOdRequestInformation;
+exports.buildSuccessGetPendingOdRequestInformationResponse = buildSuccessGetPendingOdRequestInformationResponse;
+exports.buildFailedGetPendingOdRequestInformationResponse = buildFailedGetPendingOdRequestInformationResponse;
+exports.buildServerErrorGetPendingOdRequestInformationResponse = buildServerErrorGetPendingOdRequestInformationResponse;
+exports.buildGetRosterInformationRequest = buildGetRosterInformationRequest;
+exports.buildSuccessGetRosterInformationResponse = buildSuccessGetRosterInformationResponse;
+exports.buildFailedGetRosterInformationResponse = buildFailedGetRosterInformationResponse;
+exports.buildServerErrorGetRosterInformationResponse = buildServerErrorGetRosterInformationResponse;
+exports.buildGetAppliedOdListRequest = buildGetAppliedOdListRequest;
+exports.buildSuccesGetAppliedOdListResponse = buildSuccesGetAppliedOdListResponse;
+exports.buildFailedGetAppliedOdListResponse = buildFailedGetAppliedOdListResponse;
+exports.buildServerErrorGetAppliedOdListResponse = buildServerErrorGetAppliedOdListResponse;
+
+var _odrequestapiendpoints = require('./odrequestapiendpoints');
+
+var odRequestApiEndPoints = babelHelpers.interopRequireWildcard(_odrequestapiendpoints);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var FILE_NAME = "odrequestprocessing.js : ";
+
+function buildGetOdRequestInformation(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetOdRequestInformation Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + odRequestApiEndPoints.GET_OD_REQUEST_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var odInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", odInformationRequest);
+
+  return odInformationRequest;
+}
+
+function buildSuccessGetOdRequestInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetOdRequestInformationResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetOdRequestInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetOdRequestInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetOdRequestInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetOdRequestInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildApplyOdRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildApplyOdRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + odRequestApiEndPoints.APPLY_OD_REQUEST + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME;
+
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var applyOdRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+  console.log("loginRequest is -", applyOdRequest);
+
+  return applyOdRequest;
+}
+
+function buildSuccessApplyOdRequestResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessApplyOdRequestResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedApplyOdRequestResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedApplyOdRequestResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorApplyOdRequestResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorApplyOdRequestResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildOdActionRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildOdActionRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + odRequestApiEndPoints.OD_ACTION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME;
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var OdActionRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", OdActionRequest);
+
+  return OdActionRequest;
+}
+
+function buildSuccessOdActionResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessOdActionResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedOdActionResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedOdActionResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorOdActionResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorOdActionResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetPendingOdRequestInformation(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetPendingOdRequestInformation Method - ");
+
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + odRequestApiEndPoints.PENDING_OD_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&pi_txn_id=" + params.odId + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var pendingOdInformationRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", pendingOdInformationRequest);
+
+  return pendingOdInformationRequest;
+};
+
+function buildSuccessGetPendingOdRequestInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetPendingOdRequestInformationResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+};
+
+function buildFailedGetPendingOdRequestInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetPendingOdRequestInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetPendingOdRequestInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetPendingOdRequestInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetRosterInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetRosterRequest Method - ");
+
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + odRequestApiEndPoints.ROSTER_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&roster_data=Y&apply_date=" + params.applyDate + "&currentTimeStamp=" + new Date().getTime();
+  var data = params;
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var rosterInformation = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", rosterInformation);
+
+  return rosterInformation;
+}
+
+function buildSuccessGetRosterInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetRosterInformationRequestResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetRosterInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetRosterInformationRequestResponse Method - ");
+
+  var response = {
+    data: null,
+    error: result.data.error_flag
+  };
+
+  return response;
+}
+
+function buildServerErrorGetRosterInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetRosterInformationRequestResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}
+
+function buildGetAppliedOdListRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetAppliedOdListRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + odRequestApiEndPoints.GET_APPLIED_OD_LIST + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&request_type=" + params.requestType + "&current_id=" + params.currentId + "&no_of_record=" + params.numberOfRecords + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {
+
+    headers: {
+      'Accept': 'application/v2+json'
+    }
+  };
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var appliedOdListRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", appliedOdListRequest);
+
+  return appliedOdListRequest;
+}
+
+function buildSuccesGetAppliedOdListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccesGetAppliedOdListResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetAppliedOdListResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedGetAppliedOdListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetAppliedOdListResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetAppliedOdListResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

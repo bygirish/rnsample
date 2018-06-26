@@ -1,0 +1,279 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getMyCompensationInformation = getMyCompensationInformation;
+exports.getAppliedCtcClaimList = getAppliedCtcClaimList;
+exports.getClaimInformation = getClaimInformation;
+exports.getEntitlementSummary = getEntitlementSummary;
+exports.clearCompensationError = clearCompensationError;
+exports.clearCompensationStateData = clearCompensationStateData;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _compensationprocessing = require('./compensationprocessing');
+
+var compensationProcessing = babelHelpers.interopRequireWildcard(_compensationprocessing);
+
+var _compensationactiontypes = require('./compensationactiontypes');
+
+var compensationActionTypes = babelHelpers.interopRequireWildcard(_compensationactiontypes);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var FILE_NAME = "compensationactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_COMPENSATION_AND_BENEFITS;
+
+function getMyCompensationInformation(params) {
+
+  var functionName = "getMyCompensationInformation";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getMyCompensationInformation = compensationProcessing.buildGetMyCompensationInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    console.log("getMyCompensationInformation", getMyCompensationInformation);
+
+    _axios2.default.get(getMyCompensationInformation.url, getMyCompensationInformation.data, getMyCompensationInformation.config).then(function (result) {
+
+      console.log("getMyCompensationInformation Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: compensationActionTypes.SUCCESS_GET_MY_COMPENSATION,
+          response: compensationProcessing.buildSuccesGetMyCompensationInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: compensationActionTypes.FAILURE_GET_MY_COMPENSATION,
+          response: compensationProcessing.buildFailedGetMyCompensationInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getMyCompensationInformation Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: compensationActionTypes.FAILURE_GET_MY_COMPENSATION,
+        response: compensationProcessing.buildServerErrorGetMyCompensationInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function getAppliedCtcClaimList(params) {
+
+  var functionName = "getAppliedCtcClaimList";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getAppliedCtcClaimListInformation = compensationProcessing.buildGetAppliedCtcClaimListInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    console.log("getAppliedCtcClaimListInformation", getAppliedCtcClaimListInformation);
+
+    _axios2.default.get(getAppliedCtcClaimListInformation.url, getAppliedCtcClaimListInformation.data, getAppliedCtcClaimListInformation.config).then(function (result) {
+
+      console.log("getAppliedCtcClaimListInformation Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: compensationActionTypes.SUCCESS_GET_MY_CTC_CLAIM_LIST,
+          response: compensationProcessing.buildSuccesGetAppliedCtcClaimListInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: compensationActionTypes.FAILURE_GET_MY_CTC_CLAIM_LIST,
+          response: compensationProcessing.buildFailedGetAppliedCtcClaimListInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getAppliedCtcClaimListInformation Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: compensationActionTypes.FAILURE_GET_MY_CTC_CLAIM_LIST,
+        response: compensationProcessing.buildServerErrorGetAppliedCtcClaimListInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function getClaimInformation(params) {
+
+  var functionName = "getClaimInformation";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getClaimInformation = compensationProcessing.buildGetClaimInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    console.log("getClaimInformation", getClaimInformation);
+
+    _axios2.default.post(getClaimInformation.url, getClaimInformation.data, getClaimInformation.config).then(function (result) {
+
+      console.log("getClaimInformation Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: compensationActionTypes.SUCCESS_GET_MY_CLAIM_INFORMATION,
+          response: compensationProcessing.buildSuccesGetClaimInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: compensationActionTypes.FAILURE_GET_MY_CLAIM_INFORMATION,
+          response: compensationProcessing.buildFailedGetClaimInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getClaimInformation Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: compensationActionTypes.FAILURE_GET_MY_CLAIM_INFORMATION,
+        response: compensationProcessing.buildServerErrorGetClaimInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function getEntitlementSummary(params) {
+
+  var functionName = "getEntitlementSummary";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getEntitlementSummaryInformation = compensationProcessing.buildGetEntitlementSummaryInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    console.log("getEntitlementSummaryInformation", getEntitlementSummaryInformation);
+
+    dispatch({
+      type: compensationActionTypes.SUCCESS_GET_ENTITLEMENT_SUMMARY,
+      response: compensationProcessing.buildSuccesGetEntitlementSummaryInformationResponse("result", params)
+    });
+  };
+}
+
+function clearCompensationError(params) {
+
+  return {
+    type: compensationActionTypes.CLEAR_COMPENSATION_ERROR,
+    response: null
+  };
+}
+
+function clearCompensationStateData(params) {
+
+  console.log(FILE_NAME + "In clearCompensationStateData - ");
+  console.log("Type of Data to be cleared - ", params);
+
+  CLEAR_STATE_DATA_ALL = 'CLEAR_STATE_DATA_ALL';
+  CLEAR_STATE_ERROR_COUNTER = 'CLEAR_STATE_ERROR_COUNTER';
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var errorCounter = getState().compensation.errorCounter;
+    var myCompensationData = getState().compensation.myCompensationData;
+    var myCompensationError = getState().compensation.myCompensationError;
+
+    Object.keys(params).map(function (key) {
+      console.log("params attribute " + key + " value is - " + params[key]);
+
+      switch (params[key]) {
+        case CLEAR_STATE_DATA_ALL:
+
+          errorCounter = null;
+          myCompensationData = null;
+          myCompensationError = null;
+          break;
+
+        case CLEAR_STATE_ERROR_COUNTER:
+
+          errorCounter = null;
+          break;
+
+        default:
+
+      }
+    });
+
+    var response = {
+      errorCounter: errorCounter,
+      myCompensationData: myCompensationData,
+      myCompensationError: myCompensationError
+    };
+
+    dispatch({
+      type: compensationActionTypes.CLEAR_COMPENSATION_STATE_DATA,
+      response: response
+    });
+  };
+}

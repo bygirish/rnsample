@@ -1,0 +1,88 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = needToActReducer;
+
+var _needtoactactiontypes = require('./needtoactactiontypes');
+
+var needToActActionTypes = babelHelpers.interopRequireWildcard(_needtoactactiontypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var FILE_NAME = "needtoactreducer.js : ";
+var initialState = {
+
+  needToActData: null,
+  needToActError: null,
+
+  isReportErrorFlagVisible: false,
+
+  errorCounter: 0
+
+};
+
+function needToActReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+
+  console.log(FILE_NAME + "In method needToActReducer");
+  console.log(action);console.log(state);
+
+  switch (action.type) {
+    case needToActActionTypes.SUCCESS_GET_NEED_TO_ACT_LIST:
+
+      console.log("In method needToActReducer SUCCESS_GET_NEED_TO_ACT_LIST");
+
+      return babelHelpers.extends({}, state, {
+        needToActData: action.response.data,
+        needToActError: action.response.error,
+        isReportErrorFlagVisible: !action.response.data.partner
+
+      });
+
+      break;
+
+    case needToActActionTypes.FAILURE_GET_NEED_TO_ACT_LIST:
+
+      console.log("In method needToActReducer FAILURE_GET_NEED_TO_ACT_LIST");
+
+      return babelHelpers.extends({}, state, {
+        needToActData: action.response.data,
+        needToActError: action.response.error,
+        errorCounter: state.errorCounter + 1
+      });
+
+      break;
+
+    case needToActActionTypes.CLEAR_NEED_TO_ACT_ERROR:
+
+      console.log("In method needToActReducer CLEAR_NEED_TO_ACT_ERROR");
+
+      return babelHelpers.extends({}, state, {
+        needToActError: null
+      });
+
+      break;
+
+    case needToActActionTypes.CLEAR_NEED_TO_ACT_STATE_DATA:
+
+      console.log("In method needToActReducer CLEAR_NEED_TO_ACT_STATE_DATA");
+
+      return {
+        errorCounter: action.response.errorCounter,
+        needToActData: action.response.needToActData,
+        needToActError: action.response.needToActError
+      };
+
+      break;
+
+    default:
+
+      console.log("In method needToActReducer NOTHING");
+      return babelHelpers.extends({}, state);
+
+  }
+}

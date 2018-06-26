@@ -1,0 +1,95 @@
+'use strict';
+
+var _createReactClass = require('create-react-class');
+
+var _createReactClass2 = babelHelpers.interopRequireDefault(_createReactClass);
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = babelHelpers.interopRequireDefault(_propTypes);
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactCloneReferencedElement = require('react-clone-referenced-element');
+
+var _reactCloneReferencedElement2 = babelHelpers.interopRequireDefault(_reactCloneReferencedElement);
+
+var _reactNative = require('react-native');
+
+var _reactNativeScrollableMixin = require('react-native-scrollable-mixin');
+
+var _reactNativeScrollableMixin2 = babelHelpers.interopRequireDefault(_reactNativeScrollableMixin);
+
+var InvertibleScrollView = (0, _createReactClass2.default)({
+  displayName: 'InvertibleScrollView',
+
+  mixins: [_reactNativeScrollableMixin2.default],
+
+  propTypes: babelHelpers.extends({}, _reactNative.ScrollView.propTypes, {
+    inverted: _propTypes2.default.bool,
+    renderScrollComponent: _propTypes2.default.func.isRequired
+  }),
+
+  getDefaultProps: function getDefaultProps() {
+    return {
+      renderScrollComponent: function renderScrollComponent(props) {
+        return _react2.default.createElement(_reactNative.ScrollView, props);
+      }
+    };
+  },
+  getScrollResponder: function getScrollResponder() {
+    return this._scrollComponent.getScrollResponder();
+  },
+  setNativeProps: function setNativeProps(props) {
+    this._scrollComponent.setNativeProps(props);
+  },
+  render: function render() {
+    var _this = this;
+
+    var _props = this.props,
+        inverted = _props.inverted,
+        renderScrollComponent = _props.renderScrollComponent,
+        props = babelHelpers.objectWithoutProperties(_props, ['inverted', 'renderScrollComponent']);
+
+
+    if (inverted) {
+      if (this.props.horizontal) {
+        props.style = [styles.horizontallyInverted, props.style];
+        props.children = this._renderInvertedChildren(props.children, styles.horizontallyInverted);
+      } else {
+        props.style = [styles.verticallyInverted, props.style];
+        props.children = this._renderInvertedChildren(props.children, styles.verticallyInverted);
+      }
+    }
+
+    return (0, _reactCloneReferencedElement2.default)(renderScrollComponent(props), {
+      ref: function ref(component) {
+        _this._scrollComponent = component;
+      }
+    });
+  },
+  _renderInvertedChildren: function _renderInvertedChildren(children, inversionStyle) {
+    return _react2.default.Children.map(children, function (child) {
+      return child ? _react2.default.createElement(
+        _reactNative.View,
+        { style: inversionStyle },
+        child
+      ) : child;
+    });
+  }
+});
+
+var styles = _reactNative.StyleSheet.create({
+  verticallyInverted: {
+    flex: 1,
+    transform: [{ scaleY: -1 }]
+  },
+  horizontallyInverted: {
+    flex: 1,
+    transform: [{ scaleX: -1 }]
+  }
+});
+
+module.exports = InvertibleScrollView;

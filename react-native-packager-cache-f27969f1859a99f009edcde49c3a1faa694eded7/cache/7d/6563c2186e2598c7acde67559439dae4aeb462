@@ -1,0 +1,78 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.buildGetCalendarInformationRequest = buildGetCalendarInformationRequest;
+exports.buildSuccessGetCalendarInformationResponse = buildSuccessGetCalendarInformationResponse;
+exports.buildFailedGetCalendarInformationResponse = buildFailedGetCalendarInformationResponse;
+exports.buildServerErrorGetCalendarInformationResponse = buildServerErrorGetCalendarInformationResponse;
+
+var _calendarapiendpoints = require('./calendarapiendpoints');
+
+var calendarApiEndPoints = babelHelpers.interopRequireWildcard(_calendarapiendpoints);
+
+var _utils = require('../../utils');
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var FILE_NAME = "calendarprocessing.js : ";
+
+function buildGetCalendarInformationRequest(params, getState) {
+
+  console.log(FILE_NAME + "In buildGetCalendarInformationRequest Method - ");
+  console.log("params - ", params);
+
+  var url = _utils.BASIC_URL + calendarApiEndPoints.GET_CALENDAR_INFORMATION + "&token=" + getState.auth.sessionToken + "&device_id=" + _utils.DEVICE_ID + "&versionCode=" + _utils.VERSION_CODE + "&versionName=" + _utils.VERSION_NAME + "&month=" + params.month + "&year=" + params.year + "&currentTimeStamp=" + new Date().getTime();
+
+  var data = {};
+
+  var config = {
+    responseType: 'json'
+  };
+
+  var calendarRequest = {
+    url: url,
+    data: data,
+    config: config
+  };
+
+  console.log("loginRequest is -", calendarRequest);
+
+  return calendarRequest;
+}
+
+function buildSuccessGetCalendarInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildSuccessGetCalendarInformationResponse Method - ");
+
+  var response = {
+    data: result.data,
+    error: null
+  };
+
+  return response;
+}
+
+function buildFailedGetCalendarInformationResponse(result, params) {
+
+  console.log(FILE_NAME + "In buildFailedsGetCalendarInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: 'Error in fetching list elements'
+  };
+
+  return response;
+}
+
+function buildServerErrorGetCalendarInformationResponse(err, params) {
+
+  console.log(FILE_NAME + "In buildServerErrorGetCalendarInformationResponse Method - ");
+
+  var response = {
+    data: null,
+    error: globalErrors.LOCAL_SERVER_ACCESS_ERROR };
+
+  return response;
+}

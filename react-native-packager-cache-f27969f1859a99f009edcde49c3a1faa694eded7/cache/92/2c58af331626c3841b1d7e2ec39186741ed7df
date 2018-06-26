@@ -1,0 +1,472 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getOdRequestInformation = getOdRequestInformation;
+exports.applyOdRequest = applyOdRequest;
+exports.odAction = odAction;
+exports.getAppliedOdList = getAppliedOdList;
+exports.getPendingOdRequestInformation = getPendingOdRequestInformation;
+exports.getRosterInformation = getRosterInformation;
+exports.clearOdError = clearOdError;
+exports.clearOdRequestStateData = clearOdRequestStateData;
+
+var _axios = require('axios');
+
+var _axios2 = babelHelpers.interopRequireDefault(_axios);
+
+var _odrequestprocessing = require('./odrequestprocessing');
+
+var odRequestProcessing = babelHelpers.interopRequireWildcard(_odrequestprocessing);
+
+var _odrequestactiontypes = require('./odrequestactiontypes');
+
+var odRequestActionTypes = babelHelpers.interopRequireWildcard(_odrequestactiontypes);
+
+var _globalerrors = require('../../utils/globalerrors');
+
+var globalErrors = babelHelpers.interopRequireWildcard(_globalerrors);
+
+var _utils = require('../../utils');
+
+var _modulelist = require('../../utils/modulelist');
+
+var modules = babelHelpers.interopRequireWildcard(_modulelist);
+
+var FILE_NAME = "odrequestactions.js : ";
+
+var SCREEN_CATEGORY = modules.MODULE_LEAVE_AND_ATTENDANCE;
+
+function getOdRequestInformation(params) {
+
+  console.log(FILE_NAME + "In getOdRequestInformation method ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getOdRequestInformationRequest = odRequestProcessing.buildGetOdRequestInformation(params, getState());
+
+    console.log("Current GetState Value is - ");console.log(getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getOdRequestInformationRequest.url, getOdRequestInformationRequest.data, getOdRequestInformationRequest.config).then(function (result) {
+
+      console.log("getOdRequestInformationRequest Result - ");console.log(result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getOdRequestInformation', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: odRequestActionTypes.SUCCESS_OD_REQUEST_INFORMATION,
+          response: odRequestProcessing.buildSuccessGetOdRequestInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getOdRequestInformation', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: odRequestActionTypes.FAILURE_OD_REQUEST_INFORMATION,
+          response: odRequestProcessing.buildFailedGetOdRequestInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getOdRequestInformation', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getOdRequestInformation Error - ");console.log(err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: odRequestActionTypes.FAILURE_OD_REQUEST_INFORMATION,
+        response: odRequestProcessing.buildServerErrorGetOdRequestInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function applyOdRequest(params) {
+
+  console.log(FILE_NAME + "In applyOdRequest method ");
+  console.log("params - ", params);
+
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState);
+
+    var applyOdRequest = odRequestProcessing.buildApplyOdRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.post(applyOdRequest.url, applyOdRequest.data, applyOdRequest.config).then(function (result) {
+
+      console.log("applyOdRequest Result - ", result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'applyOdRequest', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: odRequestActionTypes.SUCCESS_APPLY_OD_REQUEST,
+          response: odRequestProcessing.buildSuccessApplyOdRequestResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'applyOdRequest', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: odRequestActionTypes.FAILURE_APPLY_OD_REQUEST,
+          response: odRequestProcessing.buildFailedApplyOdRequestResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'applyOdRequest', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("applyOdRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: odRequestActionTypes.FAILURE_APPLY_OD_REQUEST,
+        response: odRequestProcessing.buildServerErrorApplyOdRequestResponse(err, params)
+      });
+    });
+  };
+}
+
+function odAction(params) {
+
+  console.log(FILE_NAME + "In odAction method - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var odActionRequest = odRequestProcessing.buildOdActionRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.put(odActionRequest.url, odActionRequest.data, odActionRequest.config).then(function (result) {
+
+      console.log("odAction Result - ", result);
+
+      if (result.data.update_Flag != 0) {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'odAction', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: odRequestActionTypes.SUCCESS_OD_ACTION_TAKEN,
+          response: odRequestProcessing.buildSuccessOdActionResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'odAction', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: odRequestActionTypes.FAILURE_OD_ACTION_TAKEN,
+          response: odRequestProcessing.buildFailedOdActionResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'odAction', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("odAction Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: odRequestActionTypes.FAILURE_OD_ACTION_TAKEN,
+        response: odRequestProcessing.buildServerErrorOdActionResponse(err, params)
+      });
+    });
+  };
+}
+
+function getAppliedOdList(params) {
+
+  var functionName = "getAppliedOdList";
+
+  console.log(FILE_NAME + "In " + functionName + " method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var getAppliedOdRequest = odRequestProcessing.buildGetAppliedOdListRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(getAppliedOdRequest.url, getAppliedOdRequest.data, getAppliedOdRequest.config).then(function (result) {
+
+      console.log("getAppliedOdRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: odRequestActionTypes.SUCCESS_APPLIED_OD_LIST,
+          response: odRequestProcessing.buildSuccesGetAppliedOdListResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: odRequestActionTypes.FAILURE_APPLIED_OD_LIST,
+          response: odRequestProcessing.buildFailedGetAppliedOdListResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, functionName, _utils.REQUEST_SERVER_ERROR);
+
+      console.log("getAppliedOdRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: odRequestActionTypes.FAILURE_APPLIED_OD_LIST,
+        response: odRequestProcessing.buildServerErrorGetAppliedOdListResponse(err, params)
+      });
+    });
+  };
+}
+
+function getPendingOdRequestInformation(params) {
+
+  console.log(FILE_NAME + "In getPendingOdRequestInformation method- ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var pendingOdInformationRequest = odRequestProcessing.buildGetPendingOdRequestInformation(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(pendingOdInformationRequest.url, pendingOdInformationRequest.data, pendingOdInformationRequest.config).then(function (result) {
+
+      console.log("pendingOdInformation Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPendingOdRequestInformation', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: odRequestActionTypes.SUCCESS_PENDING_OD_INFORMATION,
+          response: odRequestProcessing.buildSuccessGetPendingOdRequestInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPendingOdRequestInformation', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: odRequestActionTypes.FAILURE_PENDING_OD_INFORMATION,
+          response: odRequestProcessing.buildFailedGetPendingOdRequestInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getPendingOdRequestInformation', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("pendingOdInformationRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: odRequestActionTypes.FAILURE_PENDING_OD_INFORMATION,
+        response: odRequestProcessing.buildServerErrorGetPendingOdRequestInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function getRosterInformation(params) {
+
+  console.log(FILE_NAME + "In getRosterInformation method - ");
+  console.log("params - ", params);
+
+  return function (dispatch, getState) {
+
+    var rosterInformationRequest = odRequestProcessing.buildGetRosterInformationRequest(params, getState());
+
+    console.log("Current GetState Value is - ", getState);
+
+    requestStartTime = (0, _utils.getCurrentTime)();
+
+    _axios2.default.get(rosterInformationRequest.url, rosterInformationRequest.data, rosterInformationRequest.config).then(function (result) {
+
+      console.log("rosterInformationRequest Result - ", result);
+
+      if (result.data != '') {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getRosterInformation', _utils.REQUEST_SUCCESSFULL);
+
+        dispatch({
+          type: odRequestActionTypes.SUCCESS_ROSTER_INFORMATION,
+          response: odRequestProcessing.buildSuccessGetRosterInformationResponse(result, params)
+        });
+      } else {
+
+        (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getRosterInformation', _utils.REQUEST_FAILED);
+
+        dispatch({
+          type: odRequestActionTypes.FAILURE_ROSTER_INFORMATION,
+          response: odRequestProcessing.buildFailedGetRosterInformationResponse(result, params)
+        });
+      }
+    }).catch(function (err) {
+
+      (0, _utils.trackServerRequestTimings)(requestStartTime, SCREEN_CATEGORY, 'getRosterInformation', _utils.REQUEST_SERVER_ERROR);
+
+      console.log("rosterInformationRequest Error - ", err);
+
+      globalErrors.updateLocalServerAccessError(getState().auth.isNetworkConnected);
+
+      dispatch({
+        type: odRequestActionTypes.FAILURE_ROSTER_INFORMATION,
+        response: odRequestProcessing.buildServerErrorGetRosterInformationResponse(err, params)
+      });
+    });
+  };
+}
+
+function clearOdError(params) {
+
+  return {
+    type: odRequestActionTypes.CLEAR_OD_ERROR,
+    response: null
+  };
+}
+
+function clearOdRequestStateData(params) {
+
+  console.log(FILE_NAME + "In clearOdRequestStateData method - ");
+  console.log("Type of Data to be cleared - ", params);
+
+  CLEAR_STATE_DATA_ALL = 'CLEAR_STATE_DATA_ALL';
+  CLEAR_STATE_DATA_OD_INFORMATION = 'CLEAR_STATE_DATA_OD_INFORMATION';
+  CLEAR_STATE_DATA_OD_ACTION = 'CLEAR_STATE_DATA_OD_ACTION';
+  CLEAR_STATE_DATA_APPLIED_OD = 'CLEAR_STATE_DATA_APPLIED_OD';
+  CLEAR_STATE_DATA_PENDING_OD_INFORMATION = 'CLEAR_STATE_DATA_PENDING_OD_INFORMATION';
+  CLEAR_STATE_ERROR_COUNTER = 'CLEAR_STATE_ERROR_COUNTER';
+  CLEAR_STATE_ROSTER_INFORMATION = 'CLEAR_ROSTER_INFORMATION';
+  CLEAR_STATE_DATA_APPLIED_OD = 'CLEAR_STATE_DATA_APPLIED_OD';
+
+  return function (dispatch, getState) {
+
+    console.log("Current GetState Value is - ", getState());
+
+    var errorCounter = getState().odrequest.errorCounter;
+
+    var odRequestInformationData = getState().odrequest.odRequestInformationData;
+    var odRequestInformationError = getState().odrequest.odRequestInformationError;
+
+    var odRequestActionData = getState().odrequest.odRequestActionData;
+    var odRequestActionError = getState().odrequest.odRequestActionError;
+
+    var odRequestAppliedData = getState().odrequest.odRequestAppliedData;
+    var odRequestAppliedError = getState().odrequest.odRequestAppliedError;
+
+    var pendingOdRequestInformationData = getState().odrequest.pendingOdRequestInformationData;
+    var pendingOdRequestInformationError = getState().odrequest.pendingOdRequestInformationError;
+
+    var odRosterInformationData = getState().odrequest.odRosterInformationData;
+    var odRosterInformationError = getState().odrequest.odRosterInformationError;
+
+    var appliedOdData = getState().odrequest.appliedOdData;
+    var appliedOdError = getState().odrequest.appliedOdError;
+
+    Object.keys(params).map(function (key) {
+      console.log("params attribute " + key + " value is - " + params[key]);
+
+      switch (params[key]) {
+        case CLEAR_STATE_DATA_ALL:
+          errorCounter = 0;
+          odRequestInformationData = null;
+          odRequestInformationError = null;
+          odRequestActionData = null;
+          odRequestActionError = null;
+          odRequestAppliedData = null;
+          odRequestAppliedError = null;
+          pendingOdRequestInformationData = null;
+          pendingOdRequestInformationError = null;
+          odRosterInformationData = null;
+          odRosterInformationError = null;
+          appliedOdData = null;
+          appliedOdError = null;
+          break;
+
+        case CLEAR_STATE_ERROR_COUNTER:
+          errorCounter = null;
+          break;
+
+        case CLEAR_STATE_DATA_OD_INFORMATION:
+          odRequestInformationData = null;
+          odRequestInformationError = null;
+          break;
+
+        case CLEAR_STATE_DATA_OD_ACTION:
+          odRequestActionData = null;
+          odRequestActionError = null;
+          break;
+
+        case CLEAR_STATE_DATA_APPLIED_OD:
+          odRequestAppliedData = null;
+          odRequestAppliedError = null;
+          break;
+
+        case CLEAR_STATE_DATA_PENDING_OD_INFORMATION:
+          pendingOdRequestInformationData = null;
+          pendingOdRequestInformationError = null;
+          break;
+
+        case CLEAR_STATE_ROSTER_INFORMATION:
+          odRosterInformationData = null;
+          odRosterInformationError = null;
+          break;
+
+        case CLEAR_STATE_DATA_APPLIED_OD:
+
+          appliedOdData = null;
+          appliedOdError = null;
+
+          break;
+
+        default:
+
+      }
+    });
+
+    var response = {
+      errorCounter: errorCounter,
+      odRequestInformationData: odRequestInformationData,
+      odRequestInformationError: odRequestInformationError,
+      odRequestActionData: odRequestActionData,
+      odRequestActionError: odRequestActionError,
+      odRequestAppliedData: odRequestAppliedData,
+      odRequestAppliedError: odRequestAppliedError,
+      pendingOdRequestInformationData: pendingOdRequestInformationData,
+      pendingOdRequestInformationError: pendingOdRequestInformationError,
+      odRosterInformationData: odRosterInformationData,
+      odRosterInformationError: odRosterInformationError,
+      appliedOdData: appliedOdData,
+      appliedOdError: appliedOdError
+    };
+
+    dispatch({
+      type: odRequestActionTypes.CLEAR_OD_STATE_DATA,
+      response: response
+    });
+  };
+}

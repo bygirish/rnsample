@@ -1,0 +1,312 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactNative = require('react-native');
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _nativeBase = require('native-base');
+
+var _ewcomponents = require('../../../../utils/ewcomponents');
+
+var _othersclaimactions = require('../../../../services/expenseclaim/others/othersclaimactions');
+
+var _styles = require('./styles');
+
+var _styles2 = babelHelpers.interopRequireDefault(_styles);
+
+var _appstyleguide = require('../../../../../appstyleguide/appstyleguide');
+
+var appstyleguide = babelHelpers.interopRequireWildcard(_appstyleguide);
+
+var _expenseutils = require('../../expenseutils');
+
+var expenseConstants = babelHelpers.interopRequireWildcard(_expenseutils);
+
+
+var FILE_NAME = "ewotherexpensetypes.js";
+
+var context;
+
+var EwOtherExpenseType = function (_Component) {
+  babelHelpers.inherits(EwOtherExpenseType, _Component);
+
+  function EwOtherExpenseType(props, context) {
+    babelHelpers.classCallCheck(this, EwOtherExpenseType);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, (EwOtherExpenseType.__proto__ || Object.getPrototypeOf(EwOtherExpenseType)).call(this, props, context));
+
+    _this.initialState = {
+
+      expenseType: _this.props.initialState.expenseType,
+      expenseTypeConfiguration: _this.props.initialState.expenseTypeConfiguration,
+      expenseTypeError: _this.props.initialState.expenseTypeError,
+      isServerRequestComplete: false
+    };
+
+    _this.state = _this.initialState;
+    return _this;
+  }
+
+  babelHelpers.createClass(EwOtherExpenseType, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+
+      console.log("Inside componentWillMount");
+      context = this;
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+
+      if (this.isStateChanged(nextProps.initialState)) {
+        console.log("nextpropsreceiveotherexpnest", nextProps, this.state);
+
+        this.setState({
+
+          expenseType: nextProps.initialState.expenseType,
+          expenseTypeConfiguration: nextProps.initialState.expenseTypeConfiguration,
+          expenseTypeError: nextProps.initialState.expenseTypeError
+        });
+      }
+
+      if (nextProps.othersExpenseComponentInformationData != null && nextProps.othersExpenseComponentInformationError == null) {
+
+        this.setState({
+
+          expenseTypeConfiguration: nextProps.othersExpenseComponentInformationData,
+          expenseTypeError: null,
+          isServerRequestComplete: true
+        });
+
+        this.clearOtherExpensecomponentReduxData();
+      }
+
+      if (nextProps.othersExpenseComponentInformationData == null && nextProps.othersExpenseComponentInformationError != null) {
+
+        this.setState({
+          expenseTypeConfiguration: null,
+          expenseTypeError: nextProps.othersExpenseComponentInformationError,
+          isServerRequestComplete: true
+
+        });
+      }
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextStat) {
+
+      console.log("In shouldComponentUpdate");
+      console.log("New Props are - ", nextProps);
+      console.log("New State is - ", nextStat);
+
+      return true;
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+
+      console.log("In componentWillUpdate Method");
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log(FILE_NAME + "In render() Method");
+
+      if (this.state.isLoading) {
+
+        console.log("Loading is active");
+
+        return _react2.default.createElement(_ewcomponents.EwLoadingIndicator, null);
+      } else {
+
+        return this.renderScreen();
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+
+      console.log("In componentDidMount");
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+
+      console.log("Inside componentDidUpdate");
+
+      console.log("updated new state", this.state, this.props, prevProps);
+
+      if (this.isStateChanged(this.props.initialState)) {
+
+        console.log("Inside ewotherexpensetypeupdate");
+
+        this.props.updateParentState(this.getOtherExpenseobject());
+
+        if (!this.state.isServerRequestComplete) this.props.updateLoadingState(true);
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+
+      console.log("In componentWillUnmount");
+    }
+  }, {
+    key: 'renderScreen',
+    value: function renderScreen() {
+      var _this2 = this;
+
+      var _props = this.props,
+          expenseTypesList = _props.expenseTypesList,
+          isReveiwMode = _props.isReveiwMode;
+      var expenseType = this.state.expenseType;
+
+      console.log("currentstaeotherexpense", this.props, this.state);
+
+      if (isReveiwMode) {
+
+        return _react2.default.createElement(_ewcomponents.Reveiw, {
+          heading: expenseConstants.EXPENSE_TYPE_LABEL,
+          value: expenseTypesList[expenseType].label,
+          customValueStyle: { color: this.getTextColor(expenseTypesList[expenseType]) }
+        });
+      } else {
+
+        customPickerView = Object.keys(expenseTypesList).map(function (key) {
+
+          console.log("expenseType", this.props);
+
+          return _react2.default.createElement(_nativeBase.Item, { label: expenseTypesList[key].label, value: expenseTypesList[key].value, color: context.getTextColor(expenseTypesList[key]) });
+        });
+
+        return _react2.default.createElement(_ewcomponents.EwDropdownPicker, {
+          pickerLabel: expenseConstants.EXPENSE_TYPE_LABEL,
+          pickerPlaceholderLabel: expenseTypesList[0].value,
+          isDefaultPickerValueSelected: expenseTypesList[expenseType].value == expenseConstants.DEFAULT_PICKER_VALUE,
+          customPickerView: customPickerView,
+          selectedValue: expenseType,
+          onPickerValueChange: function onPickerValueChange(expenseType) {
+            return _this2.onExpenseTypeChanged(expenseType);
+          }
+        });
+      }
+    }
+  }, {
+    key: 'clearOtherExpensecomponentReduxData',
+    value: function clearOtherExpensecomponentReduxData() {
+
+      var params = {
+
+        "0": 'CLEAR_STATE_OTHER_EXPENSE_COMPONENT'
+      };
+
+      this.props.clearOthersExpenseClaimStateData(params);
+    }
+  }, {
+    key: 'onExpenseTypeChanged',
+    value: function onExpenseTypeChanged(expenseType) {
+
+      if (expenseType != expenseConstants.DEFAULT_PICKER_VALUE) {
+
+        this.setState({
+          expenseType: expenseType,
+          expenseTypeConfiguration: null
+        });
+
+        this.getComponentConfiguration(expenseType);
+      }
+    }
+  }, {
+    key: 'getComponentConfiguration',
+    value: function getComponentConfiguration(expenseType) {
+      var expenseTypesList = this.props.expenseTypesList;
+
+
+      var params = {
+
+        componentId: expenseTypesList[expenseType].expenseTypeId
+
+      };
+
+      this.setState({
+        isServerRequestComplete: false
+      });
+
+      this.props.getOthersExpenseComponentInformation(params);
+    }
+  }, {
+    key: 'getTextColor',
+    value: function getTextColor(expenseType) {
+
+      console.log(FILE_NAME + "In getTextColor", expenseType);
+
+      if (expenseType.value == expenseConstants.DEFAULT_PICKER_VALUE) return appstyleguide.APP_BLACK;else {
+
+        if (expenseType.isApplicableToEmployee) return appstyleguide.APP_GREEN;
+
+        return appstyleguide.APP_RED;
+      }
+    }
+  }, {
+    key: 'isStateChanged',
+    value: function isStateChanged(initialState) {
+
+      console.log("stringifiedobject", JSON.stringify(initialState), JSON.stringify(this.getOtherExpenseobject()));
+
+      if (JSON.stringify(initialState) != JSON.stringify(this.getOtherExpenseobject())) return true;
+
+      return false;
+    }
+  }, {
+    key: 'getOtherExpenseobject',
+    value: function getOtherExpenseobject() {
+
+      var otherExpense = {
+
+        expenseType: this.state.expenseType,
+        expenseTypeConfiguration: this.state.expenseTypeConfiguration,
+        expenseTypeError: this.state.expenseTypeError
+      };
+
+      return otherExpense;
+    }
+  }]);
+  return EwOtherExpenseType;
+}(_react.Component);
+
+function bindAction(dispatch) {
+
+  console.log(FILE_NAME + "In bindAction");
+
+  return {
+
+    getOthersExpenseComponentInformation: function getOthersExpenseComponentInformation(params) {
+      return dispatch((0, _othersclaimactions.getOthersExpenseComponentInformation)(params));
+    },
+    clearOthersExpenseClaimStateData: function clearOthersExpenseClaimStateData(params) {
+      return dispatch((0, _othersclaimactions.clearOthersExpenseClaimStateData)(params));
+    }
+
+  };
+}
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.auth.isLoggedIn,
+    errorWebService: state.auth.errorWebService,
+    sessionToken: state.auth.sessionToken,
+
+    othersExpenseComponentInformationData: state.othersClaim.othersExpenseComponentInformationData,
+    othersExpenseComponentInformationError: state.othersClaim.othersExpenseComponentInformationError
+
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, bindAction)(EwOtherExpenseType);

@@ -1,0 +1,35 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var AUTHENTICATION_FAILURE = exports.AUTHENTICATION_FAILURE = 'Not Authorized';
+var SERVER_EXCEPTION = exports.SERVER_EXCEPTION = 'Exception occured';
+
+var OD_INVALID_STATE = exports.OD_INVALID_STATE = 'Invalid state';
+var OD_APPROVER_NOT_FOUND = exports.OD_APPROVER_NOT_FOUND = 'Approver Not Found';
+var OD_ROSTER_NOT_DEFINED = exports.OD_ROSTER_NOT_DEFINED = 'Roster not defined';
+var OD_DATE_OUT_SIDE_PLAN_TIMINGS = exports.OD_DATE_OUT_SIDE_PLAN_TIMINGS = 'OD can not be outside of shift timings';
+var OD_REQUEST_BEFORE_DOJ = exports.OD_REQUEST_BEFORE_DOJ = 'On duty cannot be applied before date of joining';
+var OD_ALREADY_EXISTS = exports.OD_ALREADY_EXISTS = "OD already exists for applied Date.";
+var OD_OUT_TIME_CAN_NOT_BEFORE_IN_TIME = exports.OD_OUT_TIME_CAN_NOT_BEFORE_IN_TIME = 'Out time can not be before in time';
+var OD_IN_TIME_CAN_NOT_BE_EMPTY = exports.OD_IN_TIME_CAN_NOT_BE_EMPTY = 'In time is mandatory';
+var OD_OUT_TIME_CAN_NOT_BE_EMPTY = exports.OD_OUT_TIME_CAN_NOT_BE_EMPTY = 'Out time is mandatory';
+var OD_TIME_CAN_NOT_BE_EMPTY = exports.OD_TIME_CAN_NOT_BE_EMPTY = "In time and out time is mandatory";
+
+var LEAVE_EXIST_FOR_APPLIED_DATE = exports.LEAVE_EXIST_FOR_APPLIED_DATE = "Leave exists for applied date.";
+var LEAVE_EXIST_FOR_FIRST_HALF = exports.LEAVE_EXIST_FOR_FIRST_HALF = "Leave for first half exists for applied Date";
+var LEAVE_EXIST_FOR_SECOND_HALF = exports.LEAVE_EXIST_FOR_SECOND_HALF = "Leave for second half exists for applied Date";
+var TWO_HALF_DAY_LEAVE_EXIST_FOR_APPLIED_DATE = exports.TWO_HALF_DAY_LEAVE_EXIST_FOR_APPLIED_DATE = "Two half day leaves exists for applied Date";
+var OD_EXIST_FOR_APPLIED_DATE = exports.OD_EXIST_FOR_APPLIED_DATE = "OD already exists for applied Date";
+var TRAVEL_ALREADY_EXIST = exports.TRAVEL_ALREADY_EXIST = "Travel already Exists. Do you want to continue";
+var SHORT_LEAVE_EXIST = exports.SHORT_LEAVE_EXIST = "Short Leave exists for applied date.";
+var HALF_DAY_AND_SHORT_LEAVE_EXIST = exports.HALF_DAY_AND_SHORT_LEAVE_EXIST = "Half day and Short Leave exists for applied date.";
+
+var DATE_CANNOT_BE_BEFORE_ABSENCE_PERIOD = exports.DATE_CANNOT_BE_BEFORE_ABSENCE_PERIOD = "Date cannot be in Separation/Leave of Absence period";
+var REQUEST_BEFORE_DOJ = exports.REQUEST_BEFORE_DOJ = "Past Attendance cannot be applied before date of joining";
+var APPLY_IN_DATE_CAN_NOT_BE_FUTURE = exports.APPLY_IN_DATE_CAN_NOT_BE_FUTURE = "Request can not be for future date";
+var APPLY_OUT_DATE_CAN_NOT_BE_FUTURE = exports.APPLY_OUT_DATE_CAN_NOT_BE_FUTURE = "To date can not be future date";
+var IN_TIME_CAN_NOT_BE_FUTURE = exports.IN_TIME_CAN_NOT_BE_FUTURE = "In time should be before current time";
+var OUT_TIME_CAN_NOT_BE_FUTURE = exports.OUT_TIME_CAN_NOT_BE_FUTURE = "Out time can not be after current time";
+var IN_TIME_CAN_NOT_BE_AFTER_OUT_TIME = exports.IN_TIME_CAN_NOT_BE_AFTER_OUT_TIME = "In time can not be after out time";
+
+var SERVER_ERROR = exports.SERVER_ERROR = "Server is down, please try after some time";

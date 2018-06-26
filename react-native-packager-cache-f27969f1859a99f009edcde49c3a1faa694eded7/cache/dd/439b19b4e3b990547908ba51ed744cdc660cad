@@ -1,0 +1,24 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.LOCAL_SERVER_ACCESS_ERROR = exports.STATUS_AUTHORIZED = exports.STATUS_FORBIDDEN = exports.STATUS_UNAUTHORIZED = exports.AUTHENTICATION_FAILURE = undefined;
+exports.updateLocalServerAccessError = updateLocalServerAccessError;
+
+var _utils = require('../utils');
+
+var _reactNative = require('react-native');
+
+var AUTHENTICATION_FAILURE = exports.AUTHENTICATION_FAILURE = 'Not Authorized';
+
+var STATUS_UNAUTHORIZED = exports.STATUS_UNAUTHORIZED = 401;
+
+var STATUS_FORBIDDEN = exports.STATUS_FORBIDDEN = 403;
+
+var STATUS_AUTHORIZED = exports.STATUS_AUTHORIZED = 200;
+
+var LOCAL_SERVER_ACCESS_ERROR = exports.LOCAL_SERVER_ACCESS_ERROR = '';function updateLocalServerAccessError(isNetworkConnected) {
+
+  console.log("In LOCAL_SERVER_ACCESS_ERROR1", isNetworkConnected);
+
+  exports.LOCAL_SERVER_ACCESS_ERROR = LOCAL_SERVER_ACCESS_ERROR = isNetworkConnected ? "Server not responding, please try later" : "No internet connection";
+}
